@@ -9,6 +9,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.subsystems.Reportable;
+
+import java.lang.Thread.State;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -67,8 +70,7 @@ public class SwerveModule implements Reportable {
      * @param CANCoderOffsetDegrees
      * @param CANCoderReversed
      */
-    public SwerveModule(int driveMotorId, int turningMotorId, boolean invertDriveMotor, boolean invertTurningMotor, 
-        int CANCoderId, boolean CANCoderReversed) {
+    public SwerveModule(int driveMotorId, int turningMotorId, int CANCoderId, boolean CANCoderReversed) { 
         this.canCoder = new CANcoder(CANCoderId, ModuleConstants.kCANivoreName);
         this.driveMotor = new TalonFX(driveMotorId, ModuleConstants.kCANivoreName);
         this.turnMotor = new TalonFX(turningMotorId, ModuleConstants.kCANivoreName);
@@ -92,6 +94,7 @@ public class SwerveModule implements Reportable {
         this.driveMotorID = driveMotorId;
         this.turnMotorID = turningMotorId;
         this.CANCoderID = CANCoderId;
+        //Note: to invert a motor, you have to use phoenix tuner as the setInverted method is inverted
 
         this.turningController = new PIDController(
             ModuleConstants.kPTurning.get(),
@@ -99,9 +102,6 @@ public class SwerveModule implements Reportable {
             ModuleConstants.kDTurning.get());
         turningController.enableContinuousInput(0, 2 * Math.PI); // Originally was -pi to pi
         turningController.setTolerance(.005);
-
-        this.driveMotor.setInverted(invertDriveMotor);
-        this.turnMotor.setInverted(invertTurningMotor);
         this.invertTurningEncoder = CANCoderReversed;
         
         this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
@@ -133,8 +133,8 @@ public class SwerveModule implements Reportable {
         turnMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
         turnMotorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
         turnMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        turnMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 15;
-        turnMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
+        // turnMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 15;
+        // turnMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;  TODO: figure out alternative for deprecated field
         turnMotorConfigs.Audio.AllowMusicDurDisable = true;
         turnConfigurator.apply(turnMotorConfigs);
 
@@ -171,7 +171,8 @@ public class SwerveModule implements Reportable {
     }
 
     public void run() {
-        desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRadians(getTurningPosition()));
+        desiredState = optimizeState(desiredState, Rotation2d.fromRadians(getTurningPosition()));
+        
 
         desiredAngle = desiredState.angle.getDegrees();
 
@@ -209,13 +210,13 @@ public class SwerveModule implements Reportable {
      * @return Distance travelled by motor (in meters)
      */
     public double getDrivePosition() {
-        return driveMotor.getRotorPosition().getValue()
+        return driveMotor.getRotorPosition().getValueAsDouble()
             * ModuleConstants.kMetersPerRevolution
             * ModuleConstants.kDriveMotorGearRatio;
     }
 
     public double getDrivePositionTicks() {
-        return driveMotor.getRotorPosition().getValue() * 2048;
+        return driveMotor.getRotorPosition().getValueAsDouble() * 2048;
     }
 
 
@@ -233,7 +234,7 @@ public class SwerveModule implements Reportable {
      * @return Angle in degrees
      */
     public double getTurningPositionDegrees() {
-        double turningPosition = ((360 * canCoder.getAbsolutePosition().getValue()) % 360 + 360) % 360;
+        double turningPosition = ((360 * canCoder.getAbsolutePosition().getValueAsDouble()) % 360 + 360) % 360;
         return turningPosition;
     }
 
@@ -242,7 +243,7 @@ public class SwerveModule implements Reportable {
      * @return Velocity of the drive motor (in meters / sec)
      */
     public double getDriveVelocity() {
-        return driveMotor.getRotorVelocity().getValue() 
+        return driveMotor.getRotorVelocity().getValueAsDouble() 
             * ModuleConstants.kMetersPerRevolution
             * ModuleConstants.kDriveMotorGearRatio;
     }
@@ -252,7 +253,7 @@ public class SwerveModule implements Reportable {
      * @return Velocity of the drive motor (in meters / sec)
      */
     public double getDriveVelocityRPS() {
-        return driveMotor.getRotorVelocity().getValue();
+        return driveMotor.getRotorVelocity().getValueAsDouble();
     }
 
     /**
@@ -269,7 +270,7 @@ public class SwerveModule implements Reportable {
      * @return Velocity of the turning motor (in degrees / sec)
      */
     public double getTurningVelocityDegrees() {
-        double turnVelocity = canCoder.getVelocity().getValue();
+        double turnVelocity = canCoder.getVelocity().getValueAsDouble();
         return turnVelocity;
     }
 
@@ -284,6 +285,16 @@ public class SwerveModule implements Reportable {
         // return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getTurningPosition()));
 
     }
+
+    public SwerveModuleState optimizeState(SwerveModuleState state, Rotation2d currentAngle) {
+        var delta = state.angle.minus(currentAngle);
+        if (Math.abs(delta.getDegrees()) > 90.0) {
+          state.speedMetersPerSecond *= -1;
+          state.angle = state.angle.rotateBy(Rotation2d.kPi);
+        }
+        return state;
+      }
+
 
     public SwerveModulePosition getPosition() {
         currPosition.distanceMeters = getDrivePosition();
@@ -333,9 +344,9 @@ public class SwerveModule implements Reportable {
                 tab.addNumber("Turn percent (motor controller)", () -> turnMotor.getDutyCycle().getValue());
                 tab.addNumber("Turn percent (current)", () -> this.currentTurnPercent);
             case MEDIUM:
-                tab.addNumber("Turn Motor Current", () -> turnMotor.getStatorCurrent().getValue());
-                tab.addNumber("Drive Motor Voltage", () -> (driveMotor.getDutyCycle().getValue() * driveMotor.getSupplyVoltage().getValue()));
-                tab.addNumber("Turn Motor Voltage", () -> turnMotor.getSupplyVoltage().getValue());// ::getMotorOutputVoltage);
+                tab.addNumber("Turn Motor Current", () -> turnMotor.getStatorCurrent().getValueAsDouble());
+                tab.addNumber("Drive Motor Voltage", () -> (driveMotor.getDutyCycle().getValueAsDouble() * driveMotor.getSupplyVoltage().getValueAsDouble()));
+                tab.addNumber("Turn Motor Voltage", () -> turnMotor.getSupplyVoltage().getValueAsDouble());// ::getMotorOutputVoltage);
                 tab.addNumber("Drive percent (motor controller)", () -> driveMotor.getDutyCycle().getValue());
                 tab.addNumber("Drive percent (current)", () -> this.currentPercent);
                 
@@ -345,13 +356,13 @@ public class SwerveModule implements Reportable {
             case MINIMAL:
                 // tab.addNumber("Turn angle", this::getTurningPositionDegrees);
                 // tab.addNumber("Desired Angle", () -> desiredAngle);
-                tab.addNumber("Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValue());
+                tab.addNumber("Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValueAsDouble());
                 // tab.addNumber("Module Velocity", this::getDriveVelocity);
                 tab.addNumber("Module Velocity RPS", this::getDriveVelocityRPS);
                 tab.addNumber("Desired Velocity", () -> this.desiredVelocity);
                 tab.addBoolean("Velocity Control", () -> this.velocityControl);
                 // tab.addString("Error Status", () -> driveMotor.getFaultField().getName());
-                tab.addNumber("Drive Stator Current", () -> driveMotor.getStatorCurrent().getValue());
+                tab.addNumber("Drive Stator Current", () -> driveMotor.getStatorCurrent().getValueAsDouble());
                 break;
             }
             
