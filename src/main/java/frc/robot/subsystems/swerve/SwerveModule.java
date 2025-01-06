@@ -81,7 +81,7 @@ public class SwerveModule implements Reportable {
         this.driveRequest.EnableFOC = true;
         this.turnRequest.EnableFOC = true;
         
-        this.driveVelocityRequest = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+        this.driveVelocityRequest = new VelocityVoltage(0);
         this.driveVelocityRequest.Slot = 0;
 
         this.drivePIDConfigs = new Slot0Configs();
@@ -115,8 +115,6 @@ public class SwerveModule implements Reportable {
         driveMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
         driveMotorConfigs.CurrentLimits.SupplyCurrentLimit = 10;
         driveMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
-        driveMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 30;
-        driveMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
         driveMotorConfigs.CurrentLimits.StatorCurrentLimit = 40;
         driveMotorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         driveMotorConfigs.Audio.AllowMusicDurDisable = true;
