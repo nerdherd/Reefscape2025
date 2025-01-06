@@ -25,8 +25,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
+import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.util.NerdyMath;
@@ -92,26 +94,7 @@ public class RobotContainer {
   }
 
   public void initDefaultCommands_teleop() {
-    
-    shooterPivot.setDefaultCommand(
-      new RunCommand(
-        () -> {
-          double increment = Math.signum(
-              NerdyMath.deadband(
-                -operatorController.getLeftY(), //0.5 rev/second 
-                -ControllerConstants.kDeadband, 
-                ControllerConstants.kDeadband)
-            ) * 0.1;
-          SmartDashboard.putNumber("Increment", increment);
-          shooterPivot.incrementPosition(increment);
-             // (20 * x) degrees per second
-            // If x = 0.1, then v = 2 degrees per second
-            
-        },
-        shooterPivot
-      ));
-      
-      swerveJoystickCommand = 
+      SwerveJoystickCommand swerveJoystickCommand = 
       new SwerveJoystickCommand(
         swerveDrive,
         () -> -commandDriverController.getLeftY(), // Horizontal translation
@@ -186,181 +169,156 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
     // commandDriverController.cross().whileTrue(swerveDrive.driveToAmpCommand(3, 3));
-    commandDriverController.cross().whileTrue(superSystem.eject());
     // commandDriverController.square().whileTrue(
     //   Commands.parallel(
     //     noteCamera.driveToNoteCommand(swerveDrive, 15, 0, 0, 10, 200, null),
     //     superSystem.intakeUntilSensedNoBackup().andThen(superSystem.stow())
     //   )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
     // ).whileFalse(superSystem.backupIndexerAndShooter().andThen(superSystem.stow()));    // commandDriverController.square().onTrue(apriltagCamera.TurnToTagCommand4Auto(swerveDrive, 5, 50));
-
-    commandDriverController.square().whileTrue(superSystem.intakeUntilSensedNoBackup().andThen(superSystem.stow()))
-                                    .whileFalse(superSystem.backupIndexerAndShooter().andThen(superSystem.stow()));
-
     //commandDriverController.square().onTrue(apriltagCamera.TurnToAngleByTagCommand4Auto(swerveDrive, 2, 15));
-    commandOperatorController.povLeft().whileTrue(
-      Commands.repeatingSequence(
-        Commands.runOnce(() -> superSystem.getShooterAngle(swerveDrive))
-      )
-    );
-
-    
-
-    commandOperatorController.povUp().onTrue(
-      Commands.runOnce(() -> superSystem.incrementOffset(0.5))
-    );
-    commandOperatorController.povDown().onTrue(
-      Commands.runOnce(() -> superSystem.incrementOffset(-0.5))
-    );
-    commandOperatorController.povRight().onTrue(
-      Commands.runOnce(() -> superSystem.resetOffset())
-    );
-    commandDriverController.touchpad().whileTrue(superSystem.shoot())
-                                      .whileFalse(superSystem.stow());
     commandDriverController.triangle().onTrue(swerveDrive.toggleTurnToAngleMode());
     
-    commandDriverController.L2().whileTrue(Commands.sequence(
-      Commands.race(
-        superSystem.prepareShooterVision(swerveDrive),
-        Commands.sequence(
-          Commands.race(
-            Commands.waitUntil(() -> 
-              // aimTrigger.getAsBoolean() 
-              // && 
-              armTrigger.getAsBoolean()
-            ),
-            Commands.waitSeconds(1.5)
-          ),
-          Commands.waitSeconds(0.1),
-          superSystem.indexer.setEnabledCommand(true),
-          superSystem.indexer.indexCommand(),
-          Commands.either(
-            Commands.none(),
-            Commands.waitSeconds(0.5),
-            () -> superSystem.noteIntook()
-          ),
-          Commands.waitUntil(() -> !superSystem.noteIntook())
-        )
-      ),
-      superSystem.stow()
-    )).whileFalse(superSystem.stow());
+    // commandDriverController.L2().whileTrue(Commands.sequence(
+    //   Commands.race(
+    //     Commands.sequence(
+    //       Commands.race(
+    //         Commands.waitUntil(() -> 
+    //           // aimTrigger.getAsBoolean() 
+    //           // && 
+    //           armTrigger.getAsBoolean()
+    //         ),
+    //         Commands.waitSeconds(1.5)
+    //       ),
+    //       Commands.waitSeconds(0.1),
+    //       superSystem.indexer.setEnabledCommand(true),
+    //       superSystem.indexer.indexCommand(),
+    //       Commands.either(
+    //         Commands.none(),
+    //         Commands.waitSeconds(0.5),
+    //         () -> superSystem.noteIntook()
+    //       ),
+    //       Commands.waitUntil(() -> !superSystem.noteIntook())
+    //     )
+    //   ),
+    //   superSystem.stow()
+    // )).whileFalse(superSystem.stow());
 
     // Operator bindings
-    commandOperatorController.triangle().whileTrue(superSystem.eject());
-    commandOperatorController.square().whileTrue(superSystem.getReadyForAmp())
-                                      .whileFalse(superSystem.stow()); // TODO: Can we try getting rid of this whileFalse line here **(field testing)**
-    commandOperatorController.cross().whileTrue(superSystem.shootAmp()).whileFalse(superSystem.stow());
+    // commandOperatorController.triangle().whileTrue(superSystem.eject());
+    // commandOperatorController.square().whileTrue(superSystem.getReadyForAmp())
+    //                                   .whileFalse(superSystem.stow()); // TODO: Can we try getting rid of this whileFalse line here **(field testing)**
+    // commandOperatorController.cross().whileTrue(superSystem.shootAmp()).whileFalse(superSystem.stow());
     // commandOperatorController.PS().whileTrue(superSystem.climbSequence());
 
-    commandOperatorController.L1().whileTrue(superSystem.backupIndexerManual());
+    // commandOperatorController.L1().whileTrue(superSystem.backupIndexerManual());
     
-    commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed().andThen(superSystem.stow()))
-                                  .whileFalse(superSystem.stow()); // Get rid of both stows
+    // commandOperatorController.L2().whileTrue(superSystem.intakeUntilSensed().andThen(superSystem.stow()))
+    //                               .whileFalse(superSystem.stow()); // Get rid of both stows
 
-    commandOperatorController.R2().whileTrue(superSystem.prepareShooterSpeaker())
-                                  .whileFalse(superSystem.stow());
-    commandOperatorController.R1().whileTrue(superSystem.prepareShooterPodium())
-                                  .whileFalse(superSystem.stow());
+    // commandOperatorController.R2().whileTrue(superSystem.prepareShooterSpeaker())
+    //                               .whileFalse(superSystem.stow());
+    // commandOperatorController.R1().whileTrue(superSystem.prepareShooterPodium())
+    //                               .whileFalse(superSystem.stow());
 
-    commandOperatorController.touchpad().whileTrue(superSystem.ejectIntakeOnly());
-    commandOperatorController.PS().whileTrue(superSystem.panicEject());
-    commandOperatorController.circle().whileTrue(superSystem.stow()); // TODO: Change this binding
-    // commandOperatorController.share().whileTrue(superSystem.intakeDirectShoot());
-    commandOperatorController.share().whileTrue(superSystem.advanceIndexerManual());
-    commandOperatorController.options().whileTrue(superSystem.prepareShooterVision(swerveDrive)) //
-                                  .whileFalse(superSystem.stow()); // TODO: Safety *Do nothing if April Tag is not seen*
+    // commandOperatorController.touchpad().whileTrue(superSystem.ejectIntakeOnly());
+    // commandOperatorController.PS().whileTrue(superSystem.panicEject());
+    // commandOperatorController.circle().whileTrue(superSystem.stow()); // TODO: Change this binding
+    // // commandOperatorController.share().whileTrue(superSystem.intakeDirectShoot());
+    // commandOperatorController.share().whileTrue(superSystem.advanceIndexerManual());
+    // commandOperatorController.options().whileTrue(superSystem.prepareShooterVision(swerveDrive)) //
+    //                               .whileFalse(superSystem.stow()); // TODO: Safety *Do nothing if April Tag is not seen*
   }
 
   public void configureBindings_test() {}
 
-  Trigger armTrigger = new Trigger(
-    () -> superSystem.shooterPivot.atTargetPositionAccurate() 
-        && superSystem.shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get()
-        && superSystem.shooterRoller.getVelocity() > (superSystem.shooterRoller.getTargetVelocity() * 0.6) 
-        && superSystem.shooterRoller.getTargetVelocity() > 0
-    );
+  // Trigger armTrigger = new Trigger(
+  //   () -> superSystem.shooterPivot.atTargetPositionAccurate() 
+  //       && superSystem.shooterPivot.getTargetPositionDegrees() > ShooterConstants.kFullStowPosition.get()
+  //       && superSystem.shooterRoller.getVelocity() > (superSystem.shooterRoller.getTargetVelocity() * 0.6) 
+  //       && superSystem.shooterRoller.getTargetVelocity() > 0
+  //   );
 
   // AprilTag Trigger
-  Trigger aimTrigger = new Trigger(() -> {
-    double desiredAngle = swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);// TODO, update?
-    SmartDashboard.putNumber("Desired Angle", desiredAngle);
-    double angleToleranceScale = swerveDrive.getTurnToAngleToleranceScale(desiredAngle);
-    SmartDashboard.putNumber("Angle Tolerance Scale", angleToleranceScale);
-    double angleTolerance = angleToleranceScale * swerveDrive.getSpeakerTurnToAngleTolerance();
-    SmartDashboard.putNumber("Angle Tolerance", angleTolerance);
-    double angleDifference = Math.abs(swerveDrive.getImu().getHeading() - desiredAngle);
-    angleDifference = NerdyMath.posMod(angleDifference, 360);
-    SmartDashboard.putNumber("Angle Difference", angleDifference);
-    if (angleDifference > 360 - angleTolerance && angleDifference < 360 + angleTolerance) {
-      return true;
-    } else if (angleDifference > -angleTolerance && angleDifference < angleTolerance) {
-      return true;
-    }
-    return false;
-    // return apriltagCamera.apriltagInRange(IsRedSide() ? 4 : 7, 0, 0);
-  });
+  // Trigger aimTrigger = new Trigger(() -> {
+  //   double desiredAngle = swerveDrive.getTurnToSpecificTagAngle(IsRedSide() ? 4 : 7);// TODO, update?
+  //   SmartDashboard.putNumber("Desired Angle", desiredAngle);
+  //   double angleToleranceScale = swerveDrive.getTurnToAngleToleranceScale(desiredAngle);
+  //   SmartDashboard.putNumber("Angle Tolerance Scale", angleToleranceScale);
+  //   double angleTolerance = angleToleranceScale * swerveDrive.getSpeakerTurnToAngleTolerance();
+  //   SmartDashboard.putNumber("Angle Tolerance", angleTolerance);
+  //   double angleDifference = Math.abs(swerveDrive.getImu().getHeading() - desiredAngle);
+  //   angleDifference = NerdyMath.posMod(angleDifference, 360);
+  //   SmartDashboard.putNumber("Angle Difference", angleDifference);
+  //   if (angleDifference > 360 - angleTolerance && angleDifference < 360 + angleTolerance) {
+  //     return true;
+  //   } else if (angleDifference > -angleTolerance && angleDifference < angleTolerance) {
+  //     return true;
+  //   }
+  //   return false;
+  //   // return apriltagCamera.apriltagInRange(IsRedSide() ? 4 : 7, 0, 0);
+  // });
 
 
 
-  public void configureLEDTriggers() {
-    // Note Trigger
-    Trigger noteTrigger = new Trigger(superSystem::noteIntook);
-    noteTrigger.onTrue(Commands.runOnce(
-      () -> {
-        CANdle.setStatus(Status.HASNOTE);
-        SmartDashboard.putBoolean("Has Note", true);
-      }));
-    noteTrigger.onFalse(Commands.runOnce(
-      () -> {
-        SmartDashboard.putBoolean("Has Note", false); 
-        CANdle.setStatus(Status.TELEOP);
-      }
-    ));
+  // public void configureLEDTriggers() {
+  //   // Note Trigger
+  //   Trigger noteTrigger = new Trigger(superSystem::noteIntook);
+  //   noteTrigger.onTrue(Commands.runOnce(
+  //     () -> {
+  //       CANdle.setStatus(Status.HASNOTE);
+  //       SmartDashboard.putBoolean("Has Note", true);
+  //     }));
+  //   noteTrigger.onFalse(Commands.runOnce(
+  //     () -> {
+  //       SmartDashboard.putBoolean("Has Note", false); 
+  //       CANdle.setStatus(Status.TELEOP);
+  //     }
+  //   ));
 
-    noteTrigger.and(aimTrigger.negate().and(armTrigger.negate())).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.HAS_TARGET);
-          SmartDashboard.putBoolean("Tag aimed", false); 
-        }
-      )
-    );
+    // noteTrigger.and(aimTrigger.negate().and(armTrigger.negate())).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.HAS_TARGET);
+    //       SmartDashboard.putBoolean("Tag aimed", false); 
+    //     }
+    //   )
+    // );
 
-    armTrigger.and(aimTrigger.negate()).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.SHOOTER_READY);
-        }  
-      )
-    );
+    // armTrigger.and(aimTrigger.negate()).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.SHOOTER_READY);
+    //     }  
+    //   )
+    // );
 
-    ShuffleboardTab tab = Shuffleboard.getTab("Main");
-    tab.addBoolean("Arm aimed", armTrigger);    
-    tab.addBoolean("Drivebase aimed", aimTrigger);
+    // ShuffleboardTab tab = Shuffleboard.getTab("Main");
+    // tab.addBoolean("Arm aimed", armTrigger);    
+    // tab.addBoolean("Drivebase aimed", aimTrigger);
 
-    armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.HASNOTE);
-        }  
-      )
-    );
+    // armTrigger.negate().and(aimTrigger.negate()).and(noteTrigger).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.HASNOTE);
+    //     }  
+    //   )
+    // );
 
-    aimTrigger.and(armTrigger).onTrue(
-      Commands.runOnce(
-        () -> {
-          CANdle.setStatus(Status.SHOTREADY);
-          SmartDashboard.putBoolean("Tag aimed", true); 
-        }
-      )
-    );
+    // aimTrigger.and(armTrigger).onTrue(
+    //   Commands.runOnce(
+    //     () -> {
+    //       CANdle.setStatus(Status.SHOTREADY);
+    //       SmartDashboard.putBoolean("Tag aimed", true); 
+    //     }
+    //   )
+    // );
 
-    noteTrigger.negate().onTrue(Commands.runOnce(
-      () -> {
-        CANdle.setStatus(Status.TELEOP);
-        SmartDashboard.putBoolean("Tag aimed", false); 
-      }
-    ));
+    // noteTrigger.negate().onTrue(Commands.runOnce(
+    //   () -> {
+    //     CANdle.setStatus(Status.TELEOP);
+    //     SmartDashboard.putBoolean("Tag aimed", false); 
+    //   }
+    // ));
 
     // if (driverController.getCircleButton()) { //turn to amp
     //         if (!IsRedSide()){
@@ -414,21 +372,21 @@ public class RobotContainer {
     // tagTrigger.onFalse(Commands.runOnce(
     //   () -> CANdle.setStatus(Status.TELEOP)
     // ));
-  }
+  
 
   //PathPlannerPath a01 = PathPlannerPath.fromPathFile("a01Path");
-  PathPlannerPath a02 = PathPlannerPath.fromPathFile("a02Path");
-  PathPlannerPath pieceOneGrab = PathPlannerPath.fromPathFile("Piece1Grab");
-  PathPlannerPath aSY = PathPlannerPath.fromPathFile("aSYPath");
-  PathPlannerPath aY3 = PathPlannerPath.fromPathFile("aY3Path");  
+  // PathPlannerPath a02 = PathPlannerPath.fromPathFile("a02Path");
+  // PathPlannerPath pieceOneGrab = PathPlannerPath.fromPathFile("Piece1Grab");
+  // PathPlannerPath aSY = PathPlannerPath.fromPathFile("aSYPath");
+  // PathPlannerPath aY3 = PathPlannerPath.fromPathFile("aY3Path");  
   
   //PathPlannerPath b12 = PathPlannerPath.fromPathFile("b12Path");
   // PathPlannerPath b23 = PathPlannerPath.fromPathFile("b23Path");
   // PathPlannerPath b32 = PathPlannerPath.fromPathFile("b32Path");
   // PathPlannerPath b21 = PathPlannerPath.fromPathFile("b21Path");
   // PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
-  PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
-  PathPlannerPath b2p6 = PathPlannerPath.fromPathFile("b2p6Path");
+  // PathPlannerPath b31 = PathPlannerPath.fromPathFile("b31Path");
+  // PathPlannerPath b2p6 = PathPlannerPath.fromPathFile("b2p6Path");
 
   // PathPlannerPath c14 = PathPlannerPath.fromPathFile("c14Path");
   // PathPlannerPath c24 = PathPlannerPath.fromPathFile("c24Path");
@@ -443,16 +401,16 @@ public class RobotContainer {
   // PathPlannerPath c15 = PathPlannerPath.fromPathFile("c15Path");
   // PathPlannerPath c28 = PathPlannerPath.fromPathFile("c28Path");
   // PathPlannerPath c27 = PathPlannerPath.fromPathFile("c27Path");
-  PathPlannerPath c26 = PathPlannerPath.fromPathFile("c26Path");
-  PathPlannerPath c26Fast = PathPlannerPath.fromPathFile("c26PathFast");
-  //PathPlannerPath c25 = PathPlannerPath.fromPathFile("c25Path");
-  //PathPlannerPath c25Stage = PathPlannerPath.fromPathFile("c25PathStage");
-  //PathPlannerPath c26Short = PathPlannerPath.fromPathFile("c26PathShort");
+  // PathPlannerPath c26 = PathPlannerPath.fromPathFile("c26Path");
+  // PathPlannerPath c26Fast = PathPlannerPath.fromPathFile("c26PathFast");
+  // //PathPlannerPath c25 = PathPlannerPath.fromPathFile("c25Path");
+  // //PathPlannerPath c25Stage = PathPlannerPath.fromPathFile("c25PathStage");
+  // //PathPlannerPath c26Short = PathPlannerPath.fromPathFile("c26PathShort");
   
-  //PathPlannerPath d26ShortC = PathPlannerPath.fromPathFile("d26PathShortC");
-  PathPlannerPath d26 = PathPlannerPath.fromPathFile("d26Path");
-  PathPlannerPath d25 = PathPlannerPath.fromPathFile("d25Path");
-  PathPlannerPath d27 = PathPlannerPath.fromPathFile("d27Path");
+  // //PathPlannerPath d26ShortC = PathPlannerPath.fromPathFile("d26PathShortC");
+  // PathPlannerPath d26 = PathPlannerPath.fromPathFile("d26Path");
+  // PathPlannerPath d25 = PathPlannerPath.fromPathFile("d25Path");
+  // PathPlannerPath d27 = PathPlannerPath.fromPathFile("d27Path");
   // PathPlannerPath d45 = PathPlannerPath.fromPathFile("d45Path");
   // PathPlannerPath d56 = PathPlannerPath.fromPathFile("d56Path");
   // PathPlannerPath d87 = PathPlannerPath.fromPathFile("d87Path");
@@ -465,11 +423,11 @@ public class RobotContainer {
   // PathPlannerPath e4Y = PathPlannerPath.fromPathFile("e4YPath");
   // PathPlannerPath e5Y = PathPlannerPath.fromPathFile("e5YPath");
   // PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
-  PathPlannerPath e7Z = PathPlannerPath.fromPathFile("e7ZPath");
-  PathPlannerPath e8Z = PathPlannerPath.fromPathFile("e8ZPath");
-  PathPlannerPath e5Y = PathPlannerPath.fromPathFile("e5YPath");
-  PathPlannerPath e6Y = PathPlannerPath.fromPathFile("e6YPath");
-  PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
+  // PathPlannerPath e7Z = PathPlannerPath.fromPathFile("e7ZPath");
+  // PathPlannerPath e8Z = PathPlannerPath.fromPathFile("e8ZPath");
+  // PathPlannerPath e5Y = PathPlannerPath.fromPathFile("e5YPath");
+  // PathPlannerPath e6Y = PathPlannerPath.fromPathFile("e6YPath");
+  // PathPlannerPath e7Y = PathPlannerPath.fromPathFile("e7YPath");
 
   // PathPlannerPath e6YShort = PathPlannerPath.fromPathFile("e6YPathShort");
 
@@ -478,10 +436,10 @@ public class RobotContainer {
   // PathPlannerPath f06 = PathPlannerPath.fromPathFile("f06Path");
   // PathPlannerPath f07 = PathPlannerPath.fromPathFile("f07Path");
   // PathPlannerPath f08 = PathPlannerPath.fromPathFile("f08Path");
-  PathPlannerPath fZ7 = PathPlannerPath.fromPathFile("fZ7Path");
-  PathPlannerPath fS8 = PathPlannerPath.fromPathFile("fS8Path");
-  // PathPlannerPath fast = PathPlannerPath.fromPathFile("c26TestPath");
-  PathPlannerPath fS7 = PathPlannerPath.fromPathFile("fS7");
+  // PathPlannerPath fZ7 = PathPlannerPath.fromPathFile("fZ7Path");
+  // PathPlannerPath fS8 = PathPlannerPath.fromPathFile("fS8Path");
+  // // PathPlannerPath fast = PathPlannerPath.fromPathFile("c26TestPath");
+  // PathPlannerPath fS7 = PathPlannerPath.fromPathFile("fS7");
 
   // final List<PathPlannerPath> pathGroupExample3 = List.of(
   //   a01, c15, a03
@@ -519,16 +477,16 @@ public class RobotContainer {
   	List<String> paths = AutoBuilder.getAllAutoNames();
     autoChooser.addOption("Do Nothing", Commands.none());
 
-    if (paths.contains("TaxiOnly")) {
-      autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
-      autoChooser.addOption("Preload Taxi Source", new PreloadTaxi(swerveDrive, List.of(aSY), superSystem));
-      autoChooser.addOption("Preload", new Preload(swerveDrive, List.of(a02), superSystem));
-    }
+    // if (paths.contains("TaxiOnly")) {
+    //   autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
+    //   autoChooser.addOption("Preload Taxi Source", new PreloadTaxi(swerveDrive, List.of(aSY), superSystem));
+    //   autoChooser.addOption("Preload", new Preload(swerveDrive, List.of(a02), superSystem));
+    // }
     
 
-    if (paths.contains("Reliable4Piece")) {
-      autoChooser.setDefaultOption("Reliable 4 Piece", new Reliable4Piece(swerveDrive, "Reliable4Piece", superSystem));
-    }
+    // if (paths.contains("Reliable4Piece")) {
+    //   autoChooser.setDefaultOption("Reliable 4 Piece", new Reliable4Piece(swerveDrive, "Reliable4Piece", superSystem));
+    // }
 
     // if (paths.contains("NEW4Piece")) {
     //   autoChooser.addOption("New 4 Piece", new Reliable4Piece(swerveDrive, "NEW4Piece", superSystem));
@@ -537,12 +495,12 @@ public class RobotContainer {
 
 
     // autoChooser.addOption("4PieceMiddle",         new Mid4Piece(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d26,e6Y,aY3)));
-    autoChooser.addOption("5PieceMiddle",   new Mid5PieceMiddle(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26Fast,d26,e6Y,aY3,b31)));
-    // autoChooser.addOption("4PieceAmpSide",    new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d25,e5Y,aY3)));
-    // autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
+    // autoChooser.addOption("5PieceMiddle",   new Mid5PieceMiddle(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26Fast,d26,e6Y,aY3,b31)));
+    // // autoChooser.addOption("4PieceAmpSide",    new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d25,e5Y,aY3)));
+    // // autoChooser.addOption("4PieceSourceSide", new Mid4PieceSide(swerveDrive, superSystem, noteCamera, List.of(a02,b2p6,c26,    d27,e7Y,aY3)));
 
-    autoChooser.addOption("Three Piece Source",   new ThreePieceMid(swerveDrive, superSystem, List.of(fS8, e8Z, fZ7, e7Z), noteCamera));
-    autoChooser.addOption("ThreePieceNote7", new ThreePieceMid(swerveDrive, superSystem, List.of(fS7, e7Z, fS8, e8Z), noteCamera));
+    // autoChooser.addOption("Three Piece Source",   new ThreePieceMid(swerveDrive, superSystem, List.of(fS8, e8Z, fZ7, e7Z), noteCamera));
+    // autoChooser.addOption("ThreePieceNote7", new ThreePieceMid(swerveDrive, superSystem, List.of(fS7, e7Z, fS8, e8Z), noteCamera));
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
@@ -553,14 +511,14 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);    
-    noteCamera.initShuffleboard(LOG_LEVEL.MEDIUM);
+    // noteCamera.initShuffleboard(LOG_LEVEL.MEDIUM);
 
-    shooterRoller.initShuffleboard(loggingLevel);
-    shooterPivot.initShuffleboard(loggingLevel);
-    intakeRoller.initShuffleboard(loggingLevel);
-    indexer.initShuffleboard(loggingLevel);
-    // superSystem.colorSensor.initShuffleboard(loggingLevel);
-    superSystem.bannerSensor.initShuffleboard(loggingLevel);
+    // shooterRoller.initShuffleboard(loggingLevel);
+    // shooterPivot.initShuffleboard(loggingLevel);
+    // intakeRoller.initShuffleboard(loggingLevel);
+    // indexer.initShuffleboard(loggingLevel);
+    // // superSystem.colorSensor.initShuffleboard(loggingLevel);
+    // superSystem.bannerSensor.initShuffleboard(loggingLevel);
 
     ShuffleboardTab tab = Shuffleboard.getTab("Main");
     // tab.addNumber("Total Current Draw", pdp::getTotalCurrent);
