@@ -7,25 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S3R12"
+            "pathName": "S5R6"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R12C1"
+            "pathName": "R6C4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C1R1"
+            "pathName": "C4R7"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "Bottom Half Autos",
   "choreoAuto": false
 }
