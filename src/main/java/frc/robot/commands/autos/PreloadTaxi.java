@@ -12,7 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 
 public class PreloadTaxi extends SequentialCommandGroup{
     public PreloadTaxi(SwerveDrivetrain swerve, List<PathPlannerPath> pathGroup){
-        Pose2d startingPose = pathGroup.get(0).getPreviewStartingHolonomicPose();
+        Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
 
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
