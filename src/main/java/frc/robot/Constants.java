@@ -74,7 +74,7 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
 
-    public static final String kCANivoreName = "CANivore2";
+    public static final String kCANivoreName = "CANivore1";
   } 
 
   public static final class SwerveDriveConstants {

@@ -6,6 +6,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.subsystems.Reportable;
@@ -171,6 +172,7 @@ public class SwerveModule implements Reportable {
     }
 
     public void run() {
+        // desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRadians(getTurningPosition()));
         desiredState = optimizeState(desiredState, Rotation2d.fromRadians(getTurningPosition()));
         
 
@@ -369,24 +371,24 @@ public class SwerveModule implements Reportable {
     }
 
      public void reportToSmartDashboard(LOG_LEVEL level) {
-    //     currentAngle = Math.toDegrees(getTurningPosition());
-    //     switch (level) {
-    //         case OFF:
-    //             break;
-    //         case ALL:
-    //             SmartDashboard.putNumber("Drive Motor #" + driveMotorID + " Current", driveMotor.getStatorCurrent().getValue());
-    //             SmartDashboard.putNumber("Turn Motor #" + turnMotorID + " Current", turnMotor.getStatorCurrent().getValue());
-    //             SmartDashboard.putNumber("Drive Motor #" + driveMotorID + " Voltage", (driveMotor.getDutyCycle().getValue() * driveMotor.getSupplyVoltage().getValue()));
-    //             SmartDashboard.putNumber("Turn Motor #" + turnMotorID + " Voltage", (turnMotor.getDutyCycle().getValue() * turnMotor.getSupplyVoltage().getValue()));
-    //             SmartDashboard.putNumber("Turn Offset", this.CANCoderOffsetDegrees.get());
-    //         case MEDIUM:
-    //             SmartDashboard.putNumber("Module velocity #" + driveMotorID, getDriveVelocity());
-    //             SmartDashboard.putNumber("Drive percent #" + driveMotorID, driveMotor.getDutyCycle().getValue());
-    //             SmartDashboard.putNumber("Turn Angle #" + turnMotorID, currentAngle);
-    //             SmartDashboard.putNumber("Turn Error #" + turnMotorID, desiredAngle - currentAngle);
-    //         case MINIMAL:
-    //             break;
-    //     }
+        currentAngle = Math.toDegrees(getTurningPosition());
+        switch (level) {
+            case OFF:
+                break;
+            case ALL:
+                SmartDashboard.putNumber("Drive Motor #" + driveMotorID + " Current", driveMotor.getStatorCurrent().getValueAsDouble());
+                SmartDashboard.putNumber("Turn Motor #" + turnMotorID + " Current", turnMotor.getStatorCurrent().getValueAsDouble());
+                SmartDashboard.putNumber("Drive Motor #" + driveMotorID + " Voltage", (driveMotor.getDutyCycle().getValueAsDouble() * driveMotor.getSupplyVoltage().getValueAsDouble()));
+                SmartDashboard.putNumber("Turn Motor #" + turnMotorID + " Voltage", (turnMotor.getDutyCycle().getValueAsDouble() * turnMotor.getSupplyVoltage().getValueAsDouble()));
+                // SmartDashboard.putNumber("Turn Offset", this.CANCoderOffsetDegrees.get());
+            case MEDIUM:
+                SmartDashboard.putNumber("Module velocity #" + driveMotorID, getDriveVelocity());
+                SmartDashboard.putNumber("Drive percent #" + driveMotorID, driveMotor.getDutyCycle().getValue());
+                SmartDashboard.putNumber("Turn Angle #" + turnMotorID, currentAngle);
+                SmartDashboard.putNumber("Turn Error #" + turnMotorID, desiredAngle - currentAngle);
+            case MINIMAL:
+                break;
+        }
 
      }
 

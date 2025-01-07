@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.SwerveAutoConstants;
 import frc.robot.Constants.SwerveDriveConstants;
+import frc.robot.util.filters.OldDriverFilter2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.util.filters.DeadbandFilter;
@@ -74,20 +75,20 @@ public class SwerveJoystickCommand extends Command {
         this.turnToAngleSupplier = turnToAngleSupplier;
         this.desiredAngle = desiredAngleSupplier;
 
-        // this.xFilter = new OldDriverFilter2(
-        //     ControllerConstants.kDeadband, 
-        //     kMinimumMotorOutput,
-        //     kTeleDriveMaxSpeedMetersPerSecond, 
-        //     kDriveAlpha, 
-        //     kTeleMaxAcceleration, 
-        //     kTeleMaxDeceleration);
-        // this.yFilter = new OldDriverFilter2(
-        //     ControllerConstants.kDeadband, 
-        //     kMinimumMotorOutput,
-        //     kTeleDriveMaxSpeedMetersPerSecond, 
-        //     kDriveAlpha, 
-        //     kTeleMaxAcceleration, 
-        //     kTeleMaxDeceleration);
+        this.xFilter = new OldDriverFilter2(
+            ControllerConstants.kDeadband, 
+            kMinimumMotorOutput,
+            kTeleDriveMaxSpeedMetersPerSecond, 
+            kDriveAlpha, 
+            kTeleMaxAcceleration, 
+            kTeleMaxDeceleration);
+        this.yFilter = new OldDriverFilter2(
+            ControllerConstants.kDeadband, 
+            kMinimumMotorOutput,
+            kTeleDriveMaxSpeedMetersPerSecond, 
+            kDriveAlpha, 
+            kTeleMaxAcceleration, 
+            kTeleMaxDeceleration);
         this.turningFilter = new FilterSeries(
             new DeadbandFilter(ControllerConstants.kRotationDeadband),
             new ScaleFilter(kTeleDriveMaxAngularSpeedRadiansPerSecond)
