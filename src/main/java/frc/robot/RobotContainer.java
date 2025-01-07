@@ -32,6 +32,7 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.util.NerdyMath;
+import frc.robot.commands.autos.PreloadTaxi;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
@@ -168,6 +169,8 @@ public class RobotContainer {
 
   public void configureBindings_test() {}
 
+  PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
+
   private void initAutoChoosers() {
   	List<String> paths = AutoBuilder.getAllAutoNames();
     autoChooser.addOption("Do Nothing", Commands.none());
@@ -175,6 +178,11 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
+    if (paths.contains("S4R3")) {
+      autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
+      autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, List.of(S4R3)));
+    }
+  
   }
   
   public void initShuffleboard() {
@@ -194,4 +202,6 @@ public class RobotContainer {
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
+  
+
 }
