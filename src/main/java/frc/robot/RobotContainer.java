@@ -48,7 +48,6 @@ public class RobotContainer {
   private final PS4Controller driverController = commandDriverController.getHID();
   private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
     ControllerConstants.kOperatorControllerPort);
-  private final PS4Controller operatorController = commandOperatorController.getHID();
 
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
 
@@ -61,13 +60,16 @@ public class RobotContainer {
    * s subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    initAutoChoosers();
+    try {
+      swerveDrive = new SwerveDrivetrain(imu);
+    } catch (IllegalArgumentException e) {
+      DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
+    }
+    initDefaultCommands_teleop();
     initShuffleboard();
-
     // Configure the trigger bindings
     // Moved to teleop init
     
-    DriverStation.reportWarning("Initalization complete", false);
       // NamedCommands.registerCommand("intakeBasic1", superSystem.intakeBasicHold());
       // NamedCommands.registerCommand("intakeBasic2", superSystem.stopIntaking());
       // NamedCommands.registerCommand("shootSequence2Far", superSystem.shootSequence2Far());
@@ -473,9 +475,9 @@ public class RobotContainer {
   //    a03, b32, b21, c14, d45, d56, e4Y
   // );
 
-  private void initAutoChoosers() {
-  	List<String> paths = AutoBuilder.getAllAutoNames();
-    autoChooser.addOption("Do Nothing", Commands.none());
+  // private void initAutoChoosers() {
+  // 	List<String> paths = AutoBuilder.getAllAutoNames();
+  //   autoChooser.addOption("Do Nothing", Commands.none());
 
     // if (paths.contains("TaxiOnly")) {
     //   autoChooser.addOption("Taxi Only", AutoBuilder.buildAuto("TaxiOnly"));
@@ -502,15 +504,14 @@ public class RobotContainer {
     // autoChooser.addOption("Three Piece Source",   new ThreePieceMid(swerveDrive, superSystem, List.of(fS8, e8Z, fZ7, e7Z), noteCamera));
     // autoChooser.addOption("ThreePieceNote7", new ThreePieceMid(swerveDrive, superSystem, List.of(fS7, e7Z, fS8, e8Z), noteCamera));
 
-    ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
+  //   ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
-    autosTab.add("Selected Auto", autoChooser);
-  }
+  //   autosTab.add("Selected Auto", autoChooser);
+  // }
   
   public void initShuffleboard() {
-    imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);    
+    swerveDrive.initModuleShuffleboard(loggingLevel);    
     // noteCamera.initShuffleboard(LOG_LEVEL.MEDIUM);
 
     // shooterRoller.initShuffleboard(loggingLevel);

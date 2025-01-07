@@ -364,7 +364,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void drive(double xSpeed, double ySpeed, double turnSpeed) {
         setModuleStates(
             SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(
-                new ChassisSpeeds(xSpeed, ySpeed, turnSpeed)
+                new ChassisSpeeds(xSpeed, ySpeed, 0)
             )
         );
     }
@@ -495,7 +495,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
     }
 
-    public void initModuleShuffleboard(LOG_LEVEL level) {
+    public void  linitModuleShuffleboard(LOG_LEVEL level) {
         frontRight.initShuffleboard(level);
         frontLeft.initShuffleboard(level);
         backLeft.initShuffleboard(level);
