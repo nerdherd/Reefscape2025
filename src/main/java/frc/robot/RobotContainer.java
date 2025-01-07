@@ -99,7 +99,7 @@ public class RobotContainer {
       () -> {
         return commandDriverController.getRightX(); // Rotation
       },
-      () -> true, // should be field oriented now on false
+      () -> false, // robot oriented vairable
       () -> false, // tow supplier
       driverController::getR2Button, // Precision/"Sniper Button"
       () -> {
