@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,10 +27,10 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
+import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
 import frc.robot.subsystems.Reportable;
-import frc.robot.subsystems.imu.Gyro;
 
 import static frc.robot.Constants.PathPlannerConstants.kPPMaxVelocity;
 import static frc.robot.Constants.SwerveDriveConstants.*;
@@ -37,8 +38,15 @@ import static frc.robot.Constants.SwerveDriveConstants.*;
 import java.util.Optional;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.controllers.PathFollowingController;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.GeometryUtil;
+// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+// import com.pathplanner.lib.util.ReplanningConfig;
 
 public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final SwerveModule frontLeft;
@@ -76,28 +84,36 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      * Construct a new {@link SwerveDrivetrain}
      */
     public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
-        this.gyro = gyro;
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,
+            kFLDriveReversed,
+            kFLTurningReversed,
             CANCoderConstants.kFLCANCoderID,
             CANCoderConstants.kFLCANCoderReversed);
         frontRight = new SwerveModule(
             kFRDriveID,
             kFRTurningID,
+            kFRDriveReversed,
+            kFRTurningReversed,
             CANCoderConstants.kFRCANCoderID,
             CANCoderConstants.kFRCANCoderReversed);
         backLeft = new SwerveModule(
             kBLDriveID,
             kBLTurningID,
+            kBLDriveReversed,
+            kBLTurningReversed,
             CANCoderConstants.kBLCANCoderID,
             CANCoderConstants.kBLCANCoderReversed);
         backRight = new SwerveModule(
             kBRDriveID,
             kBRTurningID,
+            kBRDriveReversed,
+            kBRTurningReversed,
             CANCoderConstants.kBRCANCoderID,
             CANCoderConstants.kBRCANCoderReversed);
 
+        this.gyro = gyro;
 
         /** @param stateStdDevs Standard deviations of the pose estimate (x position in meters, y position
          *     in meters, and heading in radians). Increase these numbers to trust your state estimate
@@ -113,10 +129,35 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();  
 
         field = new Field2d();
-        field.setRobotPose(poseEstimator.getEstimatedPosition()); 
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
+
+        DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
+        ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
+        RobotConfig robotConfig = new RobotConfig(kBLDriveID, kMinimumMotorOutput, moduleConfig, kTrackWidth);
+
+        // AutoBuilder.configure(
+        //     this::getPose,
+        //     this::resetOdometry,
+        //     this::getChassisSpeeds,
+        //     this::setChassisSpeedsBi,
+        //     new PPHolonomicDriveController(
+        //         kPPTranslationPIDConstants, 
+        //         kPPRotationPIDConstants), 
+        //         // kPPMaxVelocity,
+        //         // kTrackWidth,
+        //         // new ReplanningConfig()), 
+        //     robotConfig,
+        //     () -> {
+        //         var alliance = DriverStation.getAlliance();
+        //         if (alliance.isPresent()) {
+        //             return alliance.get() == DriverStation.Alliance.Red;
+        //         }
+        //         return false;
+        //     });
     }
 
-    //     
+    boolean initPoseByVisionDone = false;
+
     /**
      * Have modules move towards states and update odometry
      */
@@ -127,90 +168,27 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());
-
-        // if (enableVisionPE)
-        // {
-        //     visionupdateOdometry(VisionConstants.kLimelightBackName);
-        //     //visionupdateOdometry(VisionConstants.kLimelighLeftName);
-        //     //visionupdateOdometry(VisionConstants.kLimelightRightName);
-        // }
-
-        // counter = (counter + 1) % visionFrequency;
-
-        // if(vision != null && vision.getAprilTagID() != -1)
-        // {
-        //     if(vision.getTA() > 0.5) {
-        //         PoseEstimate visionPoseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(VisionConstants.kLimelightBackName);
-        //         poseEstimator.addVisionMeasurement(visionPoseEstimate.pose, visionPoseEstimate.timestampSeconds);
-        //     }
-            
-        // }
-        // else
-        // {
-        //     SmartDashboard.putBoolean("Vision Used", false);
-        // }
         
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
     
     //****************************** RESETTERS ******************************/
 
-    // public void updatePoseEstimatorWithVisionBotPose() {
-    //     // PoseEstimate visionPoseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(VisionConstants.kLimelightBackName);
-    //     // invalid LL data
-    //     if (visionPoseEstimate.pose.getX() == 0.0) {
-    //       return;
-    //     }
-    
-    //     // distance from current pose to vision estimated pose
-    //     double poseDifference = poseEstimator.getEstimatedPosition().getTranslation()
-    //         .getDistance(visionPoseEstimate.pose.getTranslation());
-    
-    //     if (visionPoseEstimate.tagCount > 0) {
-    //         double xyStds;
-    //         double degStds;
-    //         // multiple targets detected
-    //         if (visionPoseEstimate.tagCount >= 2) {
-    //             xyStds = 0.5;
-    //             degStds = 6;
-    //         }
-    //         // 1 target with large area and close to estimated pose
-    //         else if (visionPoseEstimate.avgTagArea > 0.8 && poseDifference < 0.5) {
-    //             xyStds = 1.0;
-    //             degStds = 12;
-    //         }
-    //         // 1 target farther away and estimated pose is close
-    //         else if (visionPoseEstimate.avgTagArea > 0.1 && poseDifference < 0.3) {
-    //             xyStds = 2.0;
-    //             degStds = 30;
-    //         }
-    //         // conditions don't match to add a vision measurement
-    //         else {
-    //             return;
-    //         }
-        
-    //         poseEstimator.setVisionMeasurementStdDevs(
-    //             VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-    //         poseEstimator.addVisionMeasurement(visionPoseEstimate.pose,
-    //             Timer.getFPGATimestamp() - visionPoseEstimate.latency);
-    //     }
-    // }
-
     /**
      * Resets the odometry to given pose 
      * @param pose  A Pose2D representing the pose of the robot
-    //  */
-    // public void resetOdometry(Pose2d pose) {
-    //     poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
-    // }
+     */
+    public void resetOdometry(Pose2d pose) {
+        poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
+    }
 
-    // public void resetOdometryWithAlliance(Pose2d pose){
-    //     if (RobotContainer.IsRedSide()) {
-    //         resetOdometry(GeometryUtil.flipFieldPose(pose));
-    //     } else {
-    //         resetOdometry(pose);
-    //     }
-    // }
+    public void resetOdometryWithAlliance(Pose2d pose){
+        if (RobotContainer.IsRedSide()) {
+            // resetOdometry(GeometryUtil.flipFieldPose(pose));
+        } else {
+            resetOdometry(pose);
+        }
+    }
 
     public void zeroGyroAndPoseAngle() {
         gyro.zeroHeading();
@@ -222,9 +200,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public void resetGyroFromPoseWithAlliance(Pose2d pose) {
         if (RobotContainer.IsRedSide()) {
-            // // double angle = flipFieldPose(pose).getRotation().getDegrees() - 180;
-            // angle = NerdyMath.posMod(angle, 360);
-            // gyro.resetHeading(angle);
+            double angle = /*GeometryUtil.flipFieldPose(*/pose.getRotation().getDegrees() - 180;
+            angle = NerdyMath.posMod(angle, 360);
+            gyro.resetHeading(angle);
         } else {
             gyro.resetHeading(NerdyMath.posMod(pose.getRotation().getDegrees(), 360));
         }
@@ -325,6 +303,20 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
         return (180 + angle) % 360;
     }
+
+    public double getTurnToAngleToleranceScale(double targetAngle)
+    {
+        double angleToSpeaker = 10000;
+        targetAngle = NerdyMath.posMod(targetAngle, 360);
+        if (targetAngle > 180) {
+            angleToSpeaker = Math.abs(360 - targetAngle);
+        }
+        else if (targetAngle < 180) {
+            angleToSpeaker = targetAngle;
+        }
+        return angleToleranceSpline.getOutput(angleToSpeaker);
+    }
+
     public boolean turnToAngleMode = true;
 
     public Command toggleTurnToAngleMode() {
@@ -364,7 +356,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void drive(double xSpeed, double ySpeed, double turnSpeed) {
         setModuleStates(
             SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(
-                new ChassisSpeeds(xSpeed, ySpeed, 0)
+                new ChassisSpeeds(xSpeed, ySpeed, turnSpeed)
             )
         );
     }
@@ -385,23 +377,27 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         driveFieldOriented(xSpeed, ySpeed, 0);
     }
 
-    // public Command driveToPose(Pose2d destPoseInBlue, double maxVelocityMps, double maxAccelerationMpsSq) {
-    //     PathConstraints pathcons = new PathConstraints(
-    //         maxVelocityMps, maxAccelerationMpsSq, 
-    //         Units.degreesToRadians(180), Units.degreesToRadians(360)
-    //     );
-    //     return Commands.either(
-    //         // AutoBuilder.pathfindToPose(GeometryUtil.flipFieldPose(destPoseInBlue), pathcons),
-    //         AutoBuilder.pathfindToPose(destPoseInBlue, pathcons),
-    //         RobotContainer::IsRedSide  
-    //     );
-    // }
+    public Command driveToPose(Pose2d destPoseInBlue, double maxVelocityMps, double maxAccelerationMpsSq) {
+        PathConstraints pathcons = new PathConstraints(
+            maxVelocityMps, maxAccelerationMpsSq, 
+            Units.degreesToRadians(180), Units.degreesToRadians(360)
+        );
+        return Commands.either(
+            AutoBuilder.pathfindToPose(/*GeometryUtil.flipFieldPose(*/destPoseInBlue, pathcons),
+            AutoBuilder.pathfindToPose(destPoseInBlue, pathcons),
+            RobotContainer::IsRedSide  
+        );
+    }
     
     public void setChassisSpeeds(ChassisSpeeds speeds) {
         SwerveModuleState[] targetStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
         setModuleStates(targetStates);
     }
 
+    public void setChassisSpeedsBi(ChassisSpeeds speeds, DriveFeedforwards drives) {
+        SwerveModuleState[] targetStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+        setModuleStates(targetStates);
+    }
 
     //****************************** SETTERS ******************************/
 
@@ -495,7 +491,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
     }
 
-    public void  linitModuleShuffleboard(LOG_LEVEL level) {
+    public void initModuleShuffleboard(LOG_LEVEL level) {
         frontRight.initShuffleboard(level);
         frontLeft.initShuffleboard(level);
         backLeft.initShuffleboard(level);

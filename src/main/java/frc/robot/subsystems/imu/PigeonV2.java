@@ -44,13 +44,13 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
         return this.pigeon;
     }
 
-    // public void zeroPitch() {
-    //     this.pitchOffset = -pigeon.getPitch().getValue();
-    // }
+    public void zeroPitch() {
+        this.pitchOffset = -pigeon.getPitch().getValueAsDouble();
+    }
     
-    // public void zeroRoll() {
-    //     this.rollOffset = pigeon.getRoll().getValue();
-    // }
+    public void zeroRoll() {
+        this.rollOffset = pigeon.getRoll().getValueAsDouble();
+    }
 
     public void setOffset(double offset) {
         this.offset = offset;
@@ -78,29 +78,29 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     }
 
     public double getHeading() {
-        return 0;
+        return -(pigeon.getAngle() - offset);
     }
 
     public void setHeading(double heading) {
         this.offset += (heading - getHeading());
     }
 
-    // public double getYaw() {
-    //     double currentYaw = (pigeon.getYaw().getValue() - offset) % 360;
-    //     if (currentYaw < 0) {
-    //         return currentYaw + 360;
-    //     } else {
-    //         return currentYaw;
-    //     }
-    // }
+    public double getYaw() {
+        double currentYaw = (pigeon.getYaw().getValueAsDouble() - offset) % 360;
+        if (currentYaw < 0) {
+            return currentYaw + 360;
+        } else {
+            return currentYaw;
+        }
+    }
 
-    // public double getPitch() {
-    //     return (-pigeon.getPitch().getValue() - pitchOffset) % 360;
-    // }
+    public double getPitch() {
+        return (-pigeon.getPitch().getValueAsDouble() - pitchOffset) % 360;
+    }
 
-    // public double getRoll() {
-    //     return (pigeon.getRoll().getValue() - rollOffset) % 360;
-    // }
+    public double getRoll() {
+        return (pigeon.getRoll().getValueAsDouble() - rollOffset) % 360;
+    }
 
     public double getHeadingOffset() {
         return this.offset;
@@ -136,7 +136,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
             case ALL:
                 SmartDashboard.putNumber("Pigeon Firmware Version", pigeon.getVersion().getValue());
             case MEDIUM:
-                // SmartDashboard.putNumber("Robot Yaw", this.getYaw());
+                SmartDashboard.putNumber("Robot Yaw", this.getYaw());
                 SmartDashboard.putNumber("Robot Pitch", this.getPitch());
                 SmartDashboard.putNumber("Robot Roll", this.getRoll());
             case MINIMAL:
@@ -160,36 +160,12 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
             case ALL:
                 tab.addNumber("Pigeon Firmware Version", () -> pigeon.getVersion().getValue());
             case MEDIUM:
-                // tab.addNumber("Robot Yaw", this::getYaw);
+                tab.addNumber("Robot Yaw", this::getYaw);
                 tab.addNumber("Robot Pitch", this::getPitch);
                 tab.addNumber("Robot Roll", this::getRoll);
             case MINIMAL:
                 tab.addNumber("Robot Heading", this::getHeading);
         }
-    }
-
-    @Override
-    public void zeroPitch() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'zeroPitch'");
-    }
-
-    @Override
-    public void zeroRoll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'zeroRoll'");
-    }
-
-    @Override
-    public double getPitch() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getPitch'");
-    }
-
-    @Override
-    public double getRoll() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRoll'");
     }
     
 }
