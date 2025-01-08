@@ -38,7 +38,7 @@ public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
   
   public SwerveDrivetrain swerveDrive;
-  public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kRev);
+  public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kCTRE);
   
   private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
     ControllerConstants.kDriverControllerPort);
