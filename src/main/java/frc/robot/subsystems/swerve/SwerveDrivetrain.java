@@ -126,7 +126,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
           VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)), // TODO: Set pose estimator weights
           VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))); 
         
-        layout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();  
+        layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);  
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());

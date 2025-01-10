@@ -2,6 +2,7 @@ package frc.robot.subsystems.imu;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
+import frc.robot.Constants;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -16,7 +17,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
 
     public PigeonV2(int id) {
         try {
-            this.pigeon = new Pigeon2(id, "CANivore1");
+            this.pigeon = new Pigeon2(id, Constants.ModuleConstants.kCANivoreName); // TODO check if canviore names are different
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating Pigeon 2 over CAN: " + ex.getMessage(), true);
         }
