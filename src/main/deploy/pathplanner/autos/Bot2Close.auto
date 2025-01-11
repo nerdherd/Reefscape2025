@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S4R4"
+            "pathName": "S5R6"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R4C4"
+            "pathName": "R6C4"
           }
         },
         {
@@ -26,6 +26,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Middle Autos",
+  "folder": "Comp Autos",
   "choreoAuto": false
 }

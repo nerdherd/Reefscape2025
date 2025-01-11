@@ -5,13 +5,11 @@
   "pathFolders": [
     "Bottom Half Paths",
     "Middle Paths",
-    "New Folder",
     "Top Half Paths"
   ],
   "autoFolders": [
-    "Bottom Half Autos",
-    "Middle Autos",
-    "Top Half Autos"
+    "Comp Autos",
+    "Other"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

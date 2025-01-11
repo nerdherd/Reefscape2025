@@ -8,11 +8,11 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.265034736678265,
-        "y": 1.7227388969961968
+        "x": 7.108709016393442,
+        "y": 1.9091700819672122
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "S6"
     },
     {
       "anchor": {
@@ -25,7 +25,7 @@
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "R7"
     }
   ],
   "rotationTargets": [],

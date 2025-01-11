@@ -12,20 +12,20 @@
         "y": 6.745305886960639
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "S1"
     },
     {
       "anchor": {
         "x": 5.008,
-        "y": 5.2795
+        "y": 5.279
       },
       "prevControl": {
         "x": 5.774114234326286,
-        "y": 5.965426838773961
+        "y": 5.964926838773962
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "R1"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Top Half Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
