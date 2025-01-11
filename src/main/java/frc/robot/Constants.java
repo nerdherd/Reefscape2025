@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -17,7 +18,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.util.preferences.PrefBool;
 import frc.robot.util.preferences.PrefDouble;
 
 /**
@@ -30,6 +32,7 @@ import frc.robot.util.preferences.PrefDouble;
  */
 
  // COMMENT ROBOT IDS INSTEAD OF DELETING
+
 public final class Constants {
 
   public static class ControllerConstants {
@@ -37,6 +40,10 @@ public final class Constants {
     public static final double kRotationDeadband = 0.1;
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
+  }
+
+  public static final class SuperStructureConstants {
+    public static final String kCANivoreBusName = "rio";
   }
 
   public static final class ModuleConstants {
@@ -66,7 +73,6 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
 
-    public static final String kPigeonCANivoreName = "CANivore1"; // TODO check if canviore names are different
     public static final String kCANivoreName = "rio";
   } 
 
@@ -249,4 +255,21 @@ public final class Constants {
       }
     }
   }
+
+  public static final class ElevatorConstants {
+    public static final int kElevatorMotorID = 18; // TODO change later 
+    public static final double kElevatorStowPosition = -1;
+    public static final double kElevatorStationPosition = 0; // -40962 TODO change later
+    public static final double kElevatorL1Position = 0;//-54512; // TODO change later
+    public static final double kElevatorL2Position = -28; // TODO change later
+    public static final double kElevatorL3Position = -14; // -54512 TODO change later
+    public static final double kElevatorL4Position = -7; //-133333 TODO change later
+   //  public static final double kElevatorDeadband = 1.0; // TODO change later
+    public static final double kElevatorSpeed = 1.0; //TODO change later
+   //  public static final PrefDouble kPElevatorMotor = new PrefDouble("P Elevator Motor", 0);
+   //  public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
+   //  public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
+   //  public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
+ }
 }
+
