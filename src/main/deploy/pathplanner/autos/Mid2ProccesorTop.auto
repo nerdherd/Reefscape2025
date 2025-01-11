@@ -13,13 +13,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "R3C4"
+            "pathName": "R3T3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C4R7"
+            "pathName": "T3R2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R2T5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "T5R5"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R5T6"
           }
         }
       ]
