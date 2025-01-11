@@ -171,12 +171,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());
-
-        counter = (counter + 1) % visionFrequency; //TODO: tune or remove, whichever is better
-
-        if(counter == 0) {
-            visionupdateOdometry(VisionConstants.kLimelightFrontRightName); //TODO: add other cameras
-        }
         
         field.setRobotPose(poseEstimator.getEstimatedPosition());
     }
@@ -194,7 +188,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         Pose3d botPose1 = LimelightHelpers.getBotPose3d_wpiBlue(limelightName);
         if(!receivedValidData)
             doRejectUpdate = true;
-        else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3) // Weird Robot Height
+        else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
             doRejectUpdate = true;
         else if(megaTag2.tagCount == 1 && megaTag2.rawFiducials.length == 1)
         {
@@ -333,6 +327,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         Pose2d robotPose = getPose();
         lastDistance = robotPose.getTranslation().getDistance(tagPose.getTranslation());
+        // lastDistance = Math.sqrt(Math.pow(robotPose.getX()-tagPose.getX(), 2) + Math.pow(robotPose.getY()-tagPose.getY(), 2));
 
         return lastDistance;
     }
@@ -359,7 +354,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         double xOffset = tagPose.getX() - robotPose.getX();
         double yOffset = tagPose.getY() - robotPose.getY();
 
-        double allianceOffset = 90; //TODO: check if this is correct
+        double allianceOffset = 90;
         double angle = NerdyMath.posMod(-Math.toDegrees(Math.atan2(xOffset, yOffset)) + allianceOffset, 360);
         if(RobotContainer.IsRedSide()) {
             return angle; //TODO: test if works since this is a bit different than original code
@@ -369,15 +364,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public double getTurnToAngleToleranceScale(double targetAngle)
     {
-        double angleToTag = 10000;
+        double angleToSpeaker = 10000;
         targetAngle = NerdyMath.posMod(targetAngle, 360);
         if (targetAngle > 180) {
-            angleToTag = Math.abs(360 - targetAngle);
+            angleToSpeaker = Math.abs(360 - targetAngle);
         }
         else if (targetAngle < 180) {
-            angleToTag = targetAngle;
+            angleToSpeaker = targetAngle;
         }
-        return angleToleranceSpline.getOutput(angleToTag);
+        return angleToleranceSpline.getOutput(angleToSpeaker);
     }
 
     public boolean turnToAngleMode = true;

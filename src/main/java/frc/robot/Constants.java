@@ -206,10 +206,7 @@ public final class Constants {
     public static final double kSunflowerP = 0.2;
     public static final double kSunflowerI = 0;
     public static final double kSunflowerD = 0;
-    public static final String kLimelightFrontRightName = "limelight-front";
-    public static final String kLimelightFrontLeftName = "";
-    public static final String kLimelightBackLeftName = "";
-    public static final String kLimelightBackRightName = "";
+    public static final String kLimelightFrontName = "limelight-front";
     public static final String kLimelightFrontIP = "10.6.87.25:5802";
     public static final int kAprilTagPipeline = 4;
     public static final double fieldXOffset = 8.27; // Certified (Half field dimensions)
