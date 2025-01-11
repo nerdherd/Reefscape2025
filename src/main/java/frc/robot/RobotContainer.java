@@ -25,7 +25,6 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
-import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -68,7 +67,6 @@ public class RobotContainer {
     }
 
     elevator = new Elevator();
-    coralShooter = new CoralShooter();
     
     // initAutoChoosers();
     initShuffleboard();
@@ -179,8 +177,7 @@ public class RobotContainer {
   public void initShuffleboard() {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
-    coralShooter.initShuffleboard(loggingLevel); 
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);
     elevator.initShuffleboard(loggingLevel);
   }
   
