@@ -163,7 +163,7 @@ public class RobotContainer {
   	List<String> paths = AutoBuilder.getAllAutoNames();
     autoChooser.addOption("Do Nothing", Commands.none());
 
-  //   ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
+    ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
     if (paths.contains("S4R3")) {
@@ -172,7 +172,7 @@ public class RobotContainer {
     }
     } catch (Exception e) {SmartDashboard.putBoolean("Auto Error", true);}
   
-  // }
+  }
   
   public void initShuffleboard() {
     imu.initShuffleboard(loggingLevel);
