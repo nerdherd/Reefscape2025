@@ -32,15 +32,17 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.util.NerdyMath;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.AlgaeRoller;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
 
-  // public Elevator elevator;
-
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kCTRE);
   
+  public AlgaeRoller algaeRoller;
+  public Elevator elevator;
+
   private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
     ControllerConstants.kDriverControllerPort);
   private final PS4Controller driverController = commandDriverController.getHID();
@@ -66,8 +68,10 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    // elevator = new Elevator();
+    elevator = new Elevator();
+    algaeRoller = new AlgaeRoller();
     
+    // initAutoChoosers();
     initShuffleboard();
     initDefaultCommands_teleop();
     initAutoChoosers();
@@ -144,13 +148,10 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    // commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
-    //   .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); //elevator.goToPosition(ElevatorConstants.kElevatorStowPosition));
-    // commandDriverController.triangle().onTrue(elevator.setDisabledCommand());
-    // commandDriverController.square().whileTrue(elevator.setVelocityCommand(-0.1))
-    //   .onFalse(elevator.setVelocityCommand(0));
-    //   commandDriverController.cross().whileTrue(elevator.setVelocityCommand(0.1))
-    //   .onFalse(elevator.setVelocityCommand(0));
+    commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    commandDriverController.triangle().whileTrue(algaeRoller.setVelocityCommand(-0.2));
+    commandDriverController.square().whileTrue(algaeRoller.shootBarge()).onFalse(algaeRoller.stop());
 
   }
 
@@ -181,8 +182,9 @@ public class RobotContainer {
   public void initShuffleboard() {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);
-    // elevator.initShuffleboard(loggingLevel);
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
+    algaeRoller.initShuffleboard(loggingLevel); 
+    elevator.initShuffleboard(loggingLevel);
   }
   
   /**

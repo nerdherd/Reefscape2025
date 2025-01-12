@@ -43,11 +43,6 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
   }
-
-  public static final class SuperStructureConstants {
-    public static final String kCANivoreBusName = "CANivore1";
-  }
-
   public static final class ModuleConstants {
     public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
     public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -75,7 +70,7 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
 
-    public static final String kCANivoreName = "CANivore1";
+    public static final String kCANivoreName = "rio";
   } 
 
   public static final class SwerveDriveConstants {
@@ -144,7 +139,7 @@ public final class Constants {
     public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxSpeedMetersPerSecond;
     public static final double kTeleMaxAcceleration = 5;
     // THIS CONSTANT HAS TO BE NEGATIVE OTHERWISE THE ROBOT WILL CRASH
-    //TODO: Change deceleration with driver feedback, only in small increments (<= -2 is dangerous)
+    // TODO: Change deceleration with driver feedback, only in small increments (<= -2 is dangerous)
     public static final double kTeleMaxDeceleration = -5; // Russell says he likes 2.5 from sims, but keep at 3 until tested on real robot 
 
     public static final double kTeleDriveMaxAngularSpeedRadiansPerSecond = //
@@ -279,5 +274,29 @@ public final class Constants {
    //  public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
  }
 
+ public static final class AlgaeConstants {
+
+  // ************************************** ROLLER CONSTANTS *************************************** //
+  
+  public static final int kRollerMotorID = 61; 
+
+  public static final PrefDouble kPRollerMotor = new PrefDouble("kP Roller Motor", 0);
+  public static final PrefDouble kIRollerMotor = new PrefDouble("kI Roller Motor", 0);
+  public static final PrefDouble kDRollerMotor = new PrefDouble("kD Roller Motor", 0);
+  public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0);
+
+  public static final double kIntakePower = -0.1; //0 abruticus
+  public static final double kOuttakePower = 0.1; //0 abruticus
+
+  public static final double kRollerMaxVelocityRPS =  100;
+  public static final double kRollerMinVelocityRPS = -100;
+
+  // In revolutions!
+  public static final double kRollerNeutralDeadband = 0.01;
+
+  public static final PrefDouble kBargeOuttake     = new PrefDouble("Algae Barge Outtake",     0);
+  public static final PrefDouble kProcessorOuttake = new PrefDouble("Algae Processor Outtake", 0);
+
+ }
 }
 
