@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.SuperStructureConstants;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.NerdyMath;
  
 public class AlgaeRoller extends SubsystemBase implements Reportable {
@@ -31,7 +31,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     public boolean velocityControl = true;
  
     public AlgaeRoller() {
-        shooter = new TalonFX(AlgaeConstants.kRollerMotorID, SuperStructureConstants.kCANivoreBusName);
+        shooter = new TalonFX(AlgaeConstants.kRollerMotorID);
         shooterConfigurator = shooter.getConfigurator();
         voltageRequest.EnableFOC = true;
 
@@ -102,11 +102,8 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     //****************************** VELOCITY METHODS ******************************//
  
     public void setVelocity(double velocity) {
-        velocityRequest.Velocity =
-            NerdyMath.clamp(
-                velocity,
-                AlgaeConstants.kRollerMinVelocityRPS,
-                AlgaeConstants.kRollerMaxVelocityRPS);
+        // desiredVelocity = Math.min(Math.max(velocity, -ElevatorConstants.kElevatorSpeed), ElevatorConstants.kElevatorSpeed);
+        shooter.set(velocity);
     }
 
     public double getVelocity() {
@@ -117,9 +114,9 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         return velocityRequest.Velocity;
     }
 
-    public boolean atVelocity(double velocity) {
-        return shooter.getVelocity().getValueAsDouble() > velocity;
-    }
+    // public boolean atVelocity(double velocity) {
+    //     return shooter.getVelocity().getValueAsDouble() > velocity;
+    // }
 
     //****************************** COMMAND METHODS ******************************//
 
@@ -128,7 +125,10 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     }
  
     public Command setVelocityCommand(double velocity) {
-        return Commands.runOnce(() -> setVelocity(velocity));
+        setEnabledCommand(true);
+        Command command = Commands.runOnce(() -> setVelocity(velocity));
+        command.addRequirements(this);
+        return command;
     }
 
     //****************************** NAMED COMMANDS ******************************//

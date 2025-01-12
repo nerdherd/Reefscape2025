@@ -25,7 +25,6 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
-import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -151,6 +150,8 @@ public class RobotContainer {
 
     commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    commandDriverController.triangle().whileTrue(algaeRoller.setVelocityCommand(-0.2));
+    commandDriverController.square().whileTrue(algaeRoller.shootBarge()).onFalse(algaeRoller.stop());
 
   }
 

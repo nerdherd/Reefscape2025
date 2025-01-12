@@ -285,8 +285,8 @@ public final class Constants {
   public static final PrefDouble kDRollerMotor = new PrefDouble("kD Roller Motor", 0);
   public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0);
 
-  public static final int kIntakePower = 0; //0 abruticus
-  public static final int kOuttakePower = 0; //0 abruticus
+  public static final double kIntakePower = -0.1; //0 abruticus
+  public static final double kOuttakePower = 0.1; //0 abruticus
 
   public static final double kRollerMaxVelocityRPS =  100;
   public static final double kRollerMinVelocityRPS = -100;
