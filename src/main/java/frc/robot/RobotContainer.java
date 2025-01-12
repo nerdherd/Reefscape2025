@@ -36,7 +36,7 @@ import frc.robot.subsystems.Elevator;
 public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
 
-  public Elevator elevator;
+  // public Elevator elevator;
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kCTRE);
@@ -66,11 +66,11 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    elevator = new Elevator();
+    // elevator = new Elevator();
     
-    // initAutoChoosers();
     initShuffleboard();
     initDefaultCommands_teleop();
+    initAutoChoosers();
 
     // Configure the trigger bindings
     // Moved to teleop init
@@ -144,13 +144,13 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
-      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); //elevator.goToPosition(ElevatorConstants.kElevatorStowPosition));
-    commandDriverController.triangle().onTrue(elevator.setDisabledCommand());
-    commandDriverController.square().whileTrue(elevator.setVelocityCommand(-0.1))
-      .onFalse(elevator.setVelocityCommand(0));
-      commandDriverController.cross().whileTrue(elevator.setVelocityCommand(0.1))
-      .onFalse(elevator.setVelocityCommand(0));
+    // commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+    //   .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); //elevator.goToPosition(ElevatorConstants.kElevatorStowPosition));
+    // commandDriverController.triangle().onTrue(elevator.setDisabledCommand());
+    // commandDriverController.square().whileTrue(elevator.setVelocityCommand(-0.1))
+    //   .onFalse(elevator.setVelocityCommand(0));
+    //   commandDriverController.cross().whileTrue(elevator.setVelocityCommand(0.1))
+    //   .onFalse(elevator.setVelocityCommand(0));
 
   }
 
@@ -161,15 +161,17 @@ public class RobotContainer {
     PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
 
   	List<String> paths = AutoBuilder.getAllAutoNames();
-    autoChooser.addOption("Do Nothing", Commands.none());
+    
 
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    if (paths.contains("S4R3")) {
+    autoChooser.addOption("Do Nothing", Commands.none());
+    autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    // if (paths.contains("S4R3")) {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
-      autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, List.of(S4R3)));
-    }
+      autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
+    // }
     } catch (Exception e) {SmartDashboard.putBoolean("Auto Error", true);}
   
   }
@@ -178,7 +180,7 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);
-    elevator.initShuffleboard(loggingLevel);
+    // elevator.initShuffleboard(loggingLevel);
   }
   
   /**

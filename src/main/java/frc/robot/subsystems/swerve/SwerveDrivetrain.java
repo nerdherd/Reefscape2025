@@ -14,18 +14,14 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveDriveConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyLine;
@@ -33,8 +29,10 @@ import frc.robot.util.NerdyMath;
 import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.Reportable;
 
-import static frc.robot.Constants.PathPlannerConstants.kPPMaxVelocity;
 import static frc.robot.Constants.SwerveDriveConstants.*;
+import static frc.robot.Constants.PathPlannerConstants.kPPRotationPIDConstants;
+import static frc.robot.Constants.PathPlannerConstants.kPPTranslationPIDConstants;
+
 
 import java.util.Optional;
 
@@ -42,12 +40,9 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.controllers.PathFollowingController;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.util.GeometryUtil;
-// import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-// import com.pathplanner.lib.util.ReplanningConfig;
+import com.pathplanner.lib.util.FlippingUtil;
 
 public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final SwerveModule frontLeft;
@@ -136,27 +131,36 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
-        RobotConfig robotConfig = new RobotConfig(kBLDriveID, kMinimumMotorOutput, moduleConfig, kTrackWidth);
+        RobotConfig robotConfig = null;
+        try {
+             robotConfig = RobotConfig.fromGUISettings();
 
-        // AutoBuilder.configure(
-        //     this::getPose,
-        //     this::resetOdometry,
-        //     this::getChassisSpeeds,
-        //     this::setChassisSpeedsBi,
-        //     new PPHolonomicDriveController(
-        //         kPPTranslationPIDConstants, 
-        //         kPPRotationPIDConstants), 
-        //         // kPPMaxVelocity,
-        //         // kTrackWidth,
-        //         // new ReplanningConfig()), 
-        //     robotConfig,
-        //     () -> {
-        //         var alliance = DriverStation.getAlliance();
-        //         if (alliance.isPresent()) {
-        //             return alliance.get() == DriverStation.Alliance.Red;
-        //         }
-        //         return false;
-        //     });
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        AutoBuilder.configure(
+            this::getPose,
+            this::resetOdometry,
+            this::getChassisSpeeds,
+            (speeds, feedforwards) -> setChassisSpeeds(speeds),
+            new PPHolonomicDriveController(
+                kPPTranslationPIDConstants, 
+                kPPRotationPIDConstants), 
+                // kPPMaxVelocity,
+                // kTrackWidth,
+                // new ReplanningConfig()), 
+            robotConfig,
+            () -> {
+                var alliance = DriverStation.getAlliance();
+                if (alliance.isPresent()) {
+                    return alliance.get() == DriverStation.Alliance.Red;
+                }
+                return false;
+            },
+            this
+        );
     }
 
     boolean initPoseByVisionDone = false;
@@ -242,7 +246,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public void resetOdometryWithAlliance(Pose2d pose){
         if (RobotContainer.IsRedSide()) {
-            // resetOdometry(GeometryUtil.flipFieldPose(pose));
+            resetOdometry(FlippingUtil.flipFieldPose(pose));
         } else {
             resetOdometry(pose);
         }
@@ -258,7 +262,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public void resetGyroFromPoseWithAlliance(Pose2d pose) {
         if (RobotContainer.IsRedSide()) {
-            double angle = /*GeometryUtil.flipFieldPose(*/pose.getRotation().getDegrees() - 180;
+            double angle = FlippingUtil.flipFieldPose(pose).getRotation().getDegrees() - 180;
             angle = NerdyMath.posMod(angle, 360);
             gyro.resetHeading(angle);
         } else {
@@ -327,7 +331,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         Pose2d robotPose = getPose();
         lastDistance = robotPose.getTranslation().getDistance(tagPose.getTranslation());
-        // lastDistance = Math.sqrt(Math.pow(robotPose.getX()-tagPose.getX(), 2) + Math.pow(robotPose.getY()-tagPose.getY(), 2));
+        lastDistance = Math.sqrt(Math.pow(robotPose.getX()-tagPose.getX(), 2) + Math.pow(robotPose.getY()-tagPose.getY(), 2));
 
         return lastDistance;
     }
@@ -441,7 +445,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             Units.degreesToRadians(180), Units.degreesToRadians(360)
         );
         return Commands.either(
-            AutoBuilder.pathfindToPose(/*GeometryUtil.flipFieldPose(*/destPoseInBlue, pathcons),
+            AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons),
             AutoBuilder.pathfindToPose(destPoseInBlue, pathcons),
             RobotContainer::IsRedSide  
         );

@@ -8,8 +8,10 @@
     "Top Half Paths"
   ],
   "autoFolders": [
-    "Comp Autos",
-    "Other"
+    "Bottom Half Autos",
+    "Middle Autos",
+    "Alex",
+    "Top Half Autos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

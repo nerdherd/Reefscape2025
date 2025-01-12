@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -43,7 +45,7 @@ public final class Constants {
   }
 
   public static final class SuperStructureConstants {
-    public static final String kCANivoreBusName = "rio";
+    public static final String kCANivoreBusName = "CANivore1";
   }
 
   public static final class ModuleConstants {
@@ -73,7 +75,7 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
 
-    public static final String kCANivoreName = "rio";
+    public static final String kCANivoreName = "CANivore1";
   } 
 
   public static final class SwerveDriveConstants {
@@ -194,13 +196,18 @@ public final class Constants {
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
     public static final double kPPMaxAngularAcceleration = Math.PI * 2;
 
-    public static final double kPP_P = new PrefDouble("PP_kP", 0.25).get();
+    public static final double kPP_P = new PrefDouble("PP_kP", 5.0).get();
     public static final double kPP_I = new PrefDouble("PP_kI", 0.0).get();
     public static final double kPP_D = new PrefDouble("PP_kD", 0.0).get();
 
-    public static final double kPP_ThetaP = new PrefDouble("PP_kThetaP", 0.25).get();
+    public static final PIDConstants kPPTranslationPIDConstants = new PIDConstants(kPP_P, kPP_I, kPP_D);
+
+    public static final double kPP_ThetaP = new PrefDouble("PP_kThetaP", 3.0).get();
     public static final double kPP_ThetaI = new PrefDouble("PP_kThetaI", 0).get();
-    public static final double kPP_ThetaD = new PrefDouble("PP_kThetaD", 0).get();
+    public static final double kPP_ThetaD = new PrefDouble("PP_kThetaD", 0.1).get();
+
+    public static final PIDConstants kPPRotationPIDConstants = new PIDConstants(kPP_ThetaP, kPP_ThetaI, kPP_ThetaD);
+
 
     public static final boolean kUseAllianceColor = true;
   }
