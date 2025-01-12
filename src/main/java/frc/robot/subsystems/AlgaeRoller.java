@@ -103,7 +103,8 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
  
     public void setVelocity(double velocity) {
         // desiredVelocity = Math.min(Math.max(velocity, -ElevatorConstants.kElevatorSpeed), ElevatorConstants.kElevatorSpeed);
-        shooter.set(velocity);
+        velocityRequest.Velocity = velocity;
+        // shooter.set(velocity);
     }
 
     public double getVelocity() {
@@ -125,8 +126,10 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     }
  
     public Command setVelocityCommand(double velocity) {
-        setEnabledCommand(true);
-        Command command = Commands.runOnce(() -> setVelocity(velocity));
+        Command command = Commands.sequence(
+            setEnabledCommand(true),    
+            Commands.runOnce(() -> setVelocity(velocity
+        )));
         command.addRequirements(this);
         return command;
     }
