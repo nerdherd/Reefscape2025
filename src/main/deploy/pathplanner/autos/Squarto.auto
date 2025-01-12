@@ -1,0 +1,19 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S5R6"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Alex",
+  "choreoAuto": false
+}

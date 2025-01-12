@@ -168,6 +168,8 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.addOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
+    autoChooser.addOption("Test", AutoBuilder.buildAuto("Test"));
     // if (paths.contains("S4R3")) {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));

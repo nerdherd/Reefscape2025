@@ -20,7 +20,7 @@
         "y": 6.692264344262294
       },
       "prevControl": {
-        "x": 1.8341188524658565,
+        "x": 1.8341188524658567,
         "y": 6.979969262288605
       },
       "nextControl": null,
@@ -48,7 +48,7 @@
   "folder": "Top Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.35237343790722
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }
