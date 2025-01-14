@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
@@ -79,6 +80,9 @@ public class RobotContainer {
     // Configure the trigger bindings
     // Moved to teleop init
     
+    
+    SmartDashboard.putData("Swerve Drive", swerveDrive);
+
     DriverStation.reportWarning("Initalization complete", false);
 
   }

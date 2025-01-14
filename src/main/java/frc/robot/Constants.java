@@ -88,8 +88,6 @@ public final class Constants {
     public static final PrefDouble kIThetaTeleop = new PrefDouble("kI Theta Teleop", 0);
     public static final PrefDouble kDThetaTeleop = new PrefDouble("kD Theta Teleop", 0);
 
-
-
     // Distance between right and left wheels
     public static final double kTrackWidth = Units.inchesToMeters(21);
     // Distance between front and back wheels
@@ -164,26 +162,11 @@ public final class Constants {
     };
 
     public static final double kGravityMPS = 9.80665; 
-  }
 
-  public static final class SwerveAutoConstants {
-    public static final PrefDouble kPTurnToAngle = new PrefDouble("kP Theta Teleop", 6);
-    public static final PrefDouble kITurnToAngle = new PrefDouble("kI Theta Teleop", 0);
-    public static final PrefDouble kDTurnToAngle = new PrefDouble("kD Theta Teleop", 0.2);
     public static final double kTurnToAnglePositionToleranceAngle = 5;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
-
-    // public static final double kPXController = new PrefDouble("kPXSpeed", 0.5).get();
-    // public static final double kIXController = new PrefDouble("kIXSpeed", 0).get();
-    // public static final double kDXController = new PrefDouble("kDXSpeed", 0).get();
-    // public static final double kPYController = new PrefDouble("kPYSpeed", 0.5).get();
-    // public static final double kIYController = new PrefDouble("kIYSpeed", 0).get();
-    // public static final double kDYController = new PrefDouble("kDYSpeed", 0).get();
-    // public static final double kPThetaController = new PrefDouble("kPThetaAuto", 6.0).get();
-    // public static final double kIThetaController = new PrefDouble("kIThetaAuto", 0).get();
-    // public static final double kDThetaController = new PrefDouble("kDThetaAuto", 0).get();
-    
   }
+
 
   public static final class PathPlannerConstants {
     public static final double kPPMaxVelocity = 3.0;
@@ -203,12 +186,11 @@ public final class Constants {
 
     public static final PIDConstants kPPRotationPIDConstants = new PIDConstants(kPP_ThetaP, kPP_ThetaI, kPP_ThetaD);
 
-
     public static final boolean kUseAllianceColor = true;
   }
 
   public static final class VisionConstants {
-    public static final double kFrontCameraHeightMeters = 0;
+    public static final double kFrontCameraHeightMeters = 0; // TODO change for new bot limelights
     public static final double kNoteHeightMeters = 0;
     public static final double kCameraPitchRadians = 0;
     public static final double kSunflowerP = 0.2;
@@ -266,12 +248,11 @@ public final class Constants {
     public static final double kElevatorL2Position = -28; // TODO change later
     public static final double kElevatorL3Position = -14; // -54512 TODO change later
     public static final double kElevatorL4Position = -7; //-133333 TODO change later
-   //  public static final double kElevatorDeadband = 1.0; // TODO change later
     public static final double kElevatorSpeed = 1.0; //TODO change later
-   //  public static final PrefDouble kPElevatorMotor = new PrefDouble("P Elevator Motor", 0);
-   //  public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
-   //  public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
-   //  public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
+    public static final PrefDouble kPElevatorMotor = new PrefDouble("P Elevator Motor", 0);
+    public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
+    public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
+    public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
  }
 
  public static final class AlgaeConstants {
