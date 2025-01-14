@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.util.NerdyMath;
 
 public class Elevator extends SubsystemBase implements Reportable {
     private final TalonFX elevatorMotor;
@@ -23,7 +24,6 @@ public class Elevator extends SubsystemBase implements Reportable {
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorPID = new PIDController(0.2, 0, 0); // 1, 0, 0
-
         elevatorMotor.setPosition(0.0);
     }
     
@@ -42,35 +42,38 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // STATE METHODS //
 
-    public Command setDisabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(false));
-    }
     
     public void setEnabled(boolean e) {
         this.enabled = e;
         if (!e) desiredPosition = ElevatorConstants.kElevatorStowPosition;
     }
-
+    public Command setDisabledCommand() {
+        return Commands.runOnce(() -> this.setEnabled(false));
+    }
     public Command setEnabledCommand() {
         return Commands.runOnce(() -> this.setEnabled(true));
     }
     
+    public void setPosition(double position) {
+        desiredPosition = position;
+    }
+    public Command setPositionCommand(double position) {
+        return Commands.runOnce(() -> setPosition(position));
+    }
+
     public Command goToPosition(double targetPosition) {
         return Commands.sequence(
             setEnabledCommand(),
-            Commands.runOnce(() -> { desiredPosition = targetPosition; })
+            setPositionCommand(targetPosition)
         );
     }
 
     public void setVelocity(double velocity) {
-        desiredVelocity = Math.min(Math.max(velocity, -ElevatorConstants.kElevatorSpeed), ElevatorConstants.kElevatorSpeed);
+        desiredVelocity = NerdyMath.clamp(velocity, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         elevatorMotor.set(desiredVelocity);
     }
-    
     public Command setVelocityCommand(double velocity) {
-        Command command = Commands.runOnce(() -> setVelocity(velocity));
-        command.addRequirements(this);
-        return command;
+        return Commands.runOnce(() -> setVelocity(velocity));
     }
 
     // NAMED COMMANDS //

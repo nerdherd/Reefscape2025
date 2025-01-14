@@ -167,7 +167,6 @@ public final class Constants {
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
   }
 
-
   public static final class PathPlannerConstants {
     public static final double kPPMaxVelocity = 3.0;
     public static final double kPPMaxAcceleration = 3.0;
@@ -219,11 +218,11 @@ public final class Constants {
     public static final int CANdleLength = 8; // TODO change later
 
     public static class Colors {
-      public static final Color BLACK = new Color(0.0, 0.0, 0.0); // shows up as nothing
-      public static final Color WHITE = new Color(1.0,1.0,1.0); 
-      public static final Color RED = new Color(1.0, 0.0, 0.0); 
-      public static final Color GREEN = new Color(0.0, 1.0, 0.0); 
-      public static final Color BLUE = new Color(0.0, 0.0, 1.0); 
+      public static final Color BLACK         = new Color(0.0, 0.0, 0.0); // shows up as nothing
+      public static final Color WHITE         = new Color(1.0,1.0,1.0); 
+      public static final Color RED           = new Color(1.0, 0.0, 0.0); 
+      public static final Color GREEN         = new Color(0.0, 1.0, 0.0); 
+      public static final Color BLUE          = new Color(0.0, 0.0, 1.0); 
       public static final Color NERDHERD_BLUE = new Color(0.132, 0.415, 1.0); // #071635 as base, brightened fully
     }
     
@@ -241,14 +240,14 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final int kElevatorMotorID = 18; // TODO change later 
-    public static final double kElevatorStowPosition = -1;
-    public static final double kElevatorStationPosition = 0; // -40962 TODO change later
-    public static final double kElevatorL1Position = 0;//-54512; // TODO change later
-    public static final double kElevatorL2Position = -28; // TODO change later
-    public static final double kElevatorL3Position = -14; // -54512 TODO change later
-    public static final double kElevatorL4Position = -7; //-133333 TODO change later
-    public static final double kElevatorSpeed = 1.0; //TODO change later
+    public static final int kElevatorMotorID = 18;            // TODO change later 
+    public static final double kElevatorStowPosition    = -1; // TODO change later
+    public static final double kElevatorStationPosition = 0 ; // TODO change later
+    public static final double kElevatorL1Position =   0;     // TODO change later
+    public static final double kElevatorL2Position =  -9;     // TODO change later
+    public static final double kElevatorL3Position = -18;     // TODO change later
+    public static final double kElevatorL4Position = -28;     // TODO change later
+    public static final double kElevatorSpeed = 1.0;          // TODO change later
     public static final PrefDouble kPElevatorMotor = new PrefDouble("P Elevator Motor", 0);
     public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
     public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
@@ -266,8 +265,8 @@ public final class Constants {
   public static final PrefDouble kDRollerMotor = new PrefDouble("kD Roller Motor", 0);
   public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0);
 
-  public static final double kIntakePower = -0.1; //0 abruticus
-  public static final double kOuttakePower = 0.1; //0 abruticus
+  public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", -0.1); 
+  public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power", 0.1);
 
   public static final double kRollerMaxVelocityRPS =  100;
   public static final double kRollerMinVelocityRPS = -100;

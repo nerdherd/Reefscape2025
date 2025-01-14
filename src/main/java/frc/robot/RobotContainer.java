@@ -50,11 +50,12 @@ public class RobotContainer {
   private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
     ControllerConstants.kOperatorControllerPort);
   private final PS4Controller operatorController = commandOperatorController.getHID();
-
+  
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
-
+  
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-
+  
+  static boolean isRedSide = false;
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
@@ -87,7 +88,6 @@ public class RobotContainer {
 
   }
 
-  static boolean isRedSide = false;
 
   public static void refreshAlliance() {
     var alliance = DriverStation.getAlliance();
@@ -138,24 +138,28 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 }
 
- 
-
-  
-
-
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
     // Driver bindings
 
-    commandDriverController.share().whileTrue(
+    commandDriverController.share().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+    commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    commandDriverController.triangle().whileTrue(algaeRoller.setVelocityCommand(-0.2));
-    commandDriverController.square().whileTrue(algaeRoller.shootBarge()).onFalse(algaeRoller.stop());
+    commandDriverController.triangle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    commandDriverController.square().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    commandDriverController.cross().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    
+    commandDriverController.L2().onTrue(algaeRoller.intake()) // hold it :)
+      .onFalse(algaeRoller.stop());
+    commandDriverController.R2().onTrue(algaeRoller.shootBarge()) // hold it :)
+      .onFalse(algaeRoller.stop());
 
   }
 
