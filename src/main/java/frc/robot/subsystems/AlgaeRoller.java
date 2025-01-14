@@ -149,7 +149,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     
     public Command stop() {
         return Commands.sequence(
-            setEnabledCommand(true),
+            setEnabledCommand(false),
             setVelocityCommand(0)
         );
     }
@@ -161,7 +161,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
  
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
+        ShuffleboardTab tab = Shuffleboard.getTab("Algae Roller");
         switch (priority) {
             case ALL:
             case MEDIUM:
