@@ -43,7 +43,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     // STATE METHODS //
 
     
-    public void setEnabled(boolean e) {
+    private void setEnabled(boolean e) {
         this.enabled = e;
         if (!e) desiredPosition = ElevatorConstants.kElevatorStowPosition;
     }
@@ -54,7 +54,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> this.setEnabled(true));
     }
     
-    public void setPosition(double position) {
+    private void setPosition(double position) {
         desiredPosition = position;
     }
     public Command setPositionCommand(double position) {
@@ -68,7 +68,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         );
     }
 
-    public void setVelocity(double velocity) {
+    private void setVelocity(double velocity) {
         desiredVelocity = NerdyMath.clamp(velocity, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         elevatorMotor.set(desiredVelocity);
     }
@@ -96,6 +96,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // LOG METHODS //
 
+    @Override
     public void reportToSmartDashboard(LOG_LEVEL level) {
         switch (level) {
             case OFF:
@@ -111,6 +112,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         }
     }
 
+    @Override
     public void initShuffleboard(LOG_LEVEL level) {
         ShuffleboardTab tab;
         switch (level) {

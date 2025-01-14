@@ -42,7 +42,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
 
     //****************************** SETUP METHODS ******************************//
  
-    public void configureMotor(TalonFXConfiguration motorConfigs) {
+    private void configureMotor(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
 
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
@@ -61,7 +61,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
     }
  
-    public void configurePID(TalonFXConfiguration motorConfigs) {
+    private void configurePID(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
 
         AlgaeConstants.kPRollerMotor.loadPreferences();
@@ -97,7 +97,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
  
     //****************************** VELOCITY METHODS ******************************//
  
-    public void setVelocity(double velocity) {
+    private void setVelocity(double velocity) {
         velocityRequest.Velocity = velocity;
         rollerMotor.setControl(velocityRequest);
     }
@@ -110,7 +110,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         return velocityRequest.Velocity;
     }
 
-    public void setEnabled(boolean e) {
+    private void setEnabled(boolean e) {
         this.enabled = e;
     }
 
