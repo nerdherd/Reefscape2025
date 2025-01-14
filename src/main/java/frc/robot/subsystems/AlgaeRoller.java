@@ -17,22 +17,20 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AlgaeConstants;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.util.NerdyMath;
  
 public class AlgaeRoller extends SubsystemBase implements Reportable {
-    private final TalonFX shooter;
-    private final TalonFXConfigurator shooterConfigurator;
+    private final TalonFX rollerMotor;
+    private final TalonFXConfigurator rollerConfigurator;
  
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
    
-    private boolean enabled = true;
+    private boolean enabled = false;
     public boolean velocityControl = true;
  
     public AlgaeRoller() {
-        shooter = new TalonFX(AlgaeConstants.kRollerMotorID);
-        shooterConfigurator = shooter.getConfigurator();
+        rollerMotor = new TalonFX(AlgaeConstants.kRollerMotorID);
+        rollerConfigurator = rollerMotor.getConfigurator();
         voltageRequest.EnableFOC = true;
 
         CommandScheduler.getInstance().registerSubsystem(this);
@@ -44,8 +42,8 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
 
     //****************************** SETUP METHODS ******************************//
  
-    public void configureMotor(TalonFXConfiguration motorConfigs) {
-        shooterConfigurator.refresh(motorConfigs);
+    private void configureMotor(TalonFXConfiguration motorConfigs) {
+        rollerConfigurator.refresh(motorConfigs);
 
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         motorConfigs.Voltage.PeakForwardVoltage = 11.5;
@@ -54,19 +52,17 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         motorConfigs.MotorOutput.DutyCycleNeutralDeadband = AlgaeConstants.kRollerNeutralDeadband;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
-        // leftMotorConfigs.CurrentLimits.SupplyCurrentThreshold = 30;
-        // leftMotorConfigs.CurrentLimits.SupplyTimeThreshold = 0.25;
         motorConfigs.CurrentLimits.StatorCurrentLimit = 100;
         motorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         motorConfigs.Audio.AllowMusicDurDisable = true;
  
-        StatusCode response = shooterConfigurator.apply(motorConfigs);
+        StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
     }
  
-    public void configurePID(TalonFXConfiguration motorConfigs) {
-        shooterConfigurator.refresh(motorConfigs);
+    private void configurePID(TalonFXConfiguration motorConfigs) {
+        rollerConfigurator.refresh(motorConfigs);
 
         AlgaeConstants.kPRollerMotor.loadPreferences();
         AlgaeConstants.kIRollerMotor.loadPreferences();
@@ -77,7 +73,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         motorConfigs.Slot0.kD = AlgaeConstants.kDRollerMotor.get();
         motorConfigs.Slot0.kV = AlgaeConstants.kVRollerMotor.get();
  
-        StatusCode response = shooterConfigurator.apply(motorConfigs);
+        StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
             DriverStation.reportError("Could not apply PID configs, error code:" + response.toString(), new Error().getStackTrace());
     }
@@ -86,70 +82,76 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     public void periodic() {
         if (!enabled) {
             velocityRequest.Velocity = 0;
-            shooter.setControl(velocityRequest);
+            rollerMotor.setControl(velocityRequest);
             return;
         }
  
         if (velocityControl) {
-            shooter.setControl(velocityRequest);
+            rollerMotor.setControl(velocityRequest);
             return;
         } 
  
         voltageRequest.Output = velocityRequest.Velocity * 12 / 100.0;
-        shooter.setControl(voltageRequest);
+        rollerMotor.setControl(voltageRequest);
     }
  
     //****************************** VELOCITY METHODS ******************************//
  
-    public void setVelocity(double velocity) {
-        // desiredVelocity = Math.min(Math.max(velocity, -ElevatorConstants.kElevatorSpeed), ElevatorConstants.kElevatorSpeed);
+    private void setVelocity(double velocity) {
         velocityRequest.Velocity = velocity;
-        // shooter.set(velocity);
+        rollerMotor.setControl(velocityRequest);
     }
 
     public double getVelocity() {
-        return shooter.getVelocity().getValueAsDouble();
+        return rollerMotor.getVelocity().getValueAsDouble();
     }
 
     public double getTargetVelocity() {
         return velocityRequest.Velocity;
     }
 
-    // public boolean atVelocity(double velocity) {
-    //     return shooter.getVelocity().getValueAsDouble() > velocity;
-    // }
+    private void setEnabled(boolean e) {
+        this.enabled = e;
+    }
 
     //****************************** COMMAND METHODS ******************************//
 
     public Command setEnabledCommand(boolean enabled) {
-        return Commands.runOnce(() -> {this.enabled = enabled;});
+        return Commands.runOnce(() -> setEnabled(enabled));
     }
  
     public Command setVelocityCommand(double velocity) {
-        Command command = Commands.sequence(
-            setEnabledCommand(true),    
-            Commands.runOnce(() -> setVelocity(velocity
-        )));
-        command.addRequirements(this);
-        return command;
+        return Commands.runOnce(() -> setVelocity(velocity));
     }
 
     //****************************** NAMED COMMANDS ******************************//
 
     public Command intake() {
-        return setVelocityCommand(AlgaeConstants.kIntakePower);
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommand(AlgaeConstants.kIntakePower.get())
+        );
     }
-
-    public Command shootBarge() {
-        return setVelocityCommand(AlgaeConstants.kBargeOuttake.get());
+    
+    public Command shootBarge() { // TODO when design finished
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommand(AlgaeConstants.kBargeOuttake.get())
+        );
     }
-
+    
     public Command shootProcessor() {
-        return setVelocityCommand(AlgaeConstants.kProcessorOuttake.get());
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommand(AlgaeConstants.kProcessorOuttake.get())
+        );
     }
-
+    
     public Command stop() {
-        return setVelocityCommand(0);
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommand(0)
+        );
     }
  
     //****************************** LOGGING METHODS ******************************//
@@ -160,20 +162,18 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Shooter");
-
         switch (priority) {
             case ALL:
             case MEDIUM:
-            tab.addNumber("Position", () -> shooter.getPosition().getValueAsDouble());
+                tab.addNumber("Position", () -> this.rollerMotor.getPosition().getValueAsDouble());
             case MINIMAL:
-            tab.addBoolean("Algae Shooter Enabled", () -> this.enabled);
-            tab.addNumber("Velocity", () -> getVelocity());
-            tab.addNumber("Target Velocity", () -> velocityRequest.Velocity);
-            tab.addNumber("Supply Current", () -> shooter.getSupplyCurrent().getValueAsDouble());
-            tab.addNumber("Stator Current", () -> shooter.getStatorCurrent().getValueAsDouble());
-            tab.addNumber("Applied Voltage", () -> shooter.getMotorVoltage().getValueAsDouble());    
+                tab.addBoolean("Algae Shooter Enabled", () -> this.enabled);
+                tab.addNumber("Velocity", () -> this.getVelocity());
+                tab.addNumber("Target Velocity", () -> this.getTargetVelocity());
+                tab.addNumber("Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
+                tab.addNumber("Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());
+                tab.addNumber("Applied Voltage", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
                 break;
-        
             default:
                 break;
         }

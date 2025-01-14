@@ -22,7 +22,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
@@ -30,7 +29,6 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.util.NerdyMath;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.AlgaeRoller;
 
@@ -49,11 +47,12 @@ public class RobotContainer {
   private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
     ControllerConstants.kOperatorControllerPort);
   private final PS4Controller operatorController = commandOperatorController.getHID();
-
+  
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
-
+  
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-
+  
+  static boolean isRedSide = false;
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
@@ -79,11 +78,13 @@ public class RobotContainer {
     // Configure the trigger bindings
     // Moved to teleop init
     
+    
+    SmartDashboard.putData("Swerve Drive", swerveDrive);
+
     DriverStation.reportWarning("Initalization complete", false);
 
   }
 
-  static boolean isRedSide = false;
 
   public static void refreshAlliance() {
     var alliance = DriverStation.getAlliance();
@@ -134,24 +135,28 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 }
 
- 
-
-  
-
-
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
     // Driver bindings
 
-    commandDriverController.share().whileTrue(
+    commandDriverController.share().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+    commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    commandDriverController.triangle().whileTrue(algaeRoller.setVelocityCommand(-0.2));
-    commandDriverController.square().whileTrue(algaeRoller.shootBarge()).onFalse(algaeRoller.stop());
+    commandDriverController.triangle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    commandDriverController.square().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    commandDriverController.cross().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    
+    commandDriverController.L2().onTrue(algaeRoller.intake()) // hold it :)
+      .onFalse(algaeRoller.stop());
+    commandDriverController.R2().onTrue(algaeRoller.shootBarge()) // hold it :)
+      .onFalse(algaeRoller.stop());
 
   }
 

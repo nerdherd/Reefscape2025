@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.SwerveAutoConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.util.filters.OldDriverFilter2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -108,8 +107,8 @@ public class SwerveJoystickCommand extends Command {
         //     0.02);
         
         this.turnToAngleController.setTolerance(
-            SwerveAutoConstants.kTurnToAnglePositionToleranceAngle, 
-            SwerveAutoConstants.kTurnToAngleVelocityToleranceAnglesPerSec * 0.02);
+            SwerveDriveConstants.kTurnToAnglePositionToleranceAngle, 
+            SwerveDriveConstants.kTurnToAngleVelocityToleranceAnglesPerSec * 0.02);
     
 
         this.turnToAngleController.enableContinuousInput(0, 360);

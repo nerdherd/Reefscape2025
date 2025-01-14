@@ -20,8 +20,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.util.preferences.PrefBool;
 import frc.robot.util.preferences.PrefDouble;
 
 /**
@@ -87,8 +85,6 @@ public final class Constants {
     public static final PrefDouble kPThetaTeleop = new PrefDouble("kP Theta Teleop", 0);
     public static final PrefDouble kIThetaTeleop = new PrefDouble("kI Theta Teleop", 0);
     public static final PrefDouble kDThetaTeleop = new PrefDouble("kD Theta Teleop", 0);
-
-
 
     // Distance between right and left wheels
     public static final double kTrackWidth = Units.inchesToMeters(21);
@@ -164,25 +160,9 @@ public final class Constants {
     };
 
     public static final double kGravityMPS = 9.80665; 
-  }
 
-  public static final class SwerveAutoConstants {
-    public static final PrefDouble kPTurnToAngle = new PrefDouble("kP Theta Teleop", 6);
-    public static final PrefDouble kITurnToAngle = new PrefDouble("kI Theta Teleop", 0);
-    public static final PrefDouble kDTurnToAngle = new PrefDouble("kD Theta Teleop", 0.2);
     public static final double kTurnToAnglePositionToleranceAngle = 5;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
-
-    // public static final double kPXController = new PrefDouble("kPXSpeed", 0.5).get();
-    // public static final double kIXController = new PrefDouble("kIXSpeed", 0).get();
-    // public static final double kDXController = new PrefDouble("kDXSpeed", 0).get();
-    // public static final double kPYController = new PrefDouble("kPYSpeed", 0.5).get();
-    // public static final double kIYController = new PrefDouble("kIYSpeed", 0).get();
-    // public static final double kDYController = new PrefDouble("kDYSpeed", 0).get();
-    // public static final double kPThetaController = new PrefDouble("kPThetaAuto", 6.0).get();
-    // public static final double kIThetaController = new PrefDouble("kIThetaAuto", 0).get();
-    // public static final double kDThetaController = new PrefDouble("kDThetaAuto", 0).get();
-    
   }
 
   public static final class PathPlannerConstants {
@@ -203,12 +183,11 @@ public final class Constants {
 
     public static final PIDConstants kPPRotationPIDConstants = new PIDConstants(kPP_ThetaP, kPP_ThetaI, kPP_ThetaD);
 
-
     public static final boolean kUseAllianceColor = true;
   }
 
   public static final class VisionConstants {
-    public static final double kFrontCameraHeightMeters = 0;
+    public static final double kFrontCameraHeightMeters = 0; // TODO change for new bot limelights
     public static final double kNoteHeightMeters = 0;
     public static final double kCameraPitchRadians = 0;
     public static final double kSunflowerP = 0.2;
@@ -237,11 +216,11 @@ public final class Constants {
     public static final int CANdleLength = 8; // TODO change later
 
     public static class Colors {
-      public static final Color BLACK = new Color(0.0, 0.0, 0.0); // shows up as nothing
-      public static final Color WHITE = new Color(1.0,1.0,1.0); 
-      public static final Color RED = new Color(1.0, 0.0, 0.0); 
-      public static final Color GREEN = new Color(0.0, 1.0, 0.0); 
-      public static final Color BLUE = new Color(0.0, 0.0, 1.0); 
+      public static final Color BLACK         = new Color(0.0, 0.0, 0.0); // shows up as nothing
+      public static final Color WHITE         = new Color(1.0,1.0,1.0); 
+      public static final Color RED           = new Color(1.0, 0.0, 0.0); 
+      public static final Color GREEN         = new Color(0.0, 1.0, 0.0); 
+      public static final Color BLUE          = new Color(0.0, 0.0, 1.0); 
       public static final Color NERDHERD_BLUE = new Color(0.132, 0.415, 1.0); // #071635 as base, brightened fully
     }
     
@@ -259,19 +238,18 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-    public static final int kElevatorMotorID = 18; // TODO change later 
-    public static final double kElevatorStowPosition = -1;
-    public static final double kElevatorStationPosition = 0; // -40962 TODO change later
-    public static final double kElevatorL1Position = 0;//-54512; // TODO change later
-    public static final double kElevatorL2Position = -28; // TODO change later
-    public static final double kElevatorL3Position = -14; // -54512 TODO change later
-    public static final double kElevatorL4Position = -7; //-133333 TODO change later
-   //  public static final double kElevatorDeadband = 1.0; // TODO change later
-    public static final double kElevatorSpeed = 1.0; //TODO change later
-   //  public static final PrefDouble kPElevatorMotor = new PrefDouble("P Elevator Motor", 0);
-   //  public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
-   //  public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
-   //  public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
+    public static final int kElevatorMotorID = 18;            // TODO change later 
+    public static final double kElevatorStowPosition    = -1; // TODO change later
+    public static final double kElevatorStationPosition = 0 ; // TODO change later
+    public static final double kElevatorL1Position =   0;     // TODO change later
+    public static final double kElevatorL2Position =  -9;     // TODO change later
+    public static final double kElevatorL3Position = -18;     // TODO change later
+    public static final double kElevatorL4Position = -28;     // TODO change later
+    public static final double kElevatorSpeed = 1.0;          // TODO change later
+    public static final PrefDouble kPElevatorMotor = new PrefDouble("P Elevator Motor", 0);
+    public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
+    public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
+    public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
  }
 
  public static final class AlgaeConstants {
@@ -285,8 +263,8 @@ public final class Constants {
   public static final PrefDouble kDRollerMotor = new PrefDouble("kD Roller Motor", 0);
   public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0);
 
-  public static final double kIntakePower = -0.1; //0 abruticus
-  public static final double kOuttakePower = 0.1; //0 abruticus
+  public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", -0.1); 
+  public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power", 0.1);
 
   public static final double kRollerMaxVelocityRPS =  100;
   public static final double kRollerMinVelocityRPS = -100;

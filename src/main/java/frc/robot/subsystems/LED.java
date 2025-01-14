@@ -65,7 +65,6 @@ public class LED extends SubsystemBase {
     private void setLEDs(Color color, LEDStrips section) {
         setLEDs((int)(color.red * 255 * brightness), (int)(color.green * 255 * brightness), (int)(color.blue * 255 * brightness), section.index, section.count);
     }
-    
     private void setLEDs(int r, int g, int b) {
         setLEDs((int)(r * brightness), (int)(g * brightness), (int)(b * brightness));
     }
@@ -230,7 +229,6 @@ public class LED extends SubsystemBase {
 
     private int delay = 0;
     private int time = 0; // time value
-    // Runs 5 times a second
     @Override
     public void periodic() {
         if (!paused) delay++;
