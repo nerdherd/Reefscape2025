@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -17,6 +18,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -27,6 +29,7 @@ import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
 import frc.robot.subsystems.LimelightHelpers;
+import frc.robot.subsystems.LimelightHelpers.PoseEstimate;
 import frc.robot.subsystems.Reportable;
 
 import static frc.robot.Constants.SwerveDriveConstants.*;
@@ -175,8 +178,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());
-        
+
         field.setRobotPose(poseEstimator.getEstimatedPosition());
+
+        visionupdateOdometry("limelight-back");
     }
 
     //******************************  Vision ******************************/
@@ -189,11 +194,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         double degStds = 999999; //
 
         boolean receivedValidData = LimelightHelpers.getTV(limelightName);
-        Pose3d botPose1 = LimelightHelpers.getBotPose3d_wpiBlue(limelightName);
+        PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+        Pose2d botPose1 = estimate.pose;
+        
         if(!receivedValidData)
             doRejectUpdate = true;
-        else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
-            doRejectUpdate = true;
+        // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
+        //     doRejectUpdate = true;
         else if(megaTag2.tagCount == 1 && megaTag2.rawFiducials.length == 1)
         {
             if(megaTag2.rawFiducials[0].ambiguity > .7)
@@ -205,6 +212,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 doRejectUpdate = true;
             }
 
+            SmartDashboard.putNumber("X Position", botPose1.getX());
+            SmartDashboard.putNumber("Y Position", botPose1.getY());
             
             // 1 target with large area and close to estimated pose
             if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
