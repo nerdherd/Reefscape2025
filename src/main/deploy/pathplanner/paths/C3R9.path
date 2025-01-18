@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.8031762295081966,
-        "y": 1.273821721311475
+        "x": 0.767,
+        "y": 1.35
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.803176229508196,
-        "y": 1.273821721311475
+        "x": 1.7669999999999995,
+        "y": 1.35
       },
       "isLocked": false,
       "linkedName": "C3"
@@ -48,7 +48,7 @@
   "folder": "Bottom Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -124.62415507994895
+    "rotation": -126.0
   },
   "useDefaultConstraints": true
 }
