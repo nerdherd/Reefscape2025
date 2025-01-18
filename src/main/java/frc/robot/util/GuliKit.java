@@ -8,7 +8,7 @@ public class GuliKit {
     private final JoystickButton buttonB, buttonA, buttonY, buttonZ,
                                  bumperL, bumperR,
                                  buttonMinus, buttonPlus,
-                                 buttonLJ, buttonRJ;
+                                 buttonLeftJoy, buttonRightJoy;
 
     public GuliKit(int port) {
         controller = new Joystick(port);
@@ -20,8 +20,8 @@ public class GuliKit {
         bumperR = new JoystickButton(controller, 6);
         buttonMinus = new JoystickButton(controller, 7);
         buttonPlus = new JoystickButton(controller, 8);
-        buttonLJ = new JoystickButton(controller, 9);
-        buttonRJ = new JoystickButton(controller, 10);
+        buttonLeftJoy = new JoystickButton(controller, 9);
+        buttonRightJoy = new JoystickButton(controller, 10);
     }
 
     public JoystickButton getButtonB() {return buttonB;}
@@ -32,8 +32,8 @@ public class GuliKit {
     public JoystickButton getBumperR() {return bumperR;}
     public JoystickButton getButtonMinus() {return buttonMinus;}
     public JoystickButton getButtonPlus() {return buttonPlus;}
-    public JoystickButton getButtonLJ() {return buttonLJ;}
-    public JoystickButton getButtonRJ() {return buttonRJ;}
+    public JoystickButton getButtonLeftJoy() {return buttonLeftJoy;}
+    public JoystickButton getButtonRightJoy() {return buttonRightJoy;}
 
     public double getLeftX() { return controller.getRawAxis(0); }
     public double getLeftY() { return controller.getRawAxis(1); }
