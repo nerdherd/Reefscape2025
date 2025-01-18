@@ -36,6 +36,7 @@ import static frc.robot.Constants.PathPlannerConstants.kPPTranslationPIDConstant
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
@@ -437,6 +438,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public void driveFieldOriented(double xSpeed, double ySpeed) {
         driveFieldOriented(xSpeed, ySpeed, 0);
+    }
+
+    public Command driveToPose(SwerveDriveConstants.FieldPositions fieldPos, double maxVelocityMps, double maxAccelerationMpsSq) {
+        return driveToPose(fieldPos.pos, maxVelocityMps, maxAccelerationMpsSq);
     }
 
     public Command driveToPose(Pose2d destPoseInBlue, double maxVelocityMps, double maxAccelerationMpsSq) {

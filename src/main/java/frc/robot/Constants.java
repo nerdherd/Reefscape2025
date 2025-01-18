@@ -9,6 +9,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -163,6 +164,34 @@ public final class Constants {
 
     public static final double kTurnToAnglePositionToleranceAngle = 5;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
+
+    public static enum FieldPositions {
+      Reef1(5.008,5.279,-120.0),
+      Reef2(5.345, 5.12, -120.0),
+      Reef3(5.84, 4.084, 180.0),
+      Reef4(5.84, 3.916, 180.0),
+      Reef5(5.345, 2.88, 120.0),
+      Reef6(5.008, 2.721, 120.0),
+      //--------------------------------------
+      // center is (4.49, 4.0)
+      Reef7(3.972, 2.721, 60.0),
+      Reef8(3.635, 2.88, 60.0),
+      Reef9(3.14, 3.916, 0.0),
+      Reef10(3.14, 4.084, 0.0),
+      Reef11(3.635, 5.12, -60.0),
+      Reef12(3.972, 5.279, -60.0),
+      //--------------------------------------
+      Source1(1.582, 7.275, 126.0),
+      Source2(0.767, 6.692, 126.0),
+      Source3(0.767, 1.35, -126.0),
+      Source4(1.582, 0.78, -126.0),
+      ;
+      
+      public Pose2d pos;
+      FieldPositions(double _x, double _y, double _heading) {
+        pos = new Pose2d(new Translation2d(_x, _y), new Rotation2d(Units.degreesToRadians(_heading)));
+      }
+    }
   }
 
   public static final class PathPlannerConstants {
