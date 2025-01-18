@@ -4,43 +4,46 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class GuliKit {
-    private final Joystick ma_joystick;
-    private final JoystickButton trigger, thumbButton, button3,
-                                 button4, button5, button6,
-                                 button7, button8, button9,
-                                 button10, button11, button12;
+    private final Joystick controller;
+    private final JoystickButton buttonB, buttonA, buttonY, buttonZ,
+                                 bumperL, bumperR,
+                                 buttonMinus, buttonPlus,
+                                 buttonLJ, buttonRJ;
 
     public GuliKit(int port) {
-        ma_joystick = new Joystick(port);
-        trigger = new JoystickButton(ma_joystick, 1);
-        thumbButton = new JoystickButton(ma_joystick, 2);
-        button3 = new JoystickButton(ma_joystick, 3);
-        button4 = new JoystickButton(ma_joystick, 4);
-        button5 = new JoystickButton(ma_joystick, 5);
-        button6 = new JoystickButton(ma_joystick, 6);
-        button7 = new JoystickButton(ma_joystick, 7);
-        button8 = new JoystickButton(ma_joystick, 8);
-        button9 = new JoystickButton(ma_joystick, 9);
-        button10 = new JoystickButton(ma_joystick, 10);
-        button11 = new JoystickButton(ma_joystick, 11);
-        button12 = new JoystickButton(ma_joystick, 12);
+        controller = new Joystick(port);
+        buttonB = new JoystickButton(controller, 1);
+        buttonA = new JoystickButton(controller, 2);
+        buttonY = new JoystickButton(controller, 3);
+        buttonZ = new JoystickButton(controller, 4);
+        bumperL = new JoystickButton(controller, 5);
+        bumperR = new JoystickButton(controller, 6);
+        buttonMinus = new JoystickButton(controller, 7);
+        buttonPlus = new JoystickButton(controller, 8);
+        buttonLJ = new JoystickButton(controller, 9);
+        buttonRJ = new JoystickButton(controller, 10);
     }
 
-    public JoystickButton getTrigger() {return trigger;}
-    public JoystickButton getThumbButtn() {return thumbButton;}
-    public JoystickButton getButton3() {return button3;} 
-    public JoystickButton getButton4() {return button4;}
-    public JoystickButton getButton5() {return button5;}
-    public JoystickButton getButton6() {return button6;}
-    public JoystickButton getButton7() {return button7;}
-    public JoystickButton getButton8() {return button8;}
-    public JoystickButton getButton9() {return button9;}
-    public JoystickButton getButton10() {return button10;}
-    public JoystickButton getButton11() {return button11;}
-    public JoystickButton getButton12() {return button12;}
+    public JoystickButton getButtonB() {return buttonB;}
+    public JoystickButton getButtonA() {return buttonA;}
+    public JoystickButton getButtonY() {return buttonY;} 
+    public JoystickButton getButtonZ() {return buttonZ;}
+    public JoystickButton getBumperL() {return bumperL;}
+    public JoystickButton getBumperR() {return bumperR;}
+    public JoystickButton getButtonMinus() {return buttonMinus;}
+    public JoystickButton getButtonPlus() {return buttonPlus;}
+    public JoystickButton getButtonLJ() {return buttonLJ;}
+    public JoystickButton getButtonRJ() {return buttonRJ;}
 
-    public double getXAxis() { return ma_joystick.getRawAxis(0); }
-    public double getYAxis() { return ma_joystick.getRawAxis(1); }
-    public double getZAxis() { return ma_joystick.getRawAxis(2); }
-    public double getSliderAxis() { return ma_joystick.getRawAxis(3); }
+    public double getLeftX() { return controller.getRawAxis(0); }
+    public double getLeftY() { return controller.getRawAxis(1); }
+    public double getTriggerZL() { return controller.getRawAxis(2); }
+    public double getTriggerZR() { return controller.getRawAxis(3); }
+    public double getRightX() { return controller.getRawAxis(4); }
+    public double getRightY() { return controller.getRawAxis(5); }
+
+    public int getDpadUp() { return controller.getPOV(0); }
+    public int getDpadRight() { return controller.getPOV(90); }
+    public int getDpadDown() { return controller.getPOV(180); }
+    public int getDpadLeft() { return controller.getPOV(270); }
 }
