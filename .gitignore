@@ -185,3 +185,6 @@ compile_commands.json
 
 # Eclipse generated file for annotation processors
 .factorypath
+src/main/java/frc/robot/subsystems/ExampleSubsystem.java
+src/main/java/frc/robot/subsystems/Elevator.java
+src/main/java/frc/robot/subsystems/CoralWrist.java

@@ -42,6 +42,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
   }
+  
   public static final class ModuleConstants {
     public static final double kWheelDiameterMeters = Units.inchesToMeters(4);
     public static final double kDriveMotorGearRatio = 1 / 6.75;
@@ -69,7 +70,7 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
 
-    public static final String kCANivoreName = "CANivore1";
+    public static final String kCANivoreName = "rio";
   } 
 
   public static final class SwerveDriveConstants {
@@ -267,6 +268,7 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
+    // ************************************** ELEVATOR CONSTANTS *************************************** //
     public static final int kElevatorMotorID = 18;            // TODO change later 
     public static final double kElevatorStowPosition    = -1; // TODO change later
     public static final double kElevatorStationPosition = 0 ; // TODO change later
@@ -279,6 +281,33 @@ public final class Constants {
     public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
     public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
     public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
+
+    // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
+    public static final int kPivotMotorID = 0;
+    public static final int kPivotPigeonID = 0; // TODO change later
+    
+    public static final PrefDouble kPElevatorPivot = new PrefDouble("P Elevator Pivot Motor", 0);
+    public static final PrefDouble kIElevatorPivot = new PrefDouble("I Elevator Pivot Motor", 0);
+    public static final PrefDouble kDElevatorPivot = new PrefDouble("D Elevator Pivot Motor", 0);
+    public static final PrefDouble kVElevatorPivot = new PrefDouble("V Elevator Pivot Motor", 0);
+    public static final PrefDouble kSElevatorPivot = new PrefDouble("S Elevator Pivot Motor", 0);
+    public static final PrefDouble kAElevatorPivot = new PrefDouble("A Elevator Pivot Motor", 0);
+    public static final PrefDouble kGElevatorPivot = new PrefDouble("G Elevator Pivot Motor", 0);
+
+    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", 0); //TODO change later
+    public static final PrefDouble kElevatorPivotStartPosition = new PrefDouble("Elevator Pivot Start", 0);; //TODO change later
+    public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", 0);; //TODO change later
+
+    public static final double kElevatorPivotMin = 0; // TODO change later
+    public static final double kElevatorPivotMax = 0; // TODO change later
+
+    public static final double kElevatorPivotGearRatio = 0; // TODO change later
+    public static final PrefDouble kElevatorPivotDeadBand = new PrefDouble("Elevator Pivot DeadBand", 0);
+    public static final PrefDouble kElevatorPivotOffSet = new PrefDouble("Elevator Pivot Offset", 0);
+
+    public static final PrefDouble kEPivotCruiseVelocity = new PrefDouble("Elevator Pivot Cruise Velocity",0);
+    public static final PrefDouble kElevatorPivotCruiseAcceleration = new PrefDouble("Elevator Pivot Acceleration",0);
+    
  }
 
  public static final class AlgaeConstants {

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import static edu.wpi.first.units.Units.Newton;
+
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -32,6 +34,7 @@ import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.AlgaeRoller;
 import frc.robot.util.GuliKit;
+import frc.robot.subsystems.ElevatorPivot;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
@@ -41,6 +44,7 @@ public class RobotContainer {
   
   public AlgaeRoller algaeRoller;
   public Elevator elevator;
+  public ElevatorPivot elevatorPivot;
 
   // private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
   //   ControllerConstants.kDriverControllerPort);
@@ -148,8 +152,8 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    driverController.buttonA().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
-      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    // driverController.buttonA().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
+    //   .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
     driverController.buttonX().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
     driverController.buttonY().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
@@ -194,6 +198,7 @@ public class RobotContainer {
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
+    elevatorPivot.initShuffleboard(loggingLevel);
   }
   
   /**
