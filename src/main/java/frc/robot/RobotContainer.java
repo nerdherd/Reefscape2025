@@ -31,6 +31,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.AlgaeRoller;
+import frc.robot.util.GuliKit;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
@@ -41,12 +42,15 @@ public class RobotContainer {
   public AlgaeRoller algaeRoller;
   public Elevator elevator;
 
-  private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
-    ControllerConstants.kDriverControllerPort);
-  private final PS4Controller driverController = commandDriverController.getHID();
-  private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
-    ControllerConstants.kOperatorControllerPort);
-  private final PS4Controller operatorController = commandOperatorController.getHID();
+  // private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
+  //   ControllerConstants.kDriverControllerPort);
+  // private final PS4Controller driverController = commandDriverController.getHID();
+  // private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
+  //   ControllerConstants.kOperatorControllerPort);
+  // private final PS4Controller operatorController = commandOperatorController.getHID();
+
+  private final GuliKit driverController = new GuliKit(ControllerConstants.kDriverControllerPort, true, true);
+  private final GuliKit operatorController = new GuliKit(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
@@ -101,31 +105,31 @@ public class RobotContainer {
     swerveJoystickCommand = 
     new SwerveJoystickCommand(
       swerveDrive,
-      () -> -commandDriverController.getLeftY(), // Horizontal translation
-      commandDriverController::getLeftX, // Vertical Translation
+      () -> -driverController.getLeftY(), // Horizontal translation
+      driverController::getLeftX, // Vertical Translation
       () -> {
-        return commandDriverController.getRightX(); // Rotation
+        return driverController.getRightX(); // Rotation
       },
       () -> false, // robot oriented vairable
       () -> false, // tow supplier
-      driverController::getR2Button, // Precision/"Sniper Button"
+      driverController::getRTdigital, // Precision/"Sniper Button"
       () -> {
-        if (driverController.getCircleButton() || driverController.getCrossButton() || driverController.getTriangleButton()) {
+        if (driverController.getA() || driverController.getB() || driverController.getX()) {
           return true;
         }
         return false;
       },
       () -> { // Turn To angle Direction | TODO WIP
-        if (driverController.getCircleButton()) { // turn to amp
+        if (driverController.getA()) { // turn to amp
           if (!IsRedSide()){
             return 90.0;
           }
           return 270.0;
         }
-        if (driverController.getCrossButton()) {
+        if (driverController.getB()) {
            return 180.0;
         }
-        if(driverController.getTriangleButton()) {
+        if(driverController.getX()) {
           return 0.0;
         }
         return swerveDrive.getImu().getHeading();
@@ -140,22 +144,22 @@ public class RobotContainer {
   public void configureBindings_teleop() {
     // Driver bindings
 
-    commandDriverController.share().onTrue(
+    driverController.buttonA().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    commandDriverController.circle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
+    driverController.buttonA().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    commandDriverController.triangle().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+    driverController.buttonX().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    commandDriverController.square().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
+    driverController.buttonY().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    commandDriverController.cross().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
+    driverController.buttonB().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
     
-    commandDriverController.L2().onTrue(algaeRoller.intake())
+    driverController.triggerLT().onTrue(algaeRoller.intake()) // hold it :)
       .onFalse(algaeRoller.stop());
-    commandDriverController.R2().onTrue(algaeRoller.shootBarge())
+    driverController.triggerRT().onTrue(algaeRoller.shootBarge()) // hold it :)
       .onFalse(algaeRoller.stop());
 
   }
