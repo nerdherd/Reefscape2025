@@ -24,10 +24,10 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
  
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
-   
+
     private boolean enabled = false;
     public boolean velocityControl = true;
- 
+
     public AlgaeRoller() {
         rollerMotor = new TalonFX(AlgaeConstants.kRollerMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
@@ -83,16 +83,19 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         if (!enabled) {
             velocityRequest.Velocity = 0;
             rollerMotor.setControl(velocityRequest);
+            rollerMotor.set(velocityRequest.Velocity);
             return;
         }
  
         if (velocityControl) {
             rollerMotor.setControl(velocityRequest);
+            rollerMotor.set(velocityRequest.Velocity);
             return;
         } 
  
         voltageRequest.Output = velocityRequest.Velocity * 12 / 100.0;
         rollerMotor.setControl(voltageRequest);
+        rollerMotor.set(velocityRequest.Velocity);
     }
  
     //****************************** VELOCITY METHODS ******************************//
@@ -168,7 +171,8 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
                 tab.addNumber("Position", () -> this.rollerMotor.getPosition().getValueAsDouble());
             case MINIMAL:
                 tab.addBoolean("Algae Shooter Enabled", () -> this.enabled);
-                tab.addNumber("Velocity", () -> this.getVelocity());
+                tab.addBoolean("Algae Shooter Velocity Control", () -> this.velocityControl);
+                tab.addNumber("Velocity", () -> this.getVelocity() / 100);
                 tab.addNumber("Target Velocity", () -> this.getTargetVelocity());
                 tab.addNumber("Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
                 tab.addNumber("Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());

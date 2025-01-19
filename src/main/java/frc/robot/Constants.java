@@ -301,8 +301,8 @@ public final class Constants {
   // In revolutions!
   public static final double kRollerNeutralDeadband = 0.01;
 
-  public static final PrefDouble kBargeOuttake     = new PrefDouble("Algae Barge Outtake",     0);
-  public static final PrefDouble kProcessorOuttake = new PrefDouble("Algae Processor Outtake", 0);
+  public static final PrefDouble kBargeOuttake     = new PrefDouble("Algae Barge Outtake",     0.1);
+  public static final PrefDouble kProcessorOuttake = new PrefDouble("Algae Processor Outtake", 0.1);
 
  }
 }

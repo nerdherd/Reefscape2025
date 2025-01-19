@@ -153,9 +153,9 @@ public class RobotContainer {
     commandDriverController.cross().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
     
-    commandDriverController.L2().onTrue(algaeRoller.intake()) // hold it :)
+    commandDriverController.L2().onTrue(algaeRoller.intake())
       .onFalse(algaeRoller.stop());
-    commandDriverController.R2().onTrue(algaeRoller.shootBarge()) // hold it :)
+    commandDriverController.R2().onTrue(algaeRoller.shootBarge())
       .onFalse(algaeRoller.stop());
 
   }
