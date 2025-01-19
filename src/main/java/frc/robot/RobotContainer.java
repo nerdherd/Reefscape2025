@@ -148,7 +148,7 @@ public class RobotContainer {
   public void configureBindings_teleop() {
     // Driver bindings
 
-    driverController.buttonA().onTrue(
+    driverController.buttonMinus().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
