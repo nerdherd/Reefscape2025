@@ -46,13 +46,6 @@ public class RobotContainer {
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
 
-  // private final CommandPS4Controller commandDriverController = new CommandPS4Controller(
-  //   ControllerConstants.kDriverControllerPort);
-  // private final PS4Controller driverController = commandDriverController.getHID();
-  // private final CommandPS4Controller commandOperatorController = new CommandPS4Controller(
-  //   ControllerConstants.kOperatorControllerPort);
-  // private final PS4Controller operatorController = commandOperatorController.getHID();
-
   private final GuliKit driverController = new GuliKit(ControllerConstants.kDriverControllerPort, true, true);
   private final GuliKit operatorController = new GuliKit(ControllerConstants.kOperatorControllerPort, true, true);
   
@@ -77,6 +70,7 @@ public class RobotContainer {
 
     elevator = new Elevator();
     algaeRoller = new AlgaeRoller();
+    elevatorPivot = new ElevatorPivot();
     
     // initAutoChoosers();
     initShuffleboard();
@@ -198,7 +192,7 @@ public class RobotContainer {
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
-    elevatorPivot.initShuffleboard(loggingLevel);
+    // elevatorPivot.initShuffleboard(loggingLevel);
   }
   
   /**

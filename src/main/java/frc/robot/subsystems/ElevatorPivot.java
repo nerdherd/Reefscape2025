@@ -23,7 +23,7 @@ import frc.robot.util.NerdyMath;
 public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFX pivotMotor;
     private TalonFXConfigurator pivotConfigurator;
-    private Pigeon2 pigeon;
+    // private Pigeon2 pigeon;
     public boolean enabled = false;
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
     private final NeutralOut brakeRequest = new NeutralOut();
@@ -31,7 +31,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public ElevatorPivot (){
         pivotMotor = new TalonFX(ElevatorConstants.kPivotMotorID);
-        pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
+        // pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
+        pivotConfigurator = pivotMotor.getConfigurator();
         CommandScheduler.getInstance().registerSubsystem(this);
         configureMotor();
         configurePID();
@@ -113,7 +114,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         if(deg > 180)deg -=360;
         return deg;
     }
-    public void increamentPosition(){
+    public void incrementPosition(){
 
     }
     public double getTargetPositionRev(){

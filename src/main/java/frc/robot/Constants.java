@@ -283,7 +283,7 @@ public final class Constants {
     public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kPivotMotorID = 0;
+    public static final int kPivotMotorID = 71;
     public static final int kPivotPigeonID = 0; // TODO change later
     
     public static final PrefDouble kPElevatorPivot = new PrefDouble("P Elevator Pivot Motor", 0);
