@@ -33,6 +33,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.AlgaeRoller;
+import frc.robot.subsystems.CoralWrist;
 import frc.robot.util.GuliKit;
 import frc.robot.subsystems.ElevatorPivot;
 
@@ -45,6 +46,7 @@ public class RobotContainer {
   public AlgaeRoller algaeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
+  public CoralWrist coralWrist;
 
   private final GuliKit driverController = new GuliKit(ControllerConstants.kDriverControllerPort, true, true);
   private final GuliKit operatorController = new GuliKit(ControllerConstants.kOperatorControllerPort, true, true);
@@ -71,6 +73,7 @@ public class RobotContainer {
     elevator = new Elevator();
     algaeRoller = new AlgaeRoller();
     elevatorPivot = new ElevatorPivot();
+    coralWrist = new CoralWrist();
     
     initShuffleboard();
     // initDefaultCommands_test();
@@ -205,8 +208,12 @@ public class RobotContainer {
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
     driverController.buttonB().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+
+    driverController.buttonA().onTrue(coralWrist.upCommand())
+      .onFalse(coralWrist.stowCommand()); 
     
-    driverController.triggerZL().onTrue(algaeRoller.intake()) // hold it :)
+    driverController.buttonPlus().onTrue(elevatorPivot.moveToPickUp()).onFalse(elevatorPivot.moveToStow());
+    driverController.triggerZR().onTrue(algaeRoller.intake()) // hold it :)
       .onFalse(algaeRoller.stop());
     driverController.triggerZR().onTrue(algaeRoller.shootBarge()) // hold it :)
       .onFalse(algaeRoller.stop());

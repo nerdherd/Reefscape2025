@@ -294,9 +294,9 @@ public final class Constants {
     public static final PrefDouble kAElevatorPivot = new PrefDouble("A Elevator Pivot Motor", 0);
     public static final PrefDouble kGElevatorPivot = new PrefDouble("G Elevator Pivot Motor", 0);
 
-    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", 0); //TODO change later
+    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", -1); //TODO change later
     public static final PrefDouble kElevatorPivotStartPosition = new PrefDouble("Elevator Pivot Start", 0);; //TODO change later
-    public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", 0);; //TODO change later
+    public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", 1);; //TODO change later
 
     public static final double kElevatorPivotMin = 0; // TODO change later
     public static final double kElevatorPivotMax = 0; // TODO change later
@@ -314,7 +314,7 @@ public final class Constants {
 
   // ************************************** ROLLER CONSTANTS *************************************** //
   
-  public static final int kRollerMotorID = 61; 
+  public static final int kRollerMotorID = 0; //61
 
   public static final PrefDouble kPRollerMotor = new PrefDouble("kP Roller Motor", 0);
   public static final PrefDouble kIRollerMotor = new PrefDouble("kI Roller Motor", 0);
@@ -333,6 +333,21 @@ public final class Constants {
   public static final PrefDouble kBargeOuttake     = new PrefDouble("Algae Barge Outtake",     0.1);
   public static final PrefDouble kProcessorOuttake = new PrefDouble("Algae Processor Outtake", 0.1);
 
+ }
+
+ public static final class CoralConstants {
+  public static final int kWristMotorID = 61;
+  
+
+  public static final PrefDouble kPWristMotor = new PrefDouble("kP Roller Motor", 0.1);
+  public static final PrefDouble kIWristMotor = new PrefDouble("kI Roller Motor", 0);
+  public static final PrefDouble kDWristMotor = new PrefDouble("kD Roller Motor", 0);
+  public static final PrefDouble kVWristMotor = new PrefDouble("kV Roller Motor", 0);
+
+  public static final double kWristStowPosition = 0.1;
+  public static final double kWristUpPostion = 1.0;
+
+  public static final double kWristSpeed = 1.0;
  }
 }
 
