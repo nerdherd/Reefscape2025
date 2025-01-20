@@ -183,6 +183,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         field.setRobotPose(poseEstimator.getEstimatedPosition());
 
         // visionupdateOdometry("limelight-back");
+        // visionupdateOdometry("limelight-kads");
+
     }
 
     //******************************  Vision ******************************/
@@ -213,8 +215,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //             doRejectUpdate = true;
     //         }
 
-    //         SmartDashboard.putNumber("X Position", botPose1.getX());
-    //         SmartDashboard.putNumber("Y Position", botPose1.getY());
+            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
             
     //         // 1 target with large area and close to estimated pose
     //         if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
