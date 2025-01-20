@@ -49,8 +49,8 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
-  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
@@ -77,8 +77,8 @@ public class RobotContainer {
     coralWrist = new CoralWrist();
     
     initShuffleboard();
-    // initDefaultCommands_test();
-    initDefaultCommands_teleop();
+    initDefaultCommands_test();
+    // initDefaultCommands_teleop();
     initAutoChoosers();
 
     // Configure the trigger bindings
@@ -212,7 +212,7 @@ public class RobotContainer {
     driverController.buttonRight().onTrue(coralWrist.upCommand())
       .onFalse(coralWrist.stowCommand()); 
 
-    driverController.controllerRight().onTrue(elevatorPivot.moveToStart())
+    driverController.controllerRight().whileTrue(elevatorPivot.moveToStart())
       .onFalse(elevatorPivot.moveToStow());
     driverController.controllerLeft().onTrue(elevatorPivot.moveToPickUp())
       .onFalse(elevatorPivot.moveToStow());

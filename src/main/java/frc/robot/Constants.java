@@ -294,7 +294,7 @@ public final class Constants {
     public static final PrefDouble kAElevatorPivot = new PrefDouble("A Elevator Pivot Motor", 0.01);
     public static final PrefDouble kGElevatorPivot = new PrefDouble("G Elevator Pivot Motor", 0.01);
 
-    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", -90); //TODO change later
+    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", -90.5); //TODO change later
     public static final PrefDouble kElevatorPivotStartPosition = new PrefDouble("Elevator Pivot Start", 0); //TODO change later
     public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", 90); //TODO change later
 
@@ -305,8 +305,8 @@ public final class Constants {
     public static final PrefDouble kElevatorPivotDeadBand = new PrefDouble("Elevator Pivot DeadBand", 0);
     public static final PrefDouble kElevatorPivotOffSet = new PrefDouble("Elevator Pivot Offset", 0);
 
-    public static final PrefDouble kEPivotCruiseVelocity = new PrefDouble("Elevator Pivot Cruise Velocity",0);
-    public static final PrefDouble kElevatorPivotCruiseAcceleration = new PrefDouble("Elevator Pivot Acceleration",0);
+    public static final PrefDouble kEPivotCruiseVelocity = new PrefDouble("Elevator Pivot Cruise Velocity",16_333);
+    public static final PrefDouble kElevatorPivotCruiseAcceleration = new PrefDouble("Elevator Pivot Acceleration",100_000);
     
  }
 
