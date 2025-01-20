@@ -5,14 +5,11 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -24,7 +21,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFX pivotMotor;
     private TalonFXConfigurator pivotConfigurator;
     // private Pigeon2 pigeon;
-    public boolean enabled = false;
+    public boolean enabled = true;
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
     private final NeutralOut brakeRequest = new NeutralOut();
     
@@ -36,6 +33,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         CommandScheduler.getInstance().registerSubsystem(this);
         configureMotor();
         configurePID();
+        motionMagicRequest.withSlot(0);
+        pivotMotor.setPosition(0.0);
     }
     //********************************SETUP METHODS ***************************************/
     private void configurePID(){
@@ -66,8 +65,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private void configureMotor(){
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         pivotConfigurator.refresh(pivotConfiguration);
-        pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
+        // pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;//FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
         pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
         pivotConfiguration.Feedback.SensorToMechanismRatio = -1; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
@@ -97,7 +96,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             ElevatorConstants.kElevatorPivotMin, 
             ElevatorConstants.kElevatorPivotMax
             );
-        motionMagicRequest.Position = newPos;  
+        motionMagicRequest.Position = (newPos / 360.0);  
     }
     public void stop() {
         setEnabled(false);
@@ -106,16 +105,13 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     public Command stopCommand() {
         return Commands.runOnce(() -> stop());
     }
-    public Command setPositionCommand(boolean enabled){
-        return Commands.runOnce(() -> setEnabled(enabled));
+    public Command setPositionCommand(double position){
+        return Commands.runOnce(() -> setPosition(position));
     }
     public double mapDegrees(double deg){
         deg = deg - (Math.floor(deg / 360.0 ) * 360.0 );
         if(deg > 180)deg -=360;
         return deg;
-    }
-    public void incrementPosition(){
-
     }
     public double getTargetPositionRev(){
         return motionMagicRequest.Position;
@@ -136,7 +132,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         setPosition(getTargetPositionDegrees() + incrementDegrees);
     }
     public Command incrementPositionCommand(double increment){
-        return Commands.runOnce(() -> setPosition(increment));
+        return Commands.runOnce(() -> incrementPosition(increment));
     }
     public Command moveToStow(){
         return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotStowPosition.get()));
@@ -152,7 +148,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             getPositionDegrees(),
             positionDegrees - ElevatorConstants.kElevatorPivotDeadBand.get(),
             positionDegrees + ElevatorConstants.kElevatorPivotDeadBand.get()
-        ) && NerdyMath.inRange(
+            ) && NerdyMath.inRange(
             getTargetPositionDegrees(), 
             positionDegrees - ElevatorConstants.kElevatorPivotDeadBand.get(), 
             positionDegrees + ElevatorConstants.kElevatorPivotDeadBand.get());
@@ -163,7 +159,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     @Override
     public void periodic() {
         if (enabled){
-           pivotMotor.setControl(motionMagicRequest);
+            pivotMotor.setControl(motionMagicRequest);
+            DriverStation.reportWarning("SDKLJLDSHFKJSFGKJFS: " + Double.toString(motionMagicRequest.Position), false);
         } else {
             pivotMotor.setControl(brakeRequest);
         }
@@ -175,7 +172,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'reportToSmartDashboard'");
     }
-
+    
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         // TODO Auto-generated method stub

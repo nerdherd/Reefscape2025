@@ -211,9 +211,13 @@ public class RobotContainer {
 
     driverController.buttonRight().onTrue(coralWrist.upCommand())
       .onFalse(coralWrist.stowCommand()); 
+
+    driverController.controllerRight().onTrue(elevatorPivot.moveToStart())
+      .onFalse(elevatorPivot.moveToStow());
+    driverController.controllerLeft().onTrue(elevatorPivot.moveToPickUp())
+      .onFalse(elevatorPivot.moveToStow());
     
-    driverController.controllerRight().onTrue(elevatorPivot.moveToPickUp()).onFalse(elevatorPivot.moveToStow());
-    driverController.triggerRight().onTrue(algaeRoller.intake()) // hold it :)
+    driverController.bumperRight().onTrue(algaeRoller.intake()) // hold it :)
       .onFalse(algaeRoller.stop());
     driverController.triggerRight().onTrue(algaeRoller.shootBarge()) // hold it :)
       .onFalse(algaeRoller.stop());
