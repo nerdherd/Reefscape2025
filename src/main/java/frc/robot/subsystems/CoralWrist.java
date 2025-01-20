@@ -31,8 +31,8 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     private final TalonFXConfigurator motorConfigurator;
 
     private final PIDController motorPID;
-    private double desiredPosition;
-    private double desiredVelocity;
+    private double desiredPosition = CoralConstants.kWristStowPosition;
+    private double desiredVelocity = 0.0;
     public boolean enabled = false;
 
     public CoralWrist(){
@@ -44,6 +44,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         configurePID(motorConfigs);
 
         motorPID = new PIDController(0.2, 0, 0);
+        motorPID.setTolerance(0.01, 0.02);
         
         motor.setNeutralMode(NeutralModeValue.Brake);
         zeroEncoder();
