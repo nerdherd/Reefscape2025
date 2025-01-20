@@ -1,24 +1,27 @@
 package frc.robot.util;
 
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 public class Controller {
     private final boolean isPS4;
 
-    private BadPS4 PS4;
-    private CommandBadPS4 cmdPS4;
+    private CommandPS4Controller cmdPS4;
+    private PS4Controller PS4;
     private GuliKit guliKit;
 
     /**
      * Generic wrapper class for PS4 controllers.
+     * <p>Combines CommandPS4Controller and PS4Controller.
      * @param port
      */
     public Controller(int port) {
         isPS4 = true;
 
-        PS4 = new BadPS4(port);
-        cmdPS4 = new CommandBadPS4(port);
+        cmdPS4 = new CommandPS4Controller(port);
+        PS4 = cmdPS4.getHID();
     }
 
     /**
@@ -34,6 +37,7 @@ public class Controller {
     }
 
     // ***** VALUE METHODS ***** //
+
     public double getLeftX() { return isPS4 ? PS4.getLeftX() : guliKit.getLeftX(); }
     public double getLeftY() { return isPS4 ? PS4.getLeftY() : guliKit.getLeftY(); }
     public double getRightX() { return isPS4 ? PS4.getRightX() : guliKit.getRightX(); }
@@ -54,24 +58,25 @@ public class Controller {
     public boolean getJoystickLeft() { return isPS4 ? PS4.getL3Button() : guliKit.getLeftJoy(); }
     public boolean getJoystickRight() { return isPS4 ? PS4.getR3Button() : guliKit.getRightJoy(); }
 
-    /** <STRONG> PS4 ONLY </STRONG> @param loop */
+    /** <STRONG> PS4 ONLY </STRONG> */
     public boolean getDpadUp(EventLoop loop) { return PS4.povUp(loop).getAsBoolean(); }
     /** <STRONG> GULIKIT ONLY </STRONG> */
     public boolean getDpadUp() { return guliKit.getDpadUp(); }
-    /** <STRONG> PS4 ONLY </STRONG> @param loop */
+    /** <STRONG> PS4 ONLY </STRONG> */
     public boolean getDpadRight(EventLoop loop) { return PS4.povRight(loop).getAsBoolean(); }
     /** <STRONG> GULIKIT ONLY </STRONG> */
     public boolean getDpadRight() { return guliKit.getDpadRight(); }
-    /** <STRONG> PS4 ONLY </STRONG> @param loop */
+    /** <STRONG> PS4 ONLY </STRONG> */
     public boolean getDpadDown(EventLoop loop) { return PS4.povDown(loop).getAsBoolean(); }
     /** <STRONG> GULIKIT ONLY </STRONG> */
     public boolean getDpadDown() { return guliKit.getDpadDown(); }
-    /** <STRONG> PS4 ONLY </STRONG> @param loop */
+    /** <STRONG> PS4 ONLY </STRONG> */
     public boolean getDpadLeft(EventLoop loop) { return PS4.povLeft(loop).getAsBoolean(); }
     /** <STRONG> GULIKIT ONLY </STRONG> */
     public boolean getDpadLeft() { return guliKit.getDpadLeft(); }
 
     // ***** OBJECT METHODS ***** //
+
     public Trigger buttonRight() { return isPS4 ? cmdPS4.circle() : guliKit.buttonA(); }
     public Trigger buttonDown() { return isPS4 ? cmdPS4.cross() : guliKit.buttonA(); }
     public Trigger buttonUp() { return isPS4 ? cmdPS4.triangle() : guliKit.buttonA(); }
@@ -93,21 +98,22 @@ public class Controller {
     public Trigger dpadLeft() { return isPS4 ? cmdPS4.povLeft() : guliKit.dpadLeft(); }
 
     // ***** STATE METHODS ***** //
-    /** <STRONG> GULIKIT ONLY </STRONG> @param isDigital */
+
+    /** <STRONG> GULIKIT ONLY </STRONG> */
     public void setDigitalLeft(boolean isDigital) {
         if (!isPS4) guliKit.setDigitalLeft(isDigital);
     }
-    /** <STRONG> GULIKIT ONLY </STRONG> @param isDigital */
+    /** <STRONG> GULIKIT ONLY </STRONG> */
     public void setDigitalRight(boolean isDigital) {
         if (!isPS4) guliKit.setDigitalRight(isDigital);
     }
 
-    /** <STRONG> GULIKIT ONLY </STRONG> @param isDigital */
+    /** <STRONG> GULIKIT ONLY </STRONG> */
     public boolean isDigitalLeft() {
         if (!isPS4) return guliKit.isDigitalLeft();
         else return true;
     }
-    /** <STRONG> GULIKIT ONLY </STRONG> @param isDigital */
+    /** <STRONG> GULIKIT ONLY </STRONG> */
     public boolean isDigitalRight() {
         if (!isPS4) return guliKit.isDigitalRight();
         else return true;
