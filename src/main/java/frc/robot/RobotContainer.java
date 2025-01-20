@@ -166,16 +166,16 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "bye")));
 
-    driverController.DpadUp()
+    driverController.dpadUp()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "bye")));
-    driverController.DpadRight()
+    driverController.dpadRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "bye")));
-    driverController.DpadDown()
+    driverController.dpadDown()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "bye")));
-    driverController.DpadLeft()
+    driverController.dpadLeft()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "bye")));
 
