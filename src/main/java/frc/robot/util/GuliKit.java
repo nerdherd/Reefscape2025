@@ -14,20 +14,27 @@ public class GuliKit {
     private boolean isDigitalLeft;
     private boolean isDigitalRight;
 
+    /**
+     * Creates an instance of a GuliKit controller.
+     * @param port The port of the controller on FRC Driver Station
+     * @param isDigitalLeft If the left switch on the controller is set to digital (dot)
+     * @param isDigitalRight If the right switch on the controller is set to digital (dot)
+     */
     public GuliKit(int port, boolean isDigitalLeft, boolean isDigitalRight) {
         this.isDigitalLeft = isDigitalLeft;
         this.isDigitalRight = isDigitalRight;
 
         controller = new Joystick(port);
+
         buttonB = new JoystickButton(controller, 1);
         buttonA = new JoystickButton(controller, 2);
         buttonY = new JoystickButton(controller, 3);
         buttonX = new JoystickButton(controller, 4);
         bumperL = new JoystickButton(controller, 5);
         bumperR = new JoystickButton(controller, 6);
-        buttonMinus = new JoystickButton(controller, 7);
-        buttonPlus = new JoystickButton(controller, 8);
-        buttonLeftJoy = new JoystickButton(controller, 9);
+        buttonMinus    = new JoystickButton(controller, 7);
+        buttonPlus     = new JoystickButton(controller, 8);
+        buttonLeftJoy  = new JoystickButton(controller, 9);
         buttonRightJoy = new JoystickButton(controller, 10);
     }
 
@@ -50,8 +57,8 @@ public class GuliKit {
     public boolean getX() { return buttonY.getAsBoolean(); }
     public boolean getL() { return bumperL.getAsBoolean(); }
     public boolean getR() { return bumperR.getAsBoolean(); }
-    public boolean getZLdigital() { return controller.getRawAxis(2) == 1 ? true : false; }
-    public boolean getZRdigital() { return controller.getRawAxis(3) == 1 ? true : false; }
+    public boolean getZLdigital() { return controller.getRawAxis(2) > 0.65 ? true : false; }
+    public boolean getZRdigital() { return controller.getRawAxis(3) > 0.65 ? true : false; }
     public double getZLanalog() { return controller.getRawAxis(2); }
     public double getZRanalog() { return controller.getRawAxis(3); }
 

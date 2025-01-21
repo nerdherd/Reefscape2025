@@ -13,9 +13,9 @@ public class Controller {
     private GuliKit guliKit;
 
     /**
-     * Generic wrapper class for PS4 controllers.
+     * PS4 controller implemntation.
      * <p>Combines CommandPS4Controller and PS4Controller.
-     * @param port
+     * @param port The port of the controller on FRC Driver Station
      */
     public Controller(int port) {
         isPS4 = true;
@@ -25,10 +25,10 @@ public class Controller {
     }
 
     /**
-     * Generic wrapper class for GuliKit controllers.
-     * @param port
-     * @param isDigitalLeft
-     * @param isDigitalRight
+     * GuliKit controller implementation.
+     * @param port The port of the controller on FRC Driver Station
+     * @param isDigitalLeft If the left switch on the controller is set to digital (dot)
+     * @param isDigitalRight If the right switch on the controller is set to digital (dot)
      */
     public Controller(int port, boolean isDigitalLeft, boolean isDigitalRight) {
         isPS4 = false;
