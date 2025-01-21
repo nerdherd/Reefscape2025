@@ -171,6 +171,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             positionDegrees - ElevatorConstants.kElevatorPivotDeadBand.get(),
             positionDegrees + ElevatorConstants.kElevatorPivotDeadBand.get()
             ) && NerdyMath.inRange(
+            ) && NerdyMath.inRange(
             getTargetPositionDegrees(), 
             positionDegrees - ElevatorConstants.kElevatorPivotDeadBand.get(), 
             positionDegrees + ElevatorConstants.kElevatorPivotDeadBand.get());
