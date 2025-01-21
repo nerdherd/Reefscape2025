@@ -213,10 +213,10 @@ public class RobotContainer {
       .onFalse(coralWrist.stowCommand()); 
     
     driverController.buttonPlus().onTrue(elevatorPivot.moveToPickUp()).onFalse(elevatorPivot.moveToStow());
-    driverController.triggerZR().onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
+    driverController.triggerZL().onTrue(algaeRoller.intake()) // hold it :)
+      .onFalse(algaeRoller.stopCommand());
     driverController.triggerZR().onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stop());
+      .onFalse(algaeRoller.stopCommand());
 
   }
 

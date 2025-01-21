@@ -314,12 +314,11 @@ public final class Constants {
 
   // ************************************** ROLLER CONSTANTS *************************************** //
   
-  public static final int kRollerMotorID = 0; //61
-
-  public static final PrefDouble kPRollerMotor = new PrefDouble("kP Roller Motor", 0);
+  public static final int kRollerMotorID = 61;
+  public static final PrefDouble kPRollerMotor = new PrefDouble("kP Roller Motor", 0.1);
   public static final PrefDouble kIRollerMotor = new PrefDouble("kI Roller Motor", 0);
   public static final PrefDouble kDRollerMotor = new PrefDouble("kD Roller Motor", 0);
-  public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0);
+  public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0.015);
 
   public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", -0.1); 
   public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power", 0.1);
@@ -336,7 +335,7 @@ public final class Constants {
  }
 
  public static final class CoralConstants {
-  public static final int kWristMotorID = 61;
+  public static final int kWristMotorID = 0;
   
 
   public static final PrefDouble kPWristMotor = new PrefDouble("kP Roller Motor", 0.1);

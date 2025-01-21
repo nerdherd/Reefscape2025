@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -24,6 +26,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
  
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
     private final VoltageOut voltageRequest = new VoltageOut(0);
+    private final NeutralOut brakeRequest = new NeutralOut();
 
     private boolean enabled = false;
     public boolean velocityControl = true;
@@ -31,7 +34,14 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     public AlgaeRoller() {
         rollerMotor = new TalonFX(AlgaeConstants.kRollerMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
-        voltageRequest.EnableFOC = true;
+        velocityRequest.EnableFOC = true;
+        velocityRequest.Acceleration = 0;
+        velocityRequest.FeedForward = 0;
+        velocityRequest.Slot = 0;
+        velocityRequest.OverrideBrakeDurNeutral = false;
+        velocityRequest.LimitForwardMotion = false;
+        velocityRequest.LimitReverseMotion = false;
+        // velocityRequest.
 
         CommandScheduler.getInstance().registerSubsystem(this);
  
@@ -81,32 +91,36 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            velocityRequest.Velocity = 0;
-            rollerMotor.setControl(velocityRequest);
-            rollerMotor.set(velocityRequest.Velocity);
-            return;
+            rollerMotor.setControl(brakeRequest);
+            // rollerMotor.set(velocityRequest.Velocity);
         }
  
-        if (velocityControl) {
+        else {
+            // voltageRequest.Output = velocityRequest.Velocity * 12 / 100;
+            // rollerMotor.setControl(voltageRequest);
+
+            // ************************************* FIX THIS ******************************
+            //moves w/o set control SLKJDFLKJSDLFKJSLDKFJ !!!!!!!
             rollerMotor.setControl(velocityRequest);
-            rollerMotor.set(velocityRequest.Velocity);
-            return;
+            // want feedforward to change based on desired velocity which is what setcontrol was supposed to do
+            // but it doesnt work, so figure out another way to change feedforward to figure out why
+            // set control isnt working
+            velocityRequest.FeedForward = 0.5;
+
+            // velocityRequest.FeedForward = rollerMotor.setControl(velocityRequest).value;
+            // rollerMotor.set(velocityRequest.Velocity);
         } 
- 
-        voltageRequest.Output = velocityRequest.Velocity * 12 / 100.0;
-        rollerMotor.setControl(voltageRequest);
-        rollerMotor.set(velocityRequest.Velocity);
     }
  
     //****************************** VELOCITY METHODS ******************************//
- 
+//  
+    private void stop() {
+        velocityRequest.Velocity = 0;
+        rollerMotor.setControl(brakeRequest);
+    }
     private void setVelocity(double velocity) {
         velocityRequest.Velocity = velocity;
         rollerMotor.setControl(velocityRequest);
-    }
-
-    public double getVelocity() {
-        return rollerMotor.getVelocity().getValueAsDouble();
     }
 
     public double getTargetVelocity() {
@@ -124,6 +138,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     }
  
     public Command setVelocityCommand(double velocity) {
+        velocityRequest.Velocity = velocity;
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
@@ -150,10 +165,10 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         );
     }
     
-    public Command stop() {
+    public Command stopCommand() {
         return Commands.sequence(
             setEnabledCommand(false),
-            setVelocityCommand(0)
+            Commands.runOnce(() -> stop())
         );
     }
  
@@ -172,11 +187,13 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
             case MINIMAL:
                 tab.addBoolean("Algae Shooter Enabled", () -> this.enabled);
                 tab.addBoolean("Algae Shooter Velocity Control", () -> this.velocityControl);
-                tab.addNumber("Velocity", () -> this.getVelocity() / 100);
+                tab.addNumber("Velocity", () -> rollerMotor.getVelocity().getValueAsDouble());
+                tab.addNumber("NEW Velocity", () -> velocityRequest.Velocity);
                 tab.addNumber("Target Velocity", () -> this.getTargetVelocity());
-                tab.addNumber("Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
-                tab.addNumber("Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());
-                tab.addNumber("Applied Voltage", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Feed Forward", () -> velocityRequest.FeedForward);
+                // tab.addNumber("Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
+                // tab.addNumber("Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());
+                // tab.addNumber("Applied Voltage", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
                 break;
             default:
                 break;
