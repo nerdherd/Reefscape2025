@@ -34,8 +34,9 @@ import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.AlgaeRoller;
 import frc.robot.subsystems.CoralWrist;
-import frc.robot.util.GuliKit;
 import frc.robot.subsystems.ElevatorPivot;
+import frc.robot.util.Controller;
+import frc.robot.util.GuliKit;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
@@ -48,8 +49,8 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final GuliKit driverController = new GuliKit(ControllerConstants.kDriverControllerPort, true, true);
-  private final GuliKit operatorController = new GuliKit(ControllerConstants.kOperatorControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
@@ -76,8 +77,8 @@ public class RobotContainer {
     coralWrist = new CoralWrist();
     
     initShuffleboard();
-    // initDefaultCommands_test();
-    initDefaultCommands_teleop();
+    initDefaultCommands_test();
+    // initDefaultCommands_teleop();
     initAutoChoosers();
 
     // Configure the trigger bindings
@@ -112,24 +113,24 @@ public class RobotContainer {
       },
       () -> false, // robot oriented vairable
       () -> false, // tow supplier
-      driverController::getZRdigital, // Precision/"Sniper Button"
+      driverController::getTriggerRight, // Precision/"Sniper Button"
       () -> {
-        if (driverController.getA() || driverController.getB() || driverController.getX()) {
+        if (driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp()) {
           return true;
         }
         return false;
       },
       () -> { // Turn To angle Direction | TODO WIP
-        if (driverController.getA()) { // turn to amp
+        if (driverController.getButtonRight()) { // turn to amp
           if (!IsRedSide()){
             return 90.0;
           }
           return 270.0;
         }
-        if (driverController.getB()) {
+        if (driverController.getButtonDown()) {
            return 180.0;
         }
-        if(driverController.getX()) {
+        if(driverController.getButtonUp()) {
           return 0.0;
         }
         return swerveDrive.getImu().getHeading();
@@ -140,76 +141,75 @@ public class RobotContainer {
 }
 
   public void initDefaultCommands_test() {
-    driverController.buttonA()
+    driverController.buttonRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "bye")));
-    driverController.buttonB()
+    driverController.buttonDown()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "bye")));
-    driverController.buttonX()
+    driverController.buttonUp()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "bye")));
-    driverController.buttonY()
+    driverController.buttonLeft()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "bye")));
 
-    driverController.bumperL()
+    driverController.bumperLeft()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "bye")));
-    driverController.bumperR()
+    driverController.bumperRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "bye")));
-    driverController.triggerZL()
+    driverController.triggerLeft()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "bye")));
-    driverController.triggerZR()
+    driverController.triggerRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "bye")));
 
-    driverController.DpadUp()
+    driverController.dpadUp()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "bye")));
-    driverController.DpadRight()
+    driverController.dpadRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "bye")));
-    driverController.DpadDown()
+    driverController.dpadDown()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "bye")));
-    driverController.DpadLeft()
+    driverController.dpadLeft()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "bye")));
 
-    driverController.buttonMinus()
+    driverController.controllerLeft()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "bye")));
-    driverController.buttonPlus()
+    driverController.controllerRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "bye")));
-    driverController.buttonLeftJoy()
+    driverController.joystickLeft()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "bye")));
-    driverController.buttonRightJoy()
+    driverController.joystickRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
   }
 
   public void configureBindings_teleop() {
     // Driver bindings
-
-    driverController.buttonMinus().onTrue(
+    driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    // driverController.buttonA().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
-    //   .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    driverController.buttonX().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
+    driverController.buttonRight().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    driverController.buttonY().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
+    driverController.buttonUp().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    driverController.buttonB().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
+    driverController.buttonLeft().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
+      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
+    driverController.buttonDown().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
 
-    driverController.buttonA().onTrue(coralWrist.upCommand())
+    driverController.buttonRight().onTrue(coralWrist.upCommand())
       .onFalse(coralWrist.stowCommand()); 
     
     driverController.buttonPlus().onTrue(elevatorPivot.moveToPickUp()).onFalse(elevatorPivot.moveToStow());
@@ -218,6 +218,15 @@ public class RobotContainer {
     driverController.triggerZR().onTrue(algaeRoller.shootBarge()) // hold it :)
       .onFalse(algaeRoller.stopCommand());
 
+    driverController.controllerRight().whileTrue(elevatorPivot.moveToStart())
+      .onFalse(elevatorPivot.moveToStow());
+    driverController.controllerLeft().onTrue(elevatorPivot.moveToPickUp())
+      .onFalse(elevatorPivot.moveToStow());
+    
+    driverController.bumperRight().onTrue(algaeRoller.intake()) // hold it :)
+      .onFalse(algaeRoller.stop());
+    driverController.triggerRight().onTrue(algaeRoller.shootBarge()) // hold it :)
+      .onFalse(algaeRoller.stop());
   }
 
   public void configureBindings_test() {}
@@ -228,7 +237,6 @@ public class RobotContainer {
 
   	List<String> paths = AutoBuilder.getAllAutoNames();
     
-
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);

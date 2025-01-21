@@ -1,12 +1,8 @@
 package frc.robot.subsystems;
 
-import java.util.function.Supplier;
-
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -20,19 +16,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralConstants;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.subsystems.Reportable.LOG_LEVEL;
-import frc.robot.Constants.ControllerConstants;
 import frc.robot.util.NerdyMath;
-import frc.robot.util.filters.ExponentialSmoothingFilter;
 
 public class CoralWrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
     private final TalonFXConfigurator motorConfigurator;
 
     private final PIDController motorPID;
-    private double desiredPosition;
-    private double desiredVelocity;
+    private double desiredPosition = CoralConstants.kWristStowPosition;
+    private double desiredVelocity = 0.0;
     public boolean enabled = false;
 
     public CoralWrist(){
@@ -44,6 +36,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         configurePID(motorConfigs);
 
         motorPID = new PIDController(0.2, 0, 0);
+        motorPID.setTolerance(0.01, 0.02);
         
         motor.setNeutralMode(NeutralModeValue.Brake);
         zeroEncoder();

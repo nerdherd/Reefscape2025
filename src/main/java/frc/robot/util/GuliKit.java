@@ -36,7 +36,7 @@ public class GuliKit {
     public void setDigitalRight(boolean isDigital) { this.isDigitalRight = isDigital; }
 
     public boolean isDigitalLeft() { return isDigitalLeft; }
-    public boolean isDigitaRight() { return isDigitalRight; }
+    public boolean isDigitalRight() { return isDigitalRight; }
 
     // VALUE METHODS \\
     public double getLeftX() { return controller.getRawAxis(0); }
@@ -80,8 +80,8 @@ public class GuliKit {
     public JoystickButton buttonLeftJoy() { return buttonLeftJoy; }
     public JoystickButton buttonRightJoy() { return buttonRightJoy; }
 
-    public Trigger DpadUp() { return new Trigger(this::getDpadUp); }
-    public Trigger DpadRight() { return new Trigger(this::getDpadRight); }
-    public Trigger DpadDown() { return new Trigger(this::getDpadDown); }
-    public Trigger DpadLeft() { return new Trigger(this::getDpadLeft); }
+    public Trigger dpadUp() { return new Trigger(this::getDpadUp); }
+    public Trigger dpadRight() { return new Trigger(this::getDpadRight); }
+    public Trigger dpadDown() { return new Trigger(this::getDpadDown); }
+    public Trigger dpadLeft() { return new Trigger(this::getDpadLeft); }
 }
