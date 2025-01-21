@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -58,26 +57,26 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // ****************************** COMMAND METHODS ***************************** //
 
-    public Command setEnabledCommand(boolean enabled) {
+    private Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> this.setEnabled(enabled));
     }
 
-    public Command setPositionCommand(double position) {
+    private Command setPositionCommand(double position) {
         return Commands.runOnce(() -> setPosition(position));
     }
 
-    public Command goToPosition(double position) {
+    private Command goToPosition(double position) {
         return Commands.sequence(
             setEnabledCommand(true),
             setPositionCommand(position)
         );
     }
 
-    public Command setVelocityCommand(double velocity) {
+    private Command setVelocityCommand(double velocity) {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
-    public Command stopCommand() {
+    private Command stopCommand() {
         return Commands.sequence(
             setVelocityCommand(0),
             setEnabledCommand(false)
@@ -85,6 +84,10 @@ public class Elevator extends SubsystemBase implements Reportable {
     }
 
     // ****************************** NAMED COMMANDS ****************************** //
+
+    public Command stow() {
+        return goToPosition(ElevatorConstants.kElevatorStowPosition);
+    }
 
     public Command moveToReefL1() {
         return goToPosition(ElevatorConstants.kElevatorL1Position);

@@ -79,9 +79,6 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     public void periodic() {
         if (enabled) {
             setVelocity((motorPID.calculate(motor.getPosition().getValueAsDouble(), desiredPosition))/2);
-            if (desiredPosition == CoralConstants.kWristStowPosition) {     //TODO see if deletable also see elevator
-                setVelocity((motorPID.calculate(motor.getPosition().getValueAsDouble(), desiredPosition))/2);
-            }
         }
         else {
             setVelocity((motorPID.calculate(motor.getPosition().getValueAsDouble(), CoralConstants.kWristStowPosition))/2);
@@ -138,7 +135,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         return goToPosition(CoralConstants.kWristStowPosition);
     }
     
-    public Command up() {
+    public Command raise() {
         return goToPosition(CoralConstants.kWristUpPostion);
     }
 
@@ -164,6 +161,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
                 break;
         }
     }
+    
     @Override
     public void initShuffleboard(LOG_LEVEL level) { 
         if (level == LOG_LEVEL.OFF || level == LOG_LEVEL.MINIMAL) {
@@ -174,7 +172,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
             case OFF:
                 break;
             case ALL:
-                tab.addString("Control Mode", motor.getControlMode()::toString);
+                tab.addString("Control Mode", () -> motor.getControlMode().toString());
             case MEDIUM:
 
             case MINIMAL:

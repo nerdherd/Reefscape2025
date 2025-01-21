@@ -11,18 +11,18 @@ public class GuliKit {
                                  buttonMinus, buttonPlus,
                                  buttonLeftJoy, buttonRightJoy;
     
-    private boolean isDigitalLeft;
-    private boolean isDigitalRight;
+    private boolean isDigLeft;
+    private boolean isDigRight;
 
     /**
      * Creates an instance of a GuliKit controller.
      * @param port The port of the controller on FRC Driver Station
-     * @param isDigitalLeft If the left switch on the controller is set to digital (dot)
-     * @param isDigitalRight If the right switch on the controller is set to digital (dot)
+     * @param isDigLeft If the left switch on the controller is set to digital (dot)
+     * @param isDigRight If the right switch on the controller is set to digital (dot)
      */
-    public GuliKit(int port, boolean isDigitalLeft, boolean isDigitalRight) {
-        this.isDigitalLeft = isDigitalLeft;
-        this.isDigitalRight = isDigitalRight;
+    public GuliKit(int port, boolean isDigLeft, boolean isDigRight) {
+        this.isDigLeft = isDigLeft;
+        this.isDigRight = isDigRight;
 
         controller = new Joystick(port);
 
@@ -39,11 +39,11 @@ public class GuliKit {
     }
 
     // STATE METHODS \\
-    public void setDigitalLeft(boolean isDigital) { this.isDigitalLeft = isDigital; }
-    public void setDigitalRight(boolean isDigital) { this.isDigitalRight = isDigital; }
+    public void setDigitalLeft(boolean isDigital) { this.isDigLeft = isDigital; }
+    public void setDigitalRight(boolean isDigital) { this.isDigRight = isDigital; }
 
-    public boolean isDigitalLeft() { return isDigitalLeft; }
-    public boolean isDigitalRight() { return isDigitalRight; }
+    public boolean isDigLeft() { return isDigLeft; }
+    public boolean isDigRight() { return isDigRight; }
 
     // VALUE METHODS \\
     public double getLeftX() { return controller.getRawAxis(0); }

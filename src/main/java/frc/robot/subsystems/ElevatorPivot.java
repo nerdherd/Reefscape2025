@@ -107,11 +107,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     // ****************************** STATE METHODS ***************************** //
 
-    public void setEnabled(boolean enabled) {
+    private void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    public void setPosition(double positionDegrees) {
+    private void setPosition(double positionDegrees) {
         double newPos = NerdyMath.clamp(
             mapDegrees(positionDegrees), 
             ElevatorConstants.kElevatorPivotMin, 
@@ -120,36 +120,36 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         motionMagicRequest.Position = (newPos / 360.0);  
     }
 
-    public void incrementPosition(double incrementDegrees) {
+    private void incrementPosition(double incrementDegrees) {
         if(Math.abs(incrementDegrees) <= 0.001) {
             return;
         }
         setPosition(getTargetPositionDegrees() + incrementDegrees);
     }
 
-    public double mapDegrees(double deg){
+    private double mapDegrees(double deg){
         deg -= (Math.floor(deg / 360.0) * 360.0);
         if(deg > 180) deg -= 360;
         return deg;
     }
 
-    public double getTargetPositionRev() {
+    private double getTargetPositionRev() {
         return motionMagicRequest.Position;
     }
 
-    public double getTargetPositionDegrees() {
+    private double getTargetPositionDegrees() {
         return getTargetPositionRev() * 360;
     }
 
-    public double getPositionRev() {
+    private double getPositionRev() {
         return pivotMotor.getPosition().getValueAsDouble();
     }
     
-    public double getPositionDegrees() {
+    private double getPositionDegrees() {
         return getPositionRev() * 360;
     }
 
-    public boolean hasReachedPosition(double positionDegrees) {
+    private boolean hasReachedPosition(double positionDegrees) {
         return NerdyMath.inRange(
             getPositionDegrees(),
                 positionDegrees - ElevatorConstants.kElevatorPivotDeadBand.get(),
@@ -157,33 +157,33 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             );
     }
 
-    public boolean atTargetPosition() {
+    private boolean atTargetPosition() {
         return hasReachedPosition(getPositionDegrees());
     }
 
-    public void movePivotMotionMagic() { // fake
+    private void movePivotMotionMagic() { // fake
         // double ff = -(ArmConstants.kStowedFF + ArmConstants.kDiffFF * percentExtended) * Math.cos(getArmAngle());
         // pivotMotor.set(ControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, ff);
     }
 
     // ****************************** COMMAND METHODS ***************************** //
 
-    public Command setEnabledCommand(boolean enabled) {
+    private Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
 
-    public Command stopCommand() {
+    private Command stopCommand() {
         return Commands.sequence(
             Commands.runOnce(() -> pivotMotor.setControl(brakeRequest)),
             setEnabledCommand(false)
         );
     }
 
-    public Command setPositionCommand(double position) {
+    private Command setPositionCommand(double position) {
         return Commands.runOnce(() -> setPosition(position));
     }
     
-    public Command incrementPositionCommand(double increment) {
+    private Command incrementPositionCommand(double increment) {
         return Commands.runOnce(() -> incrementPosition(increment));
     }
 
@@ -197,7 +197,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotStartPosition.get()));
     }
 
-    public Command moveToPickUp() {
+    public Command moveToPickup() {
         return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
     }
 

@@ -41,7 +41,6 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         velocityRequest.OverrideBrakeDurNeutral = false;
         velocityRequest.LimitForwardMotion = false;
         velocityRequest.LimitReverseMotion = false;
-        // velocityRequest.
 
         CommandScheduler.getInstance().registerSubsystem(this);
  
@@ -78,6 +77,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         AlgaeConstants.kIRollerMotor.loadPreferences();
         AlgaeConstants.kDRollerMotor.loadPreferences();
         AlgaeConstants.kVRollerMotor.loadPreferences();
+
         motorConfigs.Slot0.kP = AlgaeConstants.kPRollerMotor.get();
         motorConfigs.Slot0.kI = AlgaeConstants.kIRollerMotor.get();
         motorConfigs.Slot0.kD = AlgaeConstants.kDRollerMotor.get();
@@ -123,7 +123,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         rollerMotor.setControl(velocityRequest);
     }
 
-    public double getTargetVelocity() {
+    private double getTargetVelocity() {
         return velocityRequest.Velocity;
     }
 
@@ -153,18 +153,18 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
             setVelocityCommand(AlgaeConstants.kIntakePower.get())
         );
     }
+
+    public Command shootProcessor() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommand(AlgaeConstants.kProcessorOuttake.get())
+        );
+    }
     
     public Command shootBarge() { // TODO when design finished
         return Commands.sequence(
             setEnabledCommand(true),
             setVelocityCommand(AlgaeConstants.kBargeOuttake.get())
-        );
-    }
-    
-    public Command shootProcessor() {
-        return Commands.sequence(
-            setEnabledCommand(true),
-            setVelocityCommand(AlgaeConstants.kProcessorOuttake.get())
         );
     }
 

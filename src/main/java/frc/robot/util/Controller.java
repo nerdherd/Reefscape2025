@@ -27,13 +27,13 @@ public class Controller {
     /**
      * GuliKit controller implementation.
      * @param port The port of the controller on FRC Driver Station
-     * @param isDigitalLeft If the left switch on the controller is set to digital (dot)
-     * @param isDigitalRight If the right switch on the controller is set to digital (dot)
+     * @param isDigLeft If the left switch on the controller is set to digital (dot)
+     * @param isDigRight If the right switch on the controller is set to digital (dot)
      */
-    public Controller(int port, boolean isDigitalLeft, boolean isDigitalRight) {
+    public Controller(int port, boolean isDigLeft, boolean isDigRight) {
         isPS4 = false;
 
-        guliKit = new GuliKit(port, isDigitalLeft, isDigitalRight);
+        guliKit = new GuliKit(port, isDigLeft, isDigRight);
     }
 
     // ***** VALUE METHODS ***** //
@@ -109,13 +109,13 @@ public class Controller {
     }
 
     /** <STRONG> GULIKIT ONLY </STRONG> */
-    public boolean isDigitalLeft() {
-        if (!isPS4) return guliKit.isDigitalLeft();
+    public boolean isDigLeft() {
+        if (!isPS4) return guliKit.isDigLeft();
         else return true;
     }
     /** <STRONG> GULIKIT ONLY </STRONG> */
-    public boolean isDigitalRight() {
-        if (!isPS4) return guliKit.isDigitalRight();
+    public boolean isDigRight() {
+        if (!isPS4) return guliKit.isDigRight();
         else return true;
     }
 }

@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import static edu.wpi.first.units.Units.Newton;
-
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -21,7 +18,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -36,7 +32,6 @@ import frc.robot.subsystems.AlgaeRoller;
 import frc.robot.subsystems.CoralWrist;
 import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.util.Controller;
-import frc.robot.util.GuliKit;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(2);
@@ -71,31 +66,27 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    elevator = new Elevator();
     algaeRoller = new AlgaeRoller();
-    elevatorPivot = new ElevatorPivot();
     coralWrist = new CoralWrist();
+    elevator = new Elevator();
+    elevatorPivot = new ElevatorPivot();
     
     initShuffleboard();
     initDefaultCommands_test();
+    configureBindings_test();
     // initDefaultCommands_teleop();
+    // configureBindings_teleop();
     initAutoChoosers();
-
-    // Configure the trigger bindings
-    // Moved to teleop init
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
-
     DriverStation.reportWarning("Initalization complete", false);
-
   }
 
 
   public static void refreshAlliance() {
     var alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
+    if (alliance.isPresent())
       isRedSide = (alliance.get() == DriverStation.Alliance.Red);
-    }
   }
 
   public static boolean IsRedSide() {
@@ -107,32 +98,21 @@ public class RobotContainer {
     new SwerveJoystickCommand(
       swerveDrive,
       () -> -driverController.getLeftY(), // Horizontal translation
-      driverController::getLeftX, // Vertical Translation
-      () -> {
-        return driverController.getRightX(); // Rotation
-      },
-      () -> false, // robot oriented vairable
+      () -> driverController.getLeftX(), // Vertical Translation
+      () -> driverController.getRightX(), // Rotation
+      () -> false, // robot oriented variable
       () -> false, // tow supplier
-      driverController::getTriggerRight, // Precision/"Sniper Button"
-      () -> {
-        if (driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp()) {
-          return true;
-        }
-        return false;
-      },
+      () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
+      () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
-        if (driverController.getButtonRight()) { // turn to amp
-          if (!IsRedSide()){
-            return 90.0;
-          }
-          return 270.0;
-        }
-        if (driverController.getButtonDown()) {
+        if (driverController.getButtonRight())
+          if (!IsRedSide())
+            return 90.0; 
+          else return 270.0;
+        if (driverController.getButtonDown())
            return 180.0;
-        }
-        if(driverController.getButtonUp()) {
+        if (driverController.getButtonUp())
           return 0.0;
-        }
         return swerveDrive.getImu().getHeading();
       }
     );
@@ -140,7 +120,56 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 }
 
-  public void initDefaultCommands_test() {
+  public void initDefaultCommands_test() {}
+
+  public void configureBindings_teleop() {
+    // Driver bindings
+    driverController.controllerLeft().onTrue(
+      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
+    );
+
+    driverController.buttonRight()
+      .onTrue(elevator.moveToReefL1())
+      .onFalse(elevator.stow()); 
+    driverController.buttonUp()
+      .onTrue(elevator.moveToReefL2())
+      .onFalse(elevator.stow()); 
+    driverController.buttonLeft()
+      .onTrue(elevator.moveToReefL3())
+      .onFalse(elevator.stow()); 
+    driverController.buttonDown()
+      .onTrue(elevator.moveToReefL4())
+      .onFalse(elevator.stow());
+    driverController.buttonRight()
+      .onTrue(coralWrist.raise())
+      .onFalse(coralWrist.stow()); 
+    
+    driverController.controllerRight()
+      .onTrue(elevatorPivot.moveToPickup())
+    .onFalse(elevatorPivot.moveToStow());
+    driverController.triggerLeft()
+      .onTrue(algaeRoller.intake()) // hold it :)
+      .onFalse(algaeRoller.stop());
+    driverController.triggerRight()
+      .onTrue(algaeRoller.shootBarge()) // hold it :)
+      .onFalse(algaeRoller.stop());
+
+    driverController.controllerRight()
+      .whileTrue(elevatorPivot.moveToStart())
+      .onFalse(elevatorPivot.moveToStow());
+    driverController.controllerLeft()
+      .onTrue(elevatorPivot.moveToPickup())
+      .onFalse(elevatorPivot.moveToStow());
+    
+    driverController.bumperRight()
+      .onTrue(algaeRoller.intake()) // hold it :)
+      .onFalse(algaeRoller.stop());
+    driverController.triggerRight()
+      .onTrue(algaeRoller.shootBarge()) // hold it :)
+      .onFalse(algaeRoller.stop());
+  }
+
+  public void configureBindings_test() {
     driverController.buttonRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "bye")));
@@ -193,43 +222,6 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
   }
-
-  public void configureBindings_teleop() {
-    // Driver bindings
-    driverController.controllerLeft().onTrue(
-      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
-    );
-
-    driverController.buttonRight().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL1Position))
-      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    driverController.buttonUp().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL2Position))
-      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    driverController.buttonLeft().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL3Position))
-      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-    driverController.buttonDown().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
-      .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
-
-    driverController.buttonRight().onTrue(coralWrist.up())
-      .onFalse(coralWrist.stow()); 
-    
-    driverController.controllerRight().onTrue(elevatorPivot.moveToPickUp()).onFalse(elevatorPivot.moveToStow());
-    driverController.triggerLeft().onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
-    driverController.triggerRight().onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stop());
-
-    driverController.controllerRight().whileTrue(elevatorPivot.moveToStart())
-      .onFalse(elevatorPivot.moveToStow());
-    driverController.controllerLeft().onTrue(elevatorPivot.moveToPickUp())
-      .onFalse(elevatorPivot.moveToStow());
-    
-    driverController.bumperRight().onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
-    driverController.triggerRight().onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stop());
-  }
-
-  public void configureBindings_test() {}
   
   private void initAutoChoosers() {
     try { // TODO fix for vendordeps not importing
@@ -248,8 +240,7 @@ public class RobotContainer {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
-    } catch (Exception e) {SmartDashboard.putBoolean("Auto Error", true);}
-  
+    } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
   
   public void initShuffleboard() {
@@ -273,5 +264,4 @@ public class RobotContainer {
     return currentAuto;
   }
   
-
 }
