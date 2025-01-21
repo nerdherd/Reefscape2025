@@ -336,6 +336,9 @@ public final class Constants {
 
  public static final class CoralConstants {
   public static final int kWristMotorID = 0; //62
+  public static final PrefDouble kPWristMotor = new PrefDouble("kV Roller Motor", 0);
+  public static final PrefDouble kIWristMotor = new PrefDouble("kV Roller Motor", 0);
+  public static final PrefDouble kDWristMotor = new PrefDouble("kV Roller Motor", 0);
   public static final PrefDouble kVWristMotor = new PrefDouble("kV Roller Motor", 0);
 
   public static final double kWristStowPosition = 0.1;

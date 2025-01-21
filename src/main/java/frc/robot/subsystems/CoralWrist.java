@@ -42,6 +42,8 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         zeroEncoder();
         setEnabled(false);
     }
+
+    //****************************** SETUP METHODS ******************************//
     
     private void configurePID(TalonFXConfiguration motorConfigs) {
         motorConfigurator.refresh(motorConfigs);
@@ -86,52 +88,66 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         }
     }
 
-    //****************************** POSITION METHODS ******************************//
+    // ****************************** STATE METHODS ****************************** //
 
-    private void setEnabled(boolean e) {
-        this.enabled = e;
-        if (!e) desiredPosition = CoralConstants.kWristStowPosition;
-    }
-    public Command setDisabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(false));
-    }
-    public Command setEnabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(true));
+    private void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (!enabled) desiredPosition = CoralConstants.kWristStowPosition;
     }
     
     private void setPosition(double position) {
         desiredPosition = position;
-    }
-    public Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPosition(position));
-    }
-
-    public Command goToPosition(double targetPosition) {
-        return Commands.sequence(
-            setEnabledCommand(),
-            setPositionCommand(targetPosition)
-        );
     }
 
     private void setVelocity(double velocity) {
         desiredVelocity = NerdyMath.clamp(velocity, -CoralConstants.kWristSpeed, CoralConstants.kWristSpeed);
         motor.set(desiredVelocity);
     }
-    public Command setVelocityCommand(double velocity) {
+
+    // ****************************** COMMAND METHODS ****************************** //
+
+    private Command setEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> this.setEnabled(enabled));
+    }
+
+    private Command setPositionCommand(double position) {
+        return Commands.runOnce(() -> setPosition(position));
+    }
+
+    private Command goToPosition(double targetPosition) {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setPositionCommand(targetPosition)
+        );
+    }
+
+    private Command setVelocityCommand(double velocity) {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
-    //****************************** NAMED COMMANDS ******************************//
+    private Command stopCommand() {
+        return Commands.sequence(
+            setVelocityCommand(0),
+            setEnabledCommand(false)
+        );
+    }
 
-    public Command stowCommand() {
+    // ****************************** NAMED COMMANDS ****************************** //
+
+    public Command stow() {
         return goToPosition(CoralConstants.kWristStowPosition);
     }
     
-    public Command upCommand() {
+    public Command up() {
         return goToPosition(CoralConstants.kWristUpPostion);
     }
 
-    //****************************** LOGGING METHODS ******************************//
+    public Command stop() {
+        return stopCommand();
+    }
+
+    // ****************************** LOGGING METHODS ****************************** //
+
     @Override
     public void reportToSmartDashboard(LOG_LEVEL level) {
         switch (level) {
@@ -166,4 +182,5 @@ public class CoralWrist extends SubsystemBase implements Reportable{
                 break;
         }
     }
+
 }

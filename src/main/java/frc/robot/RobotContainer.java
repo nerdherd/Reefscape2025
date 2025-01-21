@@ -209,14 +209,14 @@ public class RobotContainer {
     driverController.buttonDown().onTrue(elevator.goToPosition(ElevatorConstants.kElevatorL4Position))
       .onFalse(elevator.goToPosition(ElevatorConstants.kElevatorStowPosition)); 
 
-    driverController.buttonRight().onTrue(coralWrist.upCommand())
-      .onFalse(coralWrist.stowCommand()); 
+    driverController.buttonRight().onTrue(coralWrist.up())
+      .onFalse(coralWrist.stow()); 
     
-    driverController.buttonPlus().onTrue(elevatorPivot.moveToPickUp()).onFalse(elevatorPivot.moveToStow());
-    driverController.triggerZL().onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stopCommand());
-    driverController.triggerZR().onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stopCommand());
+    driverController.controllerRight().onTrue(elevatorPivot.moveToPickUp()).onFalse(elevatorPivot.moveToStow());
+    driverController.triggerLeft().onTrue(algaeRoller.intake()) // hold it :)
+      .onFalse(algaeRoller.stop());
+    driverController.triggerRight().onTrue(algaeRoller.shootBarge()) // hold it :)
+      .onFalse(algaeRoller.stop());
 
     driverController.controllerRight().whileTrue(elevatorPivot.moveToStart())
       .onFalse(elevatorPivot.moveToStow());

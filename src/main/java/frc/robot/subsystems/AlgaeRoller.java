@@ -99,7 +99,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
             // voltageRequest.Output = velocityRequest.Velocity * 12 / 100;
             // rollerMotor.setControl(voltageRequest);
 
-            // ************************************* FIX THIS ******************************
+            // ************************************* TODO FIX THIS ******************************
             //moves w/o set control SLKJDFLKJSDLFKJSLDKFJ !!!!!!!
             rollerMotor.setControl(velocityRequest);
             // want feedforward to change based on desired velocity which is what setcontrol was supposed to do
@@ -112,12 +112,12 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         } 
     }
  
-    //****************************** VELOCITY METHODS ******************************//
-//  
-    private void stop() {
-        velocityRequest.Velocity = 0;
-        rollerMotor.setControl(brakeRequest);
+    // ****************************** STATE METHODS ***************************** //
+
+    private void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
+
     private void setVelocity(double velocity) {
         velocityRequest.Velocity = velocity;
         rollerMotor.setControl(velocityRequest);
@@ -127,22 +127,25 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         return velocityRequest.Velocity;
     }
 
-    private void setEnabled(boolean e) {
-        this.enabled = e;
-    }
+    // ****************************** COMMAND METHODS ****************************** //
 
-    //****************************** COMMAND METHODS ******************************//
-
-    public Command setEnabledCommand(boolean enabled) {
+    private Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
  
-    public Command setVelocityCommand(double velocity) {
+    private Command setVelocityCommand(double velocity) {
         velocityRequest.Velocity = velocity;
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
-    //****************************** NAMED COMMANDS ******************************//
+    private Command stopCommand() {
+        return Commands.sequence(
+            setVelocityCommand(0),
+            setEnabledCommand(false)
+        );
+    }
+
+    // ****************************** NAMED COMMANDS ****************************** //
 
     public Command intake() {
         return Commands.sequence(
@@ -164,15 +167,12 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
             setVelocityCommand(AlgaeConstants.kProcessorOuttake.get())
         );
     }
-    
-    public Command stopCommand() {
-        return Commands.sequence(
-            setEnabledCommand(false),
-            Commands.runOnce(() -> stop())
-        );
+
+    public Command stop() {
+        return stopCommand();
     }
  
-    //****************************** LOGGING METHODS ******************************//
+    // ****************************** LOGGING METHODS ****************************** //
  
     @Override
     public void reportToSmartDashboard(LOG_LEVEL priority) {}
@@ -198,8 +198,8 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
             default:
                 break;
         }
-        
     }
+
 }
  
  

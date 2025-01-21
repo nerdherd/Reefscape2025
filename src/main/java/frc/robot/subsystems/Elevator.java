@@ -40,43 +40,51 @@ public class Elevator extends SubsystemBase implements Reportable {
         }
     }
 
-    // STATE METHODS //
+    // ****************************** STATE METHODS ****************************** //
 
-    
-    private void setEnabled(boolean e) {
-        this.enabled = e;
-        if (!e) desiredPosition = ElevatorConstants.kElevatorStowPosition;
-    }
-    public Command setDisabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(false));
-    }
-    public Command setEnabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(true));
+    private void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (!enabled) desiredPosition = ElevatorConstants.kElevatorStowPosition;
     }
     
     private void setPosition(double position) {
         desiredPosition = position;
-    }
-    public Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPosition(position));
-    }
-
-    public Command goToPosition(double targetPosition) {
-        return Commands.sequence(
-            setEnabledCommand(),
-            setPositionCommand(targetPosition)
-        );
     }
 
     private void setVelocity(double velocity) {
         desiredVelocity = NerdyMath.clamp(velocity, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         elevatorMotor.set(desiredVelocity);
     }
+
+    // ****************************** COMMAND METHODS ***************************** //
+
+    public Command setEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> this.setEnabled(enabled));
+    }
+
+    public Command setPositionCommand(double position) {
+        return Commands.runOnce(() -> setPosition(position));
+    }
+
+    public Command goToPosition(double position) {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setPositionCommand(position)
+        );
+    }
+
     public Command setVelocityCommand(double velocity) {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
-    // NAMED COMMANDS //
+    public Command stopCommand() {
+        return Commands.sequence(
+            setVelocityCommand(0),
+            setEnabledCommand(false)
+        );
+    }
+
+    // ****************************** NAMED COMMANDS ****************************** //
 
     public Command moveToReefL1() {
         return goToPosition(ElevatorConstants.kElevatorL1Position);
@@ -94,7 +102,11 @@ public class Elevator extends SubsystemBase implements Reportable {
         return goToPosition(ElevatorConstants.kElevatorL4Position);
     }
 
-    // LOG METHODS //
+    public Command stop() {
+        return stopCommand();
+    }
+
+    // ****************************** LOGGING METHODS ****************************** //
 
     @Override
     public void reportToSmartDashboard(LOG_LEVEL level) {
