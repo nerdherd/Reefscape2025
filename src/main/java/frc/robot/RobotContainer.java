@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
+import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
@@ -44,7 +45,7 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -75,7 +76,7 @@ public class RobotContainer {
     initDefaultCommands_test();
     configureBindings_test();
     // initDefaultCommands_teleop();
-    // configureBindings_teleop();
+    configureBindings_teleop();
     initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
@@ -128,20 +129,24 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
+    // driverController.buttonRight()
+    //   .onTrue(elevator.moveToReefL1())
+    //   .onFalse(elevator.stow()); 
+    // driverController.buttonUp()
+    //   .onTrue(elevator.moveToReefL2())
+    //   .onFalse(elevator.stow()); 
+    // driverController.buttonLeft()
+    //   .onTrue(elevator.moveToReefL3())
+    //   .onFalse(elevator.stow()); 
+    // driverController.buttonDown()
+    //   .onTrue(elevator.moveToReefL4())
+    //   .onFalse(elevator.stow());
     driverController.buttonRight()
-      .onTrue(elevator.moveToReefL1())
-      .onFalse(elevator.stow()); 
-    driverController.buttonUp()
-      .onTrue(elevator.moveToReefL2())
-      .onFalse(elevator.stow()); 
+      .onTrue(coralWrist.setEnabledCommand());
     driverController.buttonLeft()
-      .onTrue(elevator.moveToReefL3())
-      .onFalse(elevator.stow()); 
-    driverController.buttonDown()
-      .onTrue(elevator.moveToReefL4())
-      .onFalse(elevator.stow());
-    driverController.buttonRight()
-      .onTrue(coralWrist.raise())
+      .onTrue(coralWrist.setDisabledCommand());
+    driverController.buttonUp()
+      .whileTrue(coralWrist.raise())
       .onFalse(coralWrist.stow()); 
     
     driverController.controllerRight()
@@ -249,6 +254,7 @@ public class RobotContainer {
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
+    coralWrist.initShuffleboard(loggingLevel);
     // elevatorPivot.initShuffleboard(loggingLevel);
   }
   

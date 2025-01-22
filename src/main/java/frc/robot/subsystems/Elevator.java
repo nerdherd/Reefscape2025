@@ -65,7 +65,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setPosition(position));
     }
 
-    private Command goToPosition(double position) {
+    public Command goToPosition(double position) {
         return Commands.sequence(
             setEnabledCommand(true),
             setPositionCommand(position)

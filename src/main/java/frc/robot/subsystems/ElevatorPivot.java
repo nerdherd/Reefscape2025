@@ -201,10 +201,6 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
     }
 
-    public Command stop() {
-        return stopCommand();
-    }
-
     // ****************************** LOGGING METHODS ****************************** //
 
     @Override

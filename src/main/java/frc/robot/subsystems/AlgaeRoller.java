@@ -114,7 +114,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
  
     // ****************************** STATE METHODS ***************************** //
 
-    private void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
