@@ -35,7 +35,7 @@ public class RobotContainer {
   public Gyro imu = new PigeonV2(1);
 
   public SwerveDrivetrain swerveDrive;
-  public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kCTRE);
+  public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
 
 
@@ -63,9 +63,9 @@ public class RobotContainer {
 
 
     initShuffleboard();
-    initDefaultCommands_test();
+    // initDefaultCommands_test();
     configureBindings_test();
-    // initDefaultCommands_teleop();
+    initDefaultCommands_teleop();
     configureBindings_teleop();
     initAutoChoosers();
     
