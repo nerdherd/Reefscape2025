@@ -7,6 +7,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -22,7 +23,7 @@ import frc.robot.util.NerdyMath;
 public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFX pivotMotor;
     private TalonFXConfigurator pivotConfigurator;
-    // private Pigeon2 pigeon;
+    private Pigeon2 pigeon;
 
     public boolean enabled = true;
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
@@ -31,7 +32,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public ElevatorPivot () {
         pivotMotor = new TalonFX(ElevatorConstants.kPivotMotorID);
-        // pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
+        pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
+
         pivotConfigurator = pivotMotor.getConfigurator();
         CommandScheduler.getInstance().registerSubsystem(this);
         configureMotor();
@@ -75,8 +77,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
-        // pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;//FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
+        
+        pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
         pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
         pivotConfiguration.Feedback.SensorToMechanismRatio = -1; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
