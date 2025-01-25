@@ -39,7 +39,7 @@ public class RobotContainer {
   
 
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
