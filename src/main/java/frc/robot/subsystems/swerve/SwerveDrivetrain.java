@@ -1,19 +1,53 @@
 package frc.robot.subsystems.swerve;
 
+import static frc.robot.Constants.PathPlannerConstants.kPPRotationPIDConstants;
+import static frc.robot.Constants.PathPlannerConstants.kPPTranslationPIDConstants;
+import static frc.robot.Constants.SwerveDriveConstants.kBLDriveID;
+import static frc.robot.Constants.SwerveDriveConstants.kBLDriveReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kBLTurningID;
+import static frc.robot.Constants.SwerveDriveConstants.kBLTurningReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kBRDriveID;
+import static frc.robot.Constants.SwerveDriveConstants.kBRDriveReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kBRTurningID;
+import static frc.robot.Constants.SwerveDriveConstants.kBRTurningReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kDriveAlpha;
+import static frc.robot.Constants.SwerveDriveConstants.kDriveKinematics;
+import static frc.robot.Constants.SwerveDriveConstants.kDriveOneMinusAlpha;
+import static frc.robot.Constants.SwerveDriveConstants.kFLDriveID;
+import static frc.robot.Constants.SwerveDriveConstants.kFLDriveReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kFLTurningID;
+import static frc.robot.Constants.SwerveDriveConstants.kFLTurningReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kFRDriveID;
+import static frc.robot.Constants.SwerveDriveConstants.kFRDriveReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kFRTurningID;
+import static frc.robot.Constants.SwerveDriveConstants.kFRTurningReversed;
+import static frc.robot.Constants.SwerveDriveConstants.kPhysicalMaxSpeedMetersPerSecond;
+import static frc.robot.Constants.SwerveDriveConstants.kWheelBase;
+import static frc.robot.Constants.SwerveDriveConstants.towModuleStates;
+
+import java.util.Optional;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.FlippingUtil;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -22,31 +56,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
+import frc.robot.RobotContainer;
+import frc.robot.subsystems.Reportable;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
 import frc.robot.vision.LimelightHelpers;
 import frc.robot.vision.LimelightHelpers.PoseEstimate;
-import frc.robot.subsystems.Reportable;
-
-import static frc.robot.Constants.SwerveDriveConstants.*;
-import static frc.robot.Constants.PathPlannerConstants.kPPRotationPIDConstants;
-import static frc.robot.Constants.PathPlannerConstants.kPPTranslationPIDConstants;
-
-
-import java.util.Optional;
-
-import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.util.DriveFeedforwards;
-import com.pathplanner.lib.util.FlippingUtil;
 
 public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final SwerveModule frontLeft;
@@ -180,16 +198,24 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());
 
-        field.setRobotPose(poseEstimator.getEstimatedPosition());
+        Pose2d estimatedPosition = poseEstimator.getEstimatedPosition();
 
-        visionupdateOdometry("limelight-back");
-        visionupdateOdometry("limelight-kads");
+        field.setRobotPose(estimatedPosition);
+
+        double robotRotation = estimatedPosition.getRotation().getDegrees();
+
+        visionupdateOdometry("limelight-back",robotRotation);
+        visionupdateOdometry("limelight-kads",robotRotation);
 
     }
 
     //******************************  Vision ******************************/
 
-    private void visionupdateOdometry(String limelightName) {
+    private void visionupdateOdometry(String limelightName,double robotRotation) {
+
+        LimelightHelpers.SetRobotOrientation(limelightName, robotRotation, 0, 0, 0, 0, 0);
+
+        // LimelightHelpers.SetRobotOrientation("limelightName")
         boolean doRejectUpdate = false;
 
         LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName); //TODO: test if we need to account for alliance
@@ -204,22 +230,25 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             doRejectUpdate = true;
         // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
         //     doRejectUpdate = true;
-        else if(megaTag2.tagCount == 1 && megaTag2.rawFiducials.length == 1)
+        // else if(Math.abs(m_gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        // {
+        //     doRejectUpdate = true;
+        // }
+        else if(megaTag2.tagCount == 0)
         {
-            if(megaTag2.rawFiducials[0].ambiguity > .7)
-            {
-                doRejectUpdate = true;
-            }
-            if(megaTag2.rawFiducials[0].distToCamera > 3)
-            {
-                doRejectUpdate = true;
-            }
-
+            doRejectUpdate = true;
+        }
+        if(!doRejectUpdate)
+        {
             SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
             SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
-            
+
+            if (megaTag2.tagCount >= 2) {
+                xyStds = 0.5;
+                degStds = 6;
+            }
             // 1 target with large area and close to estimated pose
-            if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
+            else if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
                 xyStds = 1.0;
                 degStds = 12;
             }
@@ -228,16 +257,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 xyStds = 2.0;
                 degStds = 30;
             }
-        }
-        else if (megaTag2.tagCount >= 2) {
-            xyStds = 0.5;
-            degStds = 6;
-        }
 
-        if(!doRejectUpdate)
-        {
             poseEstimator.setVisionMeasurementStdDevs(
-              VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+                VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
 
             //poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
             poseEstimator.addVisionMeasurement(
