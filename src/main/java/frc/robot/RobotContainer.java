@@ -28,22 +28,16 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.AlgaeRoller;
-import frc.robot.subsystems.CoralWrist;
-import frc.robot.subsystems.ElevatorPivot;
+
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public Gyro imu = new PigeonV2(2);
+  public Gyro imu = new PigeonV2(1);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kCTRE);
   
-  public AlgaeRoller algaeRoller;
-  public Elevator elevator;
-  public ElevatorPivot elevatorPivot;
-  public CoralWrist coralWrist;
+
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
@@ -67,11 +61,7 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    algaeRoller = new AlgaeRoller();
-    coralWrist = new CoralWrist();
-    elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
-    
+
     initShuffleboard();
     initDefaultCommands_test();
     configureBindings_test();
@@ -128,7 +118,7 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
-
+  }
     // driverController.buttonRight()
     //   .onTrue(elevator.moveToReefL1())
     //   .onFalse(elevator.stow()); 
@@ -141,38 +131,8 @@ public class RobotContainer {
     // driverController.buttonDown()
     //   .onTrue(elevator.moveToReefL4())
     //   .onFalse(elevator.stow());
-    driverController.buttonRight()
-      .onTrue(coralWrist.setEnabledCommand());
-    driverController.buttonLeft()
-      .onTrue(coralWrist.setDisabledCommand());
-    driverController.buttonUp()
-      .whileTrue(coralWrist.raise())
-      .onFalse(coralWrist.stow()); 
-    
-    driverController.controllerRight()
-      .onTrue(elevatorPivot.moveToPickup())
-    .onFalse(elevatorPivot.moveToStow());
-    driverController.triggerLeft()
-      .onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
-    driverController.triggerRight()
-      .onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stop());
 
-    driverController.controllerRight()
-      .whileTrue(elevatorPivot.moveToStart())
-      .onFalse(elevatorPivot.moveToStow());
-    driverController.controllerLeft()
-      .onTrue(elevatorPivot.moveToPickup())
-      .onFalse(elevatorPivot.moveToStow());
     
-    driverController.bumperRight()
-      .onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
-    driverController.triggerRight()
-      .onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stop());
-  }
 
   public void configureBindings_test() {
     driverController.buttonRight()
@@ -252,10 +212,7 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
-    algaeRoller.initShuffleboard(loggingLevel); 
-    elevator.initShuffleboard(loggingLevel);
-    coralWrist.initShuffleboard(loggingLevel);
-    // elevatorPivot.initShuffleboard(loggingLevel);
+   
   }
   
   /**
