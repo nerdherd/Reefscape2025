@@ -116,10 +116,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     private void setPosition(double positionDegrees) {
         double newPos = NerdyMath.clamp(
-            mapDegrees(positionDegrees), 
+            positionDegrees,
             ElevatorConstants.kElevatorPivotMin, 
             ElevatorConstants.kElevatorPivotMax
-            );
+        );
+
         motionMagicRequest.Position = (newPos / 360.0);  
     }
 
@@ -130,11 +131,6 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         setPosition(getTargetPositionDegrees() + incrementDegrees);
     }
 
-    private double mapDegrees(double deg){
-        deg -= (Math.floor(deg / 360.0) * 360.0);
-        if(deg > 180) deg -= 360;
-        return deg;
-    }
 
     private double getTargetPositionRev() {
         return motionMagicRequest.Position;

@@ -298,8 +298,8 @@ public final class Constants {
     public static final PrefDouble kElevatorPivotStartPosition = new PrefDouble("Elevator Pivot Start", 0); //TODO change later
     public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", 90); //TODO change later
 
-    public static final double kElevatorPivotMin = -90; // TODO change later
-    public static final double kElevatorPivotMax = 90; // TODO change later
+    public static final double kElevatorPivotMin =   0; // TODO change later
+    public static final double kElevatorPivotMax = 180; // TODO change later
 
     public static final double kElevatorPivotGearRatio = 0; // TODO change later
     public static final PrefDouble kElevatorPivotDeadBand = new PrefDouble("Elevator Pivot DeadBand", 0);
