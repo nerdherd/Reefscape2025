@@ -30,7 +30,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPosition = CoralConstants.kWristStowPosition;
-    public boolean enabled = false;
+    private boolean enabled = false;
 
     public CoralWrist(){
         motor = new TalonFX(CoralConstants.kWristMotorID);
@@ -83,7 +83,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     }
 
-    public void zeroEncoder() {
+    private void zeroEncoder() {
         motor.setPosition(0);
     }
 
@@ -110,15 +110,18 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     // ****************************** COMMAND METHODS ****************************** //
 
-    public Command setDisabledCommand() {
+    private Command setDisabledCommand() {
         return Commands.runOnce(() -> this.setEnabled(false));
     }
-    public Command setEnabledCommand() {
+    private Command setEnabledCommand() {
         return Commands.runOnce(() -> this.setEnabled(true));
     }
 
     private Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPosition(position));
+        return Commands.sequence(
+            setEnabledCommand(),
+            Commands.runOnce(() -> setPosition(position))
+        );
     }
 
     private Command stopCommand() {
