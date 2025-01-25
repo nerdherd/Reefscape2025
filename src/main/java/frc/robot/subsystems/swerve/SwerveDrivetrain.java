@@ -204,8 +204,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         double robotRotation = estimatedPosition.getRotation().getDegrees();
 
+        SmartDashboard.putNumber("Robot Rotation", robotRotation);
+
         visionupdateOdometry("limelight-back",robotRotation);
-        visionupdateOdometry("limelight-kads",robotRotation);
+        visionupdateOdometry("limelight-deedee",robotRotation);
 
     }
 
@@ -224,7 +226,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         boolean receivedValidData = LimelightHelpers.getTV(limelightName);
         PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
-        Pose2d botPose1 = estimate.pose;
+
+        if (estimate == null){
+            doRejectUpdate = true;
+        }
         
         if(!receivedValidData)
             doRejectUpdate = true;
@@ -238,8 +243,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         {
             doRejectUpdate = true;
         }
+
+        SmartDashboard.putBoolean(limelightName+" Valid Data", !doRejectUpdate);
+
         if(!doRejectUpdate)
         {
+            Pose2d botPose1 = estimate.pose;
+
             SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
             SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
 
