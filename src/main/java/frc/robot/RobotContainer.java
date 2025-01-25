@@ -77,8 +77,8 @@ public class RobotContainer {
     elevatorPivot = new ElevatorPivot();
     
     initShuffleboard();
-    // initDefaultCommands_test();
-    // configureBinadings_test();
+    initDefaultCommands_test();
+    configureBindings_test();
     initDefaultCommands_teleop();
     configureBindings_teleop();
     // initAutoChoosers();
@@ -111,14 +111,12 @@ public class RobotContainer {
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
         if (driverController.getButtonRight())
-          if (!IsRedSide())
-            return 90.0; 
-          else return 270.0;
-        if (driverController.getButtonDown())
-           return 180.0;
-        if (driverController.getButtonUp())
+          return !IsRedSide() ? 90.0 : 270.0;
+        else if (driverController.getButtonDown())
+          return 180.0;
+        else if (driverController.getButtonUp())
           return 0.0;
-        return swerveDrive.getImu().getHeading();
+        else return swerveDrive.getImu().getHeading();
       }
     );
 
@@ -133,29 +131,22 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    // driverController.buttonRight()
-    //   .onTrue(elevator.moveToReefL1())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonUp()
-    //   .onTrue(elevator.moveToReefL2())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonLeft()
-    //   .onTrue(elevator.moveToReefL3())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonDown()
-    //   .onTrue(elevator.moveToReefL4())
-    //   .onFalse(elevator.stow());
-    // driverController.buttonRight()
-    //   .onTrue(coralWrist.setEnabledCommand());
-    // driverController.buttonLeft()
-    //   .onTrue(coralWrist.setDisabledCommand());
-    // driverController.buttonUp()
-    //   .whileTrue(coralWrist.raise())
-    //   .onFalse(coralWrist.stow()); 
+    driverController.buttonRight()
+      .onTrue(elevator.moveToReefL1())
+      .onFalse(elevator.stow()); 
+    driverController.buttonUp()
+      .onTrue(elevator.moveToReefL2())
+      .onFalse(elevator.stow()); 
+    driverController.buttonLeft()
+      .onTrue(elevator.moveToReefL3())
+      .onFalse(elevator.stow()); 
+    driverController.buttonDown()
+      .onTrue(elevator.moveToReefL4())
+      .onFalse(elevator.stow());
     
-    // driverController.controllerRight()
-    //   .onTrue(elevatorPivot.moveToPickup())
-    // .onFalse(elevatorPivot.moveToStow());
+    driverController.controllerRight()
+      .onTrue(elevatorPivot.moveToPickup())
+    .onFalse(elevatorPivot.moveToStow());
 
     driverController.triggerLeft()
       .onTrue(algaeRoller.intake()) // hold it :)
@@ -164,12 +155,12 @@ public class RobotContainer {
       .onTrue(algaeRoller.outtake()) // hold it :)
       .onFalse(algaeRoller.stop());
 
-    // driverController.controllerRight()
-    //   .whileTrue(elevatorPivot.moveToStart())
-    //   .onFalse(elevatorPivot.moveToStow());
-    // driverController.controllerLeft()
-    //   .onTrue(elevatorPivot.moveToPickup())
-    //   .onFalse(elevatorPivot.moveToStow());
+    driverController.controllerRight()
+      .whileTrue(elevatorPivot.moveToStart())
+      .onFalse(elevatorPivot.moveToStow());
+    driverController.controllerLeft()
+      .onTrue(elevatorPivot.moveToPickup())
+      .onFalse(elevatorPivot.moveToStow());
     
   }
 
