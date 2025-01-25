@@ -173,7 +173,7 @@ public class SwerveModule implements Reportable {
     }
 
     public void run() {
-        desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRadians(getTurningPosition()));
+        desiredState.optimize(Rotation2d.fromRadians(getTurningPosition()));
 
         desiredAngle = desiredState.angle.getDegrees();
 
@@ -236,6 +236,7 @@ public class SwerveModule implements Reportable {
      */
     public double getTurningPositionDegrees() {
         double turningPosition = ((360 * canCoder.getAbsolutePosition().getValueAsDouble()) % 360 + 360) % 360;
+        if (turningPosition > 180) turningPosition -= 360;
         return turningPosition;
     }
 
@@ -345,8 +346,8 @@ public class SwerveModule implements Reportable {
                 tab.addNumber("Turn angle percent", () -> turnMotor.getDutyCycle().getValue());
                 tab.addNumber("Angle Difference", () -> desiredAngle - currentAngle);
             case MINIMAL:
-                // tab.addNumber("Turn angle", this::getTurningPositionDegrees);
-                // tab.addNumber("Desired Angle", () -> desiredAngle);
+                tab.addNumber("Turn angle", this::getTurningPositionDegrees);
+                tab.addNumber("Desired Angle", () -> desiredAngle);
                 tab.addNumber("Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValueAsDouble());
                 // tab.addNumber("Module Velocity", this::getDriveVelocity);
                 tab.addNumber("Module Velocity RPS", this::getDriveVelocityRPS);
