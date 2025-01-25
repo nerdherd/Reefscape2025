@@ -339,17 +339,19 @@ public final class Constants {
     public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", 10);
     public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power",     -10);
 
-    // ************************************** WRIST CONSTANTS *************************************** //
-    public static final int kWristMotorID = 57; //62
-    
-    public static final PrefDouble kPWristMotor = new PrefDouble("kP Wrist", 0.1);
-    public static final PrefDouble kIWristMotor = new PrefDouble("kI Wrist", 0);
-    public static final PrefDouble kDWristMotor = new PrefDouble("kD Wrist", 0);
-    public static final PrefDouble kVWristMotor = new PrefDouble("kV Wrist", 0.12);
-    public static final PrefDouble kSWristMotor = new PrefDouble("kS Wrist", 0); //Static Friction
-    public static final PrefDouble kGWristMotor = new PrefDouble("kG Wrist", 0.015); //Gravity
-    public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 100); //Rotations per second squared
-    public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 700); //Rotations per second squared
+ }
+
+ public static final class CoralConstants {
+  public static final int kWristMotorID = 54;
+  
+  public static final PrefDouble kPWristMotor = new PrefDouble("kP Wrist", 0.1);
+  public static final PrefDouble kIWristMotor = new PrefDouble("kI Wrist", 0);
+  public static final PrefDouble kDWristMotor = new PrefDouble("kD Wrist", 0);
+  public static final PrefDouble kVWristMotor = new PrefDouble("kV Wrist", 0.12);
+  public static final PrefDouble kSWristMotor = new PrefDouble("kS Wrist", 0); //Static Friction
+  public static final PrefDouble kGWristMotor = new PrefDouble("kG Wrist", 0.015); //Gravity
+  public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 100); //Rotations per second squared
+  public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 700); //Rotations per second squared
 
     public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.1);
     public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", 0);
