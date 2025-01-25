@@ -296,7 +296,7 @@ public final class Constants {
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
     public static final int kPivotMotorID = 59; // TODO IDs cant go over 62
-    public static final int kPivotPigeonID = 0; // TODO change later
+    public static final int kPivotPigeonID = 2; // TODO change later
     
     public static final PrefDouble kPElevatorPivot = new PrefDouble("P Elevator Pivot Motor", 0.1);
     public static final PrefDouble kIElevatorPivot = new PrefDouble("I Elevator Pivot Motor", 0);
