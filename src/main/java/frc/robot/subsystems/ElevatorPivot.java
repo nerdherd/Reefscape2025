@@ -26,7 +26,6 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
     private final NeutralOut brakeRequest = new NeutralOut();
     
-
     public ElevatorPivot () {
         pivotMotor = new TalonFX(ElevatorConstants.kPivotMotorID);
         // pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
@@ -159,7 +158,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return hasReachedPosition(getPositionDegrees());
     }
 
-    private void movePivotMotionMagic() { // fake
+    private void moveMotionMagic() { // TODO fake
         // double ff = -(ArmConstants.kStowedFF + ArmConstants.kDiffFF * percentExtended) * Math.cos(getArmAngle());
         // pivotMotor.set(ControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, ff);
     }
@@ -197,6 +196,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public Command moveToPickup() {
         return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
+    }
+
+    public Command stop() {
+        return stopCommand();
     }
 
     // ****************************** LOGGING METHODS ****************************** //

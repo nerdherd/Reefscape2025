@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.AlgaeConstants;
+import frc.robot.Constants.IntakeConstants;
  
 public class AlgaeRoller extends SubsystemBase implements Reportable {
     private final TalonFX rollerMotor;
@@ -29,7 +29,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     private boolean velocityControl = true;
 
     public AlgaeRoller() {
-        rollerMotor = new TalonFX(AlgaeConstants.kRollerMotorID);
+        rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
         velocityRequest.EnableFOC = true;
         velocityRequest.Acceleration = 0;
@@ -55,7 +55,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         motorConfigs.Voltage.PeakForwardVoltage = 11.5;
         motorConfigs.Voltage.PeakReverseVoltage = -11.5;
         motorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        motorConfigs.MotorOutput.DutyCycleNeutralDeadband = AlgaeConstants.kRollerNeutralDeadband;
+        motorConfigs.MotorOutput.DutyCycleNeutralDeadband = IntakeConstants.kRollerNeutralDeadband;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
         motorConfigs.CurrentLimits.StatorCurrentLimit = 100;
@@ -70,15 +70,15 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     private void configurePID(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
 
-        AlgaeConstants.kPRollerMotor.loadPreferences();
-        AlgaeConstants.kIRollerMotor.loadPreferences();
-        AlgaeConstants.kDRollerMotor.loadPreferences();
-        AlgaeConstants.kVRollerMotor.loadPreferences();
+        IntakeConstants.kPRollerMotor.loadPreferences();
+        IntakeConstants.kIRollerMotor.loadPreferences();
+        IntakeConstants.kDRollerMotor.loadPreferences();
+        IntakeConstants.kVRollerMotor.loadPreferences();
 
-        motorConfigs.Slot0.kP = AlgaeConstants.kPRollerMotor.get();
-        motorConfigs.Slot0.kI = AlgaeConstants.kIRollerMotor.get();
-        motorConfigs.Slot0.kD = AlgaeConstants.kDRollerMotor.get();
-        motorConfigs.Slot0.kV = AlgaeConstants.kVRollerMotor.get();
+        motorConfigs.Slot0.kP = IntakeConstants.kPRollerMotor.get();
+        motorConfigs.Slot0.kI = IntakeConstants.kIRollerMotor.get();
+        motorConfigs.Slot0.kD = IntakeConstants.kDRollerMotor.get();
+        motorConfigs.Slot0.kV = IntakeConstants.kVRollerMotor.get();
  
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
@@ -132,21 +132,14 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     public Command intake() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(AlgaeConstants.kIntakePower.get())
+            setVelocityCommand(IntakeConstants.kIntakePower.get())
         );
     }
 
-    public Command shootProcessor() {
+    public Command outtake() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(AlgaeConstants.kProcessorOuttake.get())
-        );
-    }
-    
-    public Command shootBarge() { 
-        return Commands.sequence(
-            setEnabledCommand(true),
-            setVelocityCommand(AlgaeConstants.kBargeOuttake.get())
+            setVelocityCommand(IntakeConstants.kOuttakePower.get())
         );
     }
 

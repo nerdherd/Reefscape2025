@@ -89,6 +89,10 @@ public class Elevator extends SubsystemBase implements Reportable {
         return goToPosition(ElevatorConstants.kElevatorStowPosition);
     }
 
+    public Command moveToStation() {
+        return goToPosition(ElevatorConstants.kElevatorStationPosition);
+    }
+
     public Command moveToReefL1() {
         return goToPosition(ElevatorConstants.kElevatorL1Position);
     }

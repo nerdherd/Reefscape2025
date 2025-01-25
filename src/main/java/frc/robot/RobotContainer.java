@@ -18,20 +18,24 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.IntakeConstants;
+
+import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.SwerveJoystickCommand;
+
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.AlgaeRoller;
 import frc.robot.subsystems.CoralWrist;
 import frc.robot.subsystems.ElevatorPivot;
+
 import frc.robot.util.Controller;
 
 public class RobotContainer {
@@ -157,7 +161,7 @@ public class RobotContainer {
       .onTrue(algaeRoller.intake()) // hold it :)
       .onFalse(algaeRoller.stop());
     driverController.triggerRight()
-      .onTrue(algaeRoller.shootBarge()) // hold it :)
+      .onTrue(algaeRoller.outtake()) // hold it :)
       .onFalse(algaeRoller.stop());
 
     // driverController.controllerRight()
