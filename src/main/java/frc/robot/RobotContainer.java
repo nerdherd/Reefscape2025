@@ -45,7 +45,7 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -160,7 +160,7 @@ public class RobotContainer {
       .onFalse(algaeRoller.stop());
 
     driverController.controllerRight()
-      .whileTrue(elevatorPivot.moveToStart())
+      .whileTrue(elevatorPivot.moveToPickup())
       .onFalse(elevatorPivot.moveToStow());
     driverController.controllerLeft()
       .onTrue(elevatorPivot.moveToPickup())

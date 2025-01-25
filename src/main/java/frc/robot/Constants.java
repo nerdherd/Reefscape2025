@@ -289,8 +289,8 @@ public final class Constants {
     public static final PrefDouble kPElevatorPivot = new PrefDouble("P Elevator Pivot Motor", 0.1);
     public static final PrefDouble kIElevatorPivot = new PrefDouble("I Elevator Pivot Motor", 0);
     public static final PrefDouble kDElevatorPivot = new PrefDouble("D Elevator Pivot Motor", 0);
-    public static final PrefDouble kVElevatorPivot = new PrefDouble("V Elevator Pivot Motor", 0.015);
-    public static final PrefDouble kSElevatorPivot = new PrefDouble("S Elevator Pivot Motor", 0.25);
+    public static final PrefDouble kVElevatorPivot = new PrefDouble("V Elevator Pivot Motor", 0.4);
+    public static final PrefDouble kSElevatorPivot = new PrefDouble("S Elevator Pivot Motor", 0.34);
     public static final PrefDouble kAElevatorPivot = new PrefDouble("A Elevator Pivot Motor", 0.01);
     public static final PrefDouble kGElevatorPivot = new PrefDouble("G Elevator Pivot Motor", 0.01);
 

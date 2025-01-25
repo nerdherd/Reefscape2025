@@ -53,7 +53,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.Slot0.kS = ElevatorConstants.kSElevatorPivot.get();
         pivotConfiguration.Slot0.kA = ElevatorConstants.kAElevatorPivot.get();
         pivotConfiguration.Slot0.kG = ElevatorConstants.kGElevatorPivot.get();
-        
+        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = 10;
+        pivotConfiguration.MotionMagic.MotionMagicAcceleration = 20;
+        pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0.4;
+        pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0.01;
+
         ElevatorConstants.kElevatorPivotStowPosition.loadPreferences();
         ElevatorConstants.kElevatorPivotStartPosition.loadPreferences();
         ElevatorConstants.kElevatorPivotPickUpPosition.loadPreferences();
@@ -78,7 +82,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;//FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
         pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
-        pivotConfiguration.Feedback.SensorToMechanismRatio = -1; //TODO change later
+        pivotConfiguration.Feedback.SensorToMechanismRatio = 1; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
@@ -118,6 +122,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             ElevatorConstants.kElevatorPivotMax
             );
         motionMagicRequest.Position = (newPos / 360.0);  
+        DriverStation.reportError("hiaskjfkahsgkh", false);
     }
 
     private void incrementPosition(double incrementDegrees) {
