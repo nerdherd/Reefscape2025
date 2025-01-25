@@ -19,7 +19,7 @@ public class SuperSystem {
         this.elevatorPivot = elevatorPivot;
     }
 
-    public Command intakeStation() {
+    public Command intakeCoralStation() {
         Command command = Commands.sequence(
             elevatorPivot.moveToStart(),
             elevator.moveToStation(),
@@ -30,7 +30,29 @@ public class SuperSystem {
         return command;
     }
 
-    public Command placeReefL1() {
+    public Command intakeCoralGround() { // TODO finish this
+        Command command = Commands.sequence(
+            // elevatorPivot.moveToStart(),
+            // elevator.moveToStation(),
+            // intakeWrist.moveToStation(),
+            // intakeRoller.intake()
+        );
+        command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
+        return command;
+    }
+
+    public Command intakeAlgaeGround() { // TODO finish this
+        Command command = Commands.sequence(
+            // elevatorPivot.moveToStart(),
+            // elevator.moveToStation(),
+            // intakeWrist.moveToStation(),
+            // intakeRoller.intake()
+        );
+        command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
+        return command;
+    }
+
+    public Command placeCoralL1() {
         Command command = Commands.sequence(
             elevatorPivot.moveToStart(),
             elevator.moveToReefL1(),
@@ -41,7 +63,7 @@ public class SuperSystem {
         return command;
     }
 
-    public Command placeReefL2() {
+    public Command placeCoralL2() {
         Command command = Commands.sequence(
             elevatorPivot.moveToStart(),
             elevator.moveToReefL2(),
@@ -52,7 +74,7 @@ public class SuperSystem {
         return command;
     }
 
-    public Command placeReefL3() {
+    public Command placeCoralL3() {
         Command command = Commands.sequence(
             elevatorPivot.moveToStart(),
             elevator.moveToReefL3(),
@@ -63,7 +85,7 @@ public class SuperSystem {
         return command;
     }
 
-    public Command placeReefL4() {
+    public Command placeCoralL4() {
         Command command = Commands.sequence(
             elevatorPivot.moveToStart(),
             elevator.moveToReefL4(),
@@ -74,7 +96,7 @@ public class SuperSystem {
         return command;
     }
 
-    public Command placeProcessor() { // TODO finish this
+    public Command placeAlgaeProcessor() { // TODO finish this
         Command command = Commands.sequence(
             // elevatorPivot.moveToStow(),
             // elevator.moveToReefL1(),
