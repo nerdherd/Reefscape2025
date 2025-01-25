@@ -283,7 +283,7 @@ public final class Constants {
     public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kPivotMotorID = 59; // TODO IDs cant go over 62
+    public static final int kPivotMotorID = 61; // TODO IDs cant go over 62
     public static final int kPivotPigeonID = 0; // TODO change later
     
     public static final PrefDouble kPElevatorPivot = new PrefDouble("P Elevator Pivot Motor", 0.1);
@@ -314,14 +314,14 @@ public final class Constants {
 
   // ************************************** ROLLER CONSTANTS *************************************** //
   
-  public static final int kRollerMotorID = 61;
-  public static final PrefDouble kPRollerMotor = new PrefDouble("kP Roller Motor", 0.1);
+  public static final int kRollerMotorID = 59;
+  public static final PrefDouble kPRollerMotor = new PrefDouble("kP Roller Motor", 0.05);
   public static final PrefDouble kIRollerMotor = new PrefDouble("kI Roller Motor", 0);
   public static final PrefDouble kDRollerMotor = new PrefDouble("kD Roller Motor", 0);
-  public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0.015);
+  public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0);
 
-  public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", -0.1); 
-  public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power", 0.1);
+  public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", -10); 
+  public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power", 10);
 
   public static final double kRollerMaxVelocityRPS =  100;
   public static final double kRollerMinVelocityRPS = -100;
@@ -329,8 +329,8 @@ public final class Constants {
   // In revolutions!
   public static final double kRollerNeutralDeadband = 0.01;
 
-  public static final PrefDouble kBargeOuttake     = new PrefDouble("Algae Barge Outtake",     0.1);
-  public static final PrefDouble kProcessorOuttake = new PrefDouble("Algae Processor Outtake", 0.1);
+  public static final PrefDouble kBargeOuttake     = new PrefDouble("Algae Barge Outtake",     10);
+  public static final PrefDouble kProcessorOuttake = new PrefDouble("Algae Processor Outtake", 10);
 
  }
 

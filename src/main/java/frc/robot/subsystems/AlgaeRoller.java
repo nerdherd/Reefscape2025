@@ -99,14 +99,8 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
             // voltageRequest.Output = velocityRequest.Velocity * 12 / 100;
             // rollerMotor.setControl(voltageRequest);
 
-            // ************************************* TODO FIX THIS ******************************
-            //moves w/o set control SLKJDFLKJSDLFKJSLDKFJ !!!!!!!
             rollerMotor.setControl(velocityRequest);
-            // want feedforward to change based on desired velocity which is what setcontrol was supposed to do
-            // but it doesnt work, so figure out another way to change feedforward to figure out why
-            // set control isnt working
-            velocityRequest.FeedForward = 0.5;
-
+            // velocityRequest.FeedForward = 0.5;
             // velocityRequest.FeedForward = rollerMotor.setControl(velocityRequest).value;
             // rollerMotor.set(velocityRequest.Velocity);
         } 
@@ -120,7 +114,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
 
     private void setVelocity(double velocity) {
         velocityRequest.Velocity = velocity;
-        rollerMotor.setControl(velocityRequest);
+        // rollerMotor.setControl(velocityRequest);
     }
 
     private double getTargetVelocity() {

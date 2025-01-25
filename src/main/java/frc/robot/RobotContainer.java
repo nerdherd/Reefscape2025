@@ -45,7 +45,7 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -73,8 +73,8 @@ public class RobotContainer {
     elevatorPivot = new ElevatorPivot();
     
     initShuffleboard();
-    initDefaultCommands_test();
-    configureBindings_test();
+    // initDefaultCommands_test();
+    // configureBinadings_test();
     // initDefaultCommands_teleop();
     configureBindings_teleop();
     initAutoChoosers();
@@ -141,17 +141,18 @@ public class RobotContainer {
     // driverController.buttonDown()
     //   .onTrue(elevator.moveToReefL4())
     //   .onFalse(elevator.stow());
-    driverController.buttonRight()
-      .onTrue(coralWrist.setEnabledCommand());
-    driverController.buttonLeft()
-      .onTrue(coralWrist.setDisabledCommand());
-    driverController.buttonUp()
-      .whileTrue(coralWrist.raise())
-      .onFalse(coralWrist.stow()); 
+    // driverController.buttonRight()
+    //   .onTrue(coralWrist.setEnabledCommand());
+    // driverController.buttonLeft()
+    //   .onTrue(coralWrist.setDisabledCommand());
+    // driverController.buttonUp()
+    //   .whileTrue(coralWrist.raise())
+    //   .onFalse(coralWrist.stow()); 
     
-    driverController.controllerRight()
-      .onTrue(elevatorPivot.moveToPickup())
-    .onFalse(elevatorPivot.moveToStow());
+    // driverController.controllerRight()
+    //   .onTrue(elevatorPivot.moveToPickup())
+    // .onFalse(elevatorPivot.moveToStow());
+
     driverController.triggerLeft()
       .onTrue(algaeRoller.intake()) // hold it :)
       .onFalse(algaeRoller.stop());
@@ -159,19 +160,13 @@ public class RobotContainer {
       .onTrue(algaeRoller.shootBarge()) // hold it :)
       .onFalse(algaeRoller.stop());
 
-    driverController.controllerRight()
-      .whileTrue(elevatorPivot.moveToStart())
-      .onFalse(elevatorPivot.moveToStow());
-    driverController.controllerLeft()
-      .onTrue(elevatorPivot.moveToPickup())
-      .onFalse(elevatorPivot.moveToStow());
+    // driverController.controllerRight()
+    //   .whileTrue(elevatorPivot.moveToStart())
+    //   .onFalse(elevatorPivot.moveToStow());
+    // driverController.controllerLeft()
+    //   .onTrue(elevatorPivot.moveToPickup())
+    //   .onFalse(elevatorPivot.moveToStow());
     
-    driverController.bumperRight()
-      .onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
-    driverController.triggerRight()
-      .onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stop());
   }
 
   public void configureBindings_test() {
