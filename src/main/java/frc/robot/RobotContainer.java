@@ -35,7 +35,7 @@ import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public Gyro imu = new PigeonV2(2);
+  public Gyro imu = new PigeonV2(1);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kCTRE);
