@@ -64,7 +64,7 @@ public class RobotContainer {
 
     initShuffleboard();
     // initDefaultCommands_test();
-    configureBindings_test();
+    // configureBinadings_test();
     initDefaultCommands_teleop();
     configureBindings_teleop();
     initAutoChoosers();
