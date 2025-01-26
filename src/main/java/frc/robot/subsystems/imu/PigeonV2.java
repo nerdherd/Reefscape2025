@@ -3,6 +3,7 @@ package frc.robot.subsystems.imu;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import frc.robot.Constants;
+import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -11,13 +12,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class PigeonV2 extends SubsystemBase implements Gyro {
+public class PigeonV2 extends SubsystemBase {
     private Pigeon2 pigeon;
     private double offset, pitchOffset, rollOffset = 0;
 
-    public PigeonV2(int id) {
+    public PigeonV2(int id, String CAN_Name) {
         try {
-            this.pigeon = new Pigeon2(id, Constants.ModuleConstants.kCANivoreName); // TODO check if canviore names are different
+            this.pigeon = new Pigeon2(id, CAN_Name); // TODO check if canviore names are different
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating Pigeon 2 over CAN: " + ex.getMessage(), true);
         }
@@ -26,13 +27,13 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
         rollOffset = 0;
     }
 
-    public void zeroAll() {
+    private void zeroAll() {
         zeroHeading();
         zeroPitch();
         zeroRoll();
     }
     
-    public void zeroHeading() {
+    private void zeroHeading() {
         pigeon.setYaw(0);
         offset = 0;
     }
@@ -41,77 +42,79 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
      * Return the internal pigeon object.
      * @return
      */
-    public Pigeon2 getPigeon() {
+    private Pigeon2 getPigeon() {
         return this.pigeon;
     }
 
-    public void zeroPitch() {
+    private void zeroPitch() {
         this.pitchOffset = -pigeon.getPitch().getValueAsDouble();
     }
     
-    public void zeroRoll() {
+    private void zeroRoll() {
         this.rollOffset = pigeon.getRoll().getValueAsDouble();
     }
 
-    public void setOffset(double offset) {
+    private void setOffset(double offset) {
         this.offset = offset;
     }
 
-    public void setPitchOffset(double offset) {
+    private void setPitchOffset(double offset) {
         this.pitchOffset = offset;
     }
 
-    public void setRollOffset(double offset) {
+    private void setRollOffset(double offset) {
         this.rollOffset = offset;
     }
 
-    public void resetHeading(double headingDegrees) {
+    private void resetHeading(double headingDegrees) {
         zeroHeading();
         offset = headingDegrees;
     }
 
-    public void resetPitch(double pitchDegrees) {
+    private void resetPitch(double pitchDegrees) {
         this.pitchOffset = this.getPitch() - pitchDegrees;
     }
 
-    public void resetRoll(double rollDegrees) {
+    private void resetRoll(double rollDegrees) {
         this.rollOffset = this.getRoll() - rollDegrees;
     }
 
     public double getHeading() {
-        return -(pigeon.getAngle() - offset);
+        //return -(pigeon.getAngle() - offset);
+        double currentHeading = pigeon.getYaw().getValueAsDouble() - offset; 
+        return normalizeToMinus180To180(currentHeading);
+    }
+    
+    private double normalizeToMinus180To180(double angle) {
+        angle = (angle % 360 + 360) % 360; // Normalize to [0, 360)
+        return (angle > 180) ? angle - 360 : angle; // Convert to (-180, 180)
     }
 
-    public void setHeading(double heading) {
+    private void setHeading(double heading) {
         this.offset += (heading - getHeading());
     }
 
-    public double getYaw() {
-        double currentYaw = (pigeon.getYaw().getValueAsDouble() - offset) % 360;
-        if (currentYaw < 0) {
-            return currentYaw + 360;
-        } else {
-            return currentYaw;
-        }
+    private double getYaw() {
+        return (pigeon.getYaw().getValueAsDouble() - offset) % 360;
     }
 
-    public double getPitch() {
+    private double getPitch() {
         return (-pigeon.getPitch().getValueAsDouble() - pitchOffset) % 360;
     }
 
-    public double getRoll() {
+    private double getRoll() {
         return (pigeon.getRoll().getValueAsDouble() - rollOffset) % 360;
     }
 
-    public double getHeadingOffset() {
+    private double getHeadingOffset() {
         return this.offset;
     }
 
-    public double getRollOffset() {
+    private double getRollOffset() {
         return this.rollOffset;
     }
 
-    public double getPitchOffset() {
+    private double getPitchOffset() {
         return this.pitchOffset;
     }
 

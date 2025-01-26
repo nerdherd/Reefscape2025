@@ -25,7 +25,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
-import frc.robot.subsystems.imu.Gyro;
+// import frc.robot.subsystems.imu.Gyro;
+import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
 import frc.robot.subsystems.LimelightHelpers;
@@ -39,6 +40,7 @@ import static frc.robot.Constants.PathPlannerConstants.kPPTranslationPIDConstant
 
 import java.util.Optional;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
@@ -54,7 +56,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
-    private final Gyro gyro;
+    private final PigeonV2 gyro;
     // private final SwerveDriveOdometry odometer;
     private boolean isTest = false;
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -83,7 +85,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     /**
      * Construct a new {@link SwerveDrivetrain}
      */
-    public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
+    public SwerveDrivetrain(PigeonV2 gyro) throws IllegalArgumentException {
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,
@@ -264,23 +266,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
     }
 
-    public void zeroGyroAndPoseAngle() {
-        gyro.zeroHeading();
-        gyro.setOffset(0);
-        Pose2d pose = getPose();
-        Pose2d newPose = new Pose2d(pose.getX(), pose.getY(), RobotContainer.IsRedSide() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
-        poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), newPose);
-    }
+    // public void zeroGyroAndPoseAngle() {
+    //     gyro.zeroHeading();
+    //     gyro.setOffset(0);
+    //     Pose2d pose = getPose();
+    //     Pose2d newPose = new Pose2d(pose.getX(), pose.getY(), RobotContainer.IsRedSide() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
+    //     poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), newPose);
+    // }
 
-    public void resetGyroFromPoseWithAlliance(Pose2d pose) {
-        if (RobotContainer.IsRedSide()) {
-            double angle = FlippingUtil.flipFieldPose(pose).getRotation().getDegrees() - 180;
-            angle = NerdyMath.posMod(angle, 360);
-            gyro.resetHeading(angle);
-        } else {
-            gyro.resetHeading(NerdyMath.posMod(pose.getRotation().getDegrees(), 360));
-        }
-    }
+    // public void resetGyroFromPoseWithAlliance(Pose2d pose) {
+    //     if (RobotContainer.IsRedSide()) {
+    //         double angle = FlippingUtil.flipFieldPose(pose).getRotation().getDegrees() - 180;
+    //         angle = NerdyMath.posMod(angle, 360);
+    //         gyro.resetHeading(angle);
+    //     } else {
+    //         gyro.resetHeading(NerdyMath.posMod(pose.getRotation().getDegrees(), 360));
+    //     }
+    // }
 
     public void refreshModulePID() {
         frontLeft.refreshPID();
@@ -311,9 +313,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     //****************************** GETTERS ******************************/
 
-    public Gyro getImu() {
-        return this.gyro;
-    }
+    // public PigeonV2 getImu() {
+    //     return this.gyro;
+    // }
 
     /**
      * Gets a pose2d representing the position of the drivetrain
@@ -336,70 +338,70 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         return tagPose.get();
     }
 
-    public double getDistanceFromTag(boolean preserveOldValue, int tagID)
-    {
-        Pose2d tagPose = getTagPose2D(tagID);
-        if(tagPose == null) return (preserveOldValue ? lastDistance : 0.01);
+    // public double getDistanceFromTag(boolean preserveOldValue, int tagID)
+    // {
+    //     Pose2d tagPose = getTagPose2D(tagID);
+    //     if(tagPose == null) return (preserveOldValue ? lastDistance : 0.01);
 
-        Pose2d robotPose = getPose();
-        lastDistance = robotPose.getTranslation().getDistance(tagPose.getTranslation());
-        lastDistance = Math.sqrt(Math.pow(robotPose.getX()-tagPose.getX(), 2) + Math.pow(robotPose.getY()-tagPose.getY(), 2));
+    //     Pose2d robotPose = getPose();
+    //     lastDistance = robotPose.getTranslation().getDistance(tagPose.getTranslation());
+    //     lastDistance = Math.sqrt(Math.pow(robotPose.getX()-tagPose.getX(), 2) + Math.pow(robotPose.getY()-tagPose.getY(), 2));
 
-        return lastDistance;
-    }
-    public double getSpeakerTurnToAngleTolerance ()
-    {
-        double distance = getDistanceFromTag(true, RobotContainer.IsRedSide() ? 4 : 7);
-        if(distance > 5) {
-            return 0;
-        }
-        if(distance > 4) {
-            return 1;
-        }
-        double tolerance = toleranceSpline.getOutput(distance);
-        if(tolerance < 0) {
-            return 0;
-        }
-        return tolerance;
-    }
+    //     return lastDistance;
+    // }
+    // public double getSpeakerTurnToAngleTolerance ()
+    // {
+    //     double distance = getDistanceFromTag(true, RobotContainer.IsRedSide() ? 4 : 7);
+    //     if(distance > 5) {
+    //         return 0;
+    //     }
+    //     if(distance > 4) {
+    //         return 1;
+    //     }
+    //     double tolerance = toleranceSpline.getOutput(distance);
+    //     if(tolerance < 0) {
+    //         return 0;
+    //     }
+    //     return tolerance;
+    // }
 
-    public double getTurnToSpecificTagAngle(int tagID)
-    {
-        Pose2d tagPose = getTagPose2D(tagID);
-        Pose2d robotPose = getPose();
-        double xOffset = tagPose.getX() - robotPose.getX();
-        double yOffset = tagPose.getY() - robotPose.getY();
+    // public double getTurnToSpecificTagAngle(int tagID)
+    // {
+    //     Pose2d tagPose = getTagPose2D(tagID);
+    //     Pose2d robotPose = getPose();
+    //     double xOffset = tagPose.getX() - robotPose.getX();
+    //     double yOffset = tagPose.getY() - robotPose.getY();
 
-        double allianceOffset = 90;
-        double angle = NerdyMath.posMod(-Math.toDegrees(Math.atan2(xOffset, yOffset)) + allianceOffset, 360);
-        if(RobotContainer.IsRedSide()) {
-            return angle; //TODO: test if works since this is a bit different than original code
-        }
-        return (180 + angle) % 360;
-    }
+    //     double allianceOffset = 90;
+    //     double angle = NerdyMath.posMod(-Math.toDegrees(Math.atan2(xOffset, yOffset)) + allianceOffset, 360);
+    //     if(RobotContainer.IsRedSide()) {
+    //         return angle; //TODO: test if works since this is a bit different than original code
+    //     }
+    //     return (180 + angle) % 360;
+    // }
 
-    public double getTurnToAngleToleranceScale(double targetAngle)
-    {
-        double angleToSpeaker = 10000;
-        targetAngle = NerdyMath.posMod(targetAngle, 360);
-        if (targetAngle > 180) {
-            angleToSpeaker = Math.abs(360 - targetAngle);
-        }
-        else if (targetAngle < 180) {
-            angleToSpeaker = targetAngle;
-        }
-        return angleToleranceSpline.getOutput(angleToSpeaker);
-    }
+    // public double getTurnToAngleToleranceScale(double targetAngle)
+    // {
+    //     double angleToSpeaker = 10000;
+    //     targetAngle = NerdyMath.posMod(targetAngle, 360);
+    //     if (targetAngle > 180) {
+    //         angleToSpeaker = Math.abs(360 - targetAngle);
+    //     }
+    //     else if (targetAngle < 180) {
+    //         angleToSpeaker = targetAngle;
+    //     }
+    //     return angleToleranceSpline.getOutput(angleToSpeaker);
+    // }
 
-    public boolean turnToAngleMode = true;
+    // public boolean turnToAngleMode = true;
 
-    public Command toggleTurnToAngleMode() {
-      return Commands.runOnce(() -> turnToAngleMode = !turnToAngleMode);
-    }
+    // public Command toggleTurnToAngleMode() {
+    //   return Commands.runOnce(() -> turnToAngleMode = !turnToAngleMode);
+    // }
 
-    public boolean getTurnToAngleMode() {
-        return turnToAngleMode;
-    }
+    // public boolean getTurnToAngleMode() {
+    //     return turnToAngleMode;
+    // }
 
     /**
      * Get the position of each swerve module
