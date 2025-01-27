@@ -149,7 +149,7 @@ public class SwerveJoystickCommand extends Command {
                 // turnToAngleController.setI(SwerveDriveConstants.kIThetaTeleop.get());
                 // turnToAngleController.setD(SwerveDriveConstants.kDThetaTeleop.get());
             }
-            turningSpeed = turnToAngleController.calculate(swerveDrive.getImu().getHeading(), targetAngle);
+            turningSpeed = turnToAngleController.calculate(swerveDrive.getPose().getRotation().getDegrees(), targetAngle);
             SmartDashboard.putNumber("Turning Speed Initial", turningSpeed);
             // turningSpeed += Math.signum(turningSpeed) * SwerveAutoConstants.kTurnToAngleFeedForwardDegreesPerSecond;
             turningSpeed = Math.toRadians(turningSpeed);
@@ -182,7 +182,7 @@ public class SwerveJoystickCommand extends Command {
             swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
-                swerveDrive.getImu().getRotation2d());
+                swerveDrive.getPose().getRotation());
         } else {
             swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
             chassisSpeeds = new ChassisSpeeds(

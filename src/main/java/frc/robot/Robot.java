@@ -26,7 +26,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_robotContainer.swerveDrive.refreshModulePID();
   }
 
   /**
@@ -58,6 +57,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    RobotContainer.refreshAlliance();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -72,6 +72,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    RobotContainer.refreshAlliance();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -80,6 +81,8 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.configureBindings_teleop();
+    m_robotContainer.initDefaultCommands_teleop();
+
   }
 
   /** This function is called periodically during operator control. */
@@ -88,8 +91,10 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
+    RobotContainer.refreshAlliance();
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.swerveDrive.refreshModulePID();
   }
 
   /** This function is called periodically during test mode. */

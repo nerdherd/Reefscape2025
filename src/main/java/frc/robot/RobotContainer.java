@@ -23,7 +23,7 @@ import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
-import frc.robot.subsystems.imu.Gyro;
+// import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
@@ -32,7 +32,7 @@ import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public Gyro imu = new PigeonV2(1);
+  public PigeonV2 imu = new PigeonV2(1, Constants.ModuleConstants.kCANivoreName);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
@@ -61,14 +61,8 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-
     initShuffleboard();
-    // initDefaultCommands_test();
-    // configureBinadings_test();
-    initDefaultCommands_teleop();
-    configureBindings_teleop();
     initAutoChoosers();
-    
     SmartDashboard.putData("Swerve Drive", swerveDrive);
     DriverStation.reportWarning("Initalization complete", false);
   }
@@ -104,7 +98,7 @@ public class RobotContainer {
            return 180.0;
         if (driverController.getButtonUp())
           return 0.0;
-        return swerveDrive.getImu().getHeading();
+        return swerveDrive.getPose().getRotation().getDegrees();
       }
     );
 
@@ -115,9 +109,9 @@ public class RobotContainer {
 
   public void configureBindings_teleop() {
     // Driver bindings
-    driverController.controllerLeft().onTrue(
-      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
-    );
+    // driverController.controllerLeft().onTrue(
+    //   Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
+    // );
   }
     // driverController.buttonRight()
     //   .onTrue(elevator.moveToReefL1())
@@ -188,7 +182,7 @@ public class RobotContainer {
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
   }
   
-  private void initAutoChoosers() {
+  public void initAutoChoosers() {
     try { // TODO fix for vendordeps not importing
     PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
 
