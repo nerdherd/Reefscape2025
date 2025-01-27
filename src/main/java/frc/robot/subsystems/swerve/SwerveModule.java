@@ -97,8 +97,8 @@ public class SwerveModule implements Reportable {
             ModuleConstants.kPTurning.get(),
             ModuleConstants.kITurning.get(),
             ModuleConstants.kDTurning.get());
-        turningController.enableContinuousInput(0, 2 * Math.PI); // Originally was -pi to pi
-        turningController.setTolerance(.005);
+        turningController.enableContinuousInput(-1*Math.PI, Math.PI); 
+        turningController.setTolerance(.005);// this is too small, may cause oscillation 
 
         this.driveMotor.setInverted(invertDriveMotor);
         this.turnMotor.setInverted(invertTurningMotor);
@@ -235,7 +235,11 @@ public class SwerveModule implements Reportable {
      * @return Angle in degrees
      */
     public double getTurningPositionDegrees() {
-        double turningPosition = ((360 * canCoder.getAbsolutePosition().getValueAsDouble()) % 360 + 360) % 360;
+        double position = canCoder.getAbsolutePosition().getValueAsDouble();
+        if (Double.isNaN(position)) {
+            return 0.0; // Default to 0 if reading fails
+        }
+        double turningPosition = ((360*position) % 360 + 360) % 360;
         if (turningPosition > 180) turningPosition -= 360;
         return turningPosition;
     }
