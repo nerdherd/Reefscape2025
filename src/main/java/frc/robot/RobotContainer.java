@@ -9,6 +9,8 @@ import java.util.List;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -21,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.commands.AutoCommand;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 // import frc.robot.subsystems.imu.Gyro;
@@ -99,7 +102,7 @@ public class RobotContainer {
            return 180.0;
         if (driverController.getButtonUp())
           return 0.0;
-        return swerveDrive.getPose().getRotation().getDegrees();
+        return swerveDrive.getEstimatedPose().getRotation().getDegrees();
       }
     );
 
@@ -200,6 +203,7 @@ public class RobotContainer {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
+    autoChooser.addOption("PoseEstmtAuto", new AutoCommand(null, new Pose2d(1,1, new Rotation2d()), new Pose2d(2,2, new Rotation2d())));
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
   

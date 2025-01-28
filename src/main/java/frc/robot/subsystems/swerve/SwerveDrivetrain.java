@@ -147,7 +147,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
 
         AutoBuilder.configure(
-            this::getPose,
+            this::getEstimatedPose,
             this::resetOdometry,
             this::getChassisSpeeds,
             (speeds, feedforwards) -> setChassisSpeeds(speeds),
@@ -321,7 +321,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      * Gets a pose2d representing the position of the drivetrain
      * @return A pose2d representing the position of the drivetrain
      */
-    public Pose2d getPose() {
+    public Pose2d getEstimatedPose() {
         // return odometer.getPoseMeters();
         return poseEstimator.getEstimatedPosition();
     }
