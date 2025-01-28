@@ -336,8 +336,8 @@ public final class Constants {
 
     public static final double kRollerNeutralDeadband = 0.01; // In revolutions!
 
-    public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", 10);
-    public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power",     -10);
+    public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", 30);
+    public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power",     -30);
 
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
