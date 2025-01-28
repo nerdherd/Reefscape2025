@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.SwerveDriveConstants;
+import frc.robot.RobotContainer;
 import frc.robot.util.filters.OldDriverFilter2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.util.FlippingUtil;
 
 public class AutoCommand extends Command {
     private final Pose2d startPoseDefault = new Pose2d(0,0, new Rotation2d());
@@ -42,6 +44,14 @@ public class AutoCommand extends Command {
     public void initialize() {
         // Get the robot's current pose
         Pose2d currentPose = poseEstimator.getEstimatedPosition();
+        
+        // To be added: validate the starting pose
+
+        // if (RobotContainer.IsRedSide()) {
+        //     (FlippingUtil.flipFieldPose(path1));
+        // } else {
+        //     (path1);
+        // }
 
         // Generate the first path (current pose to target pose 1)
         Command path1 = AutoBuilder.pathfindToPose(
@@ -59,6 +69,8 @@ public class AutoCommand extends Command {
 
         // Create a sequential command group
         fullCommand = new SequentialCommandGroup(
+            // Commands.runOnce(swerve.getImu()::zeroAll),
+            // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
             path1, // Follow path 1
             new WaitCommand(1.0), // Wait for 1 second
             path2 // Follow path 2
