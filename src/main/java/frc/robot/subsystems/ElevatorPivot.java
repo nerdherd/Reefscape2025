@@ -3,8 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
+import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,12 +23,12 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.NerdyMath;
 
 public class ElevatorPivot extends SubsystemBase implements Reportable{
-    private TalonFX pivotMotor;
-    private TalonFXConfigurator pivotConfigurator;
+    private final TalonFX pivotMotor;
+    private final TalonFXConfigurator pivotConfigurator;
     // private Pigeon2 pigeon;
 
     public boolean enabled = true;
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
+    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
 
@@ -36,8 +39,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         CommandScheduler.getInstance().registerSubsystem(this);
         configureMotor();
         configurePID();
+        pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
+        pivotMotor.setControl(motionMagicRequest);
         motionMagicRequest.withSlot(0);
-        pivotMotor.setPosition(0.0);
     }
     
     // ******************************** SETUP METHODS *************************************** //
@@ -79,10 +83,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
-        // pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
+        pivotConfiguration.Feedback.FeedbackRotorOffset = 0.0;
+        pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;//FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
         pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
-        pivotConfiguration.Feedback.SensorToMechanismRatio = 1; //TODO change later
+        pivotConfiguration.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
@@ -122,7 +127,6 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             ElevatorConstants.kElevatorPivotMax
             );
         motionMagicRequest.Position = (newPos / 360.0);  
-        DriverStation.reportError("hiaskjfkahsgkh", false);
     }
 
     private void incrementPosition(double incrementDegrees) {
