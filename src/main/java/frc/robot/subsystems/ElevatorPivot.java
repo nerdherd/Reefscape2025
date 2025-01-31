@@ -15,6 +15,9 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -50,6 +53,17 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
+
+        ElevatorConstants.kPElevatorPivot.loadPreferences();
+        ElevatorConstants.kIElevatorPivot.loadPreferences();
+        ElevatorConstants.kDElevatorPivot.loadPreferences();
+        ElevatorConstants.kVElevatorPivot.loadPreferences();
+        ElevatorConstants.kSElevatorPivot.loadPreferences();
+        ElevatorConstants.kAElevatorPivot.loadPreferences();
+        ElevatorConstants.kGElevatorPivot.loadPreferences();
+        ElevatorConstants.kElevatorPivotCruiseAcceleration.loadPreferences();
+        ElevatorConstants.kEPivotCruiseVelocity.loadPreferences();
+
         pivotConfiguration.Slot0.kP = ElevatorConstants.kPElevatorPivot.get();
         pivotConfiguration.Slot0.kI = ElevatorConstants.kIElevatorPivot.get();
         pivotConfiguration.Slot0.kD = ElevatorConstants.kDElevatorPivot.get();
@@ -57,8 +71,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.Slot0.kS = ElevatorConstants.kSElevatorPivot.get();
         pivotConfiguration.Slot0.kA = ElevatorConstants.kAElevatorPivot.get();
         pivotConfiguration.Slot0.kG = ElevatorConstants.kGElevatorPivot.get();
-        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = 10;
-        pivotConfiguration.MotionMagic.MotionMagicAcceleration = 20;
+        
+        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = ElevatorConstants.kEPivotCruiseVelocity.get();
+        pivotConfiguration.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorPivotCruiseAcceleration.get();
+        pivotConfiguration.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorPivotJerk.get();
         pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0.4;
         pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0.01;
 
@@ -83,10 +99,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
-        pivotConfiguration.Feedback.FeedbackRotorOffset = 0.0;
         pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;//FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
-        pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
+        // pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
         pivotConfiguration.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
@@ -120,7 +135,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         this.enabled = enabled;
     }
 
-    private void setPosition(double positionDegrees) {
+    private void setPositionRev(double positionDegrees) {
         double newPos = NerdyMath.clamp(
             mapDegrees(positionDegrees), 
             ElevatorConstants.kElevatorPivotMin, 
@@ -129,11 +144,15 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         motionMagicRequest.Position = (newPos / 360.0);  
     }
 
+    private void setPositionDegrees(double positionRev) {
+        motionMagicRequest.Position = positionRev;
+    }
+
     private void incrementPosition(double incrementDegrees) {
         if(Math.abs(incrementDegrees) <= 0.001) {
             return;
         }
-        setPosition(getTargetPositionDegrees() + incrementDegrees);
+        setPositionDegrees(getTargetPositionDegrees() + incrementDegrees);
     }
 
     private double mapDegrees(double deg){
@@ -189,7 +208,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     private Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPosition(position));
+        return Commands.runOnce(() -> setPositionDegrees(position));
     }
     
     private Command incrementPositionCommand(double increment) {
@@ -199,15 +218,19 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     // ****************************** NAMED COMMANDS ****************************** //
 
     public Command moveToStow() {
-        return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotStowPosition.get()));
+        SmartDashboard.putBoolean("Pushsss", false);
+        // return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition.get()));
+        return Commands.runOnce(() -> setPositionRev(-0.5));
     }
 
     public Command moveToStart() {
-        return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotStartPosition.get()));
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStartPosition.get()));
     }
 
     public Command moveToPickup() {
-        return Commands.runOnce(() -> setPosition(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
+        SmartDashboard.putBoolean("Pushsss", true);
+        // return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
+        return Commands.runOnce(() -> setPositionRev(0.5));
     }
 
     // ****************************** LOGGING METHODS ****************************** //
@@ -221,7 +244,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initShuffleboard'");
+        ShuffleboardTab tab = Shuffleboard.getTab("Elevator Pivot");
+        tab.addNumber("Position Rev", () -> getPositionRev());
+        tab.addNumber("Position Degrees", () -> getPositionDegrees());
+        tab.addNumber("Set Position Rev", () -> motionMagicRequest.Position);
+        tab.addNumber("Velocity", () -> pivotMotor.getVelocity().getValueAsDouble());
     }
     
 }
