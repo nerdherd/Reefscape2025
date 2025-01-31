@@ -283,7 +283,7 @@ public final class Constants {
     public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kPivotMotorID = 59; // TODO IDs cant go over 62
+    public static final int kPivotMotorID = 17; // TODO IDs cant go over 62
     public static final int kPivotPigeonID = 2; // TODO change later
     
     public static final PrefDouble kPElevatorPivot = new PrefDouble("P Elevator Pivot Motor", 1.2);
@@ -294,12 +294,12 @@ public final class Constants {
     public static final PrefDouble kAElevatorPivot = new PrefDouble("A Elevator Pivot Motor", 0.0); //0.01
     public static final PrefDouble kGElevatorPivot = new PrefDouble("G Elevator Pivot Motor", 0.0); //0.01
 
-    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", -90); //TODO change later
+    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", -22); //TODO change later
     public static final PrefDouble kElevatorPivotStartPosition = new PrefDouble("Elevator Pivot Start", 0); //TODO change later
-    public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", 90); //TODO change later
+    public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", -60); //TODO change later
 
-    public static final double kElevatorPivotMin = -90; // TODO change later
-    public static final double kElevatorPivotMax = 90; // TODO change later
+    public static final double kElevatorPivotMin = -61.3; // TODO change later
+    public static final double kElevatorPivotMax = -20.4; // TODO change later
 
     public static final double kElevatorPivotGearRatio = 1; // TODO change later
     public static final PrefDouble kElevatorPivotDeadBand = new PrefDouble("Elevator Pivot DeadBand", 0);

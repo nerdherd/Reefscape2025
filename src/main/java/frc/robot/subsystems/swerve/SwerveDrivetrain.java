@@ -175,7 +175,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!isTest) {
-            runModules();
+            // runModules();
         }
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());

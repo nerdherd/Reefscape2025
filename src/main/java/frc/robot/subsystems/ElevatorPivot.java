@@ -100,7 +100,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         
         pivotConfigurator.refresh(pivotConfiguration);
         pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Roll; //TODO change orientation later
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; //TODO change orientation later
         // pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
         pivotConfiguration.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
@@ -196,7 +196,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     // ****************************** COMMAND METHODS ***************************** //
 
-    private Command setEnabledCommand(boolean enabled) {
+    public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
 
@@ -219,8 +219,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public Command moveToStow() {
         SmartDashboard.putBoolean("Pushsss", false);
-        // return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition.get()));
-        return Commands.runOnce(() -> setPositionRev(-0.5));
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition.get()));
+        //return Commands.runOnce(() -> setPositionRev(-0.5));
     }
 
     public Command moveToStart() {
@@ -229,8 +229,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public Command moveToPickup() {
         SmartDashboard.putBoolean("Pushsss", true);
-        // return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
-        return Commands.runOnce(() -> setPositionRev(0.5));
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
+        //return Commands.runOnce(() -> setPositionRev(0.5));
     }
 
     // ****************************** LOGGING METHODS ****************************** //

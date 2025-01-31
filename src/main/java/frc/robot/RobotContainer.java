@@ -45,7 +45,7 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -74,7 +74,7 @@ public class RobotContainer {
     
     initShuffleboard();
     initDefaultCommands_test();
-    configureBindings_test();
+    // configureBindings_test();
     // initDefaultCommands_teleop();
     configureBindings_teleop();
     initAutoChoosers();
@@ -172,6 +172,14 @@ public class RobotContainer {
     driverController.triggerRight()
       .onTrue(algaeRoller.shootBarge()) // hold it :)
       .onFalse(algaeRoller.stop());
+
+    driverController.dpadDown()
+    .onTrue(elevatorPivot.setEnabledCommand(true));
+
+    driverController.dpadUp()
+      .onTrue(elevatorPivot.setEnabledCommand(false));
+    
+      
   }
 
   public void configureBindings_test() {
@@ -255,7 +263,7 @@ public class RobotContainer {
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
     coralWrist.initShuffleboard(loggingLevel);
-    // elevatorPivot.initShuffleboard(loggingLevel);
+    elevatorPivot.initShuffleboard(loggingLevel);
   }
   
   /**
