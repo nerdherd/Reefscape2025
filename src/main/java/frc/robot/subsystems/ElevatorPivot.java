@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -34,7 +32,6 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
-
     public ElevatorPivot () {
         pivotMotor = new TalonFX(ElevatorConstants.kPivotMotorID);
         // pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
@@ -189,7 +186,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return hasReachedPosition(getPositionDegrees());
     }
 
-    private void movePivotMotionMagic() { // fake
+    private void moveMotionMagic() { // TODO fake
         // double ff = -(ArmConstants.kStowedFF + ArmConstants.kDiffFF * percentExtended) * Math.cos(getArmAngle());
         // pivotMotor.set(ControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, ff);
     }
@@ -231,6 +228,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         SmartDashboard.putBoolean("Pushsss", true);
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
         //return Commands.runOnce(() -> setPositionRev(0.5));
+    }
+
+    public Command stop() {
+        return stopCommand();
     }
 
     // ****************************** LOGGING METHODS ****************************** //
