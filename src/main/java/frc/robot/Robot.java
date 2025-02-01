@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.refreshAlliance();
+    m_robotContainer.resetDrivebasePose();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)

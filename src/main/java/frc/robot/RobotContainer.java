@@ -71,6 +71,11 @@ public class RobotContainer {
     DriverStation.reportWarning("Initalization complete", false);
   }
 
+  public void resetDrivebasePose()
+  {
+    //zero imu
+    //do pose confirmation by camera
+  }
 
   public static void refreshAlliance() {
     var alliance = DriverStation.getAlliance();
