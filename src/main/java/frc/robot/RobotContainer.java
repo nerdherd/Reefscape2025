@@ -23,7 +23,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 
-import frc.robot.commands.autos.PreloadTaxi;
+// import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.Square;
 import frc.robot.commands.SwerveJoystickCommand;
 
@@ -106,7 +106,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> false, // robot oriented variable
+      () -> true, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
@@ -248,8 +248,8 @@ public class RobotContainer {
     // autoChooser.addOption("Square", new Square(swerveDrive, algaeRoller, "Square"));
 
     // if (paths.contains("S4R3")) {
-      autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
-      autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
+      // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
+      // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
