@@ -63,6 +63,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.imu.zeroAll();
     m_robotContainer.imu.zeroHeading();
     m_robotContainer.initShuffleboard();
+    // init auto chooser();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 

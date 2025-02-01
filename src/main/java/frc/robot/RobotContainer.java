@@ -82,7 +82,7 @@ public class RobotContainer {
     // configureBinadings_test();
     // initDefaultCommands_teleop();
     // configureBindings_teleop();
-    // initAutoChoosers();
+    initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
     DriverStation.reportWarning("Initalization complete", false);
@@ -133,6 +133,9 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
+    // driverController.controllerRight().onTrue(
+      
+    // )
 
     // driverController.buttonRight()
     //   .onTrue(elevator.moveToReefL1())
