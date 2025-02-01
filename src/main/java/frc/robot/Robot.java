@@ -30,7 +30,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    
+    // make sure pose estimation is able to reset to zero
+    m_robotContainer.resetDrivebasePose();
   }
 
   /**
@@ -54,7 +55,6 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.setBreak(true);
-    m_robotContainer.resetDrivebasePose();
   }
   
   @Override
