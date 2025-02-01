@@ -149,8 +149,8 @@ public class RobotContainer {
     .onFalse(elevatorPivot.moveToStow());
 
     driverController.triggerLeft()
-      .onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
+      .onTrue(coralWrist.moveToStation()) // hold it :)
+      .onFalse(coralWrist.moveToStow());
     driverController.triggerRight()
       .onTrue(algaeRoller.outtake()) // hold it :)
       .onFalse(algaeRoller.stop());
@@ -245,7 +245,7 @@ public class RobotContainer {
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
     coralWrist.initShuffleboard(loggingLevel);
-    // elevatorPivot.initShuffleboard(loggingLevel);
+    elevatorPivot.initShuffleboard(loggingLevel);
   }
   
   /**
