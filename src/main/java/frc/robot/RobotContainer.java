@@ -237,6 +237,7 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
+    autoChooser.setDefaultOption("Square juat drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
