@@ -30,7 +30,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final TalonFXConfigurator pivotConfigurator;
     // private Pigeon2 pigeon;
 
-    public boolean enabled = true;
+    public boolean enabled = false; // Change back to true
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
@@ -101,9 +101,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfigurator.refresh(pivotConfiguration);
         pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; //TODO change orientation later
-        // pivotConfiguration.Feedback.RotorToSensorRatio = -ElevatorConstants.kElevatorPivotGearRatio / 360;
-        pivotConfiguration.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
-        pivotConfiguration.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
+        pivotConfiguration.Feedback.RotorToSensorRatio = ElevatorConstants.kElevatorPivotGearRatio / 360;
+        pivotConfiguration.Feedback.SensorToMechanismRatio =1.0; //TODO change later
+        pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TODO change later
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
         pivotConfiguration.CurrentLimits.SupplyCurrentLimit = 40;
@@ -135,16 +135,16 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         this.enabled = enabled;
     }
 
-    private void setPositionRev(double positionDegrees) {
+    private void setPositionDegrees(double positionDegrees) {
         double newPos = NerdyMath.clamp(
-            mapDegrees(positionDegrees), 
+            positionDegrees, 
             ElevatorConstants.kElevatorPivotMin, 
             ElevatorConstants.kElevatorPivotMax
             );
         motionMagicRequest.Position = (newPos / 360.0);  
     }
 
-    private void setPositionDegrees(double positionRev) {
+    private void setPositionRev(double positionRev) {
         motionMagicRequest.Position = positionRev;
     }
 
@@ -249,6 +249,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         tab.addNumber("Position Degrees", () -> getPositionDegrees());
         tab.addNumber("Set Position Rev", () -> motionMagicRequest.Position);
         tab.addNumber("Velocity", () -> pivotMotor.getVelocity().getValueAsDouble());
+        tab.addBoolean("Enabled", ()-> enabled);
     }
     
 }
