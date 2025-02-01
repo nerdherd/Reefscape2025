@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
     RobotContainer.refreshAlliance();
     m_robotContainer.imu.zeroAll();
     m_robotContainer.imu.zeroHeading();
-
+    m_robotContainer.initShuffleboard();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -86,6 +86,10 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.configureBindings_teleop();
+    m_robotContainer.initDefaultCommands_teleop();  
+    m_robotContainer.imu.zeroAll();
+    m_robotContainer.imu.zeroHeading();
+    m_robotContainer.initShuffleboard();  
   }
 
   /** This function is called periodically during operator control. */

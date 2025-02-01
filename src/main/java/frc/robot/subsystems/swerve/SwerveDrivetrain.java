@@ -579,25 +579,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     /**
      * Report values to smartdashboard.
      */
-     public void reportToSmartDashboard(LOG_LEVEL level) {
-    //     switch (level) {
-    //         case OFF:
-    //             break;
-    //         case ALL:
-    //         case MEDIUM:
-    //             SmartDashboard.putData("Zero Modules", Commands.runOnce(this::zeroModules));
-    //         case MINIMAL:
-    //             SmartDashboard.putNumber("Odometer X Meters", poseEstimator.getEstimatedPosition().getX());
-    //             SmartDashboard.putNumber("Odometer Y Meters", poseEstimator.getEstimatedPosition().getY());
-    //             SmartDashboard.putString("Drive Mode", this.driveMode.toString());
-    //             break;
-    //     }
-     }
+     public void reportToSmartDashboard(LOG_LEVEL level) {}
 
-    // public void reportModulesToSmartDashboard(LOG_LEVEL level) {
-    //     frontRight.reportToSmartDashboard(level);
-    //     frontLeft.reportToSmartDashboard(level);
-    //     backLeft.reportToSmartDashboard(level);
-    //     backRight.reportToSmartDashboard(level);
-    // }
 }

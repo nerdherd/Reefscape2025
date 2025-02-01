@@ -77,11 +77,11 @@ public class RobotContainer {
     elevator = new Elevator();
     elevatorPivot = new ElevatorPivot();
     
-    initShuffleboard();
+    // initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
-    initDefaultCommands_teleop();
-    configureBindings_teleop();
+    // initDefaultCommands_teleop();
+    // configureBindings_teleop();
     // initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
