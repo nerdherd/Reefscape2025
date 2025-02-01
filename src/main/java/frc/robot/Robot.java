@@ -82,7 +82,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
-    RobotContainer.refreshAlliance();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -90,9 +89,9 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    RobotContainer.refreshAlliance();
     m_robotContainer.configureBindings_teleop();
     m_robotContainer.initDefaultCommands_teleop();
-
   }
 
   /** This function is called periodically during operator control. */
@@ -101,10 +100,12 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    RobotContainer.refreshAlliance();
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    RobotContainer.refreshAlliance();
     m_robotContainer.swerveDrive.refreshModulePID();
+    m_robotContainer.initDefaultCommands_test();
+    m_robotContainer.initDefaultCommands_test();
   }
 
   /** This function is called periodically during test mode. */
