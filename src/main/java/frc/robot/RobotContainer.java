@@ -25,6 +25,7 @@ import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.commands.AutoCommand;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.subsystems.LimelightHelpers;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 // import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -76,6 +77,14 @@ public class RobotContainer {
     //zero imu
     //imu.zeroAll();
     //do pose confirmation by camera
+    double front_left = LimelightHelpers.getCurrentPipelineIndex("limelightName_front_left"); 
+    double front_right = LimelightHelpers.getCurrentPipelineIndex("limelightName_front_right"); 
+    double high_back = LimelightHelpers.getCurrentPipelineIndex("limelightName_high_back");
+    double high_front = LimelightHelpers.getCurrentPipelineIndex("limelightName_high_front");
+    if(front_left  != 1 || front_right != 1 || high_back != 1 || high_front != 1)
+    {
+      DriverStation.reportWarning("Check the connection of Cameras!", true);
+    }
   }
 
   public void updateDrivebasePose()
