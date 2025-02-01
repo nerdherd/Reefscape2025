@@ -342,16 +342,19 @@ public final class Constants {
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
   
-    public static final PrefDouble kPWristMotor = new PrefDouble("kP Wrist", 0.1);
+    public static final PrefDouble kPWristMotor = new PrefDouble("kP Wrist", 1.2);
     public static final PrefDouble kIWristMotor = new PrefDouble("kI Wrist", 0);
     public static final PrefDouble kDWristMotor = new PrefDouble("kD Wrist", 0);
-    public static final PrefDouble kVWristMotor = new PrefDouble("kV Wrist", 0.12);
-    public static final PrefDouble kSWristMotor = new PrefDouble("kS Wrist", 0); //Static Friction
-    public static final PrefDouble kGWristMotor = new PrefDouble("kG Wrist", 0.015); //Gravity
-    public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 100); //Rotations per second squared
-    public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 700); //Rotations per second squared
+    public static final PrefDouble kVWristMotor = new PrefDouble("kV Wrist", 0.4);
+    public static final PrefDouble kSWristMotor = new PrefDouble("kS Wrist", 0.34); //Static Friction
+    public static final PrefDouble kAWristMotor = new PrefDouble("kA Wrist", 0.0); //Static Friction
+    public static final PrefDouble kGWristMotor = new PrefDouble("kG Wrist", 0.0); //Gravity
 
-    public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.1);
+    public static final PrefDouble kWristCruiseVelocity = new PrefDouble("Wrist Cruise Velocity", 16.333); //Rotations per second
+    public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 32.0); //Rotations per second squared
+    public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 100.0); //Rotations per second squared
+
+    public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.5);
     public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", 0);
     public static final PrefDouble kWristL23Position = new PrefDouble("Wrist L23 Position", 0);
     public static final PrefDouble kWristL14Position = new PrefDouble("Wrist L4 Position", -0.9);
