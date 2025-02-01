@@ -77,6 +77,11 @@ public class RobotContainer {
     //do pose confirmation by camera
   }
 
+  public void updateDrivebasePose()
+  {
+    // camera should be enabled to look the apriltag and update the pose if found one
+  }
+
   public static void refreshAlliance() {
     var alliance = DriverStation.getAlliance();
     if (alliance.isPresent())
@@ -208,7 +213,7 @@ public class RobotContainer {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
-    autoChooser.addOption("PoseEstmtAuto", new AutoCommand(null, new Pose2d(1,1, new Rotation2d()), new Pose2d(2,2, new Rotation2d())));
+    autoChooser.addOption("PoseEstmtAuto", new AutoCommand(swerveDrive, new Pose2d(1,1, new Rotation2d()), new Pose2d(2,2, new Rotation2d())));
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
   

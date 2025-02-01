@@ -54,16 +54,20 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.setBreak(true);
+    m_robotContainer.resetDrivebasePose();
   }
   
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    m_robotContainer.updateDrivebasePose();
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // To be confirmed: pose is able to show on the Shuffleboard
+    m_robotContainer.updateDrivebasePose();
     RobotContainer.refreshAlliance();
-    m_robotContainer.resetDrivebasePose();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)

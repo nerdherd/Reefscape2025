@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.util.filters.OldDriverFilter2;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.FlippingUtil;
@@ -26,16 +28,16 @@ public class AutoCommand extends Command {
     private final Pose2d startPoseDefault = new Pose2d(0,0, new Rotation2d());
     private final Pose2d targetPose1;
     private final Pose2d targetPose2;
-    private final SwerveDrivePoseEstimator poseEstimator;
+    private final SwerveDrivetrain drivetrain;
 
     private SequentialCommandGroup fullCommand;
 
     public AutoCommand(
-        SwerveDrivePoseEstimator poseEstimator,
+        SwerveDrivetrain drivetrain,
         Pose2d targetPose1,
         Pose2d targetPose2
     ) {
-        this.poseEstimator = poseEstimator;
+        this.drivetrain = drivetrain;
         this.targetPose1 = targetPose1;
         this.targetPose2 = targetPose2;
     }
@@ -43,7 +45,7 @@ public class AutoCommand extends Command {
     @Override
     public void initialize() {
         // Get the robot's current pose
-        Pose2d currentPose = poseEstimator.getEstimatedPosition();
+        Pose2d currentPose = drivetrain.getEstimatedPose();
         
         // To be added: validate the starting pose
 
