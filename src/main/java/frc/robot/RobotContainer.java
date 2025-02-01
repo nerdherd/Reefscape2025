@@ -32,10 +32,10 @@ import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.AlgaeRoller;
-import frc.robot.subsystems.CoralWrist;
-import frc.robot.subsystems.ElevatorPivot;
+// import frc.robot.subsystems.Elevator;
+// import frc.robot.subsystems.AlgaeRoller;
+// import frc.robot.subsystems.CoralWrist;
+// import frc.robot.subsystems.ElevatorPivot;
 
 import frc.robot.util.Controller;
 
@@ -45,10 +45,10 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
-  public AlgaeRoller algaeRoller;
-  public Elevator elevator;
-  public ElevatorPivot elevatorPivot;
-  public CoralWrist coralWrist;
+  // public AlgaeRoller algaeRoller;
+  // public Elevator elevator;
+  // public ElevatorPivot elevatorPivot;
+  // public CoralWrist coralWrist;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
@@ -72,16 +72,16 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    algaeRoller = new AlgaeRoller();
-    coralWrist = new CoralWrist();
-    elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
+    // algaeRoller = new AlgaeRoller();
+    // coralWrist = new CoralWrist();
+    // elevator = new Elevator();
+    // elevatorPivot = new ElevatorPivot();
     
     // initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
-    // initDefaultCommands_teleop();
-    // configureBindings_teleop();
+    initDefaultCommands_teleop();
+    configureBindings_teleop();
     initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
@@ -161,12 +161,12 @@ public class RobotContainer {
     //   .onTrue(elevatorPivot.moveToPickup())
     // .onFalse(elevatorPivot.moveToStow());
 
-    driverController.triggerLeft()
-      .onTrue(coralWrist.moveToStation()) // hold it :)
-      .onFalse(coralWrist.moveToStow());
-    driverController.triggerRight()
-      .onTrue(algaeRoller.outtake()) // hold it :)
-      .onFalse(algaeRoller.stop());
+    // driverController.triggerLeft()
+    //   .onTrue(coralWrist.moveToStation()) // hold it :)
+    //   .onFalse(coralWrist.moveToStow());
+    // driverController.triggerRight()
+    //   .onTrue(algaeRoller.outtake()) // hold it :)
+    //   .onFalse(algaeRoller.stop());
 
     // driverController.controllerRight()
     //   .whileTrue(elevatorPivot.moveToStart())
@@ -245,7 +245,7 @@ public class RobotContainer {
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
     autoChooser.addOption("Test", AutoBuilder.buildAuto("Test"));
-    autoChooser.addOption("Square", new Square(swerveDrive, algaeRoller, "Square"));
+    // autoChooser.addOption("Square", new Square(swerveDrive, algaeRoller, "Square"));
 
     // if (paths.contains("S4R3")) {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
@@ -258,9 +258,9 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
-    algaeRoller.initShuffleboard(loggingLevel); 
-    elevator.initShuffleboard(loggingLevel);
-    coralWrist.initShuffleboard(loggingLevel);
+    // algaeRoller.initShuffleboard(loggingLevel); 
+    // elevator.initShuffleboard(loggingLevel);
+    // coralWrist.initShuffleboard(loggingLevel);
     // elevatorPivot.initShuffleboard(loggingLevel);
   }
   

@@ -60,13 +60,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.refreshAlliance();
-    m_robotContainer.imu.zeroAll();
-    m_robotContainer.imu.zeroHeading();
+    // m_robotContainer.imu.zeroAll();
+    // m_robotContainer.imu.zeroHeading();
     m_robotContainer.initShuffleboard();
     // init auto chooser();
 
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
@@ -86,10 +85,10 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
-    m_robotContainer.configureBindings_teleop();
-    m_robotContainer.initDefaultCommands_teleop();  
-    m_robotContainer.imu.zeroAll();
-    m_robotContainer.imu.zeroHeading();
+    // m_robotContainer.configureBindings_teleop();
+    // m_robotContainer.initDefaultCommands_teleop();  
+    // m_robotContainer.imu.zeroAll();
+    // m_robotContainer.imu.zeroHeading();
     m_robotContainer.initShuffleboard();  
   }
 
