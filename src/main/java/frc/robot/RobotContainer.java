@@ -7,6 +7,8 @@ package frc.robot;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,7 +34,7 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.commands.autos.PreloadTaxi;
-
+import edu.wpi.first.math.util.Units;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
@@ -131,13 +133,22 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 }
 
-  public void initDefaultCommands_test() {}
+  
 
   public void configureBindings_teleop() {
     // Driver bindings
     // driverController.controllerLeft().onTrue(
     //   Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     // );
+    driverController.buttonLeft()
+      .onTrue(Commands.runOnce(()->AutoBuilder.pathfindToPose(
+        new Pose2d(2.0, 2.5, Rotation2d.fromDegrees(0)), 
+        new PathConstraints(
+          4.0, 4.0, 
+          Units.degreesToRadians(360), Units.degreesToRadians(540)
+        ), 
+        0
+    ))).onFalse(swerveDrive.towCommand());
   }
     // driverController.buttonRight()
     //   .onTrue(elevator.moveToReefL1())
@@ -153,6 +164,9 @@ public class RobotContainer {
     //   .onFalse(elevator.stow());
 
     
+    public void initDefaultCommands_test() {
+      initDefaultCommands_teleop();
+    }
 
   public void configureBindings_test() {
     driverController.buttonRight()
@@ -225,6 +239,7 @@ public class RobotContainer {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
+    // new PathPlannerAuto("Example Auto");//try this too?
     autoChooser.addOption("PoseEstmtAuto", new AutoCommand(swerveDrive, new Pose2d(1,1, new Rotation2d()), new Pose2d(2,2, new Rotation2d())));
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
