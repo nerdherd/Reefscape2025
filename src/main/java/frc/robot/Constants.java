@@ -354,8 +354,8 @@ public final class Constants {
     public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 32.0); //Rotations per second squared
     public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 100.0); //Rotations per second squared
 
-    public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.5);
-    public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", 0);
+    public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.1);
+    public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", -0.5);
     public static final PrefDouble kWristL23Position = new PrefDouble("Wrist L23 Position", 0);
     public static final PrefDouble kWristL14Position = new PrefDouble("Wrist L4 Position", -0.9);
 
