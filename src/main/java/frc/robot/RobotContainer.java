@@ -74,12 +74,15 @@ public class RobotContainer {
   public void resetDrivebasePose()
   {
     //zero imu
+    //imu.zeroAll();
     //do pose confirmation by camera
   }
 
   public void updateDrivebasePose()
   {
     // camera should be enabled to look the apriltag and update the pose if found one
+    Pose2d visionPose = new Pose2d(); // tbd
+    swerveDrive.resetOdometry(visionPose);
   }
 
   public static void refreshAlliance() {
