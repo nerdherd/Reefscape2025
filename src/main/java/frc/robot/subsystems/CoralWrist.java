@@ -116,6 +116,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     private Command setPositionCommand(double position) {
         return Commands.sequence(
+            setEnabledCommand(),
             Commands.runOnce(() -> setPosition(position))
         );
     }
@@ -132,7 +133,9 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     public Command moveToStow() {
         return setPositionCommand(IntakeConstants.kWristStowPosition.get());
     }
-
+    public Command moveToGround(){
+        return setPositionCommand(IntakeConstants.kWristPickupPosition.get());
+    }
     public Command moveToStation() {
         return setPositionCommand(IntakeConstants.kWristStationPosition.get());
     }

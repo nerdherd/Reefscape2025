@@ -284,6 +284,7 @@ public final class Constants {
     public static final int kElevatorMotorID = 18;            // TODO change later 
     public static final double kElevatorStowPosition    = -1; // TODO change later
     public static final double kElevatorStationPosition = 0 ; // TODO change later
+    public static final double kElevatorGroundIntakePosition = 0; // TODO change ltr
     public static final double kElevatorL1Position =   0;     // TODO change later
     public static final double kElevatorL2Position =  -9;     // TODO change later
     public static final double kElevatorL3Position = -18;     // TODO change later
@@ -309,6 +310,7 @@ public final class Constants {
     public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", -26); //TODO change later -22
     public static final PrefDouble kElevatorPivotStartPosition = new PrefDouble("Elevator Pivot Start", 0); //TODO change later
     public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", -40); //TODO change later   -60
+
 
     public static final double kElevatorPivotMin = -56.3; // TODO change later    -61.3
     public static final double kElevatorPivotMax = -25.4; // TODO change later   -20.4
@@ -349,15 +351,17 @@ public final class Constants {
     public static final PrefDouble kIWristMotor = new PrefDouble("kI Wrist", 0);
     public static final PrefDouble kDWristMotor = new PrefDouble("kD Wrist", 0);
     public static final PrefDouble kVWristMotor = new PrefDouble("kV Wrist", 0.12);
+
     public static final PrefDouble kSWristMotor = new PrefDouble("kS Wrist", 0); //Static Friction
     public static final PrefDouble kGWristMotor = new PrefDouble("kG Wrist", 0.015); //Gravity
     public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 100); //Rotations per second squared
     public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 700); //Rotations per second squared
 
     public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.1);
+    public static final PrefDouble kWristPickupPosition = new PrefDouble("Wrist Pickup Position", 0); // TODO change ltr
     public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", 0);
     public static final PrefDouble kWristL23Position = new PrefDouble("Wrist L23 Position", 0);
-    public static final PrefDouble kWristL14Position = new PrefDouble("Wrist L4 Position", -0.9);
+    public static final PrefDouble kWristL14Position = new PrefDouble("Wrist L14 Position", -0.9);
 
     public static final double kWristSpeed = 0.5;
 

@@ -16,9 +16,9 @@ public class SuperSystem {
     }
     public Command intakeCoralStation() {
         Command command = Commands.sequence(
-            elevatorPivot.moveToStart(),
-            elevator.moveToStation(),
             intakeWrist.moveToStation(),
+            elevator.moveToStation(),
+            elevatorPivot.moveToStart(),
             intakeRoller.intake()
         );
         command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
@@ -26,24 +26,26 @@ public class SuperSystem {
     }
     public Command intakeCoralGround() { // TODO finish this
         Command command = Commands.sequence(
-            elevatorPivot.moveToStart(),
-            elevator.moveToStation(),
-            intakeWrist.moveToStation(),
+            intakeWrist.moveToGround(),
+            elevator.moveToGroundIntakePosition(),
+            elevatorPivot.moveToPickup(),
             intakeRoller.intake()
         );
         command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
         return command;
     }
-    public Command intakeAlgaeGround() { // TODO finish this
-        Command command = Commands.sequence(
-            elevatorPivot.moveToStart(),
-            elevator.moveToStation(),
-            intakeWrist.moveToStation(),
-            intakeRoller.intake()
-        );
-        command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
-        return command;
-    }
+    
+    // public Command intakeAlgaeGround() { // TODO finish this
+    //     Command command = Commands.sequence(
+    //         elevatorPivot.moveToStart(),
+    //         elevator.moveToStation(),
+    //         intakeWrist.moveToStation(),
+    //         intakeRoller.intake()
+    //     );
+    //     command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
+    //     return command;
+    // }
+
     public Command placeCoralL1() {
         Command command = Commands.sequence(
             elevatorPivot.moveToStart(),
@@ -54,6 +56,7 @@ public class SuperSystem {
         command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
         return command;
     }
+
     public Command placeCoralL2() {
         Command command = Commands.sequence(
             elevatorPivot.moveToStart(),
@@ -84,26 +87,18 @@ public class SuperSystem {
         command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
         return command;
     }
-    public Command placeAlgaeProcessor() { // TODO finish this
-        Command command = Commands.sequence(
-            // elevatorPivot.moveToStow(),
-            // elevator.moveToReefL1(),
-            // intakeWrist.moveToStation(),
-            // intakeRoller.outtake()
-        );
-        command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
-        return command;
-    }
-    public Command collapse() {
-        Command command = Commands.sequence(
-            intakeRoller.stop(),
-            intakeWrist.moveToStow(),
-            elevator.stow(),
-            elevatorPivot.moveToStart()
-        );
-        command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
-        return command;
-    }
+
+    // public Command placeAlgaeProcessor() { // TODO finish this
+    //     Command command = Commands.sequence(
+    //         elevatorPivot.moveToStow(),
+    //         elevator.moveToReefL1(),
+    //         intakeWrist.moveToStation(),
+    //         intakeRoller.outtake()
+    //     );
+    //     command.addRequirements(elevator, elevatorPivot, intakeWrist, intakeRoller);
+    //     return command;
+    // }
+
     public Command stow() {
         Command command = Commands.sequence(
             intakeRoller.stop(),
