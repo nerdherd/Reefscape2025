@@ -254,7 +254,7 @@ public class RobotContainer {
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
     coralWrist.initShuffleboard(loggingLevel);
-    // elevatorPivot.initShuffleboard(loggingLevel);
+    elevatorPivot.initShuffleboard(loggingLevel);
   }
   
   /**
