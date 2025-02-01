@@ -24,7 +24,6 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 
 import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.commands.autos.Square;
 import frc.robot.commands.SwerveJoystickCommand;
 
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
@@ -241,8 +240,6 @@ public class RobotContainer {
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
     autoChooser.addOption("Test", AutoBuilder.buildAuto("Test"));
-    autoChooser.addOption("Square", new Square(swerveDrive, algaeRoller, "Square"));
-
     // if (paths.contains("S4R3")) {
       autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));

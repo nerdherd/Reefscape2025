@@ -5,14 +5,12 @@
   "pathFolders": [
     "Bottom Half Paths",
     "Middle Paths",
-    "claire square",
     "Top Half Paths"
   ],
   "autoFolders": [
-    "Alex",
     "Bottom Half Autos",
     "Middle Autos",
-    "claire square",
+    "Alex",
     "Top Half Autos"
   ],
   "defaultMaxVel": 3.0,
