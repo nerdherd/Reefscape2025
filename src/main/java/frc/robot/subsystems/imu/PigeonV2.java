@@ -133,20 +133,20 @@ public class PigeonV2 extends SubsystemBase {
         );
     }
     
-    public void reportToSmartDashboard(LOG_LEVEL level) {
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-                SmartDashboard.putNumber("Pigeon Firmware Version", pigeon.getVersion().getValue());
-            case MEDIUM:
-                SmartDashboard.putNumber("Robot Yaw", this.getYaw());
-                SmartDashboard.putNumber("Robot Pitch", this.getPitch());
-                SmartDashboard.putNumber("Robot Roll", this.getRoll());
-            case MINIMAL:
-                SmartDashboard.putNumber("Robot Heading", getHeading());
-        }
-    }
+    // public void reportToSmartDashboard(LOG_LEVEL level) {
+    //     switch (level) {
+    //         case OFF:
+    //             break;
+    //         case ALL:
+    //             SmartDashboard.putNumber("Pigeon Firmware Version", pigeon.getVersion().getValue());
+    //         case MEDIUM:
+    //             SmartDashboard.putNumber("Robot Yaw", this.getYaw());
+    //             SmartDashboard.putNumber("Robot Pitch", this.getPitch());
+    //             SmartDashboard.putNumber("Robot Roll", this.getRoll());
+    //         case MINIMAL:
+    //             SmartDashboard.putNumber("Robot Heading", getHeading());
+    //     }
+    // }
     
     public void initShuffleboard(LOG_LEVEL level) {
         if (level == LOG_LEVEL.OFF)  {

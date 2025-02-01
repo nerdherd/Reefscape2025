@@ -581,7 +581,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     /**
      * Report values to smartdashboard.
      */
-     public void reportToSmartDashboard(LOG_LEVEL level) {
+    //  public void reportToSmartDashboard(LOG_LEVEL level) {
     //     switch (level) {
     //         case OFF:
     //             break;
@@ -594,7 +594,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //             SmartDashboard.putString("Drive Mode", this.driveMode.toString());
     //             break;
     //     }
-     }
+    //  }
 
     // public void reportModulesToSmartDashboard(LOG_LEVEL level) {
     //     frontRight.reportToSmartDashboard(level);
