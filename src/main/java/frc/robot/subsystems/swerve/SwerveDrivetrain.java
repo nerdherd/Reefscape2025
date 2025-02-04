@@ -204,7 +204,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         double robotRotation = estimatedPosition.getRotation().getDegrees();
 
-        SmartDashboard.putNumber("Robot Rotation", robotRotation);
+        // SmartDashboard.putNumber("Robot Rotation", robotRotation);
 
         visionupdateOdometry("limelight-memory",robotRotation);
         visionupdateOdometry("limelight-awesome",robotRotation);
@@ -216,6 +216,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //******************************  Vision ******************************/
 
     private void visionupdateOdometry(String limelightName,double robotRotation) {
+
+        ShuffleboardTab tab = Shuffleboard.getTab(limelightName);
+        tab.add("Robot Rotation", robotRotation);
 
         LimelightHelpers.SetRobotOrientation(limelightName, robotRotation, 0, 0, 0, 0, 0);
 
@@ -246,16 +249,24 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             doRejectUpdate = true;
         }
 
-        SmartDashboard.putBoolean(limelightName+" Valid Data", !doRejectUpdate);
+        // SmartDashboard.putBoolean(limelightName+" Valid Data", !doRejectUpdate);
+        tab.add(limelightName+" Valid Data", !doRejectUpdate);
+        tab.add(limelightName+" Tag Count",megaTag2.tagCount);
+        tab.add(limelightName+" Is Null",estimate == null);
 
         if(!doRejectUpdate)
         {
             Pose2d botPose1 = estimate.pose;
 
-            SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
-            SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
-            SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
-;
+            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
+            // SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
+
+            tab.add(limelightName + " X Position", botPose1.getX());
+            tab.add(limelightName + " Y Position", botPose1.getY());
+            tab.add(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
+
+
             if (megaTag2.tagCount >= 2) {
                 xyStds = 0.5;
                 degStds = 6;
