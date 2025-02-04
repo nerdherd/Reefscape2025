@@ -105,7 +105,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> false, // robot oriented variable
+      () -> true, // robot oriented variable
       () -> false, // tow supplier
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
@@ -157,19 +157,19 @@ public class RobotContainer {
     //   .onTrue(elevatorPivot.moveToPickup())
     // .onFalse(elevatorPivot.moveToStow());
 
-    driverController.triggerLeft()
-      .onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
-    driverController.triggerRight()
-      .onTrue(algaeRoller.outtake()) // hold it :)
-      .onFalse(algaeRoller.stop());
+    // driverController.triggerLeft()
+    //   .onTrue(algaeRoller.intake()) // hold it :)
+    //   .onFalse(algaeRoller.stop());
+    // driverController.triggerRight()
+    //   .onTrue(algaeRoller.outtake()) // hold it :)
+    //   .onFalse(algaeRoller.stop());
 
-    // driverController.controllerRight()
-    //   .whileTrue(elevatorPivot.moveToStart())
-    //   .onFalse(elevatorPivot.moveToStow());
-    // driverController.controllerLeft()
-    //   .onTrue(elevatorPivot.moveToPickup())
-    //   .onFalse(elevatorPivot.moveToStow());
+    driverController.triggerRight()
+      .whileTrue(elevatorPivot.moveToStow())
+      .onFalse(elevatorPivot.moveToStart());
+    driverController.triggerLeft()
+      .onTrue(elevatorPivot.moveToStow())
+      .onFalse(elevatorPivot.moveToPickup());
     
   }
 
