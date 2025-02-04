@@ -63,15 +63,15 @@ public final class Constants {
     public static final double kDriveMotorDeadband = 0.02;
     public static final double kTurnMotorDeadband = 0.001;
 
-    public static final PrefDouble kPTurning = new PrefDouble("kPTurning",0.26); // 0.55
-    public static final PrefDouble kITurning = new PrefDouble("kITurning",0.01);
-    public static final PrefDouble kDTurning = new PrefDouble("kDTurning",0.0015);//0.02 
-    public static final PrefDouble kFTurning = new PrefDouble("kFTurning",0); //0.015
+    public static final PrefDouble kPTurning = new PrefDouble("kPTurning",0.26); // 0.26
+    public static final PrefDouble kITurning = new PrefDouble("kITurning",0.01); //0.01
+    public static final PrefDouble kDTurning = new PrefDouble("kDTurning",0.0015);//0.0015
+    public static final PrefDouble kFTurning = new PrefDouble("kFTurning",0.015); //0
 
-    public static final PrefDouble kPDrive = new PrefDouble("kPDrive",0.13); // 0.6
-    public static final PrefDouble kIDrive = new PrefDouble("kIDrive",0);
-    public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
-    public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
+    public static final PrefDouble kPDrive = new PrefDouble("kPDrive",0.13); // 0.13
+    public static final PrefDouble kIDrive = new PrefDouble("kIDrive",0); //0
+    public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); //0
+    public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); //0.0469
 
     public static final String kCANivoreName = "CANivore";
 

@@ -49,7 +49,7 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -105,7 +105,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> false, // robot oriented variable
+      () -> true, // robot oriented variable
       () -> false, // tow supplier
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
@@ -160,9 +160,9 @@ public class RobotContainer {
     driverController.triggerLeft()
       .onTrue(coralWrist.moveToStation()) // hold it :)
       .onFalse(coralWrist.moveToStow());
-    driverController.triggerRight()
-      .onTrue(algaeRoller.outtake()) // hold it :)
-      .onFalse(algaeRoller.stop());
+    // driverController.triggerRight()
+    //   .onTrue(algaeRoller.outtake()) // hold it :)
+    //   .onFalse(algaeRoller.stop());
 
     // driverController.controllerRight()
     //   .whileTrue(elevatorPivot.moveToStart())
