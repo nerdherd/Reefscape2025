@@ -36,6 +36,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         // configure motor
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         configurePID(motorConfigs);
+
         
         motor.setNeutralMode(NeutralModeValue.Brake);
         zeroEncoder();
@@ -47,7 +48,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         motorConfigurator.refresh(motorConfigs);
     
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+        motorConfigs.Feedback.SensorToMechanismRatio = 1.0;//-12.0/54.0;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
@@ -58,8 +59,10 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         IntakeConstants.kIWristMotor.loadPreferences();
         IntakeConstants.kDWristMotor.loadPreferences();
         IntakeConstants.kVWristMotor.loadPreferences();
+        IntakeConstants.kAWristMotor.loadPreferences();
         IntakeConstants.kSWristMotor.loadPreferences();
         IntakeConstants.kGWristMotor.loadPreferences();
+        IntakeConstants.kWristCruiseVelocity.loadPreferences();
         IntakeConstants.kWristAcceleration.loadPreferences();
         IntakeConstants.kWristJerk.loadPreferences();
     
@@ -68,8 +71,10 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor.get();
         motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor.get();
         motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor.get();
+        motorConfigs.Slot0.kA = IntakeConstants.kAWristMotor.get();
         motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor.get();
 
+        motorConfigs.MotionMagic.MotionMagicCruiseVelocity = IntakeConstants.kWristCruiseVelocity.get();
         motorConfigs.MotionMagic.MotionMagicAcceleration = IntakeConstants.kWristAcceleration.get();
         motorConfigs.MotionMagic.MotionMagicJerk = IntakeConstants.kWristJerk.get();
     
@@ -86,9 +91,8 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-        motionMagicRequest.Position = desiredPosition;
         if (enabled) {
-            motor.setControl(motionMagicRequest);
+            motor.setControl(motionMagicRequest.withPosition(desiredPosition));
         }
         else {
             motor.setControl(brakeRequest);
@@ -103,6 +107,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     
     private void setPosition(double position) {
         desiredPosition = position;
+        motionMagicRequest.Position = desiredPosition;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -116,6 +121,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     private Command setPositionCommand(double position) {
         return Commands.sequence(
+            setEnabledCommand(),
             Commands.runOnce(() -> setPosition(position))
         );
     }
