@@ -130,7 +130,7 @@ public class RobotContainer {
   public void configureBindings_teleop() {
     // Driver bindings
     driverController.controllerLeft().onTrue(
-      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
+      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
     driverController.triggerRight()
