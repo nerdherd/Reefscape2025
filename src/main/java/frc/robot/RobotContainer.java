@@ -105,7 +105,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> true, // robot oriented variable
+      () -> false, // robot oriented variable
       () -> false, // tow supplier
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
