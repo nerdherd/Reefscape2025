@@ -160,9 +160,9 @@ public class RobotContainer {
     driverController.triggerLeft()
       .onTrue(coralWrist.moveToStation()) // hold it :)
       .onFalse(coralWrist.moveToStow());
-    // driverController.triggerRight()
-    //   .onTrue(algaeRoller.outtake()) // hold it :)
-    //   .onFalse(algaeRoller.stop());
+    driverController.triggerRight()
+      .onTrue(algaeRoller.outtake()) // hold it :)
+      .onFalse(algaeRoller.stop());
 
     // driverController.controllerRight()
     //   .whileTrue(elevatorPivot.moveToStart())
