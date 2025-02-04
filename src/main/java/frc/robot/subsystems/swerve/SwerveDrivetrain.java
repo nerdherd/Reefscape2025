@@ -206,8 +206,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         SmartDashboard.putNumber("Robot Rotation", robotRotation);
 
-        visionupdateOdometry("limelight-back",robotRotation);
-        visionupdateOdometry("limelight-deedee",robotRotation);
+        visionupdateOdometry("limelight-memory",robotRotation);
+        visionupdateOdometry("limelight-awesome",robotRotation);
+        visionupdateOdometry("limelight-zma",robotRotation);
+        visionupdateOdometry("limelight-yipee",robotRotation);
 
     }
 
@@ -252,7 +254,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
             SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
             SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
-
+            SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
+;
             if (megaTag2.tagCount >= 2) {
                 xyStds = 0.5;
                 degStds = 6;
