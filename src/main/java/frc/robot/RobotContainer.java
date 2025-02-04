@@ -105,7 +105,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> false, // robot oriented variable
+      () -> true, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
@@ -133,43 +133,9 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
     );
 
-    // driverController.buttonRight()
-    //   .onTrue(elevator.moveToReefL1())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonUp()
-    //   .onTrue(elevator.moveToReefL2())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonLeft()
-    //   .onTrue(elevator.moveToReefL3())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonDown()
-    //   .onTrue(elevator.moveToReefL4())
-    //   .onFalse(elevator.stow());
-    // driverController.buttonRight()
-    //   .onTrue(coralWrist.setEnabledCommand());
-    // driverController.buttonLeft()
-    //   .onTrue(coralWrist.setDisabledCommand());
-    // driverController.buttonUp()
-    //   .whileTrue(coralWrist.raise())
-    //   .onFalse(coralWrist.stow()); 
-    
-    // driverController.controllerRight()
-    //   .onTrue(elevatorPivot.moveToPickup())
-    // .onFalse(elevatorPivot.moveToStow());
-
-    driverController.triggerLeft()
-      .onTrue(coralWrist.moveToStation()) // hold it :)
-      .onFalse(coralWrist.moveToStow());
     driverController.triggerRight()
-      .onTrue(algaeRoller.outtake()) // hold it :)
-      .onFalse(algaeRoller.stop());
-
-    // driverController.controllerRight()
-    //   .whileTrue(elevatorPivot.moveToStart())
-    //   .onFalse(elevatorPivot.moveToStow());
-    // driverController.controllerLeft()
-    //   .onTrue(elevatorPivot.moveToPickup())
-    //   .onFalse(elevatorPivot.moveToStow());
+      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+      .onFalse(elevatorPivot.moveToStow());
     
   }
 
