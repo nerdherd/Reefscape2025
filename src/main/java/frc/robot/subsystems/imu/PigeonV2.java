@@ -18,7 +18,7 @@ public class PigeonV2 extends SubsystemBase {
 
     public PigeonV2(int id, String CAN_Name) {
         try {
-            this.pigeon = new Pigeon2(id, CAN_Name); // TODO check if canviore names are different
+            this.pigeon = new Pigeon2(id); // TODO check if canviore names are different
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating Pigeon 2 over CAN: " + ex.getMessage(), true);
         }
@@ -27,14 +27,15 @@ public class PigeonV2 extends SubsystemBase {
         rollOffset = 0;
     }
 
-    private void zeroAll() {
+    public void zeroAll() {
         zeroHeading();
         zeroPitch();
         zeroRoll();
     }
     
     private void zeroHeading() {
-        pigeon.setYaw(0);
+        //pigeon.setYaw(0);
+        resetHeading(pigeon.getYaw().getValueAsDouble());
         offset = 0;
     }
 

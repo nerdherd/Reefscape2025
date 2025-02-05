@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -30,8 +31,6 @@ public class Robot extends TimedRobot {
 
   @Override
   public void robotInit() {
-    // make sure pose estimation is able to reset to zero
-    m_robotContainer.resetDrivebasePose();
   }
 
   /**
@@ -57,9 +56,18 @@ public class Robot extends TimedRobot {
     m_robotContainer.swerveDrive.setBreak(true);
   }
   
+  boolean doneReset = false;
   @Override
   public void disabledPeriodic() {
     m_robotContainer.updateDrivebasePose();
+    // make sure pose estimation is able to reset to zero
+    // try{
+    //   if (!doneReset)
+    //   {
+    //     m_robotContainer.resetDrivebasePose();
+    //     doneReset = true;
+    //   }
+    // }catch(Exception e){}
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
@@ -106,6 +114,8 @@ public class Robot extends TimedRobot {
     m_robotContainer.swerveDrive.refreshModulePID();
     m_robotContainer.initDefaultCommands_test();
     m_robotContainer.initDefaultCommands_test();
+    // set robot to robot oriented
+    m_robotContainer.swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
   }
 
   /** This function is called periodically during test mode. */

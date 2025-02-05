@@ -77,7 +77,7 @@ public class RobotContainer {
   public void resetDrivebasePose()
   {
     //zero imu
-    //imu.zeroAll();
+    imu.zeroAll();
     //do pose confirmation by camera
     double front_left = LimelightHelpers.getCurrentPipelineIndex("limelightName_front_left"); 
     double front_right = LimelightHelpers.getCurrentPipelineIndex("limelightName_front_right"); 
