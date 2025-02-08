@@ -23,7 +23,8 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 
-import frc.robot.commands.autos.PreloadTaxi;
+// import frc.robot.commands.autos.PreloadTaxi;
+// import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
 
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
@@ -49,7 +50,7 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -81,7 +82,7 @@ public class RobotContainer {
     // configureBinadings_test();
     initDefaultCommands_teleop();
     configureBindings_teleop();
-    // initAutoChoosers();
+    initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
     DriverStation.reportWarning("Initalization complete", false);
@@ -202,13 +203,14 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
+    autoChooser.setDefaultOption("Square juat drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
     autoChooser.addOption("Test", AutoBuilder.buildAuto("Test"));
     // if (paths.contains("S4R3")) {
-      autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
-      autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
+      // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
+      // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
