@@ -24,7 +24,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 
 // import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.commands.autos.Square;
+// import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
 
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
@@ -50,7 +50,7 @@ public class RobotContainer {
   // public ElevatorPivot elevatorPivot;
   // public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
