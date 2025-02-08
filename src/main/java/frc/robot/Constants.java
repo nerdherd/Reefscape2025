@@ -36,6 +36,8 @@ import frc.robot.util.preferences.PrefDouble;
 
 public final class Constants {
 
+  public final static int ROBOT_NAME = 1;// 1= is me; 2 = demo
+
   public static class ControllerConstants {
 
     public static final double kDeadband = 0.05;
@@ -73,7 +75,7 @@ public final class Constants {
     public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
     public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
 
-    public static final String kCANivoreName = "CANivore";
+    public static final String kCANivoreName = "rio";//"CANivore";
 
   } 
 

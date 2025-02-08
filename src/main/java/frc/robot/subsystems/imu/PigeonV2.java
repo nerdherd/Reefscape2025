@@ -17,6 +17,12 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
 
     public PigeonV2(int id) {
         try {
+            if(Constants.ROBOT_NAME == 1)
+            {
+                this.pigeon = new Pigeon2(id,"rio"); // TODO check if canviore names are different
+        
+            }
+            else
             this.pigeon = new Pigeon2(id, Constants.ModuleConstants.kCANivoreName); // TODO check if canviore names are different
         } catch (RuntimeException ex) {
             DriverStation.reportError("Error instantiating Pigeon 2 over CAN: " + ex.getMessage(), true);

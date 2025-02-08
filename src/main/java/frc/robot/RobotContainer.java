@@ -61,6 +61,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
+  private static boolean USE_ELEV = false;
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
@@ -71,12 +72,13 @@ public class RobotContainer {
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
-
+if(USE_ELEV)
+{
     algaeRoller = new AlgaeRoller();
     coralWrist = new CoralWrist();
     elevator = new Elevator();
     elevatorPivot = new ElevatorPivot();
-    
+}
     initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
@@ -133,11 +135,11 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-
+    if(USE_ELEV){
     driverController.triggerRight()
       .onTrue(elevatorPivot.moveToPickup()) // hold it :)
       .onFalse(elevatorPivot.moveToStow());
-    
+  }
   }
 
   public void configureBindings_test() {
@@ -218,11 +220,14 @@ public class RobotContainer {
   public void initShuffleboard() {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    if(USE_ELEV)
+    { 
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
     coralWrist.initShuffleboard(loggingLevel);
     elevatorPivot.initShuffleboard(loggingLevel);
+    }
   }
   
   /**
