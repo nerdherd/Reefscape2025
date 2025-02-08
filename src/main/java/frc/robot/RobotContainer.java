@@ -131,12 +131,13 @@ public class RobotContainer {
   public void configureBindings_teleop() {
     // Driver bindings
     driverController.controllerLeft().onTrue(
-      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
+      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     // driverController.controllerRight().onTrue(
       
     // )
 
+ // <<<<<<< autos Branch 2/7/25
     // driverController.buttonRight()
     //   .onTrue(elevator.moveToReefL1())
     //   .onFalse(elevator.stow()); 
@@ -174,6 +175,14 @@ public class RobotContainer {
     // driverController.controllerLeft()
     //   .onTrue(elevatorPivot.moveToPickup())
     //   .onFalse(elevatorPivot.moveToStow());
+
+  // =======
+    
+    // main Branch pre 2/7/25
+//     driverController.triggerRight()
+//       .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+//       .onFalse(elevatorPivot.moveToStow());
+// >>>>>>> main
     
   }
 
@@ -258,10 +267,12 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
+// <<<<<<< autos Branch 2/7/25: Commented out these log inits
     // algaeRoller.initShuffleboard(loggingLevel); 
     // elevator.initShuffleboard(loggingLevel);
     // coralWrist.initShuffleboard(loggingLevel);
     // elevatorPivot.initShuffleboard(loggingLevel);
+// =======
   }
   
   /**
