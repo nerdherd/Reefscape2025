@@ -18,7 +18,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     private final PIDController elevatorPID;
     private double desiredPosition;
     private double desiredVelocity;
-    public boolean enabled = false;
+    private boolean enabled = false;
 
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
@@ -65,7 +65,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setPosition(position));
     }
 
-    public Command goToPosition(double position) {
+    private Command goToPosition(double position) {
         return Commands.sequence(
             setEnabledCommand(true),
             setPositionCommand(position)
@@ -87,6 +87,10 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public Command stow() {
         return goToPosition(ElevatorConstants.kElevatorStowPosition);
+    }
+
+    public Command moveToStation() {
+        return goToPosition(ElevatorConstants.kElevatorStationPosition);
     }
 
     public Command moveToReefL1() {

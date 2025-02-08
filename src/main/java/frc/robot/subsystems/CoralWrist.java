@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -11,7 +10,6 @@ import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -19,8 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.CoralConstants;
-import frc.robot.util.NerdyMath;
+import frc.robot.Constants.IntakeConstants;
 
 public class CoralWrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
@@ -29,11 +26,11 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private double desiredPosition = CoralConstants.kWristStowPosition;
-    public boolean enabled = false;
+    private double desiredPosition = IntakeConstants.kWristStowPosition.get();
+    private boolean enabled = false;
 
-    public CoralWrist(){
-        motor = new TalonFX(CoralConstants.kWristMotorID);
+    public CoralWrist() {
+        motor = new TalonFX(IntakeConstants.kWristMotorID);
         motorConfigurator = motor.getConfigurator();
 
         // configure motor
@@ -45,7 +42,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     }
 
     //****************************** SETUP METHODS ******************************//
-    
+
     private void configurePID(TalonFXConfiguration motorConfigs) {
         motorConfigurator.refresh(motorConfigs);
     
@@ -57,24 +54,24 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
         motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     
-        CoralConstants.kPWristMotor.loadPreferences();
-        CoralConstants.kIWristMotor.loadPreferences();
-        CoralConstants.kDWristMotor.loadPreferences();
-        CoralConstants.kVWristMotor.loadPreferences();
-        CoralConstants.kSWristMotor.loadPreferences();
-        CoralConstants.kGWristMotor.loadPreferences();
-        CoralConstants.kWristAcceleration.loadPreferences();
-        CoralConstants.kWristJerk.loadPreferences();
+        IntakeConstants.kPWristMotor.loadPreferences();
+        IntakeConstants.kIWristMotor.loadPreferences();
+        IntakeConstants.kDWristMotor.loadPreferences();
+        IntakeConstants.kVWristMotor.loadPreferences();
+        IntakeConstants.kSWristMotor.loadPreferences();
+        IntakeConstants.kGWristMotor.loadPreferences();
+        IntakeConstants.kWristAcceleration.loadPreferences();
+        IntakeConstants.kWristJerk.loadPreferences();
     
-        motorConfigs.Slot0.kP = CoralConstants.kPWristMotor.get();
-        motorConfigs.Slot0.kI = CoralConstants.kIWristMotor.get();
-        motorConfigs.Slot0.kD = CoralConstants.kDWristMotor.get();
-        motorConfigs.Slot0.kV = CoralConstants.kVWristMotor.get();
-        motorConfigs.Slot0.kS = CoralConstants.kSWristMotor.get();
-        motorConfigs.Slot0.kG = CoralConstants.kGWristMotor.get();
+        motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor.get();
+        motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor.get();
+        motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor.get();
+        motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor.get();
+        motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor.get();
+        motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor.get();
 
-        motorConfigs.MotionMagic.MotionMagicAcceleration = CoralConstants.kWristAcceleration.get();
-        motorConfigs.MotionMagic.MotionMagicJerk = CoralConstants.kWristJerk.get();
+        motorConfigs.MotionMagic.MotionMagicAcceleration = IntakeConstants.kWristAcceleration.get();
+        motorConfigs.MotionMagic.MotionMagicJerk = IntakeConstants.kWristJerk.get();
     
         StatusCode response = motorConfigurator.apply(motorConfigs);
         if (!response.isOK()){
@@ -83,7 +80,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     }
 
-    public void zeroEncoder() {
+    private void zeroEncoder() {
         motor.setPosition(0);
     }
 
@@ -110,15 +107,17 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     // ****************************** COMMAND METHODS ****************************** //
 
-    public Command setDisabledCommand() {
+    private Command setDisabledCommand() {
         return Commands.runOnce(() -> this.setEnabled(false));
     }
-    public Command setEnabledCommand() {
+    private Command setEnabledCommand() {
         return Commands.runOnce(() -> this.setEnabled(true));
     }
 
     private Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPosition(position));
+        return Commands.sequence(
+            Commands.runOnce(() -> setPosition(position))
+        );
     }
 
     private Command stopCommand() {
@@ -130,12 +129,20 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     // ****************************** NAMED COMMANDS ****************************** //
 
-    public Command stow() {
-        return setPositionCommand(CoralConstants.kWristStowPosition);
+    public Command moveToStow() {
+        return setPositionCommand(IntakeConstants.kWristStowPosition.get());
     }
-    
-    public Command raise() {
-        return setPositionCommand(CoralConstants.kWristUpPostion);
+
+    public Command moveToStation() {
+        return setPositionCommand(IntakeConstants.kWristStationPosition.get());
+    }
+
+    public Command moveToReefL14() {
+        return setPositionCommand(IntakeConstants.kWristL14Position.get());
+    }
+
+    public Command moveToReefL23() {
+        return setPositionCommand(IntakeConstants.kWristL23Position.get());
     }
 
     public Command stop() {

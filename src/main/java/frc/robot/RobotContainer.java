@@ -18,27 +18,31 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.CoralConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.IntakeConstants;
+
+import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.SwerveJoystickCommand;
+
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.AlgaeRoller;
 import frc.robot.subsystems.CoralWrist;
 import frc.robot.subsystems.ElevatorPivot;
+
 import frc.robot.util.Controller;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(1);
 
   public SwerveDrivetrain swerveDrive;
-  public PowerDistribution pdp = new PowerDistribution(1, ModuleType.kCTRE);
+  public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
   public AlgaeRoller algaeRoller;
   public Elevator elevator;
@@ -75,7 +79,7 @@ public class RobotContainer {
     initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
-    // initDefaultCommands_teleop();
+    initDefaultCommands_teleop();
     configureBindings_teleop();
     // initAutoChoosers();
     
@@ -101,7 +105,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> false, // robot oriented variable
+      () -> true, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
@@ -126,46 +130,12 @@ public class RobotContainer {
   public void configureBindings_teleop() {
     // Driver bindings
     driverController.controllerLeft().onTrue(
-      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())
+      Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
-    // driverController.buttonRight()
-    //   .onTrue(elevator.moveToReefL1())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonUp()
-    //   .onTrue(elevator.moveToReefL2())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonLeft()
-    //   .onTrue(elevator.moveToReefL3())
-    //   .onFalse(elevator.stow()); 
-    // driverController.buttonDown()
-    //   .onTrue(elevator.moveToReefL4())
-    //   .onFalse(elevator.stow());
-    // driverController.buttonRight()
-    //   .onTrue(coralWrist.setEnabledCommand());
-    // driverController.buttonLeft()
-    //   .onTrue(coralWrist.setDisabledCommand());
-    // driverController.buttonUp()
-    //   .whileTrue(coralWrist.raise())
-    //   .onFalse(coralWrist.stow()); 
-    
-    // driverController.controllerRight()
-    //   .onTrue(elevatorPivot.moveToPickup())
-    // .onFalse(elevatorPivot.moveToStow());
-
-    driverController.triggerLeft()
-      .onTrue(algaeRoller.intake()) // hold it :)
-      .onFalse(algaeRoller.stop());
     driverController.triggerRight()
-      .onTrue(algaeRoller.shootBarge()) // hold it :)
-      .onFalse(algaeRoller.stop());
-
-    // driverController.controllerRight()
-    //   .whileTrue(elevatorPivot.moveToStart())
-    //   .onFalse(elevatorPivot.moveToStow());
-    // driverController.controllerLeft()
-    //   .onTrue(elevatorPivot.moveToPickup())
-    //   .onFalse(elevatorPivot.moveToStow());
+      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+      .onFalse(elevatorPivot.moveToStow());
     
   }
 
@@ -250,7 +220,7 @@ public class RobotContainer {
     algaeRoller.initShuffleboard(loggingLevel); 
     elevator.initShuffleboard(loggingLevel);
     coralWrist.initShuffleboard(loggingLevel);
-    // elevatorPivot.initShuffleboard(loggingLevel);
+    elevatorPivot.initShuffleboard(loggingLevel);
   }
   
   /**
