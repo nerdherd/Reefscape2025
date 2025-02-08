@@ -130,20 +130,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
         );
     }
     
-    public void reportToSmartDashboard(LOG_LEVEL level) {
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-                SmartDashboard.putNumber("Pigeon Firmware Version", pigeon.getVersion().getValue());
-            case MEDIUM:
-                SmartDashboard.putNumber("Robot Yaw", this.getYaw());
-                SmartDashboard.putNumber("Robot Pitch", this.getPitch());
-                SmartDashboard.putNumber("Robot Roll", this.getRoll());
-            case MINIMAL:
-                SmartDashboard.putNumber("Robot Heading", getHeading());
-        }
-    }
+    public void reportToSmartDashboard(LOG_LEVEL level) {}
     
     public void initShuffleboard(LOG_LEVEL level) {
         if (level == LOG_LEVEL.OFF)  {
@@ -159,13 +146,13 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
             case OFF:
                 break;
             case ALL:
-                tab.addNumber("Pigeon Firmware Version", () -> pigeon.getVersion().getValue());
+                // tab.addNumber("Pigeon Firmware Version", () -> pigeon.getVersion().getValue());
             case MEDIUM:
-                tab.addNumber("Robot Yaw", this::getYaw);
-                tab.addNumber("Robot Pitch", this::getPitch);
-                tab.addNumber("Robot Roll", this::getRoll);
+                // tab.addNumber("Robot Yaw", this::getYaw);
+                // tab.addNumber("Robot Pitch", this::getPitch);
+                // tab.addNumber("Robot Roll", this::getRoll);
             case MINIMAL:
-                tab.addNumber("Robot Heading", this::getHeading);
+                // tab.addNumber("Robot Heading", this::getHeading);
         }
     }
     

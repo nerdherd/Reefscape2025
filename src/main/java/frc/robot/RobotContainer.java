@@ -23,7 +23,8 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 
-import frc.robot.commands.autos.PreloadTaxi;
+// import frc.robot.commands.autos.PreloadTaxi;
+// import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
 
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
@@ -31,10 +32,10 @@ import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.AlgaeRoller;
-import frc.robot.subsystems.CoralWrist;
-import frc.robot.subsystems.ElevatorPivot;
+// import frc.robot.subsystems.Elevator;
+// import frc.robot.subsystems.AlgaeRoller;
+// import frc.robot.subsystems.CoralWrist;
+// import frc.robot.subsystems.ElevatorPivot;
 
 import frc.robot.util.Controller;
 
@@ -44,12 +45,12 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
-  public AlgaeRoller algaeRoller;
-  public Elevator elevator;
-  public ElevatorPivot elevatorPivot;
-  public CoralWrist coralWrist;
+  // public AlgaeRoller algaeRoller;
+  // public Elevator elevator;
+  // public ElevatorPivot elevatorPivot;
+  // public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -71,17 +72,17 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    algaeRoller = new AlgaeRoller();
-    coralWrist = new CoralWrist();
-    elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
+    // algaeRoller = new AlgaeRoller();
+    // coralWrist = new CoralWrist();
+    // elevator = new Elevator();
+    // elevatorPivot = new ElevatorPivot();
     
     initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
     initDefaultCommands_teleop();
     configureBindings_teleop();
-    // initAutoChoosers();
+    initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
     DriverStation.reportWarning("Initalization complete", false);
@@ -132,10 +133,56 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
+    // driverController.controllerRight().onTrue(
+      
+    // )
 
-    driverController.triggerRight()
-      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      .onFalse(elevatorPivot.moveToStow());
+ // <<<<<<< autos Branch 2/7/25
+    // driverController.buttonRight()
+    //   .onTrue(elevator.moveToReefL1())
+    //   .onFalse(elevator.stow()); 
+    // driverController.buttonUp()
+    //   .onTrue(elevator.moveToReefL2())
+    //   .onFalse(elevator.stow()); 
+    // driverController.buttonLeft()
+    //   .onTrue(elevator.moveToReefL3())
+    //   .onFalse(elevator.stow()); 
+    // driverController.buttonDown()
+    //   .onTrue(elevator.moveToReefL4())
+    //   .onFalse(elevator.stow());
+    // driverController.buttonRight()
+    //   .onTrue(coralWrist.setEnabledCommand());
+    // driverController.buttonLeft()
+    //   .onTrue(coralWrist.setDisabledCommand());
+    // driverController.buttonUp()
+    //   .whileTrue(coralWrist.raise())
+    //   .onFalse(coralWrist.stow()); 
+    
+    // driverController.controllerRight()
+    //   .onTrue(elevatorPivot.moveToPickup())
+    // .onFalse(elevatorPivot.moveToStow());
+
+    // driverController.triggerLeft()
+    //   .onTrue(coralWrist.moveToStation()) // hold it :)
+    //   .onFalse(coralWrist.moveToStow());
+    // driverController.triggerRight()
+    //   .onTrue(algaeRoller.outtake()) // hold it :)
+    //   .onFalse(algaeRoller.stop());
+
+    // driverController.controllerRight()
+    //   .whileTrue(elevatorPivot.moveToStart())
+    //   .onFalse(elevatorPivot.moveToStow());
+    // driverController.controllerLeft()
+    //   .onTrue(elevatorPivot.moveToPickup())
+    //   .onFalse(elevatorPivot.moveToStow());
+
+  // =======
+    
+    // main Branch pre 2/7/25
+//     driverController.triggerRight()
+//       .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+//       .onFalse(elevatorPivot.moveToStow());
+// >>>>>>> main
     
   }
 
@@ -202,13 +249,16 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
+    autoChooser.setDefaultOption("Square juat drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
     autoChooser.addOption("Test", AutoBuilder.buildAuto("Test"));
+    // autoChooser.addOption("Square", new Square(swerveDrive, algaeRoller, "Square"));
+
     // if (paths.contains("S4R3")) {
-      autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
-      autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
+      // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
+      // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
@@ -217,10 +267,12 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
-    algaeRoller.initShuffleboard(loggingLevel); 
-    elevator.initShuffleboard(loggingLevel);
-    coralWrist.initShuffleboard(loggingLevel);
-    elevatorPivot.initShuffleboard(loggingLevel);
+// <<<<<<< autos Branch 2/7/25: Commented out these log inits
+    // algaeRoller.initShuffleboard(loggingLevel); 
+    // elevator.initShuffleboard(loggingLevel);
+    // coralWrist.initShuffleboard(loggingLevel);
+    // elevatorPivot.initShuffleboard(loggingLevel);
+// =======
   }
   
   /**
