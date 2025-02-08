@@ -8,6 +8,7 @@ import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicExpoVoltage;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -24,9 +25,9 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.NerdyMath;
 
 public class ElevatorPivot extends SubsystemBase implements Reportable{
-    private final TalonFX pivotMotor;
-    private final TalonFXConfigurator pivotConfigurator;
-    // private Pigeon2 pigeon;
+    private TalonFX pivotMotor;
+    private TalonFXConfigurator pivotConfigurator;
+    private Pigeon2 pigeon;
 
     public boolean enabled = false; // Change back to true
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360.0);
@@ -34,7 +35,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     
     public ElevatorPivot () {
         pivotMotor = new TalonFX(ElevatorConstants.kPivotMotorID);
-        // pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
+        pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
+
         pivotConfigurator = pivotMotor.getConfigurator();
         CommandScheduler.getInstance().registerSubsystem(this);
         configureMotor();
@@ -137,7 +139,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             positionDegrees, 
             ElevatorConstants.kElevatorPivotMin, 
             ElevatorConstants.kElevatorPivotMax
-            );
+        );
+
         motionMagicRequest.Position = (newPos / 360.0);  
     }
 
@@ -152,11 +155,6 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         setPositionDegrees(getTargetPositionDegrees() + incrementDegrees);
     }
 
-    private double mapDegrees(double deg){
-        deg -= (Math.floor(deg / 360.0) * 360.0);
-        if(deg > 180) deg -= 360;
-        return deg;
-    }
 
     private double getTargetPositionRev() {
         return motionMagicRequest.Position;
