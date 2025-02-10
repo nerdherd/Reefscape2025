@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.json.simple.parser.ParseException;
+
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,7 +30,7 @@ import frc.robot.Constants.IntakeConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.commands.autos.FollowAuto;
+import frc.robot.commands.autos.Bottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -66,19 +70,31 @@ public class RobotContainer {
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
    */
+
+   List<PathPlannerPath> pathGroup;
+
   public RobotContainer() {
     try {
       swerveDrive = new SwerveDrivetrain(imu);
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
-if(USE_ELEV)
-{
-    algaeRoller = new AlgaeRoller();
-    coralWrist = new CoralWrist();
-    elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
-}
+
+    if (USE_ELEV) {
+      algaeRoller = new AlgaeRoller();;
+      coralWrist = new CoralWrist();
+      elevator = new Elevator();
+      elevatorPivot = new ElevatorPivot();
+    }
+
+    try {
+      pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Bottom2Piece");
+    } catch (IOException e) {
+      DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
+    } catch (ParseException e) {
+      DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
+    }
+
     initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
@@ -136,7 +152,16 @@ if(USE_ELEV)
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-    driverController.triggerLeft().onTrue(getAutonomousCommand());
+    driverController.triggerLeft()
+      .onTrue(getAutonomousCommand())
+      .onFalse(Commands.runOnce(() -> swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED)));
+      
+    driverController.triggerRight().onTrue(
+      Commands.sequence(
+        AutoBuilder.followPath(pathGroup.get(0)),
+        AutoBuilder.followPath(pathGroup.get(1)),
+        AutoBuilder.followPath(pathGroup.get(2))
+      ));
     // driverController.triggerRight().onTrue(() -> new FollowAuto(swerveDrive, "Bottom2Piece"));
     
     if(USE_ELEV) {
@@ -211,7 +236,7 @@ if(USE_ELEV)
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    autoChooser.setDefaultOption("Bottom 2 Piece", new FollowAuto(swerveDrive, "Bottom2Piece"));
+    autoChooser.setDefaultOption("Bottom 2 Piece", new Bottom2Piece(swerveDrive, "Bottom2Piece"));
     // if (paths.contains("S4R3")) {
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));

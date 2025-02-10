@@ -13,8 +13,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
-public class FollowAuto extends SequentialCommandGroup {
-    public FollowAuto(SwerveDrivetrain swerve, String autoPath) 
+public class Bottom2Piece extends SequentialCommandGroup {
+    public Bottom2Piece(SwerveDrivetrain swerve, String autoPath) 
     throws IOException, ParseException {
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
@@ -26,9 +26,6 @@ public class FollowAuto extends SequentialCommandGroup {
                 AutoBuilder.followPath(pathGroup.get(0)),
                 AutoBuilder.followPath(pathGroup.get(1)),
                 AutoBuilder.followPath(pathGroup.get(2))
-                
-                // for (int i = 0; i < pathGroup.length(); i++) 
-                //     AutoBuilder.followPath(pathGroup.get(i));
             )
         );
     }
