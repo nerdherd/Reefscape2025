@@ -47,7 +47,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         motorConfigurator.refresh(motorConfigs);
     
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+        motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0; // maybe negative
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
@@ -97,7 +97,12 @@ public class CoralWrist extends SubsystemBase implements Reportable{
 
     // ****************************** STATE METHODS ****************************** //
 
-    private void setEnabled(boolean e) {
+    public boolean getEnabled() {
+        return this.enabled;
+    }
+
+    public void setEnabled(boolean e) {
+        DriverStation.reportWarning("asjdhgfhjkfag", false);
         this.enabled = e;
     }
     

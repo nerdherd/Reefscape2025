@@ -44,12 +44,12 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
-  public AlgaeRoller algaeRoller;
-  public Elevator elevator;
-  public ElevatorPivot elevatorPivot;
+  // public AlgaeRoller algaeRoller;
+  // public Elevator elevator;
+  // public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, true, true);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
@@ -71,10 +71,10 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    algaeRoller = new AlgaeRoller();
+    // algaeRoller = new AlgaeRoller();
     coralWrist = new CoralWrist();
-    elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
+    // elevator = new Elevator();
+    // elevatorPivot = new ElevatorPivot();
     
     initShuffleboard();
     // initDefaultCommands_test();
@@ -133,10 +133,12 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
-    driverController.triggerRight()
-      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      .onFalse(elevatorPivot.moveToStow());
-    
+    // driverController.triggerRight()
+    //   .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+    //   .onFalse(elevatorPivot.moveToStow());
+    driverController.bumperRight().onTrue(Commands.runOnce(() -> coralWrist.setEnabled(!coralWrist.getEnabled())));
+    driverController.buttonUp().onTrue(coralWrist.moveToStation())
+                                .onFalse(coralWrist.moveToStow());
   }
 
   public void configureBindings_test() {
@@ -217,10 +219,10 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);   
-    algaeRoller.initShuffleboard(loggingLevel); 
-    elevator.initShuffleboard(loggingLevel);
+    // algaeRoller.initShuffleboard(loggingLevel); 
+    // elevator.initShuffleboard(loggingLevel);
     coralWrist.initShuffleboard(loggingLevel);
-    elevatorPivot.initShuffleboard(loggingLevel);
+    // elevatorPivot.initShuffleboard(loggingLevel);
   }
   
   /**
