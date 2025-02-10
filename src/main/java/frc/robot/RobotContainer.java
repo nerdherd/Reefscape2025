@@ -26,7 +26,7 @@ import frc.robot.Constants.IntakeConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
-
+import frc.robot.commands.autos.FollowAuto;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -126,6 +126,7 @@ if(USE_ELEV)
     );
 
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
+
 }
 
   public void initDefaultCommands_test() {}
@@ -135,11 +136,14 @@ if(USE_ELEV)
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-    if(USE_ELEV){
-    driverController.triggerRight()
-      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      .onFalse(elevatorPivot.moveToStow());
-  }
+    driverController.triggerLeft().onTrue(getAutonomousCommand());
+    // driverController.triggerRight().onTrue(() -> new FollowAuto(swerveDrive, "Bottom2Piece"));
+    
+    if(USE_ELEV) {
+      // driverController.triggerRight()
+      // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+      // .onFalse(elevatorPivot.moveToStow());
+    }
   }
 
   public void configureBindings_test() {
@@ -205,8 +209,9 @@ if(USE_ELEV)
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Square just drive", AutoBuilder.buildAuto("Square"));
+    autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    autoChooser.setDefaultOption("Bottom 2 Piece", new FollowAuto(swerveDrive, "Bottom2Piece"));
     // if (paths.contains("S4R3")) {
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
@@ -234,7 +239,7 @@ if(USE_ELEV)
    */
   public Command getAutonomousCommand() {
     Command currentAuto = autoChooser.getSelected();
-
+    
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
