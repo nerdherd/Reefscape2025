@@ -28,18 +28,25 @@ public class Bottom2Piece extends SequentialCommandGroup {
                 AutoBuilder.followPath(pathGroup.get(0)),
                 elevator.moveToReefL4(),
                 intakeRoller.outtake(),
+                Commands.waitSeconds(1.5),
+                intakeRoller.stop(),
                 Commands.parallel(
                     elevator.stow(),
                     AutoBuilder.followPath(pathGroup.get(1))
                 ),
                 elevator.moveToStation(),
                 intakeRoller.intake(),
+                Commands.waitSeconds(2.5),
+                intakeRoller.stop(),
                 Commands.parallel(
                     elevator.stow(),
                     AutoBuilder.followPath(pathGroup.get(2))
                 ),
                 elevator.moveToReefL3(),
-                intakeRoller.outtake()
+                intakeRoller.outtake(),
+                Commands.waitSeconds(1.5),
+                intakeRoller.stop(),
+                elevator.stow()
             )
         );
     }

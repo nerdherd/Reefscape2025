@@ -152,10 +152,7 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-    driverController.triggerLeft()
-      .onTrue(getAutonomousCommand())
-      .onFalse(Commands.runOnce(() -> swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED)));
-
+    
     driverController.triggerRight().onTrue(
       Commands.sequence(
         AutoBuilder.followPath(pathGroup.get(0)),
@@ -164,11 +161,11 @@ public class RobotContainer {
       ));
     // driverController.triggerRight().onTrue(() -> new FollowAuto(swerveDrive, "Bottom2Piece"));
     
-    if(USE_ELEV) {
-      // driverController.triggerRight()
-      // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      // .onFalse(elevatorPivot.moveToStow());
-    }
+    // if(USE_ELEV) {
+    //   // driverController.triggerRight()
+    //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+    //   // .onFalse(elevatorPivot.moveToStow());
+    // }
   }
 
   public void configureBindings_test() {
