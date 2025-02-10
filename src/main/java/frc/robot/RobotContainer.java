@@ -65,7 +65,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private static boolean USE_ELEV = false;
+  private static boolean USE_ELEV = true;
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
@@ -155,7 +155,7 @@ public class RobotContainer {
     driverController.triggerLeft()
       .onTrue(getAutonomousCommand())
       .onFalse(Commands.runOnce(() -> swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED)));
-      
+
     driverController.triggerRight().onTrue(
       Commands.sequence(
         AutoBuilder.followPath(pathGroup.get(0)),
@@ -236,7 +236,7 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    autoChooser.setDefaultOption("Bottom 2 Piece", new Bottom2Piece(swerveDrive, "Bottom2Piece"));
+    autoChooser.setDefaultOption("Bottom 2 Piece", new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece"));
     // if (paths.contains("S4R3")) {
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
