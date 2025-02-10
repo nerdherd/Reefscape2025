@@ -205,11 +205,8 @@ if(USE_ELEV)
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Square juat drive", AutoBuilder.buildAuto("Square"));
-    autoChooser.addOption("Do Nothing", Commands.none());
+    autoChooser.setDefaultOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
-    autoChooser.addOption("Test", AutoBuilder.buildAuto("Test"));
     // if (paths.contains("S4R3")) {
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
