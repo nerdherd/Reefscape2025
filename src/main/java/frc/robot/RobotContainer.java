@@ -87,12 +87,12 @@ public class RobotContainer {
       elevatorPivot = new ElevatorPivot();
     }
 
-    try {
+    try { // ide displayed error fix
       pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Bottom2Piece");
     } catch (IOException e) {
-      DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
+      DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
-      DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
+      DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
     }
 
     initShuffleboard();
@@ -153,13 +153,12 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.triggerRight().onTrue(
+    driverController.triggerLeft().onTrue(
       Commands.sequence(
         AutoBuilder.followPath(pathGroup.get(0)),
         AutoBuilder.followPath(pathGroup.get(1)),
         AutoBuilder.followPath(pathGroup.get(2))
       ));
-    // driverController.triggerRight().onTrue(() -> new FollowAuto(swerveDrive, "Bottom2Piece"));
     
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
@@ -223,7 +222,7 @@ public class RobotContainer {
   }
   
   private void initAutoChoosers() {
-    try { // TODO fix for vendordeps not importing
+    try { // fix for vendordeps not importing
     PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
 
   	List<String> paths = AutoBuilder.getAllAutoNames();
@@ -231,9 +230,9 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
+    autoChooser.setDefaultOption("Bottom 2 Piece", new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece"));
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    autoChooser.setDefaultOption("Bottom 2 Piece", new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece"));
     // if (paths.contains("S4R3")) {
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
@@ -245,12 +244,11 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
-    if(USE_ELEV)
-    { 
-    algaeRoller.initShuffleboard(loggingLevel); 
-    elevator.initShuffleboard(loggingLevel);
-    coralWrist.initShuffleboard(loggingLevel);
-    elevatorPivot.initShuffleboard(loggingLevel);
+    if (USE_ELEV) { 
+      algaeRoller.initShuffleboard(loggingLevel); 
+      elevator.initShuffleboard(loggingLevel);
+      coralWrist.initShuffleboard(loggingLevel);
+      elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
   
