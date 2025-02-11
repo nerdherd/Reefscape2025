@@ -61,7 +61,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private static boolean USE_ELEV = false;
+  private static boolean USE_ELEV = true; // TODO: get rid of when scoring
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
@@ -72,13 +72,17 @@ public class RobotContainer {
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
-if(USE_ELEV)
-{
+
+    // if(USE_ELEV)
+    // {
+      
+    // }
+
+    elevatorPivot = new ElevatorPivot();
     algaeRoller = new AlgaeRoller();
     coralWrist = new CoralWrist();
     elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
-}
+
     initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
@@ -135,11 +139,25 @@ if(USE_ELEV)
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
+
+    // TODO: Elevator and Elevator Pivot commands to be merged eventually when scoring L1, L2, L3, L4
     if(USE_ELEV){
-    driverController.triggerRight()
+    driverController.buttonDown()
       .onTrue(elevatorPivot.moveToPickup()) // hold it :)
       .onFalse(elevatorPivot.moveToStow());
-  }
+    }
+
+    driverController.buttonRight()
+      .onTrue(elevator.moveToReefL3())
+      .onFalse(elevator.stow());
+
+    driverController.triggerLeft()
+      .onTrue(algaeRoller.intake())
+      .onFalse(algaeRoller.stop());
+
+    driverController.triggerRight()
+      .onTrue(algaeRoller.outtake())
+      .onFalse(algaeRoller.stop());
   }
 
   public void configureBindings_test() {
