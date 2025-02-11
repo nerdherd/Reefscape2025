@@ -4,9 +4,13 @@
 
 package frc.robot;
 
+import java.io.IOException;
 import java.util.List;
 
+import org.json.simple.parser.ParseException;
+
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -26,7 +30,7 @@ import frc.robot.Constants.IntakeConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
-
+import frc.robot.commands.autos.Bottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -61,24 +65,36 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private static boolean USE_ELEV = false;
+  private static boolean USE_ELEV = true;
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
    */
+
+   List<PathPlannerPath> pathGroup;
+
   public RobotContainer() {
     try {
       swerveDrive = new SwerveDrivetrain(imu);
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
-if(USE_ELEV)
-{
-    algaeRoller = new AlgaeRoller();
-    coralWrist = new CoralWrist();
-    elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
-}
+
+    if (USE_ELEV) {
+      algaeRoller = new AlgaeRoller();;
+      coralWrist = new CoralWrist();
+      elevator = new Elevator();
+      elevatorPivot = new ElevatorPivot();
+    }
+
+    try { // ide displayed error fix
+      pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Bottom2Piece");
+    } catch (IOException e) {
+      DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
+    } catch (ParseException e) {
+      DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
+    }
+
     initShuffleboard();
     // initDefaultCommands_test();
     // configureBinadings_test();
@@ -126,6 +142,7 @@ if(USE_ELEV)
     );
 
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
+
 }
 
   public void initDefaultCommands_test() {}
@@ -135,11 +152,19 @@ if(USE_ELEV)
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-    if(USE_ELEV){
-    driverController.triggerRight()
-      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      .onFalse(elevatorPivot.moveToStow());
-  }
+    
+    driverController.triggerLeft().onTrue(
+      Commands.sequence(
+        AutoBuilder.followPath(pathGroup.get(0)),
+        AutoBuilder.followPath(pathGroup.get(1)),
+        AutoBuilder.followPath(pathGroup.get(2))
+      ));
+    
+    // if(USE_ELEV) {
+    //   // driverController.triggerRight()
+    //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+    //   // .onFalse(elevatorPivot.moveToStow());
+    // }
   }
 
   public void configureBindings_test() {
@@ -197,7 +222,7 @@ if(USE_ELEV)
   }
   
   private void initAutoChoosers() {
-    try { // TODO fix for vendordeps not importing
+    try { // fix for vendordeps not importing
     PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
 
   	List<String> paths = AutoBuilder.getAllAutoNames();
@@ -205,11 +230,9 @@ if(USE_ELEV)
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Square juat drive", AutoBuilder.buildAuto("Square"));
-    autoChooser.addOption("Do Nothing", Commands.none());
+    autoChooser.setDefaultOption("Bottom 2 Piece", new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece"));
+    autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    autoChooser.addOption("Squarto", AutoBuilder.buildAuto("Squarto"));
-    autoChooser.addOption("Test", AutoBuilder.buildAuto("Test"));
     // if (paths.contains("S4R3")) {
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
@@ -221,12 +244,11 @@ if(USE_ELEV)
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
-    if(USE_ELEV)
-    { 
-    algaeRoller.initShuffleboard(loggingLevel); 
-    elevator.initShuffleboard(loggingLevel);
-    coralWrist.initShuffleboard(loggingLevel);
-    elevatorPivot.initShuffleboard(loggingLevel);
+    if (USE_ELEV) { 
+      algaeRoller.initShuffleboard(loggingLevel); 
+      elevator.initShuffleboard(loggingLevel);
+      coralWrist.initShuffleboard(loggingLevel);
+      elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
   
@@ -237,7 +259,7 @@ if(USE_ELEV)
    */
   public Command getAutonomousCommand() {
     Command currentAuto = autoChooser.getSelected();
-
+    
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
