@@ -153,7 +153,7 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.triggerLeft().onTrue(
+    driverController.triggerRight().whileTrue(
       Commands.sequence(
         AutoBuilder.followPath(pathGroup.get(0)),
         AutoBuilder.followPath(pathGroup.get(1)),
