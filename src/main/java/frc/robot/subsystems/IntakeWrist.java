@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
-public class CoralWrist extends SubsystemBase implements Reportable{
+public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
     private final TalonFXConfigurator motorConfigurator;
 
@@ -29,7 +29,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     private double desiredPosition = IntakeConstants.kWristStowPosition.get();
     private boolean enabled = false;
 
-    public CoralWrist() {
+    public IntakeWrist() {
         motor = new TalonFX(IntakeConstants.kWristMotorID);
         motorConfigurator = motor.getConfigurator();
 

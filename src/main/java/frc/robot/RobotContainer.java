@@ -37,8 +37,8 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.AlgaeRoller;
-import frc.robot.subsystems.CoralWrist;
+import frc.robot.subsystems.IntakeRoller;
+import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.ElevatorPivot;
 
 import frc.robot.util.Controller;
@@ -49,10 +49,10 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
-  public AlgaeRoller algaeRoller;
+  public IntakeRoller algaeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
-  public CoralWrist coralWrist;
+  public IntakeWrist coralWrist;
 
   public Bottom2Piece bottom2Piece;
 
@@ -81,8 +81,8 @@ public class RobotContainer {
     }
 
     if (USE_ELEV) {
-      algaeRoller = new AlgaeRoller();;
-      coralWrist = new CoralWrist();
+      algaeRoller = new IntakeRoller();;
+      coralWrist = new IntakeWrist();
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
     }

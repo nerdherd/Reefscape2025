@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
  
-public class AlgaeRoller extends SubsystemBase implements Reportable {
+public class IntakeRoller extends SubsystemBase implements Reportable {
     private final TalonFX rollerMotor;
     private final TalonFXConfigurator rollerConfigurator;
  
@@ -28,7 +28,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     private boolean enabled = false;
     private boolean velocityControl = true;
 
-    public AlgaeRoller() {
+    public IntakeRoller() {
         rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
         velocityRequest.EnableFOC = true;
