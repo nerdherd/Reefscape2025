@@ -27,7 +27,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPosition = IntakeConstants.kWristStowPosition.get();
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     public CoralWrist() {
         motor = new TalonFX(IntakeConstants.kWristMotorID);

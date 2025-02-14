@@ -81,11 +81,12 @@ public class RobotContainer {
     }
 
     if (USE_ELEV) {
-      algaeRoller = new AlgaeRoller();;
-      coralWrist = new CoralWrist();
-      elevator = new Elevator();
-      elevatorPivot = new ElevatorPivot();
+      
     }
+    algaeRoller = new AlgaeRoller();
+    coralWrist = new CoralWrist();
+    elevator = new Elevator();
+    elevatorPivot = new ElevatorPivot();
 
     try { // ide displayed error fix
       pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Bottom2Piece");
@@ -152,8 +153,30 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
+
+        // TODO: Elevator and Elevator Pivot commands to be merged eventually when scoring L1, L2, L3, L4
+    if(USE_ELEV){
+    driverController.buttonDown()
+      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+      .onFalse(elevatorPivot.moveToStow());
+    }
+    driverController.buttonUp()
+      .onTrue(coralWrist.moveToStation())
+      .onFalse(coralWrist.moveToStow());
+
+    driverController.buttonRight()
+      .onTrue(elevator.moveToReefL3())
+      .onFalse(elevator.stow());
+
+    driverController.triggerLeft()
+      .onTrue(algaeRoller.intake())
+      .onFalse(algaeRoller.stop());
+
+    driverController.triggerRight()
+      .onTrue(algaeRoller.outtake())
+      .onFalse(algaeRoller.stop());
     
-    driverController.triggerRight().whileTrue(
+    driverController.bumperRight().whileTrue(
       Commands.sequence(
         AutoBuilder.followPath(pathGroup.get(0)),
         AutoBuilder.followPath(pathGroup.get(1)),
