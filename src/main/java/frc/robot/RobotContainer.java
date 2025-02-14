@@ -54,6 +54,8 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public CoralWrist coralWrist;
 
+  public Bottom2Piece bottom2Piece;
+
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
   
@@ -71,8 +73,6 @@ public class RobotContainer {
    * s subsystems, OI devices, and commands.
    */
 
-   List<PathPlannerPath> pathGroup;
-
   public RobotContainer() {
     try {
       swerveDrive = new SwerveDrivetrain(imu);
@@ -88,7 +88,7 @@ public class RobotContainer {
     }
 
     try { // ide displayed error fix
-      pathGroup = PathPlannerAuto.getPathGroupFromAutoFile("Bottom2Piece");
+      bottom2Piece = new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece");
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -153,12 +153,9 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.triggerRight().whileTrue(
-      Commands.sequence(
-        AutoBuilder.followPath(pathGroup.get(0)),
-        AutoBuilder.followPath(pathGroup.get(1)),
-        AutoBuilder.followPath(pathGroup.get(2))
-      ));
+    driverController.triggerRight()
+      .whileTrue(bottom2Piece.runAuto())
+      .onFalse(bottom2Piece.stopAuto());
     
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
@@ -230,7 +227,7 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Bottom 2 Piece", new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece"));
+    autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     // if (paths.contains("S4R3")) {
