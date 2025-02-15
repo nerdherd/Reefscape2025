@@ -21,7 +21,6 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
-import frc.robot.util.preferences.PrefDouble;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -65,15 +64,15 @@ public final class Constants {
     public static final double kDriveMotorDeadband = 0.02;
     public static final double kTurnMotorDeadband = 0.001;
 
-    public static final PrefDouble kPTurning = new PrefDouble("kPTurning",0.26); // 0.55
-    public static final PrefDouble kITurning = new PrefDouble("kITurning",0.01);
-    public static final PrefDouble kDTurning = new PrefDouble("kDTurning",0.0015);//0.02 
-    public static final PrefDouble kFTurning = new PrefDouble("kFTurning",0); //0.015
+    public static final double kPTurning = 0.26; // 0.55
+    public static final double kITurning = 0.01;
+    public static final double kDTurning = 0.0015;//0.02 
+    public static final double kFTurning = 0; //0.015
 
-    public static final PrefDouble kPDrive = new PrefDouble("kPDrive",0.13); // 0.6
-    public static final PrefDouble kIDrive = new PrefDouble("kIDrive",0);
-    public static final PrefDouble kDDrive = new PrefDouble("kDDrive",0); 
-    public static final PrefDouble kVDrive = new PrefDouble("kVDrive",0.0469); 
+    public static final double kPDrive = 0.13; // 0.6
+    public static final double kIDrive = 0;
+    public static final double kDDrive = 0; 
+    public static final double kVDrive = 0.0469; 
 
     public static final String kCANivoreName = "rio";//"CANivore";
 
@@ -90,9 +89,9 @@ public final class Constants {
                                                               kVisionSTDy,
                                                               kVisionSTDtheta);
     // VecBuilder.fill(kVisionSTDx, kVisionSTDy, kVisionSTDtheta);
-    public static final PrefDouble kPThetaTeleop = new PrefDouble("kP Theta Teleop", 0);
-    public static final PrefDouble kIThetaTeleop = new PrefDouble("kI Theta Teleop", 0);
-    public static final PrefDouble kDThetaTeleop = new PrefDouble("kD Theta Teleop", 0);
+    public static final double kPThetaTeleop = 0;
+    public static final double kIThetaTeleop = 0;
+    public static final double kDThetaTeleop = 0;
 
     // Distance between right and left wheels
     public static final double kTrackWidth = Units.inchesToMeters(21);
@@ -209,15 +208,15 @@ public final class Constants {
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
     public static final double kPPMaxAngularAcceleration = Math.PI * 2;
 
-    public static final double kPP_P = new PrefDouble("PP_kP", 5.0).get();
-    public static final double kPP_I = new PrefDouble("PP_kI", 0.0).get();
-    public static final double kPP_D = new PrefDouble("PP_kD", 0.0).get();
+    public static final double kPP_P = 5.0;
+    public static final double kPP_I = 0.0;
+    public static final double kPP_D = 0.0;
 
     public static final PIDConstants kPPTranslationPIDConstants = new PIDConstants(kPP_P, kPP_I, kPP_D);
 
-    public static final double kPP_ThetaP = new PrefDouble("PP_kThetaP", 3.0).get();
-    public static final double kPP_ThetaI = new PrefDouble("PP_kThetaI", 0).get();
-    public static final double kPP_ThetaD = new PrefDouble("PP_kThetaD", 0.1).get();
+    public static final double kPP_ThetaP = 3.0;
+    public static final double kPP_ThetaI = 0;
+    public static final double kPP_ThetaD = 0.1;
 
     public static final PIDConstants kPPRotationPIDConstants = new PIDConstants(kPP_ThetaP, kPP_ThetaI, kPP_ThetaD);
 
@@ -291,37 +290,37 @@ public final class Constants {
     public static final double kElevatorL3Position = -18;     // TODO change later
     public static final double kElevatorL4Position = -28;     // TODO change later
     public static final double kElevatorSpeed = 1.0;          // TODO change later
-    public static final PrefDouble kPElevatorMotor = new PrefDouble("P Elevator Motor", 0.1);
-    public static final PrefDouble kIElevatorMotor = new PrefDouble("I Elevator Motor", 0);
-    public static final PrefDouble kDElevatorMotor = new PrefDouble("D Elevator Motor", 0);
-    public static final PrefDouble kVElevatorMotor = new PrefDouble("V Elevator Motor", 0);
+    public static final double kPElevatorMotor = 0.1;
+    public static final double kIElevatorMotor = 0;
+    public static final double kDElevatorMotor = 0;
+    public static final double kVElevatorMotor = 0;
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
     public static final int kPivotMotorID = 17; // TODO IDs cant go over 62
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final PrefDouble kPElevatorPivot = new PrefDouble("P Elevator Pivot Motor", 40); //1.2
-    public static final PrefDouble kIElevatorPivot = new PrefDouble("I Elevator Pivot Motor", 0);
-    public static final PrefDouble kDElevatorPivot = new PrefDouble("D Elevator Pivot Motor", 0);
-    public static final PrefDouble kVElevatorPivot = new PrefDouble("V Elevator Pivot Motor", 0); //0.4
-    public static final PrefDouble kSElevatorPivot = new PrefDouble("S Elevator Pivot Motor", 0); //0.34
-    public static final PrefDouble kAElevatorPivot = new PrefDouble("A Elevator Pivot Motor", 0.0); //0.01
-    public static final PrefDouble kGElevatorPivot = new PrefDouble("G Elevator Pivot Motor", 0); //0.08
+    public static final double kPElevatorPivot = 40; //1.2
+    public static final double kIElevatorPivot = 0;
+    public static final double kDElevatorPivot = 0;
+    public static final double kVElevatorPivot = 0; //0.4
+    public static final double kSElevatorPivot = 0; //0.34
+    public static final double kAElevatorPivot = 0.0; //0.01
+    public static final double kGElevatorPivot = 0; //0.08
 
-    public static final PrefDouble kElevatorPivotStowPosition = new PrefDouble("Elevator Pivot Stow", -26); //TODO change later -22
-    public static final PrefDouble kElevatorPivotStartPosition = new PrefDouble("Elevator Pivot Start", 0); //TODO change later
-    public static final PrefDouble kElevatorPivotPickUpPosition = new PrefDouble("Elevator Pivot PickUp", -40); //TODO change later   -60
+    public static final double kElevatorPivotStowPosition = -26; //TODO change later -22
+    public static final double kElevatorPivotStartPosition = 0; //TODO change later
+    public static final double kElevatorPivotPickUpPosition = -40; //TODO change later   -60
 
     public static final double kElevatorPivotMin = -56.3; // TODO change later    -61.3
     public static final double kElevatorPivotMax = -25.4; // TODO change later   -20.4
 
     public static final double kElevatorPivotGearRatio = 27.0; // TODO change later
-    public static final PrefDouble kElevatorPivotDeadBand = new PrefDouble("Elevator Pivot DeadBand", 0);
-    public static final PrefDouble kElevatorPivotOffSet = new PrefDouble("Elevator Pivot Offset", 0);
+    public static final double kElevatorPivotDeadBand = 0;
+    public static final double kElevatorPivotOffSet = 0;
 
-    public static final PrefDouble kEPivotCruiseVelocity = new PrefDouble("Elevator Pivot Cruise Velocity",100); //16.333
-    public static final PrefDouble kElevatorPivotCruiseAcceleration = new PrefDouble("Elevator Pivot Acceleration",1000.000);
-    public static final PrefDouble kElevatorPivotJerk = new PrefDouble("Elevator Pivot Jerk", 900.0);
+    public static final double kEPivotCruiseVelocity = 100; //16.333
+    public static final double kElevatorPivotCruiseAcceleration = 1000.000;
+    public static final double kElevatorPivotJerk = 900.0;
     
  }
 
@@ -329,35 +328,35 @@ public final class Constants {
 
     // ************************************** ROLLER CONSTANTS *************************************** //
     public static final int kRollerMotorID = 61;
-    public static final PrefDouble kPRollerMotor = new PrefDouble("kP Roller Motor", 0.05);
-    public static final PrefDouble kIRollerMotor = new PrefDouble("kI Roller Motor", 0);
-    public static final PrefDouble kDRollerMotor = new PrefDouble("kD Roller Motor", 0);
-    public static final PrefDouble kVRollerMotor = new PrefDouble("kV Roller Motor", 0);
+    public static final double kPRollerMotor = 0.05;
+    public static final double kIRollerMotor = 0;
+    public static final double kDRollerMotor = 0;
+    public static final double kVRollerMotor = 0;
 
     public static final double kRollerMaxVelocityRPS =  100;
     public static final double kRollerMinVelocityRPS = -100;
 
     public static final double kRollerNeutralDeadband = 0.01; // In revolutions!
 
-    public static final PrefDouble kIntakePower  = new PrefDouble("Roller Intake Power", 30);
-    public static final PrefDouble kOuttakePower = new PrefDouble("Roller Outtake Power",     -30);
+    public static final double kIntakePower  = 30;
+    public static final double kOuttakePower = -30;
 
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
   
-    public static final PrefDouble kPWristMotor = new PrefDouble("kP Wrist", 0.1);
-    public static final PrefDouble kIWristMotor = new PrefDouble("kI Wrist", 0);
-    public static final PrefDouble kDWristMotor = new PrefDouble("kD Wrist", 0);
-    public static final PrefDouble kVWristMotor = new PrefDouble("kV Wrist", 0.12);
-    public static final PrefDouble kSWristMotor = new PrefDouble("kS Wrist", 0); //Static Friction
-    public static final PrefDouble kGWristMotor = new PrefDouble("kG Wrist", 0.015); //Gravity
-    public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 100); //Rotations per second squared
-    public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 700); //Rotations per second squared
+    public static final double kPWristMotor = 0.1;
+    public static final double kIWristMotor = 0;
+    public static final double kDWristMotor = 0;
+    public static final double kVWristMotor = 0.12;
+    public static final double kSWristMotor = 0; //Static Friction
+    public static final double kGWristMotor = 0.015; //Gravity
+    public static final double kWristAcceleration = 100; //Rotations per second squared
+    public static final double kWristJerk = 700; //Rotations per second cubed
 
-    public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.1);
-    public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", 0);
-    public static final PrefDouble kWristL23Position = new PrefDouble("Wrist L23 Position", 0);
-    public static final PrefDouble kWristL14Position = new PrefDouble("Wrist L4 Position", -0.9);
+    public static final double kWristStowPosition = -0.1;
+    public static final double kWristStationPosition = 0;
+    public static final double kWristL23Position = 0;
+    public static final double kWristL14Position = -0.9;
 
     public static final double kWristSpeed = 0.5;
 

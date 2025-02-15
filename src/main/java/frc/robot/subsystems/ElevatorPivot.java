@@ -29,8 +29,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFXConfigurator pivotConfigurator;
     private Pigeon2 pigeon;
 
-    public boolean enabled = false; // Change back to true
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360.0);
+    public boolean enabled = true; // Change back to true
+    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
     public ElevatorPivot () {
@@ -41,7 +41,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         CommandScheduler.getInstance().registerSubsystem(this);
         configureMotor();
         configurePID();
-        pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
+        pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition/360);
         pivotMotor.setControl(motionMagicRequest);
         motionMagicRequest.withSlot(0);
     }
@@ -53,40 +53,19 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         
         pivotConfigurator.refresh(pivotConfiguration);
 
-        ElevatorConstants.kPElevatorPivot.loadPreferences();
-        ElevatorConstants.kIElevatorPivot.loadPreferences();
-        ElevatorConstants.kDElevatorPivot.loadPreferences();
-        ElevatorConstants.kVElevatorPivot.loadPreferences();
-        ElevatorConstants.kSElevatorPivot.loadPreferences();
-        ElevatorConstants.kAElevatorPivot.loadPreferences();
-        ElevatorConstants.kGElevatorPivot.loadPreferences();
-        ElevatorConstants.kElevatorPivotCruiseAcceleration.loadPreferences();
-        ElevatorConstants.kEPivotCruiseVelocity.loadPreferences();
-
-        pivotConfiguration.Slot0.kP = ElevatorConstants.kPElevatorPivot.get();
-        pivotConfiguration.Slot0.kI = ElevatorConstants.kIElevatorPivot.get();
-        pivotConfiguration.Slot0.kD = ElevatorConstants.kDElevatorPivot.get();
-        pivotConfiguration.Slot0.kV = ElevatorConstants.kVElevatorPivot.get();
-        pivotConfiguration.Slot0.kS = ElevatorConstants.kSElevatorPivot.get();
-        pivotConfiguration.Slot0.kA = ElevatorConstants.kAElevatorPivot.get();
-        pivotConfiguration.Slot0.kG = ElevatorConstants.kGElevatorPivot.get();
+        pivotConfiguration.Slot0.kP = ElevatorConstants.kPElevatorPivot;
+        pivotConfiguration.Slot0.kI = ElevatorConstants.kIElevatorPivot;
+        pivotConfiguration.Slot0.kD = ElevatorConstants.kDElevatorPivot;
+        pivotConfiguration.Slot0.kV = ElevatorConstants.kVElevatorPivot;
+        pivotConfiguration.Slot0.kS = ElevatorConstants.kSElevatorPivot;
+        pivotConfiguration.Slot0.kA = ElevatorConstants.kAElevatorPivot;
+        pivotConfiguration.Slot0.kG = ElevatorConstants.kGElevatorPivot;
         
-        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = ElevatorConstants.kEPivotCruiseVelocity.get();
-        pivotConfiguration.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorPivotCruiseAcceleration.get();
-        pivotConfiguration.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorPivotJerk.get();
+        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = ElevatorConstants.kEPivotCruiseVelocity;
+        pivotConfiguration.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorPivotCruiseAcceleration;
+        pivotConfiguration.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorPivotJerk;
         pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0.4;
         pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0.01;
-
-        ElevatorConstants.kElevatorPivotStowPosition.loadPreferences();
-        ElevatorConstants.kElevatorPivotStartPosition.loadPreferences();
-        ElevatorConstants.kElevatorPivotPickUpPosition.loadPreferences();
-        ElevatorConstants.kPElevatorPivot.loadPreferences();
-        ElevatorConstants.kIElevatorPivot.loadPreferences();
-        ElevatorConstants.kDElevatorPivot.loadPreferences();
-        ElevatorConstants.kVElevatorPivot.loadPreferences();
-
-        ElevatorConstants.kEPivotCruiseVelocity.loadPreferences();
-        ElevatorConstants.kElevatorPivotCruiseAcceleration.loadPreferences();
         
         StatusCode statusCode = pivotConfigurator.apply(pivotConfiguration);
         if(!statusCode.isOK()){
@@ -101,7 +80,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; //TODO change orientation later
         pivotConfiguration.Feedback.RotorToSensorRatio = ElevatorConstants.kElevatorPivotGearRatio / 360;
-        pivotConfiguration.Feedback.SensorToMechanismRatio =1.0; //TODO change later
+        pivotConfiguration.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TODO change later
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
@@ -144,10 +123,6 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         motionMagicRequest.Position = (newPos / 360.0);  
     }
 
-    private void setPositionRev(double positionRev) {
-        motionMagicRequest.Position = positionRev;
-    }
-
     private void incrementPosition(double incrementDegrees) {
         if(Math.abs(incrementDegrees) <= 0.001) {
             return;
@@ -172,21 +147,16 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return getPositionRev() * 360;
     }
 
-    private boolean hasReachedPosition(double positionDegrees) {
+    public boolean hasReachedPosition(double positionDegrees) {
         return NerdyMath.inRange(
             getPositionDegrees(),
-                positionDegrees - ElevatorConstants.kElevatorPivotDeadBand.get(),
-                positionDegrees + ElevatorConstants.kElevatorPivotDeadBand.get()
+                positionDegrees - ElevatorConstants.kElevatorPivotDeadBand,
+                positionDegrees + ElevatorConstants.kElevatorPivotDeadBand
             );
     }
 
-    private boolean atTargetPosition() {
+    public boolean atTargetPosition() {
         return hasReachedPosition(getPositionDegrees());
-    }
-
-    private void moveMotionMagic() { // TODO fake
-        // double ff = -(ArmConstants.kStowedFF + ArmConstants.kDiffFF * percentExtended) * Math.cos(getArmAngle());
-        // pivotMotor.set(ControlMode.MotionMagic, targetTicks, DemandType.ArbitraryFeedForward, ff);
     }
 
     // ****************************** COMMAND METHODS ***************************** //
@@ -195,18 +165,18 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return Commands.runOnce(() -> setEnabled(enabled));
     }
 
-    private Command stopCommand() {
+    public Command stopCommand() {
         return Commands.sequence(
             Commands.runOnce(() -> pivotMotor.setControl(brakeRequest)),
             setEnabledCommand(false)
         );
     }
 
-    private Command setPositionCommand(double position) {
+    public Command setPositionCommand(double position) {
         return Commands.runOnce(() -> setPositionDegrees(position));
     }
     
-    private Command incrementPositionCommand(double increment) {
+    public Command incrementPositionCommand(double increment) {
         return Commands.runOnce(() -> incrementPosition(increment));
     }
 
@@ -214,17 +184,17 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public Command moveToStow() {
         SmartDashboard.putBoolean("Pushsss", false);
-        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition.get()));
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition));
         //return Commands.runOnce(() -> setPositionRev(-0.5));
     }
 
     public Command moveToStart() {
-        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStartPosition.get()));
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStartPosition));
     }
 
     public Command moveToPickup() {
         SmartDashboard.putBoolean("Pushsss", true);
-        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition.get()));
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition));
         //return Commands.runOnce(() -> setPositionRev(0.5));
     }
 
@@ -236,13 +206,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     @Override
     public void reportToSmartDashboard(LOG_LEVEL priority) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'reportToSmartDashboard'");
     }
     
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        // TODO Auto-generated method stub
         ShuffleboardTab tab = Shuffleboard.getTab("Elevator Pivot");
         tab.addNumber("Position Rev", () -> getPositionRev());
         tab.addNumber("Position Degrees", () -> getPositionDegrees());
