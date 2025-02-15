@@ -49,7 +49,7 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
-  public IntakeRoller algaeRoller;
+  public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
   public IntakeWrist coralWrist;
@@ -81,14 +81,14 @@ public class RobotContainer {
     }
 
     if (USE_ELEV) {
-      algaeRoller = new IntakeRoller();;
+      intakeRoller = new IntakeRoller();
       coralWrist = new IntakeWrist();
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
     }
 
     try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece");
+      bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -153,10 +153,15 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.triggerRight()
-      .whileTrue(bottom2Piece.runAuto())
-      .onFalse(bottom2Piece.stopAuto());
-    
+    // driverController.triggerRight()
+    //   .whileTrue(bottom2Piece.runAuto())
+    //   .onFalse(bottom2Piece.stopAuto());
+    driverController.triggerRight().onTrue(intakeRoller.intake())
+                                    .onFalse(intakeRoller.stop());
+    driverController.buttonUp().onTrue(elevator.moveToReefL3())
+                                    .onFalse(elevator.stow());
+    driverController.buttonLeft().onTrue(elevatorPivot.moveToPickup())
+                                    .onFalse(elevatorPivot.moveToStow());
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
     //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
@@ -242,7 +247,7 @@ public class RobotContainer {
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_ELEV) { 
-      algaeRoller.initShuffleboard(loggingLevel); 
+      intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
       coralWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
