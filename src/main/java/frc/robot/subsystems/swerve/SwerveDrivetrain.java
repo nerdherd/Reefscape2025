@@ -146,7 +146,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
 
         //Vision
-        layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);  
+        // layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);  
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -219,6 +219,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         LimelightHelpers.SetRobotOrientation(limelightName, robotRotation, 0, 0, 0, 0, 0);
 
+        String log = limelightName;
+
         // LimelightHelpers.SetRobotOrientation("limelightName")
         boolean doRejectUpdate = false;
 
@@ -246,7 +248,14 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             doRejectUpdate = true;
         }
 
-        SmartDashboard.putBoolean(limelightName+" Valid Data", !doRejectUpdate);
+        // SmartDashboard.putBoolean(limelightName+" Valid Data", !doRejectUpdate);
+        log+="Valid Data: "+ Boolean.toString(!doRejectUpdate)+"\n";
+        log+="Is Null: "+Boolean.toString(estimate == null)+"\n";
+        log+="Megatag Count"+Integer.toString(megaTag2.tagCount)+"\n";
+        // SmartDashboard.putBoolean(limelightName+" Is Null", estimate == null);
+        // SmartDashboard.putNumber(limelightName+" Megatag Count", megaTag2.tagCount);
+
+        SmartDashboard.putString(limelightName + "Info", log);
 
         if(!doRejectUpdate)
         {
