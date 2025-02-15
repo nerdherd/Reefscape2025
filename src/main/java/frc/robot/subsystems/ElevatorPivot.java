@@ -29,7 +29,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFXConfigurator pivotConfigurator;
     private Pigeon2 pigeon;
 
-    public boolean enabled = true; // Change back to true
+    public boolean enabled = false; // Change back to true
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
