@@ -157,6 +157,7 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
+    // intake
     driverController.triggerLeft()
       .onTrue(superSystem.intakeCoralStation())
       .onFalse(superSystem.stow());
@@ -165,6 +166,7 @@ public class RobotContainer {
       .onTrue(superSystem.intakeCoralGround())
       .onFalse(superSystem.stow());
 
+    // outtake
     driverController.buttonUp()
       .onTrue(superSystem.placeCoralL1())
       .onFalse(superSystem.stow());
