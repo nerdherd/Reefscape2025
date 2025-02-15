@@ -27,7 +27,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPosition = IntakeConstants.kWristStowPosition;
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     public IntakeWrist() {
         motor = new TalonFX(IntakeConstants.kWristMotorID);
