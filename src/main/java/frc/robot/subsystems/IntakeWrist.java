@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -22,16 +23,19 @@ import frc.robot.Constants.IntakeConstants;
 public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
     private final TalonFXConfigurator motorConfigurator;
+    private Pigeon2 pigeon;
 
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private double desiredPosition = IntakeConstants.kWristStowPosition.get();
-    private boolean enabled = true;
+    private double desiredPosition = IntakeConstants.kWristStowPosition;
+    private boolean enabled = false;
+    public static boolean USE_PIG = false;
 
     public IntakeWrist() {
         motor = new TalonFX(IntakeConstants.kWristMotorID);
         motorConfigurator = motor.getConfigurator();
+        pigeon = new Pigeon2(IntakeConstants.kWristPigeonID);
 
         // configure motor
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
@@ -39,6 +43,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         
         motor.setNeutralMode(NeutralModeValue.Brake);
         zeroEncoder();
+        
     }
 
     //****************************** SETUP METHODS ******************************//
@@ -47,31 +52,22 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motorConfigurator.refresh(motorConfigs);
     
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
+        motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
         motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-        motorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     
-        IntakeConstants.kPWristMotor.loadPreferences();
-        IntakeConstants.kIWristMotor.loadPreferences();
-        IntakeConstants.kDWristMotor.loadPreferences();
-        IntakeConstants.kVWristMotor.loadPreferences();
-        IntakeConstants.kSWristMotor.loadPreferences();
-        IntakeConstants.kGWristMotor.loadPreferences();
-        IntakeConstants.kWristAcceleration.loadPreferences();
-        IntakeConstants.kWristJerk.loadPreferences();
-    
-        motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor.get();
-        motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor.get();
-        motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor.get();
-        motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor.get();
-        motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor.get();
-        motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor.get();
+        motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor;
+        motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor;
+        motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor;
+        motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor;
+        motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
+        motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
 
-        motorConfigs.MotionMagic.MotionMagicAcceleration = IntakeConstants.kWristAcceleration.get();
-        motorConfigs.MotionMagic.MotionMagicJerk = IntakeConstants.kWristJerk.get();
+        motorConfigs.MotionMagic.MotionMagicAcceleration = IntakeConstants.kWristAcceleration;
+        motorConfigs.MotionMagic.MotionMagicJerk = IntakeConstants.kWristJerk;
     
         StatusCode response = motorConfigurator.apply(motorConfigs);
         if (!response.isOK()){
@@ -130,19 +126,19 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     // ****************************** NAMED COMMANDS ****************************** //
 
     public Command moveToStow() {
-        return setPositionCommand(IntakeConstants.kWristStowPosition.get());
+        return setPositionCommand(IntakeConstants.kWristStowPosition);
     }
 
     public Command moveToStation() {
-        return setPositionCommand(IntakeConstants.kWristStationPosition.get());
+        return setPositionCommand(IntakeConstants.kWristStationPosition);
     }
 
     public Command moveToReefL14() {
-        return setPositionCommand(IntakeConstants.kWristL14Position.get());
+        return setPositionCommand(IntakeConstants.kWristL14Position);
     }
 
     public Command moveToReefL23() {
-        return setPositionCommand(IntakeConstants.kWristL23Position.get());
+        return setPositionCommand(IntakeConstants.kWristL23Position);
     }
 
     public Command stop() {
