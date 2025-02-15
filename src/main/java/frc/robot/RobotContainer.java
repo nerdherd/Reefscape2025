@@ -153,18 +153,11 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-
-    // TODO someone tell me how useful this is
-    // try {
-    //   driverController.triggerLeft()
-    //     .whileTrue(new AutoDriving(swerveDrive, "Bottom2Piece"))
-    //     .onFalse(AutoDriving.stopDriving(algaeRoller, coralWrist, elevator, elevatorPivot));
-    // } catch (IOException e) { DriverStation.reportError("Auto Driving IOException for Left Trigger", e.getStackTrace());
-    // } catch (ParseException e) { DriverStation.reportError("Auto Driving ParseException for Left Trigger", e.getStackTrace()); }
     
-    // driverController.triggerRight()
-    //   .whileTrue(bottom2Piece.runAuto())
-    //   .onFalse(bottom2Piece.stopAuto());
+    driverController.triggerLeft()
+      .whileTrue(bottom2Piece.runAuto())
+      .onFalse(bottom2Piece.stopAuto());
+
     driverController.triggerRight().onTrue(intakeRoller.intake())
                                     .onFalse(intakeRoller.stop());
     driverController.buttonUp().onTrue(elevator.moveToReefL3())
