@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -33,7 +34,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition.get()/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
-    public ElevatorPivot () {
+    public ElevatorPivot (Orchestra orchestra) {
         pivotMotor = new TalonFX(ElevatorConstants.kPivotMotorID);
         pigeon = new Pigeon2(ElevatorConstants.kPivotPigeonID);
 
@@ -44,6 +45,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition.get()/360);
         pivotMotor.setControl(motionMagicRequest);
         motionMagicRequest.withSlot(0);
+        orchestra.addInstrument(pivotMotor);
     }
     
     // ******************************** SETUP METHODS *************************************** //

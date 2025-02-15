@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
  
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -8,6 +9,7 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
  
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -21,6 +23,7 @@ import frc.robot.Constants.IntakeConstants;
 public class AlgaeRoller extends SubsystemBase implements Reportable {
     private final TalonFX rollerMotor;
     private final TalonFXConfigurator rollerConfigurator;
+
  
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
     private final NeutralOut brakeRequest = new NeutralOut();
@@ -28,7 +31,7 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
     private boolean enabled = false;
     private boolean velocityControl = true;
 
-    public AlgaeRoller() {
+    public AlgaeRoller(Orchestra orchestra) {
         rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
         velocityRequest.EnableFOC = true;
@@ -44,12 +47,15 @@ public class AlgaeRoller extends SubsystemBase implements Reportable {
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         configureMotor(motorConfigs);
         configurePID(motorConfigs);
+        orchestra.addInstrument(rollerMotor);
     }
 
     //****************************** SETUP METHODS ******************************//
  
     private void configureMotor(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
+
+        
 
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         motorConfigs.Voltage.PeakForwardVoltage = 11.5;

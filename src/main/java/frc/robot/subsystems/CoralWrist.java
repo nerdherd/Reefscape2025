@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -29,7 +30,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
     private double desiredPosition = IntakeConstants.kWristStowPosition.get();
     private boolean enabled = false;
 
-    public CoralWrist() {
+    public CoralWrist(Orchestra orchestra) {
         motor = new TalonFX(IntakeConstants.kWristMotorID);
         motorConfigurator = motor.getConfigurator();
 
@@ -39,6 +40,7 @@ public class CoralWrist extends SubsystemBase implements Reportable{
         
         motor.setNeutralMode(NeutralModeValue.Brake);
         zeroEncoder();
+        orchestra.addInstrument(motor);
     }
 
     //****************************** SETUP METHODS ******************************//

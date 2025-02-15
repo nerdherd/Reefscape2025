@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.Orchestra;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -20,10 +21,11 @@ public class Elevator extends SubsystemBase implements Reportable {
     private double desiredVelocity;
     private boolean enabled = false;
 
-    public Elevator() {
+    public Elevator(Orchestra orchestra) {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorPID = new PIDController(0.2, 0, 0); // 1, 0, 0
         elevatorMotor.setPosition(0.0);
+        orchestra.addInstrument(elevatorMotor);
     }
     
     @Override
