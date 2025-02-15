@@ -70,15 +70,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private void configurePID(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
 
-        IntakeConstants.kPRollerMotor.loadPreferences();
-        IntakeConstants.kIRollerMotor.loadPreferences();
-        IntakeConstants.kDRollerMotor.loadPreferences();
-        IntakeConstants.kVRollerMotor.loadPreferences();
-
-        motorConfigs.Slot0.kP = IntakeConstants.kPRollerMotor.get();
-        motorConfigs.Slot0.kI = IntakeConstants.kIRollerMotor.get();
-        motorConfigs.Slot0.kD = IntakeConstants.kDRollerMotor.get();
-        motorConfigs.Slot0.kV = IntakeConstants.kVRollerMotor.get();
+        motorConfigs.Slot0.kP = IntakeConstants.kPRollerMotor;
+        motorConfigs.Slot0.kI = IntakeConstants.kIRollerMotor;
+        motorConfigs.Slot0.kD = IntakeConstants.kDRollerMotor;
+        motorConfigs.Slot0.kV = IntakeConstants.kVRollerMotor;
  
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
@@ -132,14 +127,14 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command intake() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(IntakeConstants.kIntakePower.get())
+            setVelocityCommand(IntakeConstants.kIntakePower)
         );
     }
 
     public Command outtake() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(IntakeConstants.kOuttakePower.get())
+            setVelocityCommand(IntakeConstants.kOuttakePower)
         );
     }
 
