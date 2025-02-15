@@ -345,7 +345,7 @@ public final class Constants {
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
   
-    public static final PrefDouble kPWristMotor = new PrefDouble("kP Wrist", 0.1);
+    public static final PrefDouble kPWristMotor = new PrefDouble("kP Wrist", 0.4);
     public static final PrefDouble kIWristMotor = new PrefDouble("kI Wrist", 0);
     public static final PrefDouble kDWristMotor = new PrefDouble("kD Wrist", 0);
     public static final PrefDouble kVWristMotor = new PrefDouble("kV Wrist", 0.12);
@@ -354,10 +354,10 @@ public final class Constants {
     public static final PrefDouble kWristAcceleration = new PrefDouble("Wrist Acceleration", 100); //Rotations per second squared
     public static final PrefDouble kWristJerk = new PrefDouble("Wrist Jerk", 700); //Rotations per second squared
 
-    public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", -0.1);
-    public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", 0);
+    public static final PrefDouble kWristStowPosition = new PrefDouble("Wrist Stow Position", 0);
+    public static final PrefDouble kWristStationPosition = new PrefDouble("Wrist Station Position", 20);
     public static final PrefDouble kWristL23Position = new PrefDouble("Wrist L23 Position", 0);
-    public static final PrefDouble kWristL14Position = new PrefDouble("Wrist L4 Position", -0.9);
+    public static final PrefDouble kWristL14Position = new PrefDouble("Wrist L14 Position", 10);
 
     public static final double kWristSpeed = 0.5;
 

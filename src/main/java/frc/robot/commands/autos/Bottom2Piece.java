@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
-import frc.robot.subsystems.AlgaeRoller;
+import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -17,12 +17,12 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class Bottom2Piece extends SequentialCommandGroup {
-    private static AlgaeRoller intakeRoller;
+    private static IntakeRoller intakeRoller;
     private static Elevator elevator;
     private static List<PathPlannerPath> pathGroup;
     private static Pose2d startingPose;
 
-    public Bottom2Piece(SwerveDrivetrain swerve, AlgaeRoller intakeRoller, Elevator elevator, String autoPath) 
+    public Bottom2Piece(SwerveDrivetrain swerve, IntakeRoller intakeRoller, Elevator elevator, String autoPath) 
     throws IOException, ParseException {
         Bottom2Piece.intakeRoller = intakeRoller;
         Bottom2Piece.elevator = elevator;

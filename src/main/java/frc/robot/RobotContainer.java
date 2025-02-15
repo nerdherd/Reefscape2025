@@ -49,10 +49,10 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
-  public IntakeRoller algaeRoller;
+  public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
-  public IntakeWrist coralWrist;
+  public IntakeWrist intakeWrist;
 
   public Bottom2Piece bottom2Piece;
 
@@ -81,14 +81,14 @@ public class RobotContainer {
     }
 
     if (USE_ELEV) {
-      algaeRoller = new IntakeRoller();;
-      coralWrist = new IntakeWrist();
+      intakeRoller = new IntakeRoller();;
+      intakeWrist = new IntakeWrist();
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
     }
 
     try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, algaeRoller, elevator, "Bottom2Piece");
+      bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -156,6 +156,14 @@ public class RobotContainer {
     driverController.triggerRight()
       .whileTrue(bottom2Piece.runAuto())
       .onFalse(bottom2Piece.stopAuto());
+    
+    driverController.buttonUp()
+      .onTrue(intakeWrist.moveToStation())
+      .onFalse(intakeWrist.moveToStow());
+
+    // driverController.buttonLeft()
+    //   .onTrue(intakeWrist.moveToReefL14())
+    //   .onFalse(intakeWrist.moveToStow());
     
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
@@ -242,9 +250,9 @@ public class RobotContainer {
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_ELEV) { 
-      algaeRoller.initShuffleboard(loggingLevel); 
+      intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
-      coralWrist.initShuffleboard(loggingLevel);
+      intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
