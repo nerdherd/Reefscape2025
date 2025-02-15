@@ -81,7 +81,7 @@ public class RobotContainer {
     }
 
     if (USE_ELEV) {
-      intakeRoller = new IntakeRoller();;
+      intakeRoller = new IntakeRoller();
       intakeWrist = new IntakeWrist();
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
@@ -153,9 +153,9 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.triggerRight()
-      .whileTrue(bottom2Piece.runAuto())
-      .onFalse(bottom2Piece.stopAuto());
+    // driverController.triggerRight()
+    //   .whileTrue(bottom2Piece.runAuto())
+    //   .onFalse(bottom2Piece.stopAuto());
     
     driverController.buttonUp()
       .onTrue(intakeWrist.moveToStation())
@@ -165,11 +165,11 @@ public class RobotContainer {
     //   .onTrue(intakeWrist.moveToReefL14())
     //   .onFalse(intakeWrist.moveToStow());
     
-    // if(USE_ELEV) {
-    //   // driverController.triggerRight()
-    //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-    //   // .onFalse(elevatorPivot.moveToStow());
-    // }
+    if(USE_ELEV) {
+      driverController.triggerRight()
+      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+      .onFalse(elevatorPivot.moveToStow());
+    }
   }
 
   public void configureBindings_test() {
