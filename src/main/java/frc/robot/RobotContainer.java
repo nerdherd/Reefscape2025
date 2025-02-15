@@ -171,6 +171,8 @@ public class RobotContainer {
                                     .onFalse(elevator.stow());
     driverController.buttonLeft().onTrue(elevatorPivot.moveToPickup())
                                     .onFalse(elevatorPivot.moveToStow());
+    driverController.buttonRight().onTrue(coralWrist.moveToReefL14())
+                                    .onFalse(coralWrist.moveToStow());
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
     //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)

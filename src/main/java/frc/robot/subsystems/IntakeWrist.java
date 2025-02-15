@@ -27,7 +27,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPosition = IntakeConstants.kWristStowPosition;
-    private boolean enabled = false;
+    private boolean enabled = true;
 
     public IntakeWrist() {
         motor = new TalonFX(IntakeConstants.kWristMotorID);
@@ -47,7 +47,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motorConfigurator.refresh(motorConfigs);
     
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+        motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
@@ -61,6 +61,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
         motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
 
+        motorConfigs.MotionMagic.MotionMagicCruiseVelocity = IntakeConstants.kWristCruiseVelocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = IntakeConstants.kWristAcceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = IntakeConstants.kWristJerk;
     
