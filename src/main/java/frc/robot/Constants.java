@@ -364,24 +364,26 @@ public final class Constants {
   
  }
   public static final class V1IntakeConstants{
-    public static final int kV1MotorID = 54;
+    public static final int kMotorID = 54;
   
-    public static final double kPV1Motor = 0.1;
-    public static final double kIV1tMotor = 0;
-    public static final double kDV1Motor = 0;
-    public static final double kVV1Motor = 0.12;
-    public static final double kSV1Motor = 0; //Static Friction
-    public static final double kGV1Motor = 0.015; //Gravity
-    public static final double kV1Acceleration = 100; //Rotations per second squared
-    public static final double kV1Jerk = 700; //Rotations per second cubed
+    public static final double kPMotor = 0.1;
+    public static final double kItMotor = 0;
+    public static final double kDMotor = 0;
+    public static final double kVMotor = 0.12;
+    public static final double kSMotor = 0; //Static Friction
+    public static final double kGMotor = 0.015; //Gravity
+    public static final double kAcceleration = 100; //Rotations per second squared
+    public static final double kJerk = 700; //Rotations per second cubed
 
-    public static final double kV1StowPosition = -0.1;
-    public static final double kV1StationPosition = 0;
-    public static final double kV1L23Position = 0;
-    public static final double kV1L14Position = -0.9;
+    public static final double kStowPosition = -0.1;
+    public static final double kStationPosition = 0;
+    public static final double kL23Position = 0;
+    public static final double kL14Position = -0.9;
 
-    public static final double kV1Speed = 0.5;
-    public static final int kV1PigeonID = 0;
+    public static final double kSpeed = 0.5;
+    public static final int kPigeonID = 0;
+
+    public static final int MotorID = 0;
   }
 
 }

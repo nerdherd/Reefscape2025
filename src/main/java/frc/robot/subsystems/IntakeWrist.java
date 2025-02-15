@@ -18,7 +18,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.V1IntakeConstants;;
 
 public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
@@ -28,14 +30,20 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private double desiredPosition = IntakeConstants.kWristStowPosition;
+    private double desiredPosition;
     private boolean enabled = false;
-    public static boolean USE_PIG = false;
+    private boolean V1 = true;
 
-    public IntakeWrist() {
-        motor = new TalonFX(IntakeConstants.kWristMotorID);
+    public IntakeWrist(boolean V1) {
+        this.V1 = V1;
+        motor = new TalonFX(V1IntakeConstants.kMotorID);
         motorConfigurator = motor.getConfigurator();
-        pigeon = new Pigeon2(IntakeConstants.kWristPigeonID);
+        
+        desiredPosition = IntakeConstants.kWristStowPosition;
+        if(V1) {
+            pigeon = new Pigeon2(V1IntakeConstants.kPigeonID);
+            desiredPosition = V1IntakeConstants.kStowPosition;
+        }
 
         // configure motor
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
@@ -49,31 +57,56 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     //****************************** SETUP METHODS ******************************//
 
     private void configurePID(TalonFXConfiguration motorConfigs) {
-        motorConfigurator.refresh(motorConfigs);
-    
-        motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
-        motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
-        motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-        motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
-        motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-        motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-    
-        motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor;
-        motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor;
-        motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor;
-        motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor;
-        motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
-        motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
+        if (V1){
+            motorConfigurator.refresh(motorConfigs);
 
-        motorConfigs.MotionMagic.MotionMagicAcceleration = IntakeConstants.kWristAcceleration;
-        motorConfigs.MotionMagic.MotionMagicJerk = IntakeConstants.kWristJerk;
+            motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
+            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch;
+            motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+            motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
+            motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
+            motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        
+            motorConfigs.Slot0.kP = V1IntakeConstants.kPMotor;
+            motorConfigs.Slot0.kI = V1IntakeConstants.kItMotor;
+            motorConfigs.Slot0.kD = V1IntakeConstants.kDMotor;
+            motorConfigs.Slot0.kV = V1IntakeConstants.kVMotor;
+            motorConfigs.Slot0.kS = V1IntakeConstants.kSMotor;
+            motorConfigs.Slot0.kG = V1IntakeConstants.kGMotor;
+
+            motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
+            motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
+        
+            StatusCode response = motorConfigurator.apply(motorConfigs);
+            if (!response.isOK()){
+                DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
+            }
+        } else {
+            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+            motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+            motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
+            motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
+            motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        
+            motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor;
+            motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor;
+            motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor;
+            motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor;
+            motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
+            motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
     
-        StatusCode response = motorConfigurator.apply(motorConfigs);
-        if (!response.isOK()){
-            DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
+            motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
+            motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
+        
+            StatusCode response = motorConfigurator.apply(motorConfigs);
+            if (!response.isOK()){
+                DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
+            }
         }
-
     }
 
     private void zeroEncoder() {
