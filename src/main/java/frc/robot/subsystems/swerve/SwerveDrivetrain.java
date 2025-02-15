@@ -206,10 +206,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         // SmartDashboard.putNumber("Robot Rotation", robotRotation);
 
-        visionupdateOdometry("limelight-memory",robotRotation);
+        visionupdateOdometry("limelight-touch",robotRotation);
         visionupdateOdometry("limelight-awesome",robotRotation);
-        visionupdateOdometry("limelight-zma",robotRotation);
-        visionupdateOdometry("limelight-yipee",robotRotation);
+        visionupdateOdometry("limelight-zzzzach",robotRotation);
+        visionupdateOdometry("limelight-duaalex",robotRotation);
 
     }
 
