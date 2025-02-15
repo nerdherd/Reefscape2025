@@ -355,9 +355,10 @@ public final class Constants {
 
     public static final double kWristStowPosition = -0.1;
     public static final double kWristStationPosition = 0;
+    public static final double kWristPickupPosition = -0.1; // TODO change later
+
     public static final double kWristL23Position = 0;
     public static final double kWristL14Position = -0.9;
-
     public static final double kWristSpeed = 0.5;
 
  }

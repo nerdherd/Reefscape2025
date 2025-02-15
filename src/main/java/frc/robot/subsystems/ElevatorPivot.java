@@ -182,7 +182,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     // ****************************** NAMED COMMANDS ****************************** //
 
-    public Command moveToStow() {
+    public Command stow() {
         SmartDashboard.putBoolean("Pushsss", false);
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition));
         //return Commands.runOnce(() -> setPositionRev(-0.5));
