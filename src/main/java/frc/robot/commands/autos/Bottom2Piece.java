@@ -18,18 +18,18 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class Bottom2Piece extends SequentialCommandGroup {
-    private static IntakeRoller intakeRoller;
-    private static Elevator elevator;
-    private static List<PathPlannerPath> pathGroup;
-    private static Pose2d startingPose;
+    private IntakeRoller intakeRoller;
+    private Elevator elevator;
+    private List<PathPlannerPath> pathGroup;
+    private Pose2d startingPose;
 
     public Bottom2Piece(SwerveDrivetrain swerve, IntakeRoller intakeRoller, Elevator elevator, String autoPath) 
     throws IOException, ParseException {
-        Bottom2Piece.intakeRoller = intakeRoller;
-        Bottom2Piece.elevator = elevator;
+        this.intakeRoller = intakeRoller;
+        this.elevator = elevator;
 
-        Bottom2Piece.pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);
-        Bottom2Piece.startingPose = pathGroup.get(0).getStartingDifferentialPose();
+        this.pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);
+        this.startingPose = pathGroup.get(0).getStartingDifferentialPose();
         
         addCommands(
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
