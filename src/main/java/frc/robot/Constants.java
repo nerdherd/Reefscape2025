@@ -344,12 +344,13 @@ public final class Constants {
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
   
-    public static final double kPWristMotor = 0.1;
+    public static final double kPWristMotor = 2.0;
     public static final double kIWristMotor = 0;
     public static final double kDWristMotor = 0;
     public static final double kVWristMotor = 0.12;
     public static final double kSWristMotor = 0; //Static Friction
     public static final double kGWristMotor = 0.015; //Gravity
+    public static final double kWristCruiseVelocity = 40; //Rotations per second 
     public static final double kWristAcceleration = 100; //Rotations per second squared
     public static final double kWristJerk = 700; //Rotations per second cubed
 

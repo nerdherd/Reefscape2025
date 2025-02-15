@@ -61,6 +61,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
         motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
 
+        motorConfigs.MotionMagic.MotionMagicCruiseVelocity = IntakeConstants.kWristCruiseVelocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = IntakeConstants.kWristAcceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = IntakeConstants.kWristJerk;
     
