@@ -128,7 +128,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
 
         //Vision
-        layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeAndyMark);  
+        layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);  
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
