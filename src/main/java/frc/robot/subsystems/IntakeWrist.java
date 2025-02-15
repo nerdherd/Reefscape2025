@@ -47,7 +47,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motorConfigurator.refresh(motorConfigs);
     
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+        motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
