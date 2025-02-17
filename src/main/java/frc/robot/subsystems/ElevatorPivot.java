@@ -186,7 +186,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     // ****************************** NAMED COMMANDS ****************************** //
 
     public Command stow() {
-        SmartDashboard.putBoolean("Pushsss", false);
+        SmartDashboard.putBoolean("Pivot Stow", false);
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition));
         //return Commands.runOnce(() -> setPositionRev(-0.5));
     }
@@ -196,7 +196,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     public Command moveToPickup() {
-        SmartDashboard.putBoolean("Pushsss", true);
+        SmartDashboard.putBoolean("Pivot Pickup", true);
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition));
         //return Commands.runOnce(() -> setPositionRev(0.5));
     }
