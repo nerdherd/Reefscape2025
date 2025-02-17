@@ -99,34 +99,36 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     // ****************************** COMMAND METHODS ****************************** //
 
-    private Command setDisabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(false));
-    }
-    private Command setEnabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(true));
+    private Command setEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> this.setEnabled(enabled));
     }
 
     private Command setPositionCommand(double position) {
         return Commands.sequence(
+            setEnabledCommand(true),
             Commands.runOnce(() -> setPosition(position))
         );
     }
 
     private Command stopCommand() {
         return Commands.sequence(
-            setDisabledCommand(),
+            setEnabledCommand(false),
             Commands.runOnce(() -> motor.setControl(brakeRequest))
         );
     }
 
     // ****************************** NAMED COMMANDS ****************************** //
 
-    public Command moveToStow() {
+    public Command stow() {
         return setPositionCommand(IntakeConstants.kWristStowPosition);
     }
 
     public Command moveToStation() {
         return setPositionCommand(IntakeConstants.kWristStationPosition);
+    }
+
+    public Command moveToPickup() {
+        return setPositionCommand(IntakeConstants.kWristPickupPosition);
     }
 
     public Command moveToReefL14() {

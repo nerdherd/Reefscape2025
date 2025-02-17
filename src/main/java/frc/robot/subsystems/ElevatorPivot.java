@@ -98,7 +98,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-        if (enabled){
+        if (enabled || true){
             pivotMotor.setControl(motionMagicRequest);
             DriverStation.reportWarning("SDKLJLDSHFKJSFGKJFS: " + Double.toString(motionMagicRequest.Position), false);
         } else {
@@ -167,13 +167,16 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public Command stopCommand() {
         return Commands.sequence(
-            Commands.runOnce(() -> pivotMotor.setControl(brakeRequest)),
-            setEnabledCommand(false)
+            setEnabledCommand(false),
+            Commands.runOnce(() -> pivotMotor.setControl(brakeRequest))
         );
     }
 
     public Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPositionDegrees(position));
+        return Commands.sequence(
+            setEnabledCommand(true),
+            Commands.runOnce(() -> setPositionDegrees(position))
+        );
     }
     
     public Command incrementPositionCommand(double increment) {
@@ -182,8 +185,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     // ****************************** NAMED COMMANDS ****************************** //
 
-    public Command moveToStow() {
-        SmartDashboard.putBoolean("Pushsss", false);
+    public Command stow() {
+        SmartDashboard.putBoolean("Pivot Stow", false);
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStowPosition));
         //return Commands.runOnce(() -> setPositionRev(-0.5));
     }
@@ -193,7 +196,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     public Command moveToPickup() {
-        SmartDashboard.putBoolean("Pushsss", true);
+        SmartDashboard.putBoolean("Pivot Pickup", true);
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotPickUpPosition));
         //return Commands.runOnce(() -> setPositionRev(0.5));
     }

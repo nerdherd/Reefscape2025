@@ -33,6 +33,7 @@ import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.Bottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
+import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -53,7 +54,9 @@ public class RobotContainer {
   public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
-  public IntakeWrist coralWrist;
+  public IntakeWrist wrist;
+
+  public SuperSystem superSystem;
 
   public Bottom2Piece bottom2Piece;
 
@@ -83,9 +86,11 @@ public class RobotContainer {
 
     if (USE_ELEV) {
       intakeRoller = new IntakeRoller();
-      coralWrist = new IntakeWrist();
+      wrist = new IntakeWrist();
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
+
+      superSystem = new SuperSystem(wrist, intakeRoller, elevator, elevatorPivot);
     }
 
     try { // ide displayed error fix
@@ -106,7 +111,6 @@ public class RobotContainer {
     SmartDashboard.putData("Swerve Drive", swerveDrive);
     DriverStation.reportWarning("Initalization complete", false);
   }
-
 
   public static void refreshAlliance() {
     var alliance = DriverStation.getAlliance();
@@ -143,8 +147,7 @@ public class RobotContainer {
     );
 
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
-
-}
+  }
 
   public void initDefaultCommands_test() {}
 
@@ -153,19 +156,51 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-    
-    driverController.triggerLeft()
-      .whileTrue(bottom2Piece.runAuto())
-      .onFalse(bottom2Piece.stopAuto());
 
-    driverController.triggerRight().onTrue(intakeRoller.intake())
-                                    .onFalse(intakeRoller.stop());
-    driverController.buttonUp().onTrue(elevator.moveToReefL3())
-                                    .onFalse(elevator.stow());
-    driverController.buttonLeft().onTrue(elevatorPivot.moveToPickup())
-                                    .onFalse(elevatorPivot.moveToStow());
-    driverController.buttonRight().onTrue(coralWrist.moveToReefL14())
-                                    .onFalse(coralWrist.moveToStow());
+    // Triggers
+    driverController.triggerLeft()
+      .onTrue(intakeRoller.outtake())
+      .onFalse(intakeRoller.stop());
+
+    // Bumpers
+    driverController.bumperLeft()
+      .onTrue(superSystem.intakeCoralStation())
+      .onFalse(superSystem.stow());
+
+      driverController.bumperRight()
+      .onTrue(superSystem.intakeCoralGround())
+      .onFalse(superSystem.stow());
+
+    // Buttons
+    driverController.buttonUp()
+      .onTrue(superSystem.placeCoralL1())
+      .onFalse(superSystem.stow());
+
+    driverController.buttonLeft()
+      .onTrue(superSystem.placeCoralL2())
+      .onFalse(superSystem.stow());
+
+    driverController.buttonRight()
+      .onTrue(superSystem.placeCoralL3())
+      .onFalse(superSystem.stow());
+
+    driverController.buttonDown()
+      .onTrue(superSystem.placeCoralL4())
+      .onFalse(superSystem.stow());
+
+    // Dpad Test
+    driverController.dpadUp()
+      .onTrue(wrist.moveToReefL14())
+      .onFalse(wrist.stow());
+
+    driverController.dpadLeft()
+      .onTrue(elevator.moveToStation())
+      .onFalse(elevator.stow());
+
+    driverController.dpadDown()
+      .onTrue(elevatorPivot.moveToPickup())
+      .onFalse(elevatorPivot.stow());
+    
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
     //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
@@ -253,7 +288,7 @@ public class RobotContainer {
     if (USE_ELEV) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
-      coralWrist.initShuffleboard(loggingLevel);
+      wrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
