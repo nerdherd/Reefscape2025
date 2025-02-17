@@ -83,7 +83,7 @@ public class RobotContainer {
 
     if (USE_ELEV) {
       intakeRoller = new IntakeRoller();
-      intakeWrist = new IntakeWrist();
+      intakeWrist = new IntakeWrist(true);
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
     }
@@ -166,10 +166,24 @@ public class RobotContainer {
     //   .whileTrue(bottom2Piece.runAuto())
     //   .onFalse(bottom2Piece.stopAuto());
     
+    // driverController.buttonUp()
+    //   .onTrue(intakeWrist.moveToStation())
+    //   .onFalse(intakeWrist.moveToStow());
+    // driverController.buttonLeft()
+    //   .onTrue(intakeWrist.setEnabledCommand());
+    // driverController.buttonRight()
+    //   .onTrue(intakeWrist.setDisabledCommand());
     driverController.buttonUp()
-      .onTrue(intakeWrist.moveToStation())
-      .onFalse(intakeWrist.moveToStow());
-
+      .onTrue(intakeRoller.intakeLeft())
+      .onFalse(intakeRoller.stop());
+    driverController.buttonDown()
+      .onTrue(intakeRoller.outtake())
+      .onFalse(intakeRoller.stop());
+    driverController.buttonLeft()
+      .onTrue(intakeRoller.intake())
+      .onFalse(intakeRoller.stop());
+    
+    
     // driverController.buttonLeft()
     //   .onTrue(intakeWrist.moveToReefL14())
     //   .onFalse(intakeWrist.moveToStow());

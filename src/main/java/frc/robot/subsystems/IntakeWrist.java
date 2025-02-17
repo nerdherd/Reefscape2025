@@ -20,7 +20,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.V1IntakeConstants;;
+import frc.robot.Constants.V1IntakeConstants;
+import frc.robot.util.NerdyMath;;
 
 public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
@@ -62,12 +63,13 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
             motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
             motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch;
-            motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+            motorConfigs.Feedback.SensorToMechanismRatio = 1/(5.5555555556 * 360);
+            // motorConfigs.Feedback.RotorToSensorRatio;
             motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
             motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
             motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
             motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+            motorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         
             motorConfigs.Slot0.kP = V1IntakeConstants.kPMotor;
             motorConfigs.Slot0.kI = V1IntakeConstants.kItMotor;
@@ -76,6 +78,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             motorConfigs.Slot0.kS = V1IntakeConstants.kSMotor;
             motorConfigs.Slot0.kG = V1IntakeConstants.kGMotor;
 
+            motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  V1IntakeConstants.kCruiseVelocity;
             motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
             motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
         
@@ -85,7 +88,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             }
         } else {
             motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = -12.0/54.0;
+            motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
             motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
             motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
             motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
@@ -115,7 +118,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-        motionMagicRequest.Position = desiredPosition;
         if (enabled) {
             motor.setControl(motionMagicRequest);
         }
@@ -134,18 +136,28 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         desiredPosition = position;
     }
 
+    private void setPositionDegrees(double positionDegrees) {
+        double newPos = NerdyMath.clamp(
+            positionDegrees, 
+            V1IntakeConstants.kMinPosition, 
+            V1IntakeConstants.kMaxPosition
+        );
+
+        motionMagicRequest.Position = (newPos / 360.0);  
+    }
+
     // ****************************** COMMAND METHODS ****************************** //
 
-    private Command setDisabledCommand() {
+    public Command setDisabledCommand() {
         return Commands.runOnce(() -> this.setEnabled(false));
     }
-    private Command setEnabledCommand() {
+    public Command setEnabledCommand() {
         return Commands.runOnce(() -> this.setEnabled(true));
     }
 
     private Command setPositionCommand(double position) {
         return Commands.sequence(
-            Commands.runOnce(() -> setPosition(position))
+            Commands.runOnce(() -> setPositionDegrees(position))
         );
     }
 
@@ -157,6 +169,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
 
     // ****************************** NAMED COMMANDS ****************************** //
+
 
     public Command moveToStow() {
         return setPositionCommand(IntakeConstants.kWristStowPosition);

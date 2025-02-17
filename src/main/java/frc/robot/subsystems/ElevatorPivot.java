@@ -100,7 +100,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     @Override
     public void periodic() {
         if (enabled){
-            pivotMotor.setControl(motionMagicRequest);
+            // pivotMotor.setControl(motionMagicRequest);
             DriverStation.reportWarning("SDKLJLDSHFKJSFGKJFS: " + Double.toString(motionMagicRequest.Position), false);
         } else {
             pivotMotor.setControl(brakeRequest);

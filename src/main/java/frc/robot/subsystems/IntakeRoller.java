@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -20,17 +21,30 @@ import frc.robot.Constants.IntakeConstants;
  
 public class IntakeRoller extends SubsystemBase implements Reportable {
     private final TalonFX rollerMotor;
+    private final TalonFX rollerMotorRight;
     private final TalonFXConfigurator rollerConfigurator;
- 
+    private final TalonFXConfigurator rollerConfiguratorRight;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
+    private final VelocityVoltage velocityRequestRight = new VelocityVoltage(0);
+
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private boolean enabled = false;
+    private boolean enableFollowRequest = true;
     private boolean velocityControl = true;
 
     public IntakeRoller() {
         rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
+        rollerMotorRight = new TalonFX(62);
         rollerConfigurator = rollerMotor.getConfigurator();
+        rollerConfiguratorRight = rollerMotorRight.getConfigurator();
+        velocityRequestRight.EnableFOC = true;
+        velocityRequestRight.Acceleration = 0;
+        velocityRequestRight.FeedForward = 0;
+        velocityRequestRight.Slot = 0;
+        velocityRequestRight.OverrideBrakeDurNeutral = false;
+        velocityRequestRight.LimitForwardMotion = false;
+        velocityRequestRight.LimitReverseMotion = false;
         velocityRequest.EnableFOC = true;
         velocityRequest.Acceleration = 0;
         velocityRequest.FeedForward = 0;
@@ -50,7 +64,6 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
  
     private void configureMotor(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
-
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         motorConfigs.Voltage.PeakForwardVoltage = 11.5;
         motorConfigs.Voltage.PeakReverseVoltage = -11.5;
@@ -65,6 +78,13 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
+        rollerConfiguratorRight.refresh(motorConfigs);
+
+        StatusCode responseRight = rollerConfiguratorRight.apply(motorConfigs);
+
+        if (!responseRight.isOK())
+        DriverStation.reportError("Could not apply motor configs, error code:" + responseRight.toString(), new Error().getStackTrace());
+
     }
  
     private void configurePID(TalonFXConfiguration motorConfigs) {
@@ -78,16 +98,26 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
             DriverStation.reportError("Could not apply PID configs, error code:" + response.toString(), new Error().getStackTrace());
+        rollerConfiguratorRight.refresh(motorConfigs);
+        StatusCode responseRight = rollerConfiguratorRight.apply(motorConfigs);
+        if (!response.isOK())
+            DriverStation.reportError("Could not apply PID configs, error code:" + responseRight.toString(), new Error().getStackTrace());
+
+
     }
  
     @Override
     public void periodic() {
         if (!enabled) {
             rollerMotor.setControl(brakeRequest);
+            rollerMotorRight.setControl(brakeRequest);
         }
         else {
-            rollerMotor.setControl(velocityRequest);          
+            rollerMotor.setControl(velocityRequest);  
+            rollerMotorRight.setControl(velocityRequestRight);
+     
         } 
+
     }
  
     // ****************************** STATE METHODS ***************************** //
@@ -112,6 +142,16 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
  
     private Command setVelocityCommand(double velocity) {
         velocityRequest.Velocity = velocity;
+        velocityRequestRight.Velocity = -velocity;
+        return Commands.runOnce(() -> setVelocity(velocity));
+    }
+
+    private Command setVelocityCommandLeft(double velocity) {
+        velocityRequest.Velocity = velocity;
+        return Commands.runOnce(() -> setVelocity(velocity));
+    }
+    private Command setVelocityCommandRight(double velocity) {
+        velocityRequestRight.Velocity = -velocity;
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
@@ -127,7 +167,22 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command intake() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(IntakeConstants.kIntakePower)
+            setVelocityCommandLeft(IntakeConstants.kIntakePower),
+            setVelocityCommandRight(IntakeConstants.kIntakePower)
+        );
+    }
+
+    public Command intakeLeft() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommandLeft(IntakeConstants.kIntakePower)
+        );
+    }
+
+    public Command intakeRight() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommandRight(IntakeConstants.kIntakePower)
         );
     }
 
