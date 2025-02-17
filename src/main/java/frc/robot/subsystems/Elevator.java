@@ -50,6 +50,10 @@ public class Elevator extends SubsystemBase implements Reportable {
         desiredPosition = position;
     }
 
+    public double getPosition() {
+        return elevatorMotor.getPosition().getValueAsDouble();
+    }
+
     private void setVelocity(double velocity) {
         desiredVelocity = NerdyMath.clamp(velocity, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         elevatorMotor.set(desiredVelocity);

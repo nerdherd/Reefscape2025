@@ -194,7 +194,7 @@ public class RobotContainer {
       .onFalse(wrist.stow());
 
     driverController.dpadLeft()
-      .onTrue(elevator.moveToStation())
+      .onTrue(elevator.moveToReefL2())
       .onFalse(elevator.stow());
 
     driverController.dpadDown()

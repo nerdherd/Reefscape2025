@@ -14,6 +14,7 @@ public class SuperSystem {
         this.roller = roller;
         this.elevator = elevator;
         this.pivot = pivot;
+        this.pivot.elevatorPosition = () -> this.elevator.getPosition();
     }
 
     // Intake Commands
