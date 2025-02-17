@@ -173,7 +173,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     public Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPositionDegrees(position));
+        return Commands.sequence(
+            setEnabledCommand(true),
+            Commands.runOnce(() -> setPositionDegrees(position))
+        );
     }
     
     public Command incrementPositionCommand(double increment) {

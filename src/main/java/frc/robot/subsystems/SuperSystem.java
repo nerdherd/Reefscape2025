@@ -16,7 +16,8 @@ public class SuperSystem {
         this.pivot = pivot;
     }
 
-    public Command intakeCoralStation() { // TODO is pivot correct
+    // Intake Commands
+    public Command intakeCoralStation() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToStation(),
@@ -26,7 +27,6 @@ public class SuperSystem {
         command.addRequirements(elevator, pivot, wrist, roller);
         return command;
     }
-
     public Command intakeCoralGround() {
         Command command = Commands.sequence(
             pivot.moveToPickup(),
@@ -37,7 +37,6 @@ public class SuperSystem {
         command.addRequirements(elevator, pivot, wrist, roller);
         return command;
     }
-    
     public Command intakeAlgaeGround() { // TODO is this real
         Command command = Commands.sequence(
             pivot.moveToStart(),
@@ -49,45 +48,41 @@ public class SuperSystem {
         return command;
     }
 
+    // OUttake Commands
     public Command placeCoralL1() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToReefL1(),
-            wrist.moveToReefL14(),
-            roller.outtake()
+            wrist.moveToReefL14()
         );
-        command.addRequirements(elevator, pivot, wrist, roller);
+        command.addRequirements(elevator, pivot, wrist);
         return command;
     }
-
     public Command placeCoralL2() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToReefL2(),
-            wrist.moveToReefL23(),
-            roller.outtake()
+            wrist.moveToReefL23()
         );
-        command.addRequirements(elevator, pivot, wrist, roller);
+        command.addRequirements(elevator, pivot, wrist);
         return command;
     }
     public Command placeCoralL3() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToReefL3(),
-            wrist.moveToReefL23(),
-            roller.outtake()
+            wrist.moveToReefL23()
         );
-        command.addRequirements(elevator, pivot, wrist, roller);
+        command.addRequirements(elevator, pivot, wrist);
         return command;
     }
     public Command placeCoralL4() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToReefL4(),
-            wrist.moveToReefL14(),
-            roller.outtake()
+            wrist.moveToReefL14()
         );
-        command.addRequirements(elevator, pivot, wrist, roller);
+        command.addRequirements(elevator, pivot, wrist);
         return command;
     }
 
