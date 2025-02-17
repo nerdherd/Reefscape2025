@@ -33,7 +33,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private Pigeon2 pigeon;
 
     public Supplier<Double> elevatorPosition = null;
-    public boolean enabled = false; // Change back to true
+    public boolean enabled = true; // Change back to true
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
@@ -114,6 +114,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     // ****************************** STATE METHODS ***************************** //
+
+    public void holdPosition() {
+        setPositionDegrees(elevatorPosition.get());
+    }
 
     private double calculateFeedForward(double position) {
         return 0.536839 * Math.sin(0.0314948*position - 1.20314) + 1.16597; 
@@ -204,6 +208,14 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     public Command moveToStart() {
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStartPosition));
     }
+    public Command moveToL23(){
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotL23Position));
+    }
+
+    public Command movetoL4(){
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotL4Position));
+    }
+
 
     public Command moveToPickup() {
         SmartDashboard.putBoolean("Pivot Pickup", true);

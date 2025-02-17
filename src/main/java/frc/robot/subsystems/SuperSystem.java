@@ -54,7 +54,7 @@ public class SuperSystem {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToReefL1(),
-            wrist.moveToReefL14()
+            wrist.moveToReefL13()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;
@@ -63,25 +63,27 @@ public class SuperSystem {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToReefL2(),
-            wrist.moveToReefL23()
+            wrist.moveToReefL24()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;
     }
+    
     public Command placeCoralL3() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToReefL3(),
-            wrist.moveToReefL23()
+            wrist.moveToReefL13()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;
     }
+
     public Command placeCoralL4() {
         Command command = Commands.sequence(
-            pivot.moveToStart(),
+            pivot.movetoL4(),
             elevator.moveToReefL4(),
-            wrist.moveToReefL14()
+            wrist.moveToReefL24()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;

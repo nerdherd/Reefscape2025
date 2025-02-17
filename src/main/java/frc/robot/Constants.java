@@ -286,9 +286,9 @@ public final class Constants {
     public static final double kElevatorStowPosition    = -1; // TODO change later
     public static final double kElevatorStationPosition = -2 ; // TODO change later
     public static final double kElevatorL1Position =   -2;     // TODO change later
-    public static final double kElevatorL2Position =  -9;     // TODO change later
-    public static final double kElevatorL3Position = -18;     // TODO change later
-    public static final double kElevatorL4Position = -28;     // TODO change later
+    public static final double kElevatorL2Position =  -1;    
+    public static final double kElevatorL3Position = -35;     // TODO change later
+    public static final double kElevatorL4Position = -68.2;     // TODO change later
     public static final double kElevatorSpeed = 1.0;          // TODO change later
     public static final double kPElevatorMotor = 0.1;
     public static final double kIElevatorMotor = 0;
@@ -310,6 +310,8 @@ public final class Constants {
     public static final double kElevatorPivotStowPosition = -26; //TODO change later -22
     public static final double kElevatorPivotStartPosition = 0; //TODO change later
     public static final double kElevatorPivotPickUpPosition = -40; //TODO change later   -60
+    public static final double kElevatorPivotL23Position = -0.078;
+    public static final double kElevatorPivotL4Position = -0.068;
 
     public static final double kElevatorPivotMin = -56.3; // TODO change later    -61.3
     public static final double kElevatorPivotMax = -25.4; // TODO change later   -20.4
@@ -318,9 +320,9 @@ public final class Constants {
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 100; //16.333
-    public static final double kElevatorPivotCruiseAcceleration = 1000.000;
-    public static final double kElevatorPivotJerk = 900.0;
+    public static final double kEPivotCruiseVelocity = 16.333; //20
+    public static final double kElevatorPivotCruiseAcceleration = 50; //100.000
+    public static final double kElevatorPivotJerk = 200.0;
     
  }
 
@@ -358,8 +360,8 @@ public final class Constants {
     public static final double kWristStationPosition = 0;
     public static final double kWristPickupPosition = -0.1; // TODO change later
 
-    public static final double kWristL23Position = 0;
-    public static final double kWristL14Position = -0.9; //TODO change ltr
+    public static final double kWristL24Position = -10.92;
+    public static final double kWristL13Position = -4.85; //TODO change ltr
     public static final double kWristSpeed = 0.5;
 
  }
