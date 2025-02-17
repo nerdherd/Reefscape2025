@@ -17,13 +17,13 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
-public class Bottom2Piece extends SequentialCommandGroup {
+public class twoPiece extends SequentialCommandGroup {
     private IntakeRoller intakeRoller;
     private Elevator elevator;
     private List<PathPlannerPath> pathGroup;
     private Pose2d startingPose;
 
-    public Bottom2Piece(SwerveDrivetrain swerve, IntakeRoller intakeRoller, Elevator elevator, String autoPath) 
+    public twoPiece(SwerveDrivetrain swerve, IntakeRoller intakeRoller, Elevator elevator, String autoPath) 
     throws IOException, ParseException {
         this.intakeRoller = intakeRoller;
         this.elevator = elevator;
@@ -73,6 +73,14 @@ public class Bottom2Piece extends SequentialCommandGroup {
         return Commands.sequence(
             intakeRoller.stop(),
             elevator.stow()
+        );
+    }
+
+    public Command driveAuto() {
+        return Commands.sequence(
+            AutoBuilder.followPath(pathGroup.get(0)),
+            AutoBuilder.followPath(pathGroup.get(1)),
+            AutoBuilder.followPath(pathGroup.get(2))
         );
     }
 }

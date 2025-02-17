@@ -7,19 +7,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S5R7"
+            "pathName": "drivePath0"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R7C4"
+            "pathName": "drivePath1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C4R7"
+            "pathName": "drivePath2"
           }
         }
       ]

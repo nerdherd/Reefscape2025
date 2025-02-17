@@ -31,7 +31,7 @@ import frc.robot.Constants.IntakeConstants;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
-import frc.robot.commands.autos.Bottom2Piece;
+import frc.robot.commands.autos.twoPiece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -55,7 +55,10 @@ public class RobotContainer {
   public ElevatorPivot elevatorPivot;
   public IntakeWrist coralWrist;
 
-  public Bottom2Piece bottom2Piece;
+  public twoPiece bottom2Piece;
+  public twoPiece mid2Piece;
+  public twoPiece top2Piece;
+  public twoPiece driveAuto;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
@@ -69,17 +72,13 @@ public class RobotContainer {
   private SwerveJoystickCommand swerveJoystickCommand;
   
   private static boolean USE_ELEV = true;
-  /**
-   * The container for the robot. Contain
-   * s subsystems, OI devices, and commands.
-   */
-
-  public RobotContainer() {
+   
+     public RobotContainer() {
     try {
       swerveDrive = new SwerveDrivetrain(imu);
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
-    }
+    } 
 
     if (USE_ELEV) {
       intakeRoller = new IntakeRoller();
@@ -88,17 +87,21 @@ public class RobotContainer {
       elevatorPivot = new ElevatorPivot();
     }
 
+  
     try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+      bottom2Piece = new twoPiece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+      mid2Piece = new twoPiece(swerveDrive, intakeRoller, elevator, "Mid2Piece");
+      top2Piece = new twoPiece(swerveDrive, intakeRoller, elevator, "Top2Piece");
+      driveAuto = new twoPiece(swerveDrive, intakeRoller, elevator, "DriveAuto");
     } catch (IOException e) {
-      DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
+      DriverStation.reportError("IOException for twoPiece", e.getStackTrace());
     } catch (ParseException e) {
-      DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
+      DriverStation.reportError("ParseException for twoPiece", e.getStackTrace());
     }
 
     initShuffleboard();
     // initDefaultCommands_test();
-    // configureBinadings_test();
+    configureBindings_test();
     initDefaultCommands_teleop();
     configureBindings_teleop();
     initAutoChoosers();
@@ -154,9 +157,6 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.triggerLeft()
-      .whileTrue(bottom2Piece.runAuto())
-      .onFalse(bottom2Piece.stopAuto());
 
     driverController.triggerRight().onTrue(intakeRoller.intake())
                                     .onFalse(intakeRoller.stop());
@@ -174,57 +174,20 @@ public class RobotContainer {
   }
 
   public void configureBindings_test() {
-    driverController.buttonRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "bye")));
-    driverController.buttonDown()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "bye")));
-    driverController.buttonUp()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "bye")));
-    driverController.buttonLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "bye")));
+    driverController.triggerLeft()
+      .whileTrue(bottom2Piece.runAuto())
+      .onFalse(bottom2Piece.stopAuto());
+    
+    driverController.triggerRight()
+      .whileTrue(mid2Piece.runAuto())
+      .onFalse(mid2Piece.stopAuto());
 
     driverController.bumperLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "bye")));
+      .whileTrue(top2Piece.runAuto())
+      .onFalse(top2Piece.stopAuto());
+
     driverController.bumperRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "bye")));
-    driverController.triggerLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "bye")));
-    driverController.triggerRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "bye")));
-
-    driverController.dpadUp()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "bye")));
-    driverController.dpadRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "bye")));
-    driverController.dpadDown()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "bye")));
-    driverController.dpadLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "bye")));
-
-    driverController.controllerLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "bye")));
-    driverController.controllerRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "bye")));
-    driverController.joystickLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "bye")));
-    driverController.joystickRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
+      .whileTrue(driveAuto.driveAuto());
   }
   
   private void initAutoChoosers() {
@@ -236,7 +199,10 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
+    autoChooser.setDefaultOption("Bottom 2 Piece", new twoPiece(swerveDrive, intakeRoller, elevator, "Bottom2Piece"));
+    autoChooser.addOption(" Mid 2 Piece", new twoPiece(swerveDrive, intakeRoller, elevator, "Mid2Piece"));
+    autoChooser.addOption("Top 2 Piece", new twoPiece(swerveDrive, intakeRoller, elevator, "Top2Piece"));
+    autoChooser.addOption("Drive auto", AutoBuilder.buildAuto("DriveAuto"));
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     // if (paths.contains("S4R3")) {
