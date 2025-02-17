@@ -187,7 +187,20 @@ public class RobotContainer {
     driverController.buttonDown()
       .onTrue(superSystem.placeCoralL4())
       .onFalse(superSystem.stow());
-   
+
+    // Dpad Test
+    driverController.dpadUp()
+      .onTrue(wrist.moveToReefL14())
+      .onFalse(wrist.stow());
+
+    driverController.dpadLeft()
+      .onTrue(elevator.moveToStation())
+      .onFalse(elevator.stow());
+
+    driverController.dpadDown()
+      .onTrue(elevatorPivot.moveToPickup())
+      .onFalse(elevatorPivot.stow());
+    
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
     //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)

@@ -98,7 +98,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-        if (enabled){
+        if (enabled || true){
             pivotMotor.setControl(motionMagicRequest);
             DriverStation.reportWarning("SDKLJLDSHFKJSFGKJFS: " + Double.toString(motionMagicRequest.Position), false);
         } else {
@@ -167,8 +167,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public Command stopCommand() {
         return Commands.sequence(
-            Commands.runOnce(() -> pivotMotor.setControl(brakeRequest)),
-            setEnabledCommand(false)
+            setEnabledCommand(false),
+            Commands.runOnce(() -> pivotMotor.setControl(brakeRequest))
         );
     }
 
