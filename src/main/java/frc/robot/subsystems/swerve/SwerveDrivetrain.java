@@ -22,7 +22,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.ROBOT_ID;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
 import frc.robot.subsystems.imu.Gyro;
@@ -186,7 +188,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         field.setRobotPose(poseEstimator.getEstimatedPosition());
 
          //TODO: Add individual limelights to pose estimation
-        visionupdateOdometry("limelight-duaalex");
+         if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
+         {
+            visionupdateOdometry("limelight-duaalex");
+         }
         // visionupdateOdometry("limelight-back");
         // visionupdateOdometry("limelight-kads");
 

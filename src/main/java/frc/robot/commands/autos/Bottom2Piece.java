@@ -34,7 +34,6 @@ public class Bottom2Piece extends SequentialCommandGroup {
         addCommands(
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(swerve.getImu()::zeroAll),
             runAuto()
         );
     }

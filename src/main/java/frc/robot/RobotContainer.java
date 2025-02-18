@@ -59,7 +59,7 @@ public class RobotContainer {
 
   public SuperSystem superSystem;
 
-  // public Bottom2Piece bottom2Piece;
+  public Bottom2Piece bottom2Piece;
 
   public isMeBottom2Piece isMeBottom2Piece;
 
@@ -102,9 +102,15 @@ public class RobotContainer {
     }
 
     try { // ide displayed error fix
-      // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
       if(USE_ELEV) {
-        isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
+        if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
+        {
+          isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
+        }
+        else
+        {
+          bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+        }
       }
 
 
@@ -285,10 +291,15 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-
-    // autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
-
-    autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
+    
+    if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
+    {
+      autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
+    }
+    else 
+    {
+      autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
+    }
 
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
