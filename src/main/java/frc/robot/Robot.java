@@ -101,6 +101,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
 
     m_robotContainer.swerveDrive.refreshModulePID();
+    m_robotContainer.initDefaultCommands_test();
+    m_robotContainer.configureBindings_test();
   }
 
   /** This function is called periodically during test mode. */
