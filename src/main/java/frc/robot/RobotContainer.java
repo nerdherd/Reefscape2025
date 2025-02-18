@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
-
+import frc.robot.Constants.ROBOT_ID;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -85,6 +85,11 @@ public class RobotContainer {
       swerveDrive = new SwerveDrivetrain(imu);
     } catch (IllegalArgumentException e) {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
+    }
+
+    if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
+    {
+      // add your code only for isme 
     }
 
     if (USE_ELEV) {
