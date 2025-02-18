@@ -98,11 +98,9 @@ public class RobotContainer {
 
     try { // ide displayed error fix
       // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
-      // if(USE_ELEV) {
-      //   isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
-      // }
-      
-      isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
+      if(USE_ELEV) {
+        isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
+      }
 
 
     } catch (IOException e) {
