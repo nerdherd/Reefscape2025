@@ -77,9 +77,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private Field2d field;
 
     public enum DRIVE_MODE {
-        FIELD_ORIENTED,
-        ROBOT_ORIENTED,
-        AUTONOMOUS
+        FIELD_ORIENTED, // always use it
+        ROBOT_ORIENTED, // most likely it's for testing
+        // AUTONOMOUS not used
     }
 
     /**

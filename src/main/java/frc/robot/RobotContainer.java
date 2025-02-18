@@ -121,10 +121,6 @@ public class RobotContainer {
     }
 
     initShuffleboard();
-    // initDefaultCommands_test();
-    // configureBinadings_test();
-    initDefaultCommands_teleop();
-    configureBindings_teleop();
     initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
@@ -139,6 +135,53 @@ public class RobotContainer {
 
   public static boolean IsRedSide() {
     return isRedSide;
+  }
+  
+  public Command getAutonomousCommand() {
+    Command currentAuto = autoChooser.getSelected();
+    
+    swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);//AUTONOMOUS);
+    return currentAuto;
+  }
+
+  public void initShuffleboard() {
+    imu.initShuffleboard(loggingLevel);
+    swerveDrive.initShuffleboard(loggingLevel);
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    if (USE_ELEV) { 
+      intakeRoller.initShuffleboard(loggingLevel); 
+      elevator.initShuffleboard(loggingLevel);
+      wrist.initShuffleboard(loggingLevel);
+      elevatorPivot.initShuffleboard(loggingLevel);
+    }
+  }
+  
+  private void initAutoChoosers() {
+    try { // fix for vendordeps not importing
+    PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
+
+  	List<String> paths = AutoBuilder.getAllAutoNames();
+    
+    ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
+
+    autosTab.add("Selected Auto", autoChooser);
+
+    if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
+    {
+      autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
+    }
+    else 
+    {
+      autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
+    }
+
+    autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
+    autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    // if (paths.contains("S4R3")) {
+      // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
+      // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
+    // }
+    } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
 
   public void initDefaultCommands_teleop() {
@@ -168,8 +211,6 @@ public class RobotContainer {
 
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
   }
-
-  public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
     // Driver bindings
@@ -227,6 +268,23 @@ public class RobotContainer {
         .onFalse(elevatorPivot.moveToStart());
     }
   }
+  
+
+
+  
+
+
+
+
+  /**
+   * 
+   * TEST mode section! 
+   * Caution: The code here will only be used for testing purposes. 
+   * 
+   */ 
+   public void initDefaultCommands_test() {
+    swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+  }
 
   public void configureBindings_test() {
     driverController.buttonRight()
@@ -280,58 +338,6 @@ public class RobotContainer {
     driverController.joystickRight()
       .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
       .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
-  }
-  
-  private void initAutoChoosers() {
-    try { // fix for vendordeps not importing
-    PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
-
-  	List<String> paths = AutoBuilder.getAllAutoNames();
-    
-    ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
-
-    autosTab.add("Selected Auto", autoChooser);
-    
-    if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
-    {
-      autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
-    }
-    else 
-    {
-      autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
-    }
-
-    autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
-    autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    // if (paths.contains("S4R3")) {
-      // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
-      // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
-    // }
-    } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
-  }
-  
-  public void initShuffleboard() {
-    imu.initShuffleboard(loggingLevel);
-    swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
-    if (USE_ELEV) { 
-      intakeRoller.initShuffleboard(loggingLevel); 
-      elevator.initShuffleboard(loggingLevel);
-      wrist.initShuffleboard(loggingLevel);
-      elevatorPivot.initShuffleboard(loggingLevel);
-    }
-  }
-  
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    Command currentAuto = autoChooser.getSelected();
-    
-    swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
-    return currentAuto;
   }
   
 }
