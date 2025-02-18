@@ -283,8 +283,7 @@ public class RobotContainer {
 
     // autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
 
-    autoChooser.setDefaultOption("isMe Bottom 2 Piece", isMeBottom2Piece);
-
+    autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
 
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
