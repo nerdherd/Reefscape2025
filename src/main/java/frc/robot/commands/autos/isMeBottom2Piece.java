@@ -18,15 +18,15 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class isMeBottom2Piece extends SequentialCommandGroup {
-    private IntakeRoller intakeRoller;
-    private Elevator elevator;
+    // private IntakeRoller intakeRoller;
+    // private Elevator elevator;
     private List<PathPlannerPath> pathGroup;
     private Pose2d startingPose;
 
     public isMeBottom2Piece(SwerveDrivetrain swerve, IntakeRoller intakeRoller, Elevator elevator, String autoPath) 
     throws IOException, ParseException {
-        this.intakeRoller = intakeRoller;
-        this.elevator = elevator;
+        // this.intakeRoller = intakeRoller;
+        // this.elevator = elevator;
 
         this.pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);
         this.startingPose = pathGroup.get(0).getStartingDifferentialPose();
@@ -43,37 +43,41 @@ public class isMeBottom2Piece extends SequentialCommandGroup {
     public Command runAuto() {
         return Commands.sequence(
             AutoBuilder.followPath(pathGroup.get(0)),
-            elevator.moveToReefL4(),
-            intakeRoller.outtake(),
+            // elevator.moveToReefL3(),
+            // intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
-            intakeRoller.stop(),
+            // intakeRoller.stop(),
 
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
+                Commands.none(),
                 AutoBuilder.followPath(pathGroup.get(1))
             ),
-            elevator.moveToStation(),
-            intakeRoller.intake(),
+            // elevator.moveToStation(),
+            // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            intakeRoller.stop(),
+            // intakeRoller.stop(),
 
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
+                Commands.none(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            elevator.moveToReefL3(),
-            intakeRoller.outtake(),
-            Commands.waitSeconds(1.5),
-            intakeRoller.stop(),
+            // elevator.moveToReefL3(),
+            // intakeRoller.outtake(),
+            Commands.waitSeconds(1.5)
+            // ,
+            // intakeRoller.stop(),
 
-            elevator.stow()
+            // elevator.stow()
         );
     }
 
     public Command stopAuto() {
         return Commands.sequence(
-            intakeRoller.stop(),
-            elevator.stow()
+            Commands.none()
+            // intakeRoller.stop(),
+            // elevator.stow()
         );
     }
 }

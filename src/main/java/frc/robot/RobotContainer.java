@@ -74,7 +74,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private static boolean USE_ELEV = true;
+  private static boolean USE_ELEV = false;
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
@@ -98,8 +98,12 @@ public class RobotContainer {
 
     try { // ide displayed error fix
       // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
-
+      // if(USE_ELEV) {
+      //   isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
+      // }
+      
       isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
+
 
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
@@ -162,7 +166,7 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-
+  if( USE_ELEV){
     // Triggers
     driverController.triggerLeft()
       .onTrue(intakeRoller.outtake())
@@ -206,7 +210,7 @@ public class RobotContainer {
     driverController.dpadDown()
       .onTrue(elevatorPivot.moveToPickup())
       .onFalse(elevatorPivot.stow());
-    
+}
     // if(USE_ELEV) {
     //   // driverController.triggerRight()
     //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
