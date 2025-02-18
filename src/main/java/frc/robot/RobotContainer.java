@@ -69,6 +69,7 @@ public class RobotContainer {
   private SwerveJoystickCommand swerveJoystickCommand;
   
   private static boolean USE_ELEV = true;
+  private static boolean V1 = true;
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
@@ -83,9 +84,9 @@ public class RobotContainer {
 
     if (USE_ELEV) {
       intakeRoller = new IntakeRoller();
-      intakeWrist = new IntakeWrist(true);
+      intakeWrist = new IntakeWrist(V1);
       elevator = new Elevator();
-      elevatorPivot = new ElevatorPivot();
+      elevatorPivot = new ElevatorPivot(V1);
     }
 
     try { // ide displayed error fix

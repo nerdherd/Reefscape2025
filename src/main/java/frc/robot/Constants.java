@@ -296,7 +296,7 @@ public final class Constants {
     public static final double kVElevatorMotor = 0;
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kPivotMotorID = 17; // TODO IDs cant go over 62
+    public static final int kLeftPivotMotorID = 17; 
     public static final int kPivotPigeonID = 2; // TODO change later
     
     public static final double kPElevatorPivot = 40; //1.2
@@ -323,6 +323,51 @@ public final class Constants {
     public static final double kElevatorPivotJerk = 900.0;
     
  }
+
+ public static final class V1ElevatorConstants {
+    // ************************************** ELEVATOR CONSTANTS *************************************** //
+    public static final int kElevatorMotorID = 18;            // TODO change later 
+    public static final int kElevatorMotorRightID = 0;            // TODO change later 
+    public static final double kElevatorStowPosition    = 0; // TODO change later
+    public static final double kElevatorStationPosition = 0 ; // TODO change later
+    public static final double kElevatorL1Position =   0;     // TODO change later
+    public static final double kElevatorL2Position =  0;     // TODO change later
+    public static final double kElevatorL3Position = 0;     // TODO change later
+    public static final double kElevatorL4Position = 0;     // TODO change later
+    public static final double kElevatorSpeed = 1.0;          // TODO change later
+    public static final double kPElevatorMotor = 0.1;
+    public static final double kIElevatorMotor = 0;
+    public static final double kDElevatorMotor = 0;
+    public static final double kVElevatorMotor = 0;
+
+    // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
+    public static final int kLeftPivotMotorID = 17; 
+    public static final int kRightPivotMotorID = 0;
+    public static final int kPivotPigeonID = 2; // TODO change later
+    
+    public static final double kPElevatorPivot = 0; 
+    public static final double kIElevatorPivot = 0;
+    public static final double kDElevatorPivot = 0;
+    public static final double kVElevatorPivot = 0; 
+    public static final double kSElevatorPivot = 0; 
+    public static final double kAElevatorPivot = 0.0; 
+    public static final double kGElevatorPivot = 0; 
+
+    public static final double kElevatorPivotStowPosition = 0; 
+    public static final double kElevatorPivotStartPosition = 0; //TODO change later
+    public static final double kElevatorPivotPickUpPosition = 0; 
+
+    public static final double kElevatorPivotMin = 0; // TODO change later   
+    public static final double kElevatorPivotMax = 0; // TODO change later   
+
+    public static final double kElevatorPivotGearRatio = 0; // TODO change later
+    public static final double kElevatorPivotDeadBand = 0;
+    public static final double kElevatorPivotOffSet = 0;
+
+    public static final double kEPivotCruiseVelocity = 10;
+    public static final double kElevatorPivotCruiseAcceleration = 20.000;
+    public static final double kElevatorPivotJerk = 200.0;
+  }
 
   public static final class IntakeConstants {
 
