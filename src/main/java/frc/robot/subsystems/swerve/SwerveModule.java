@@ -97,14 +97,14 @@ public class SwerveModule implements Reportable {
             ModuleConstants.kPTurning,
             ModuleConstants.kITurning,
             ModuleConstants.kDTurning);
-        turningController.enableContinuousInput(0, 2 * Math.PI); // Originally was -pi to pi
+        turningController.enableContinuousInput(-Math.PI, Math.PI); // Originally was -pi to pi
         turningController.setTolerance(.005);
 
         this.driveMotor.setInverted(invertDriveMotor);
         this.turnMotor.setInverted(invertTurningMotor);
         this.invertTurningEncoder = CANCoderReversed;
         
-        this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+        this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0)); //TODO: change to 90 degrees
 
         TalonFXConfiguration driveMotorConfigs = new TalonFXConfiguration();
         driveConfigurator.refresh(driveMotorConfigs);

@@ -67,7 +67,7 @@ public final class Constants {
     public static final double kPTurning = 0.26; // 0.55
     public static final double kITurning = 0.01;
     public static final double kDTurning = 0.0015;//0.02 
-    public static final double kFTurning = 0; //0.015
+    public static final double kFTurning = 0.015; //0.015
 
     public static final double kPDrive = 0.13; // 0.6
     public static final double kIDrive = 0;
@@ -326,8 +326,8 @@ public final class Constants {
 
  public static final class V1ElevatorConstants {
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    public static final int kElevatorMotorID = 18;            // TODO change later 
-    public static final int kElevatorMotorRightID = 0;            // TODO change later 
+    public static final int kElevatorMotorID = 17;            // TODO change later 
+    public static final int kElevatorMotorRightID = 18;            // TODO change later 
     public static final double kElevatorStowPosition    = 0; // TODO change later
     public static final double kElevatorStationPosition = 0 ; // TODO change later
     public static final double kElevatorL1Position =   0;     // TODO change later
