@@ -32,6 +32,7 @@ import frc.robot.Constants.ROBOT_ID;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.Bottom2Piece;
+import frc.robot.commands.autos.isMeBottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
@@ -58,7 +59,9 @@ public class RobotContainer {
 
   public SuperSystem superSystem;
 
-  public Bottom2Piece bottom2Piece;
+  // public Bottom2Piece bottom2Piece;
+
+  public isMeBottom2Piece isMeBottom2Piece;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
@@ -71,7 +74,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private static boolean USE_ELEV = true;
+  private static boolean USE_ELEV = false;
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
@@ -98,14 +101,17 @@ public class RobotContainer {
       superSystem = new SuperSystem(wrist, intakeRoller, elevator, elevatorPivot);
     }
 
-    if (USE_ELEV) {
-      try { // ide displayed error fix
-        bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
-      } catch (IOException e) {
-        DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
-      } catch (ParseException e) {
-        DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
+    try { // ide displayed error fix
+      // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+      if(USE_ELEV) {
+        isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
       }
+
+
+    } catch (IOException e) {
+      DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
+    } catch (ParseException e) {
+      DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
     }
 
     initShuffleboard();
@@ -136,7 +142,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> true, // robot oriented variable (false = field oriented)
+      () -> false, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
       // () -> false,
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
@@ -164,52 +170,52 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-
-    // Triggers
-    driverController.triggerLeft()
-      .onTrue(intakeRoller.outtake())
-      .onFalse(intakeRoller.stop());
-
-    // Bumpers
-    driverController.bumperLeft()
-      .onTrue(superSystem.intakeCoralStation())
-      .onFalse(superSystem.stow());
-
-      // driverController.bumperRight()
-      // .onTrue(superSystem.intakeCoralGround())
-      // .onFalse(superSystem.stow());
-
-    // Buttons
-    driverController.buttonUp()
-      .onTrue(superSystem.placeCoralL1())
-      .onFalse(superSystem.stow());
-
-    driverController.buttonLeft()
-      .onTrue(superSystem.placeCoralL2())
-      .onFalse(superSystem.stow());
-
-    driverController.buttonRight()
-      .onTrue(superSystem.placeCoralL3())
-      .onFalse(superSystem.stow());
-
-    driverController.buttonDown()
-      .onTrue(superSystem.placeCoralL4())
-      .onFalse(superSystem.stow());
-
-    // Dpad Test
-    driverController.dpadUp()
-      .onTrue(wrist.moveToReefL24())
-      .onFalse(wrist.stow());
-
-    driverController.dpadLeft()
-      .onTrue(elevator.moveToReefL2())
-      .onFalse(elevator.stow());
-
-    driverController.dpadDown()
-      .onTrue(elevator.moveToReefL4())
-      .onFalse(elevator.stow());
     
-    if(USE_ELEV) {
+    if( USE_ELEV) {
+      // Triggers
+      driverController.triggerLeft()
+        .onTrue(intakeRoller.outtake())
+        .onFalse(intakeRoller.stop());
+
+      // Bumpers
+      driverController.bumperLeft()
+        .onTrue(superSystem.intakeCoralStation())
+        .onFalse(superSystem.stow());
+
+        // driverController.bumperRight()
+        // .onTrue(superSystem.intakeCoralGround())
+        // .onFalse(superSystem.stow());
+
+      // Buttons
+      driverController.buttonUp()
+        .onTrue(superSystem.placeCoralL1())
+        .onFalse(superSystem.stow());
+
+      driverController.buttonLeft()
+        .onTrue(superSystem.placeCoralL2())
+        .onFalse(superSystem.stow());
+
+      driverController.buttonRight()
+        .onTrue(superSystem.placeCoralL3())
+        .onFalse(superSystem.stow());
+
+      driverController.buttonDown()
+        .onTrue(superSystem.placeCoralL4())
+        .onFalse(superSystem.stow());
+
+      // Dpad Test
+      driverController.dpadUp()
+        .onTrue(wrist.moveToReefL24())
+        .onFalse(wrist.stow());
+
+      driverController.dpadLeft()
+        .onTrue(elevator.moveToReefL2())
+        .onFalse(elevator.stow());
+
+      driverController.dpadDown()
+        .onTrue(elevator.moveToReefL4())
+        .onFalse(elevator.stow());
+      
       driverController.bumperRight()
         .onTrue(elevatorPivot.moveToPickup()) // hold it :)
         .onFalse(elevatorPivot.moveToStart());
@@ -279,9 +285,11 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    if (USE_ELEV) {
-      autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
-    }
+
+    // autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
+
+    autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
+
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     // if (paths.contains("S4R3")) {
