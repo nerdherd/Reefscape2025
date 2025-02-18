@@ -32,6 +32,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.Bottom2Piece;
+import frc.robot.commands.autos.isMeBottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
@@ -58,7 +59,9 @@ public class RobotContainer {
 
   public SuperSystem superSystem;
 
-  public Bottom2Piece bottom2Piece;
+  // public Bottom2Piece bottom2Piece;
+
+  public isMeBottom2Piece isMeBottom2Piece;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
@@ -94,7 +97,10 @@ public class RobotContainer {
     }
 
     try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+      // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+
+      isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
+
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -129,7 +135,7 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
-      () -> true, // robot oriented variable (false = field oriented)
+      () -> false, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
@@ -271,7 +277,12 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
+
+    // autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
+
+    autoChooser.setDefaultOption("isMe Bottom 2 Piece", isMeBottom2Piece);
+
+
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     // if (paths.contains("S4R3")) {
