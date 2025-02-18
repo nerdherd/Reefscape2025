@@ -141,6 +141,7 @@ public class RobotContainer {
       () -> driverController.getRightX(), // Rotation
       () -> false, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
+      // () -> false,
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
@@ -166,56 +167,56 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
-  if( USE_ELEV){
-    // Triggers
-    driverController.triggerLeft()
-      .onTrue(intakeRoller.outtake())
-      .onFalse(intakeRoller.stop());
+    
+    if( USE_ELEV) {
+      // Triggers
+      driverController.triggerLeft()
+        .onTrue(intakeRoller.outtake())
+        .onFalse(intakeRoller.stop());
 
-    // Bumpers
-    driverController.bumperLeft()
-      .onTrue(superSystem.intakeCoralStation())
-      .onFalse(superSystem.stow());
+      // Bumpers
+      driverController.bumperLeft()
+        .onTrue(superSystem.intakeCoralStation())
+        .onFalse(superSystem.stow());
 
+        // driverController.bumperRight()
+        // .onTrue(superSystem.intakeCoralGround())
+        // .onFalse(superSystem.stow());
+
+      // Buttons
+      driverController.buttonUp()
+        .onTrue(superSystem.placeCoralL1())
+        .onFalse(superSystem.stow());
+
+      driverController.buttonLeft()
+        .onTrue(superSystem.placeCoralL2())
+        .onFalse(superSystem.stow());
+
+      driverController.buttonRight()
+        .onTrue(superSystem.placeCoralL3())
+        .onFalse(superSystem.stow());
+
+      driverController.buttonDown()
+        .onTrue(superSystem.placeCoralL4())
+        .onFalse(superSystem.stow());
+
+      // Dpad Test
+      driverController.dpadUp()
+        .onTrue(wrist.moveToReefL24())
+        .onFalse(wrist.stow());
+
+      driverController.dpadLeft()
+        .onTrue(elevator.moveToReefL2())
+        .onFalse(elevator.stow());
+
+      driverController.dpadDown()
+        .onTrue(elevator.moveToReefL4())
+        .onFalse(elevator.stow());
+      
       driverController.bumperRight()
-      .onTrue(superSystem.intakeCoralGround())
-      .onFalse(superSystem.stow());
-
-    // Buttons
-    driverController.buttonUp()
-      .onTrue(superSystem.placeCoralL1())
-      .onFalse(superSystem.stow());
-
-    driverController.buttonLeft()
-      .onTrue(superSystem.placeCoralL2())
-      .onFalse(superSystem.stow());
-
-    driverController.buttonRight()
-      .onTrue(superSystem.placeCoralL3())
-      .onFalse(superSystem.stow());
-
-    driverController.buttonDown()
-      .onTrue(superSystem.placeCoralL4())
-      .onFalse(superSystem.stow());
-
-    // Dpad Test
-    driverController.dpadUp()
-      .onTrue(wrist.moveToReefL14())
-      .onFalse(wrist.stow());
-
-    driverController.dpadLeft()
-      .onTrue(elevator.moveToStation())
-      .onFalse(elevator.stow());
-
-    driverController.dpadDown()
-      .onTrue(elevatorPivot.moveToPickup())
-      .onFalse(elevatorPivot.stow());
-}
-    // if(USE_ELEV) {
-    //   // driverController.triggerRight()
-    //   // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-    //   // .onFalse(elevatorPivot.moveToStow());
-    // }
+        .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+        .onFalse(elevatorPivot.moveToStart());
+    }
   }
 
   public void configureBindings_test() {
