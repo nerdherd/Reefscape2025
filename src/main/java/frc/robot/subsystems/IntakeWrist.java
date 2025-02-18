@@ -131,12 +131,12 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         return setPositionCommand(IntakeConstants.kWristPickupPosition);
     }
 
-    public Command moveToReefL14() {
-        return setPositionCommand(IntakeConstants.kWristL14Position);
+    public Command moveToReefL24() {
+        return setPositionCommand(IntakeConstants.kWristL24Position);
     }
 
-    public Command moveToReefL23() {
-        return setPositionCommand(IntakeConstants.kWristL23Position);
+    public Command moveToReefL13() {
+        return setPositionCommand(IntakeConstants.kWristL13Position);
     }
 
     public Command stop() {

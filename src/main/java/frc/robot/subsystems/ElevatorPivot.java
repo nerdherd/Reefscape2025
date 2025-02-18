@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+import java.util.function.Supplier;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -29,7 +32,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFXConfigurator pivotConfigurator;
     private Pigeon2 pigeon;
 
-    public boolean enabled = false; // Change back to true
+    public Supplier<Double> elevatorPosition = null;
+    public boolean enabled = true; // Change back to true
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition/360.0);
     private final NeutralOut brakeRequest = new NeutralOut();
     
@@ -98,9 +102,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-        if (enabled || true){
+        if (enabled){ 
+            if (elevatorPosition != null) {
+                motionMagicRequest.withFeedForward(calculateFeedForward(elevatorPosition.get()));
+            }
             pivotMotor.setControl(motionMagicRequest);
-            DriverStation.reportWarning("SDKLJLDSHFKJSFGKJFS: " + Double.toString(motionMagicRequest.Position), false);
         } else {
             pivotMotor.setControl(brakeRequest);
         }
@@ -108,6 +114,14 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     // ****************************** STATE METHODS ***************************** //
+
+    public void holdPosition() {
+        setPositionDegrees(elevatorPosition.get());
+    }
+
+    private double calculateFeedForward(double position) {
+        return 0.536839 * Math.sin(0.0314948*position - 1.20314) + 1.16597; 
+    }
 
     private void setEnabled(boolean enabled) {
         this.enabled = enabled;
@@ -194,6 +208,14 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     public Command moveToStart() {
         return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotStartPosition));
     }
+    public Command moveToL23(){
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotL23Position));
+    }
+
+    public Command movetoL4(){
+        return Commands.runOnce(() -> setPositionDegrees(ElevatorConstants.kElevatorPivotL4Position));
+    }
+
 
     public Command moveToPickup() {
         SmartDashboard.putBoolean("Pivot Pickup", true);
