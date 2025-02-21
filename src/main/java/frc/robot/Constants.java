@@ -389,7 +389,7 @@ public final class Constants {
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
   
-    public static final double kPWristMotor = 0.1;
+    public static final double kPWristMotor = 0.3;
     public static final double kIWristMotor = 0;
     public static final double kDWristMotor = 0;
     public static final double kVWristMotor = 0;
@@ -398,10 +398,10 @@ public final class Constants {
     public static final double kWristAcceleration = 100; //Rotations per second squared
     public static final double kWristJerk = 700; //Rotations per second cubed
 
-    public static final double kWristStowPosition = -81;
+    public static final double kWristStowPosition = -1.34;//0.0
     public static final double kWristStationPosition = 23;
     public static final double kWristL23Position = 0;
-    public static final double kWristL14Position = -0.9;
+    public static final double kWristL14Position = 0.5; //0.5
 
     public static final double kWristSpeed = 0.5;
     public static final int kWristPigeonID = 0;
@@ -411,27 +411,26 @@ public final class Constants {
   public static final class V1IntakeConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor = 0.5;
+    public static final double kPMotor = 3.0; //20
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
-    public static final double kVMotor = 0.12;
-    public static final double kSMotor = 0; //Static Friction
-    public static final double kGMotor = 0.015; //Gravity
-    public static final double kCruiseVelocity = 10;
-    public static final double kAcceleration = 100; //Rotations per second squared
+    public static final double kVMotor = 0; //0.12;
+    public static final double kSMotor = 0; //0.015; //Static Friction
+    public static final double kGMotor = 0; //1.928; //0.015; //Gravity
+    // kGMotor = -2.310 + (0.002420 * theta)
+    public static final double kCruiseVelocity = 70;
+    public static final double kAcceleration = 700; //Rotations per second squared
     public static final double kJerk = 700; //Rotations per second cubed
 
     public static final double kStowPosition = -305;
     public static final double kStationPosition = 100;
-    public static final double kL23Position = 0;
+    public static final double kL23Position = 120;
     public static final double kL14Position = -0.9;
-    public static final double kMaxPosition = 81;
-    public static final double kMinPosition = -60;
+    public static final double kMaxPosition = 180; //156
+    public static final double kMinPosition = 0;
 
     public static final double kSpeed = 0.5;
     public static final int kPigeonID = 2;
-
-    public static final int MotorID = 0;
   }
 
 }

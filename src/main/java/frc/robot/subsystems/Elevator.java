@@ -28,15 +28,18 @@ public class Elevator extends SubsystemBase implements Reportable {
     
     @Override
     public void periodic() {
-        if (enabled) {
-            setVelocity((elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), desiredPosition))/2);
-            if (desiredPosition == ElevatorConstants.kElevatorStowPosition) {
-                setVelocity((elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), desiredPosition))/2);
-            }
-        }
-        else {
-            setVelocity((elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), ElevatorConstants.kElevatorStowPosition))/2);
-        }
+        
+        // TODO: Uncomment when ready to do position control
+        
+        // if (enabled) {
+        //     setVelocity((elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), desiredPosition))/2);
+        //     if (desiredPosition == ElevatorConstants.kElevatorStowPosition) {
+        //         setVelocity((elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), desiredPosition))/2);
+        //     }
+        // }
+        // else {
+        //     setVelocity((elevatorPID.calculate(elevatorMotor.getPosition().getValueAsDouble(), ElevatorConstants.kElevatorStowPosition))/2);
+        // }
     }
 
     // ****************************** STATE METHODS ****************************** //

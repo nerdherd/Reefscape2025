@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -70,6 +71,13 @@ public class RobotContainer {
   
   private static boolean USE_ELEV = true;
   private static boolean V1 = true;
+
+  private static double desiredAngle = 89; //164, 99.8
+
+  // For logging wrist
+  public final VoltageOut voltageRequest = new VoltageOut(0);
+  public double voltage = 0;
+
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
@@ -174,25 +182,62 @@ public class RobotContainer {
     //   .onTrue(intakeWrist.setEnabledCommand());
     // driverController.buttonRight()
     //   .onTrue(intakeWrist.setDisabledCommand());
-    driverController.buttonUp()
-      .onTrue(intakeRoller.intakeLeft())
-      .onFalse(intakeRoller.stop());
-    driverController.buttonDown()
-      .onTrue(intakeRoller.outtake())
-      .onFalse(intakeRoller.stop());
-    driverController.buttonLeft()
-      .onTrue(intakeRoller.intake())
-      .onFalse(intakeRoller.stop());
-    
-    
+    // driverController.buttonUp()
+    //   .onTrue(intakeRoller.intakeLeft())
+    //   .onFalse(intakeRoller.stop());
+    // driverController.buttonDown()
+    //   .onTrue(intakeRoller.outtake())
+    //   .onFalse(intakeRoller.stop());
     // driverController.buttonLeft()
-    //   .onTrue(intakeWrist.moveToReefL14())
-    //   .onFalse(intakeWrist.moveToStow());
+    //   .onTrue(intakeRoller.intake())
+    //   .onFalse(intakeRoller.stop());
+
+    driverController.bumperRight()
+      .whileTrue(Commands.run(() -> {
+        desiredAngle -= 1 / 50; // 1 degree per second ish
+        // voltage = -1.928;
+      }));
+    driverController.bumperLeft()
+      .whileTrue(Commands.run(() -> {
+        intakeWrist.setPositionDegrees(desiredAngle);
+      }));
+    driverController.buttonDown()
+      .onTrue(Commands.runOnce(() -> {
+        desiredAngle = 89; //Top: -85.4
+      }));
+
+
+      // driverController.bumperRight()
+      // .whileTrue(Commands.run(() -> {
+      //   voltage += 0.2 / 50.0;
+      //   // voltage = -1.928;
+      // }));
+      // driverController.bumperLeft()
+      //   .whileTrue(Commands.run(() -> {
+      //     intakeWrist.getMotor().setControl(voltageRequest.withOutput(voltage));
+      // }));
+      // driverController.buttonDown()
+      //   .onTrue(Commands.runOnce(() -> {
+      //     voltage = 0;
+      // }));
+    
+    
+    driverController.buttonLeft()
+      .onTrue(intakeWrist.moveToReefL14())
+      .onFalse(intakeWrist.moveToStow());
+
+    driverController.buttonUp()
+      .onTrue(intakeWrist.setEnabledCommand())
+      .onFalse(intakeWrist.setDisabledCommand());
+    
+    driverController.buttonRight()
+      .onTrue(intakeWrist.moveToReefL23())
+      .onFalse(intakeWrist.setDisabledCommand()); 
     
     if(USE_ELEV) {
-      driverController.triggerRight()
-      .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      .onFalse(elevatorPivot.moveToStow());
+      // driverController.triggerRight()
+      // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+      // .onFalse(elevatorPivot.moveToStow());
     }
   }
 
