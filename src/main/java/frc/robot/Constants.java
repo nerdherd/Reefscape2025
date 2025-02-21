@@ -398,7 +398,7 @@ public final class Constants {
     public static final double kWristAcceleration = 100; //Rotations per second squared
     public static final double kWristJerk = 700; //Rotations per second cubed
 
-    public static final double kWristStowPosition = -1.34;//0.0
+    public static final double kWristStowPosition = -1.34; //TODO: Change this to recorded value 2/21/25
     public static final double kWristStationPosition = 23;
     public static final double kWristL23Position = 0;
     public static final double kWristL14Position = 0.5; //0.5
