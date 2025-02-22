@@ -27,6 +27,7 @@ public class IntakeWristCopy extends SubsystemBase {
     private final TalonFX armMotor = new TalonFX(V1IntakeConstants.kMotorID); 
 
     // Profiled PID Controller
+    //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/profiled-pidcontroller.html
     private final ProfiledPIDController pidController;
     
     // Constants (tune these values)
@@ -125,6 +126,11 @@ public class IntakeWristCopy extends SubsystemBase {
     public void stop() {
         armMotor.setControl(voltageControl.withOutput(0));
         setpoint = getArmPosition();
+    }
+
+    public void setPivotAngle(double baseAngle)
+    {
+
     }
 
     // Reset encoder to zero (call when arm is fully down)
