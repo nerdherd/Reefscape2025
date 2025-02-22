@@ -189,23 +189,15 @@ public class RobotContainer {
     //   .onTrue(intakeRoller.intake())
     //   .onFalse(intakeRoller.stop());
 
-
-    // driverController.bumperRight()
-    //   .whileTrue(Commands.run(() -> {
-    //     desiredRotation -= 1.0 / 50.0; // 2 degrees per second ish
-    //     // voltage = -1.928;
-    // }));
-
     // driverController.bumperLeft()
     //   .whileTrue(Commands.run(() -> {
     //     desiredRotation += 0.005; // 1/60 for GR 1/50 for 20 times per second
-    //     // voltage = -1.928;
     //     intakeWrist.setPosition(desiredRotation);
     // }));
 
-    driverController.bumperRight()
-      .whileTrue(intakeWrist.moveToStow()
-    );
+    // driverController.bumperRight()
+    //   .whileTrue(intakeWrist.moveToStow()
+    // );
     driverController.triggerRight()
       .whileTrue(intakeWrist.moveToStation()
     );

@@ -83,7 +83,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
             // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
             motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = 1/(5.5555555556);
+            motorConfigs.Feedback.SensorToMechanismRatio = 5.5555555556; 
             // motorConfigs.Feedback.RotorToSensorRatio;
             motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
             motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -141,8 +141,11 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
         SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Current Rotations", motor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Current Velocity", motor.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("Current Acceleration", motor.getAcceleration().getValueAsDouble());
         SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
         SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
+        
 
 
 
@@ -150,7 +153,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
         // TODO: Uncomment when ready to do position control
 
-        ff = 1.652 + (-0.209 * desiredPosition);
+        ff = 1.652 + (-6.438 * desiredPosition);
 
         if (enabled) {
             motor.setControl(motionMagicRequest.withFeedForward(ff));
