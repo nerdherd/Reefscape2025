@@ -33,7 +33,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     public IntakeRoller() {
         rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
-        rollerMotorRight = new TalonFX(IntakeConstants.kRollerMotorRightID);
+        rollerMotorRight = new TalonFX(62);
         rollerConfigurator = rollerMotor.getConfigurator();
         rollerConfiguratorRight = rollerMotorRight.getConfigurator();
         velocityRequestRight.EnableFOC = true;
