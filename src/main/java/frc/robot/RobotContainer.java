@@ -22,11 +22,10 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ROBOT_ID;
-// import frc.robot.commands.autos.PreloadTaxi;
-// import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
-// import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.Generic2Piece;
+import frc.robot.commands.autos.Generic3Piece;
+import frc.robot.commands.autos.Generic4Piece;
 import frc.robot.commands.autos.isMeBottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem;
@@ -51,30 +50,27 @@ public class RobotContainer {
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
   public IntakeWrist wrist;
-
   public SuperSystem superSystem;
 
+  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   public Generic2Piece bottom2Piece;
-
+  public Generic3Piece bottom3Piece;
+  public Generic4Piece bottom4Piece;
   public isMeBottom2Piece isMeBottom2Piece;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
-//   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
-  
+  // private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
+  private SwerveJoystickCommand swerveJoystickCommand;
+
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
-  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-  
   static boolean isRedSide = false;
-  
-  private SwerveJoystickCommand swerveJoystickCommand;
-  
   private static boolean USE_ELEV = false;
+  
   /**
    * The container for the robot. Contain
    * s subsystems, OI devices, and commands.
    */
-
   public RobotContainer() {
     try {
       swerveDrive = new SwerveDrivetrain(imu);
@@ -82,8 +78,7 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
-    {
+    if (Constants.ROBOT_NAME == ROBOT_ID.ISME) {
       // add your code only for isme 
     }
 
@@ -97,18 +92,11 @@ public class RobotContainer {
     }
 
     try { // ide displayed error fix
-      if(USE_ELEV) {
-        if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
-        {
-          isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
-        }
-        else
-        {
-          bottom2Piece = new Generic2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
-        }
+      if (USE_ELEV) {
+        bottom2Piece = new Generic2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+        bottom3Piece = new Generic3Piece(swerveDrive, intakeRoller, elevator, "Bottom3Piece");
+        bottom4Piece = new Generic4Piece(swerveDrive, intakeRoller, elevator, "Bottom4Piece");
       }
-
-
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -159,12 +147,9 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
 
-    if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
-      autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
-    else 
-    {
-      autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
-    }
+    autoChooser.addOption("Bottom 2 Piece", bottom2Piece);
+    autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
+    autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
 
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
@@ -175,6 +160,10 @@ public class RobotContainer {
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
 
+  /**
+   * Teleop commands configuration 
+   * used in teleop mode.
+   */
   public void initDefaultCommands_teleop() {
     swerveJoystickCommand = 
     new SwerveJoystickCommand(
@@ -184,7 +173,6 @@ public class RobotContainer {
       () -> driverController.getRightX(), // Rotation
       () -> false, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
-      // () -> false,
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
@@ -261,10 +249,8 @@ public class RobotContainer {
   }
   
   /**
-   * 
    * TEST mode section! 
-   * Caution: The code here will only be used for testing purposes. 
-   * 
+   * Caution: The code here will only be used for testing purposes.
    */ 
    public void initDefaultCommands_test() {
     swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
