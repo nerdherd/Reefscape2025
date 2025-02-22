@@ -5,13 +5,10 @@
 package frc.robot;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
@@ -24,14 +21,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ROBOT_ID;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
-import frc.robot.commands.autos.Bottom2Piece;
+import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.isMeBottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem;
@@ -59,12 +54,12 @@ public class RobotContainer {
 
   public SuperSystem superSystem;
 
-  public Bottom2Piece bottom2Piece;
+  public Generic2Piece bottom2Piece;
 
   public isMeBottom2Piece isMeBottom2Piece;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
-  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
+//   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
@@ -109,7 +104,7 @@ public class RobotContainer {
         }
         else
         {
-          bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+          bottom2Piece = new Generic2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
         }
       }
 
@@ -158,18 +153,14 @@ public class RobotContainer {
   
   private void initAutoChoosers() {
     try { // fix for vendordeps not importing
-    PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
-
-  	List<String> paths = AutoBuilder.getAllAutoNames();
+    // PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
+  	// List<String> paths = AutoBuilder.getAllAutoNames();
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
-
     autosTab.add("Selected Auto", autoChooser);
 
     if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
-    {
       autoChooser.addOption("isMe Bottom 2 Piece", isMeBottom2Piece);
-    }
     else 
     {
       autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
@@ -218,64 +209,57 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    if( USE_ELEV) {
-      // Triggers
-      driverController.triggerLeft()
-        .onTrue(intakeRoller.outtake())
-        .onFalse(intakeRoller.stop());
+    if (USE_ELEV) {
+        // Triggers
+        driverController.triggerLeft()
+            .onTrue(intakeRoller.outtake())
+            .onFalse(intakeRoller.stop());
 
-      // Bumpers
-      driverController.bumperLeft()
-        .onTrue(superSystem.intakeCoralStation())
-        .onFalse(superSystem.stow());
+        // Bumpers
+        driverController.bumperLeft()
+            .onTrue(superSystem.intakeCoralStation())
+            .onFalse(superSystem.stow());
 
         // driverController.bumperRight()
-        // .onTrue(superSystem.intakeCoralGround())
-        // .onFalse(superSystem.stow());
+            // .onTrue(superSystem.intakeCoralGround())
+            // .onFalse(superSystem.stow());
 
-      // Buttons
-      driverController.buttonUp()
-        .onTrue(superSystem.placeCoralL1())
-        .onFalse(superSystem.stow());
+        // Buttons
+        driverController.buttonUp()
+            .onTrue(superSystem.placeCoralL1())
+            .onFalse(superSystem.stow());
 
-      driverController.buttonLeft()
-        .onTrue(superSystem.placeCoralL2())
-        .onFalse(superSystem.stow());
+        driverController.buttonLeft()
+            .onTrue(superSystem.placeCoralL2())
+            .onFalse(superSystem.stow());
 
-      driverController.buttonRight()
-        .onTrue(superSystem.placeCoralL3())
-        .onFalse(superSystem.stow());
+        driverController.buttonRight()
+            .onTrue(superSystem.placeCoralL3())
+            .onFalse(superSystem.stow());
 
-      driverController.buttonDown()
-        .onTrue(superSystem.placeCoralL4())
-        .onFalse(superSystem.stow());
+        driverController.buttonDown()
+            .onTrue(superSystem.placeCoralL4())
+            .onFalse(superSystem.stow());
 
-      // Dpad Test
-      driverController.dpadUp()
-        .onTrue(wrist.moveToReefL24())
-        .onFalse(wrist.stow());
+        // Dpad Test
+        driverController.dpadUp()
+            .onTrue(wrist.moveToReefL24())
+            .onFalse(wrist.stow());
 
-      driverController.dpadLeft()
-        .onTrue(elevator.moveToReefL2())
-        .onFalse(elevator.stow());
+        driverController.dpadLeft()
+            .onTrue(elevator.moveToReefL2())
+            .onFalse(elevator.stow());
 
-      driverController.dpadDown()
-        .onTrue(elevator.moveToReefL4())
-        .onFalse(elevator.stow());
-      
-      driverController.bumperRight()
-        .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-        .onFalse(elevatorPivot.moveToStart());
+        driverController.dpadDown()
+            .onTrue(elevator.moveToReefL4())
+            .onFalse(elevator.stow());
+        
+        driverController.bumperRight()
+            .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+            .onFalse(elevatorPivot.moveToStart());
     }
   }
   
-
-
-  
-
-
-
-
   /**
    * 
    * TEST mode section! 

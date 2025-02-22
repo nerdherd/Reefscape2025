@@ -3,7 +3,6 @@ package frc.robot.subsystems.imu;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import frc.robot.Constants;
-import frc.robot.Constants.ROBOT_ID;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
