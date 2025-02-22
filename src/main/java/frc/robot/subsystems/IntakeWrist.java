@@ -83,7 +83,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
             // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
             motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = 5.5555555556; 
+            motorConfigs.Feedback.SensorToMechanismRatio = (1/5.5555555556); 
             // motorConfigs.Feedback.RotorToSensorRatio;
             motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
             motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -221,19 +221,19 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
 
     public Command moveToStow() {
-        return setPositionCommand(WristConstants.kWristStowPosition);
+        return setPositionCommand(WristConstants.kStowPosition);
     }
 
     public Command moveToStation() {
-        return setPositionCommand(WristConstants.kWristStationPosition);
+        return setPositionCommand(WristConstants.kStationPosition);
     }
 
     public Command moveToReefL14() {
-        return setPositionCommand(WristConstants.kWristL14Position);
+        return setPositionCommand(WristConstants.kL14Position);
     }
 
     public Command moveToReefL23() {
-        return setPositionCommand(WristConstants.kWristL23Position);
+        return setPositionCommand(WristConstants.kL23Position);
     }
 
     public Command stop() {

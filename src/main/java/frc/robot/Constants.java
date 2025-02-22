@@ -422,6 +422,10 @@ public final class Constants {
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
 
+    public static final double kStowPosition = 5;
+    public static final double kStationPosition = 20;
+    public static final double kL23Position = 15;
+    public static final double kL14Position = 10;
     public static final double kWristStowPosition = 0.092;//0.0
     public static final double kWristStationPosition = 0.54;
     public static final double kWristL23Position = 0.36;
