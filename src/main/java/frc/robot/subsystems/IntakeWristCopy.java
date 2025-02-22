@@ -48,7 +48,7 @@ public class IntakeWristCopy extends SubsystemBase {
     private double setpoint = DOWN_POSITION; // Target position in degrees
 
     // Encoder configuration
-    private static final double GEAR_RATIO = 6; //it means 6 motor rotations equal 1 arm rotation.
+    private static final double GEAR_RATIO = 5.5556; //it means 6 motor rotations equal 1 arm rotation.
     private static final double DEGREES_PER_ARM_ROTATION = 360.0;
 
     // Voltage control request
