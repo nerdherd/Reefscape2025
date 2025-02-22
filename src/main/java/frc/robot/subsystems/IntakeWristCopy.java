@@ -32,12 +32,12 @@ public class IntakeWristCopy extends SubsystemBase {
     private final ProfiledPIDController pidController;
     
     // Constants (tune these values)
-    private static final double kP = 0.1;    // Proportional gain (volts/degree)
-    private static final double kI = 0.02;   // Integral gain (volts/degree-second)
-    private static final double kD = 0.01;   // Derivative gain (volts/degree-per-second)
-    private static final double kF = 1.0;    // Feedforward gain (volts) Set to the voltage needed to hold the arm at 90° (e.g., 1.0–2.0V).
+    private static final double kP = 0.4;    // Proportional gain (volts/degree)
+    private static final double kI = 0.0;   // Integral gain (volts/degree-second)
+    private static final double kD = 0.0;   // Derivative gain (volts/degree-per-second)
+    private static final double kF = 1.8;    // Feedforward gain (volts) Set to the voltage needed to hold the arm at 90° (e.g., 1.0–2.0V).
     private static final double TOLERANCE = 2.0; // Degrees tolerance
-    private static final double MAX_VOLTAGE = 2.0;// 2 initially to avoid damage.//8.0; // Max voltage (volts)
+    private static final double MAX_VOLTAGE = 3.0;// 2 initially to avoid damage.//8.0; // Max voltage (volts)
     private static final double MAX_VELOCITY = V1IntakeConstants.kCruiseVelocity; // Degrees per second
     private static final double MAX_ACCELERATION = 90.0; // Degrees per second squared
     
