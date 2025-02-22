@@ -7,6 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.Commands;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -26,7 +27,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    m_robotContainer.swerveDrive.refreshModulePID();
   }
 
   /**
@@ -58,6 +58,12 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    RobotContainer.refreshAlliance();
+    // m_robotContainer.imu.zeroAll();
+    // m_robotContainer.imu.zeroHeading();
+    // m_robotContainer.initShuffleboard();
+    // init auto chooser();
+
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -80,6 +86,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.configureBindings_teleop();
+    m_robotContainer.initDefaultCommands_teleop();
   }
 
   /** This function is called periodically during operator control. */
@@ -90,6 +97,9 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+
+    m_robotContainer.swerveDrive.refreshModulePID();
+    m_robotContainer.configureBindings_test();
   }
 
   /** This function is called periodically during test mode. */

@@ -94,9 +94,9 @@ public class SwerveModule implements Reportable {
         this.CANCoderID = CANCoderId;
 
         this.turningController = new PIDController(
-            ModuleConstants.kPTurning.get(),
-            ModuleConstants.kITurning.get(),
-            ModuleConstants.kDTurning.get());
+            ModuleConstants.kPTurning,
+            ModuleConstants.kITurning,
+            ModuleConstants.kDTurning);
         turningController.enableContinuousInput(0, 2 * Math.PI); // Originally was -pi to pi
         turningController.setTolerance(.005);
 
@@ -104,7 +104,7 @@ public class SwerveModule implements Reportable {
         this.turnMotor.setInverted(invertTurningMotor);
         this.invertTurningEncoder = CANCoderReversed;
         
-        this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
+        this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(90));
 
         TalonFXConfiguration driveMotorConfigs = new TalonFXConfiguration();
         driveConfigurator.refresh(driveMotorConfigs);
@@ -144,20 +144,13 @@ public class SwerveModule implements Reportable {
     }
 
     public void refreshPID() {
-        ModuleConstants.kPTurning.loadPreferences();
-        ModuleConstants.kITurning.loadPreferences();
-        ModuleConstants.kDTurning.loadPreferences();
-        turningController.setPID(ModuleConstants.kPTurning.get(), ModuleConstants.kITurning.get(), ModuleConstants.kDTurning.get());
+        turningController.setPID(ModuleConstants.kPTurning, ModuleConstants.kITurning, ModuleConstants.kDTurning);
         
         driveConfigurator.refresh(drivePIDConfigs);
-        ModuleConstants.kPDrive.loadPreferences();
-        ModuleConstants.kIDrive.loadPreferences();
-        ModuleConstants.kDDrive.loadPreferences();
-        ModuleConstants.kVDrive.loadPreferences();
-        this.drivePIDConfigs.kP = ModuleConstants.kPDrive.get();
-        this.drivePIDConfigs.kI = ModuleConstants.kIDrive.get();
-        this.drivePIDConfigs.kD = ModuleConstants.kDDrive.get();
-        this.drivePIDConfigs.kV = ModuleConstants.kVDrive.get();
+        this.drivePIDConfigs.kP = ModuleConstants.kPDrive;
+        this.drivePIDConfigs.kI = ModuleConstants.kIDrive;
+        this.drivePIDConfigs.kD = ModuleConstants.kDDrive;
+        this.drivePIDConfigs.kV = ModuleConstants.kVDrive;
 
         driveConfigurator.apply(drivePIDConfigs);
     }
@@ -173,7 +166,7 @@ public class SwerveModule implements Reportable {
     }
 
     public void run() {
-        desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromRadians(getTurningPosition()));
+        desiredState.optimize(Rotation2d.fromRadians(getTurningPosition()));
 
         desiredAngle = desiredState.angle.getDegrees();
 
@@ -236,6 +229,7 @@ public class SwerveModule implements Reportable {
      */
     public double getTurningPositionDegrees() {
         double turningPosition = ((360 * canCoder.getAbsolutePosition().getValueAsDouble()) % 360 + 360) % 360;
+        if (turningPosition > 180) turningPosition -= 360;
         return turningPosition;
     }
 
@@ -345,8 +339,8 @@ public class SwerveModule implements Reportable {
                 tab.addNumber("Turn angle percent", () -> turnMotor.getDutyCycle().getValue());
                 tab.addNumber("Angle Difference", () -> desiredAngle - currentAngle);
             case MINIMAL:
-                // tab.addNumber("Turn angle", this::getTurningPositionDegrees);
-                // tab.addNumber("Desired Angle", () -> desiredAngle);
+                tab.addNumber("Turn angle", this::getTurningPositionDegrees);
+                tab.addNumber("Desired Angle", () -> desiredAngle);
                 tab.addNumber("Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValueAsDouble());
                 // tab.addNumber("Module Velocity", this::getDriveVelocity);
                 tab.addNumber("Module Velocity RPS", this::getDriveVelocityRPS);
@@ -369,7 +363,7 @@ public class SwerveModule implements Reportable {
     //             SmartDashboard.putNumber("Turn Motor #" + turnMotorID + " Current", turnMotor.getStatorCurrent().getValue());
     //             SmartDashboard.putNumber("Drive Motor #" + driveMotorID + " Voltage", (driveMotor.getDutyCycle().getValue() * driveMotor.getSupplyVoltage().getValue()));
     //             SmartDashboard.putNumber("Turn Motor #" + turnMotorID + " Voltage", (turnMotor.getDutyCycle().getValue() * turnMotor.getSupplyVoltage().getValue()));
-    //             SmartDashboard.putNumber("Turn Offset", this.CANCoderOffsetDegrees.get());
+    //             SmartDashboard.putNumber("Turn Offset", this.CANCoderOffsetDegrees);
     //         case MEDIUM:
     //             SmartDashboard.putNumber("Module velocity #" + driveMotorID, getDriveVelocity());
     //             SmartDashboard.putNumber("Drive percent #" + driveMotorID, driveMotor.getDutyCycle().getValue());

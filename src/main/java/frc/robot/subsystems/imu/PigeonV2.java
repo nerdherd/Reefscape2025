@@ -15,12 +15,8 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     private Pigeon2 pigeon;
     private double offset, pitchOffset, rollOffset = 0;
 
-    public PigeonV2(int id) {
-        try {
-            this.pigeon = new Pigeon2(id, Constants.ModuleConstants.kCANivoreName); // TODO check if canviore names are different
-        } catch (RuntimeException ex) {
-            DriverStation.reportError("Error instantiating Pigeon 2 over CAN: " + ex.getMessage(), true);
-        }
+    public PigeonV2(int id, String canbusName) {
+        this.pigeon = new Pigeon2(id, canbusName);
         offset = 0;
         pitchOffset = 0;
         rollOffset = 0;

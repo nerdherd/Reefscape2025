@@ -7,25 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S2R1"
+            "pathName": "Square1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R1C1"
+            "pathName": "Square2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C1R1"
+            "pathName": "Square3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Square4"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": null,
+  "folder": "claire square",
   "choreoAuto": false
 }

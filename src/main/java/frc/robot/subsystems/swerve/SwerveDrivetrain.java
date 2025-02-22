@@ -146,7 +146,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
 
         //Vision
-        layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);  
+        layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);  
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -594,15 +594,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 break;
             case ALL:
                 tab.add("Field Position", field).withSize(6, 3);
-                tab.addString(("Current Command"), () -> {
-                    Command currCommand = this.getCurrentCommand();
-                    if (currCommand == null) {
-                        return "null";
-                    } else {
-                        return currCommand.getName();
-                    }
-                }
-                );
+                // tab.addString(("Current Command"), () -> {
+                //     Command currCommand = this.getCurrentCommand();
+                //     if (currCommand == null) {
+                //         return "null";
+                //     } else {
+                //         return currCommand.getName();
+                //     }
+                // }
+                // );
                 tab.add("Toggle Test", Commands.runOnce(() -> isTest = !isTest));
                 tab.addBoolean("Test Mode", () -> isTest);
                 // Might be negative because our swerveDriveKinematics is flipped across the Y axis
