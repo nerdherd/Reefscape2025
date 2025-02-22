@@ -398,20 +398,20 @@ public final class Constants {
     public static final double kWristAcceleration = 100; //Rotations per second squared
     public static final double kWristJerk = 700; //Rotations per second cubed
 
-    public static final double kWristStowPosition = -5;//0.0
-    public static final double kWristStationPosition = -10;
-    public static final double kWristL23Position = -15;
-    public static final double kWristL14Position = -20; //0.5
+    public static final double kWristStowPosition = 5;//0.0
+    public static final double kWristStationPosition = 10;
+    public static final double kWristL23Position = 15;
+    public static final double kWristL14Position = 20; //0.5
 
     public static final double kWristSpeed = 0.5;
     public static final int kWristPigeonID = 0;
 
   
  }
-  public static final class V1IntakeConstants{
+  public static final class WristConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor = 14; //20
+    public static final double kPMotor = 6.667; //20 max
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0; //0.12;

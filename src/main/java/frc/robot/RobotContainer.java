@@ -76,8 +76,8 @@ public class RobotContainer {
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
-  public double desiredAngle = 90.0; //164, 99.8
-  public double desiredRotation = -0.19;
+  public double desiredAngle = 0.0; //164, 99.8
+  public double desiredRotation = 1;
 
   /**
    * The container for the robot. Contain
@@ -198,8 +198,9 @@ public class RobotContainer {
 
     // driverController.bumperLeft()
     //   .whileTrue(Commands.run(() -> {
-    //     desiredRotation += 1.0 / 50.0; // 2 degrees per second ish
+    //     desiredRotation += 0.005; // 1/60 for GR 1/50 for 20 times per second
     //     // voltage = -1.928;
+    //     intakeWrist.setPosition(desiredRotation);
     // }));
 
     driverController.bumperRight()
@@ -229,11 +230,11 @@ public class RobotContainer {
     //   .onFalse(intakeWrist.setDisabledCommand()
     //   );
 
-    driverController.buttonDown()
-      .onTrue(Commands.runOnce(() -> {
-        desiredRotation = -0.19;
-        // desiredAngle = 90.0; //Top: -85.4
-      }));
+    // driverController.buttonDown()
+    //   .onTrue(Commands.runOnce(() -> {
+    //     desiredRotation = -0.19;
+    //     // desiredAngle = 90.0; //Top: -85.4
+    //   }));
   
     // driverController.buttonUp()
     //   .onTrue(intakeWrist.setEnabledCommand())
@@ -359,13 +360,13 @@ public class RobotContainer {
   
   public void initShuffleboard() {
     imu.initShuffleboard(loggingLevel);
-    swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    // swerveDrive.initShuffleboard(loggingLevel);
+    // swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_ELEV) { 
       intakeRoller.initShuffleboard(loggingLevel); 
-      elevator.initShuffleboard(loggingLevel);
+      // elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
-      elevatorPivot.initShuffleboard(loggingLevel);
+      // elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
   
