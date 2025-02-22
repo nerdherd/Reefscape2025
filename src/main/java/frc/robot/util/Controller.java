@@ -122,7 +122,7 @@ public class Controller {
     public Trigger controllerRight() { return isPS4 ? cmdPS4.options() : guliKit.buttonPlus(); }
 
     public Trigger joystickLeft() { return isPS4 ? cmdPS4.L3() : (isPS5 ? cmdPS5.L3() : guliKit.buttonLeftJoy()); }
-    public Trigger joystickRight() { return isPS4 ? cmdPS4.R3() : (isPS5 ? cmdPS5.R3 : guliKit.buttonRightJoy()); }
+    public Trigger joystickRight() { return isPS4 ? cmdPS4.R3() : (isPS5 ? cmdPS5.R3() : guliKit.buttonRightJoy()); }
 
     public Trigger dpadUp() { return isPS4 ? cmdPS4.povUp() : (isPS5 ? cmdPS5.povUp() : guliKit.dpadUp()); }
     public Trigger dpadRight() { return isPS4 ? cmdPS4.povRight() : (isPS5 ? cmdPS5.povRight() : guliKit.dpadRight()); }
