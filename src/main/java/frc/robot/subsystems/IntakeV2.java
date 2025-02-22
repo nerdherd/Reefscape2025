@@ -26,6 +26,7 @@ public class IntakeV2 extends SubsystemBase {
 
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
     private final NeutralOut brakeRequest = new NeutralOut();
+
     private double desiredPosition;
     private double desiredAngle;
     private double desiredVelocity;
@@ -39,15 +40,33 @@ public class IntakeV2 extends SubsystemBase {
         positionMotor = new TalonFX(IntakeConstants.kPositionMotorID);
         positionConfigurator = positionMotor.getConfigurator();
 
-        configurePID();
+        TalonFXConfiguration rollerConfigs = new TalonFXConfiguration();
+        TalonFXConfiguration positionConfigs = new TalonFXConfiguration();
 
 
+        configurePID(rollerConfigs, positionConfigs);
+        // zeroEncoder();
     }
 
     //****************************** SETUP METHODS ******************************//
 
-    private void configurePID() {
-        TalonFXConfiguration positionConfigs = new TalonFXConfiguration();
+    private void configurePID(TalonFXConfiguration rollerConfigs, TalonFXConfiguration positionConfigs) {
+        // roller configs
+        rollerConfigurator.refresh(rollerConfigs);
+
+        rollerConfigs.Slot0.kP = IntakeConstants.kPRollerMotor;
+        rollerConfigs.Slot0.kI = IntakeConstants.kIRollerMotor;
+        rollerConfigs.Slot0.kD = IntakeConstants.kDRollerMotor;
+        rollerConfigs.Slot0.kV = IntakeConstants.kVRollerMotor;
+ 
+        StatusCode rollerResponse = rollerConfigurator.apply(rollerConfigs);
+        if (!rollerResponse.isOK())
+            DriverStation.reportError("Could not apply PID configs, error code:" + rollerResponse.toString(), new Error().getStackTrace());
+        rollerConfigurator.refresh(rollerConfigs);
+
+
+        // position configs
+        positionConfigurator.refresh(positionConfigs);
         positionConfigs.Slot0.kP = IntakeConstants.kPPositionMotor;
         positionConfigs.Slot0.kI = IntakeConstants.kIPositionMotor;
         positionConfigs.Slot0.kD = IntakeConstants.kDPositionMotor;
@@ -59,22 +78,19 @@ public class IntakeV2 extends SubsystemBase {
         positionConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
         positionConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
     
-        StatusCode response = positionConfigurator.apply(positionConfigs);
-        if (!response.isOK()){
-            DriverStation.reportError("Could not apply motor configs to position motor, error code:" + response.toString(), new Error().getStackTrace());
+        StatusCode positionResponse = positionConfigurator.apply(positionConfigs);
+        if (!positionResponse.isOK()){
+            DriverStation.reportError("Could not apply motor configs to position motor, error code:" + positionResponse.toString(), new Error().getStackTrace());
         } 
-
-
     }
 
     private void zeroEncoder() {
-        rollerMotor.setPosition(0);
+        // rollerMotor.setPosition(0);
         positionMotor.setPosition(0);    
     }
 
     @Override
     public void periodic() {
-
         if (!enabled){
             rollerMotor.setControl(brakeRequest);
             positionMotor.setControl(brakeRequest);
@@ -83,15 +99,14 @@ public class IntakeV2 extends SubsystemBase {
             positionMotor.setControl(motionMagicRequest);
         }
 
-        SmartDashboard.putNumber("Roller Wrist Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Roller Current Rotations", rollerMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Roller Desired Velocity", desiredVelocity);
         SmartDashboard.putNumber("Roller Current Velocity", rollerMotor.getVelocity().getValueAsDouble());
         
         SmartDashboard.putNumber("Position Wrist Voltage", positionMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Position Current Rotations", positionMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Position Commanded Rotations", desiredPosition);
-        SmartDashboard.putNumber("Position Commanded Degrees", desiredAngle);    
+        SmartDashboard.putNumber("Position Desired Rotations", desiredPosition);
     }
 
     // ****************************** STATE METHODS ***************************** //
@@ -101,20 +116,16 @@ public class IntakeV2 extends SubsystemBase {
     }
 
     private void setVelocity(double velocity) {
+        desiredVelocity = velocity;
         velocityRequest.Velocity = velocity;
     }
 
     private void setPosition(double position){
+        desiredPosition = position;
         motionMagicRequest.Position = desiredPosition;
     }
 
-    // private double getTargetVelocity() {
-    //     return velocityRequest.Velocity;
-    // }
-
-
-
-     // ****************************** COMMAND METHODS ****************************** //
+    // ****************************** COMMAND METHODS ****************************** //
 
     private Command setPositionCommand(double position) {
         return Commands.runOnce(() -> setPosition(position));
@@ -132,16 +143,20 @@ public class IntakeV2 extends SubsystemBase {
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setPositionCommand(IntakeConstants.kAlgaePosition),
-            setVelocityCommand(IntakeConstants.kIntakePower)
+            Commands.parallel(
+                setPositionCommand(IntakeConstants.kAlgaePosition),
+                setVelocityCommand(IntakeConstants.kIntakePower)
+            )
         );
     }
     
     public Command intakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setPositionCommand(IntakeConstants.kCoralPosition),
-            setVelocityCommand(IntakeConstants.kIntakePower)
+            Commands.parallel(
+                setPositionCommand(IntakeConstants.kCoralPosition),
+                setVelocityCommand(IntakeConstants.kIntakePower)
+            )
         );
     }
 
@@ -152,9 +167,4 @@ public class IntakeV2 extends SubsystemBase {
             setVelocityCommand(0)  
         );
     }
-
-    // public Command stop() {
-
-    // }
-
 }
