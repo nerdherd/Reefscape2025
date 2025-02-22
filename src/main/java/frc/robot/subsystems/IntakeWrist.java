@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -41,7 +42,14 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private boolean V1 = true;
     double ff = 0;
 
+    private static final double GEAR_RATIO = 10.0; //10 rotations of the Talon FX motor result in 1 full rotation (360°) of the arm.
+    private static final double DEGREES_PER_ARM_ROTATION = 360.0; //1 full rotation (360°) of the arm.
 
+    private static final double TOLERANCE = 2.0; // Degrees
+    private static final double MAX_VOLTAGE = 8.0;
+    private static final double DOWN_POSITION = 0.0;
+    private static final double MAX_POSITION = 210.0;
+    private double setpoint = DOWN_POSITION;
 
     public IntakeWrist(boolean V1) {
         this.V1 = V1;
@@ -57,7 +65,9 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             pigeon = new Pigeon2(V1IntakeConstants.kPigeonID, "rio");
             // desiredPosition = 89;
             desiredPosition = pigeon.getRoll().getValueAsDouble();
-            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
+            motionMagicRequest = new MotionMagicVoltage(0)
+            .withLimitForwardMotion(true)
+            .withLimitReverseMotion(true);
         }
         else {
             pigeon = new Pigeon2(V1IntakeConstants.kPigeonID, "rio");
@@ -85,7 +95,8 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
             // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
             motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = 1/(5.5555555556);
+            motorConfigs.Feedback.SensorToMechanismRatio = 5.5555555556;
+            motorConfigs.MotorOutput.NeutralMode = com.ctre.phoenix6.signals.NeutralModeValue.Brake;
             // motorConfigs.Feedback.RotorToSensorRatio;
             motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
             motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -93,15 +104,23 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
             motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         
-            motorConfigs.Slot0.kP = V1IntakeConstants.kPMotor;
-            motorConfigs.Slot0.kI = V1IntakeConstants.kItMotor;
-            motorConfigs.Slot0.kD = V1IntakeConstants.kDMotor;
-            motorConfigs.Slot0.kV = V1IntakeConstants.kVMotor;
-            motorConfigs.Slot0.kS = V1IntakeConstants.kSMotor;
-            motorConfigs.Slot0.kG = V1IntakeConstants.kGMotor;
+            // motorConfigs.Slot0.kP = V1IntakeConstants.kPMotor;
+            // motorConfigs.Slot0.kI = V1IntakeConstants.kItMotor;
+            // motorConfigs.Slot0.kD = V1IntakeConstants.kDMotor;
+            // motorConfigs.Slot0.kV = V1IntakeConstants.kVMotor;
+            // motorConfigs.Slot0.kS = V1IntakeConstants.kSMotor;
+            // motorConfigs.Slot0.kG = V1IntakeConstants.kGMotor;
 
-            motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  V1IntakeConstants.kCruiseVelocity;
-            motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
+            // Motion Magic settings
+            motorConfigs.Slot0.kP = 0.1; // Tune these
+            motorConfigs.Slot0.kI = 0.01;
+            motorConfigs.Slot0.kD = 0.005;
+            motorConfigs.Slot0.kV = 0.12; // Velocity feedforward (V per rotation/s), estimate from motor specs (e.g., 0.12V per rotation/s).
+            motorConfigs.Slot0.kS = 0.2;  // Static feedforward (V), start low (0.2V).
+            motorConfigs.Slot0.kG = 1.5;  // Gravity feedforward (V, tune for 90°), tune to hold at 90° (start at 1.5V).
+
+            motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  60.0/360.0;//V1IntakeConstants.kCruiseVelocity;
+            motorConfigs.MotionMagic.MotionMagicAcceleration = 90.0/360.0;//V1IntakeConstants.kAcceleration;
             motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
         
             StatusCode response = motorConfigurator.apply(motorConfigs);
@@ -140,11 +159,13 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-
+        SmartDashboard.putNumber("Raw Arm Rotations", motor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Arm Position", getArmPosition());
+        SmartDashboard.putNumber("Arm Setpoint", setpoint);
         SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Wrist Roll", pigeon.getRoll().getValueAsDouble());
-        SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
-        SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
+        // SmartDashboard.putNumber("Wrist Roll", pigeon.getRoll().getValueAsDouble());
+        // SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
+        // SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
 
 
 
@@ -152,14 +173,41 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
         // TODO: Uncomment when ready to do position control
 
-        ff = 0.356 + (-0.015 * desiredPosition);
+        // ff = 0.356 + (-0.015 * desiredPosition);
 
-        if (enabled) {
-            motor.setControl(motionMagicRequest.withFeedForward(ff));
-        }
-        else {
-            motor.setControl(brakeRequest);
-        }
+        // if (enabled) {
+        //     motor.setControl(motionMagicRequest.withFeedForward(ff));
+        // }
+        // else {
+        //     motor.setControl(brakeRequest);
+        // }
+    }
+
+    public double getArmPosition() {
+        return motor.getPosition().getValueAsDouble() * DEGREES_PER_ARM_ROTATION;
+    }
+
+    public void setArmPosition(double position) {
+        setpoint = Math.max(DOWN_POSITION, Math.min(MAX_POSITION, position));
+        double setpointRotations = setpoint / DEGREES_PER_ARM_ROTATION;
+        motor.setControl(motionMagicRequest.withPosition(setpointRotations));
+    }
+
+    public void setArmVoltage(double voltage) {
+        motor.setVoltage(voltage); // Manual override
+    }
+
+    public boolean atSetpoint() {
+        return Math.abs(getArmPosition() - setpoint) < TOLERANCE;
+    }
+
+    public void stop(boolean nothing) {
+        motor.setControl(motionMagicRequest.withPosition(getArmPosition() / DEGREES_PER_ARM_ROTATION));
+    }
+
+    public void resetEncoder() {
+        motor.setPosition(0);
+        setpoint = DOWN_POSITION;
     }
 
     // ****************************** STATE METHODS ****************************** //

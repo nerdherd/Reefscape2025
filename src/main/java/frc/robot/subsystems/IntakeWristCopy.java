@@ -15,6 +15,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
+Use correct Controller
 Reset the encoder with resetEncoder() when the arm is NEUTRAL down.
 Move the arm to 90° manually and measure the voltage needed to hold it there.
 Set kF to that voltage (e.g., if 1.5V holds it, kF = 1.5).
