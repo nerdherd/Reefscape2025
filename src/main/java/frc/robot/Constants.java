@@ -65,9 +65,9 @@ public final class Constants {
     public static final double kTurnMotorDeadband = 0.001;
 
     public static final double kPTurning = 0.26; // 0.55
-    public static final double kITurning = 0.01;
+    public static final double kITurning = 0.0;
     public static final double kDTurning = 0.0015;//0.02 
-    public static final double kFTurning = 0; //0.015
+    public static final double kFTurning = 0.015;//0.015
 
     public static final double kPDrive = 0.13; // 0.6
     public static final double kIDrive = 0;
@@ -94,9 +94,9 @@ public final class Constants {
     public static final double kDThetaTeleop = 0;
 
     // Distance between right and left wheels
-    public static final double kTrackWidth = Units.inchesToMeters(21);
+    public static final double kTrackWidth = Units.inchesToMeters(24.125);
     // Distance between front and back wheels
-    public static final double kWheelBase = Units.inchesToMeters(21);
+    public static final double kWheelBase = Units.inchesToMeters(24.125);
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
       new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -398,10 +398,10 @@ public final class Constants {
     public static final double kWristAcceleration = 100; //Rotations per second squared
     public static final double kWristJerk = 700; //Rotations per second cubed
 
-    public static final double kWristStowPosition = -1.34;//0.0
-    public static final double kWristStationPosition = 23;
-    public static final double kWristL23Position = 0;
-    public static final double kWristL14Position = 0.5; //0.5
+    public static final double kWristStowPosition = -5;//0.0
+    public static final double kWristStationPosition = -10;
+    public static final double kWristL23Position = -15;
+    public static final double kWristL14Position = -20; //0.5
 
     public static final double kWristSpeed = 0.5;
     public static final int kWristPigeonID = 0;
@@ -411,7 +411,7 @@ public final class Constants {
   public static final class V1IntakeConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor = 3.0; //20
+    public static final double kPMotor = 14; //20
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0; //0.12;
@@ -422,12 +422,12 @@ public final class Constants {
     public static final double kAcceleration = 700; //Rotations per second squared
     public static final double kJerk = 700; //Rotations per second cubed
 
-    public static final double kStowPosition = -305;
-    public static final double kStationPosition = 100;
-    public static final double kL23Position = 120;
-    public static final double kL14Position = -0.9;
-    public static final double kMaxPosition = 180; //156
-    public static final double kMinPosition = 0;
+    public static final double kStowPosition = -5;
+    public static final double kStationPosition = -20;
+    public static final double kL23Position = -15;
+    public static final double kL14Position = -10;
+    public static final double kMaxPosition = 0.14; //156
+    public static final double kMinPosition = -28.8;
 
     public static final double kSpeed = 0.5;
     public static final int kPigeonID = 2;

@@ -29,24 +29,43 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFXConfigurator motorConfigurator;
     private Pigeon2 pigeon;
 
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
+
+
+
+    private final MotionMagicVoltage motionMagicRequest; // Was 0 during initialization
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private double desiredPosition;
+    private double desiredPosition; // Should be ~90 or wherever initial position is
     private double desiredAngle;
     private boolean enabled = true;
     private boolean V1 = true;
     double ff = 0;
+
+
 
     public IntakeWrist(boolean V1) {
         this.V1 = V1;
         motor = new TalonFX(V1IntakeConstants.kMotorID);
         motorConfigurator = motor.getConfigurator();
         
-        desiredPosition = IntakeConstants.kWristStowPosition;
+        // TODO: Took out immediate stow to work on Wrist tuning
+        // desiredPosition = IntakeConstants.kWristStowPosition;
+
+        
+
         if(V1) {
-            pigeon = new Pigeon2(V1IntakeConstants.kPigeonID);
-            desiredPosition = V1IntakeConstants.kStowPosition;
+            pigeon = new Pigeon2(V1IntakeConstants.kPigeonID, "rio");
+            // desiredPosition = 89;
+            desiredPosition = pigeon.getRoll().getValueAsDouble();
+            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
+        }
+        else {
+            pigeon = new Pigeon2(V1IntakeConstants.kPigeonID, "rio");
+            // desiredPosition = 89;
+            desiredPosition = pigeon.getRoll().getValueAsDouble();
+
+
+            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
         }
 
         // configure motor
@@ -64,8 +83,8 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         if (V1){
             motorConfigurator.refresh(motorConfigs);
 
-            motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
-            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Roll;
+            // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
+            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
             motorConfigs.Feedback.SensorToMechanismRatio = 1/(5.5555555556);
             // motorConfigs.Feedback.RotorToSensorRatio;
             motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
@@ -124,6 +143,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
         SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Wrist Roll", pigeon.getRoll().getValueAsDouble());
+        SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
         SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
 
 
@@ -148,9 +168,9 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         this.enabled = e;
     }
     
-    private void setPosition(double position) {
+    public void setPosition(double position) {
         desiredPosition = position;
-        motionMagicRequest.Position = position;
+        motionMagicRequest.Position = desiredPosition;
     }
 
     public void setPositionDegrees(double positionDegrees) {

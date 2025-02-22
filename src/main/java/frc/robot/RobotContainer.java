@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
-
+import frc.robot.Constants.ModuleConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -46,7 +46,7 @@ import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public Gyro imu = new PigeonV2(1);
+  public Gyro imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
@@ -72,11 +72,12 @@ public class RobotContainer {
   private static boolean USE_ELEV = true;
   private static boolean V1 = true;
 
-  private static double desiredAngle = 89; //164, 99.8
 
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
+  public double desiredAngle = 90.0; //164, 99.8
+  public double desiredRotation = -0.19;
 
   /**
    * The container for the robot. Contain
@@ -106,10 +107,6 @@ public class RobotContainer {
     }
 
     initShuffleboard();
-    // initDefaultCommands_test();
-    // configureBinadings_test();
-    initDefaultCommands_teleop();
-    configureBindings_teleop();
     initAutoChoosers();
     
     SmartDashboard.putData("Swerve Drive", swerveDrive);
@@ -192,6 +189,126 @@ public class RobotContainer {
     //   .onTrue(intakeRoller.intake())
     //   .onFalse(intakeRoller.stop());
 
+
+    // driverController.bumperRight()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation -= 1.0 / 50.0; // 2 degrees per second ish
+    //     // voltage = -1.928;
+    // }));
+
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += 1.0 / 50.0; // 2 degrees per second ish
+    //     // voltage = -1.928;
+    // }));
+
+    driverController.bumperRight()
+      .whileTrue(intakeWrist.moveToStow()
+    );
+    driverController.triggerRight()
+      .whileTrue(intakeWrist.moveToStation()
+    );
+    driverController.bumperLeft()
+      .whileTrue(intakeWrist.moveToReefL14()
+    );
+    driverController.triggerLeft()
+      .whileTrue(intakeWrist.moveToReefL23()
+    );
+
+    driverController.buttonUp()
+      .whileTrue(intakeWrist.setEnabledCommand()
+    );
+
+    // driverController.buttonUp()
+    //   .whileTrue(
+    //     Commands.parallel(
+    //       // Commands.run(() -> intakeWrist.setPositionDegrees(desiredAngle)),
+    //       Commands.run(() -> intakeWrist.setPosition(desiredRotation)),
+    //       intakeWrist.setEnabledCommand()
+    //   ))
+    //   .onFalse(intakeWrist.setDisabledCommand()
+    //   );
+
+    driverController.buttonDown()
+      .onTrue(Commands.runOnce(() -> {
+        desiredRotation = -0.19;
+        // desiredAngle = 90.0; //Top: -85.4
+      }));
+  
+    // driverController.buttonUp()
+    //   .onTrue(intakeWrist.setEnabledCommand())
+    //   .onFalse(intakeWrist.setDisabledCommand());
+    
+    // driverController.buttonLeft()
+    //   .onTrue(intakeWrist.moveToReefL14())
+    //   .onFalse(intakeWrist.moveToStow());
+
+
+    
+    // driverController.buttonRight()
+    //   .onTrue(intakeWrist.moveToReefL23())
+    //   .onFalse(intakeWrist.setDisabledCommand()); 
+    
+    if(USE_ELEV) {
+      // driverController.triggerRight()
+      // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+      // .onFalse(elevatorPivot.moveToStow());
+    }
+  }
+
+  public void configureBindings_test() {
+    // driverController.buttonRight()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "bye")));
+    // driverController.buttonDown()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "bye")));
+    // driverController.buttonUp()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "bye")));
+    // driverController.buttonLeft()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "bye")));
+
+    // driverController.bumperLeft()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "bye")));
+    // driverController.bumperRight()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "bye")));
+    // driverController.triggerLeft()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "bye")));
+    // driverController.triggerRight()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "bye")));
+
+    // driverController.dpadUp()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "bye")));
+    // driverController.dpadRight()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "bye")));
+    // driverController.dpadDown()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "bye")));
+    // driverController.dpadLeft()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "bye")));
+
+    // driverController.controllerLeft()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "bye")));
+    // driverController.controllerRight()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "bye")));
+    // driverController.joystickLeft()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "bye")));
+    // driverController.joystickRight()
+    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
+    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
+
     driverController.bumperRight()
       .whileTrue(Commands.run(() -> {
         desiredAngle -= 1 / 50; // 1 degree per second ish
@@ -203,9 +320,8 @@ public class RobotContainer {
       }));
     driverController.buttonDown()
       .onTrue(Commands.runOnce(() -> {
-        desiredAngle = 89; //Top: -85.4
+        desiredAngle = 90.0; //Top: -85.4
       }));
-
 
       // driverController.bumperRight()
       // .whileTrue(Commands.run(() -> {
@@ -220,79 +336,6 @@ public class RobotContainer {
       //   .onTrue(Commands.runOnce(() -> {
       //     voltage = 0;
       // }));
-    
-    
-    driverController.buttonLeft()
-      .onTrue(intakeWrist.moveToReefL14())
-      .onFalse(intakeWrist.moveToStow());
-
-    driverController.buttonUp()
-      .onTrue(intakeWrist.setEnabledCommand())
-      .onFalse(intakeWrist.setDisabledCommand());
-    
-    driverController.buttonRight()
-      .onTrue(intakeWrist.moveToReefL23())
-      .onFalse(intakeWrist.setDisabledCommand()); 
-    
-    if(USE_ELEV) {
-      // driverController.triggerRight()
-      // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      // .onFalse(elevatorPivot.moveToStow());
-    }
-  }
-
-  public void configureBindings_test() {
-    driverController.buttonRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "bye")));
-    driverController.buttonDown()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "bye")));
-    driverController.buttonUp()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "bye")));
-    driverController.buttonLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "bye")));
-
-    driverController.bumperLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "bye")));
-    driverController.bumperRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "bye")));
-    driverController.triggerLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "bye")));
-    driverController.triggerRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "bye")));
-
-    driverController.dpadUp()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "bye")));
-    driverController.dpadRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "bye")));
-    driverController.dpadDown()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "bye")));
-    driverController.dpadLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "bye")));
-
-    driverController.controllerLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "bye")));
-    driverController.controllerRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "bye")));
-    driverController.joystickLeft()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "bye")));
-    driverController.joystickRight()
-      .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
-      .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
   }
   
   private void initAutoChoosers() {
