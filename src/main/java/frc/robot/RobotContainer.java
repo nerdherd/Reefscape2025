@@ -41,7 +41,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.IntakeWristCopy;
+import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.ElevatorPivot;
 
 import frc.robot.util.Controller;
@@ -55,7 +55,7 @@ public class RobotContainer {
   public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
-  public IntakeWristCopy intakeWristCopy;
+  public IntakeWrist intakeWrist;
 
   public Bottom2Piece bottom2Piece;
 
@@ -94,7 +94,7 @@ public class RobotContainer {
 
     if (USE_ELEV) {
       intakeRoller = new IntakeRoller();
-      intakeWristCopy = new IntakeWristCopy();
+      intakeWrist = new IntakeWrist(V1);
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot(V1);
     }
@@ -176,12 +176,12 @@ public class RobotContainer {
     //   .onFalse(bottom2Piece.stopAuto());
     
     // driverController.buttonUp()
-    //   .onTrue(IntakeWristCopy.moveToStation())
-    //   .onFalse(IntakeWristCopy.moveToStow());
+    //   .onTrue(IntakeWrist.moveToStation())
+    //   .onFalse(IntakeWrist.moveToStow());
     // driverController.buttonLeft()
-    //   .onTrue(IntakeWristCopy.setEnabledCommand());
+    //   .onTrue(IntakeWrist.setEnabledCommand());
     // driverController.buttonRight()
-    //   .onTrue(IntakeWristCopy.setDisabledCommand());
+    //   .onTrue(IntakeWrist.setDisabledCommand());
     // driverController.buttonUp()
     //   .onTrue(intakeRoller.intakeLeft())
     //   .onFalse(intakeRoller.stop());
@@ -207,57 +207,57 @@ public class RobotContainer {
 
     
     // driverController.bumperRight()
-    //   .whileTrue(IntakeWristCopy.moveToStow()
+    //   .whileTrue(IntakeWrist.moveToStow()
     // );
     // driverController.triggerRight()
-    //   .whileTrue(IntakeWristCopy.moveToStation()
+    //   .whileTrue(IntakeWrist.moveToStation()
     // );
     // driverController.bumperLeft()
-    //   .whileTrue(IntakeWristCopy.moveToReefL14()
+    //   .whileTrue(IntakeWrist.moveToReefL14()
     // );
     // driverController.triggerLeft()
-    //   .whileTrue(IntakeWristCopy.moveToReefL23()
+    //   .whileTrue(IntakeWrist.moveToReefL23()
     // );
 
     // driverController.buttonUp()
-    //   .whileTrue(IntakeWristCopy.setEnabledCommand()
+    //   .whileTrue(IntakeWrist.setEnabledCommand()
     // );
-      operatorController.dpadDown().onTrue(new SetArmPosition(intakeWristCopy, 0.0));
-      operatorController.triggerRight().onTrue(new SetArmPosition(intakeWristCopy, 45.0));
-      operatorController.bumperRight().onTrue(new SetArmPosition(intakeWristCopy, 90.0));
-      operatorController.triggerLeft().onTrue(new SetArmPosition(intakeWristCopy, 135.0));
-      operatorController.bumperLeft().onTrue(new SetArmPosition(intakeWristCopy, 180.0));
-      operatorController.dpadUp().onTrue(new SetArmPosition(intakeWristCopy, 210.0));
+      operatorController.dpadDown().onTrue(new SetArmPosition(intakeWrist, 0.0));
+      operatorController.triggerRight().onTrue(new SetArmPosition(intakeWrist, -45.0));
+      // operatorController.bumperRight().onTrue(new SetArmPosition(intakeWrist, 90.0));
+      // operatorController.triggerLeft().onTrue(new SetArmPosition(intakeWrist, 135.0));
+      // operatorController.bumperLeft().onTrue(new SetArmPosition(intakeWrist, 180.0));
+      // operatorController.dpadUp().onTrue(new SetArmPosition(intakeWrist, 210.0));
 
-      operatorController.controllerLeft().onTrue(new InstantCommand(() -> intakeWristCopy.resetEncoder(), intakeWristCopy));
+      operatorController.controllerLeft().onTrue(new InstantCommand(() -> intakeWrist.resetEncoder(), intakeWrist));
 
       operatorController.buttonUp().onTrue(new InstantCommand(() -> {
         manualVoltage -= 0.1;
         if (manualVoltage < -2) {
             manualVoltage = -1.8; // Reset to a V if exceeds max
         }
-        intakeWristCopy.setArmVoltage(manualVoltage);
+        intakeWrist.setArmVoltage(manualVoltage);
         SmartDashboard.putNumber("Manual Voltage", manualVoltage); // Display voltage
-      }, intakeWristCopy));
+      }, intakeWrist));
 
       operatorController.buttonDown().onTrue(new InstantCommand(() -> {
         manualVoltage += 0.05;
         if (manualVoltage > 0) {
             manualVoltage = -0.1; // Reset to b V if exceeds min
         }
-        intakeWristCopy.setArmVoltage(manualVoltage);
+        intakeWrist.setArmVoltage(manualVoltage);
         SmartDashboard.putNumber("Manual Voltage", manualVoltage); // Display voltage
-      }, intakeWristCopy));
+      }, intakeWrist));
 
 
     // driverController.buttonUp()
     //   .whileTrue(
     //     Commands.parallel(
-    //       // Commands.run(() -> IntakeWristCopy.setPositionDegrees(desiredAngle)),
-    //       Commands.run(() -> IntakeWristCopy.setPosition(desiredRotation)),
-    //       IntakeWristCopy.setEnabledCommand()
+    //       // Commands.run(() -> IntakeWrist.setPositionDegrees(desiredAngle)),
+    //       Commands.run(() -> IntakeWrist.setPosition(desiredRotation)),
+    //       IntakeWrist.setEnabledCommand()
     //   ))
-    //   .onFalse(IntakeWristCopy.setDisabledCommand()
+    //   .onFalse(IntakeWrist.setDisabledCommand()
     //   );
 
     driverController.buttonDown()
@@ -267,18 +267,18 @@ public class RobotContainer {
       }));
   
     // driverController.buttonUp()
-    //   .onTrue(IntakeWristCopy.setEnabledCommand())
-    //   .onFalse(IntakeWristCopy.setDisabledCommand());
+    //   .onTrue(IntakeWrist.setEnabledCommand())
+    //   .onFalse(IntakeWrist.setDisabledCommand());
     
     // driverController.buttonLeft()
-    //   .onTrue(IntakeWristCopy.moveToReefL14())
-    //   .onFalse(IntakeWristCopy.moveToStow());
+    //   .onTrue(IntakeWrist.moveToReefL14())
+    //   .onFalse(IntakeWrist.moveToStow());
 
 
     
     // driverController.buttonRight()
-    //   .onTrue(IntakeWristCopy.moveToReefL23())
-    //   .onFalse(IntakeWristCopy.setDisabledCommand()); 
+    //   .onTrue(IntakeWrist.moveToReefL23())
+    //   .onFalse(IntakeWrist.setDisabledCommand()); 
     
     if(USE_ELEV) {
       // driverController.triggerRight()
@@ -348,7 +348,7 @@ public class RobotContainer {
     //   }));
     // driverController.bumperLeft()
     //   .whileTrue(Commands.run(() -> {
-    //     intakeWristCopy.setPositionDegrees(desiredAngle);
+    //     intakeWrist.setPositionDegrees(desiredAngle);
     //   }));
     // driverController.buttonDown()
     //   .onTrue(Commands.runOnce(() -> {
@@ -363,7 +363,7 @@ public class RobotContainer {
       // }));
       // driverController.bumperLeft()
       //   .whileTrue(Commands.run(() -> {
-      //     IntakeWristCopy.getMotor().setControl(voltageRequest.withOutput(voltage));
+      //     IntakeWrist.getMotor().setControl(voltageRequest.withOutput(voltage));
       // }));
       // driverController.buttonDown()
       //   .onTrue(Commands.runOnce(() -> {
@@ -397,7 +397,7 @@ public class RobotContainer {
     if (USE_ELEV) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
-      //intakeWristCopy.initShuffleboard(loggingLevel);
+      //intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
     }
   }

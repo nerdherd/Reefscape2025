@@ -65,9 +65,9 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             pigeon = new Pigeon2(V1IntakeConstants.kPigeonID, "rio");
             // desiredPosition = 89;
             desiredPosition = pigeon.getRoll().getValueAsDouble();
-            motionMagicRequest = new MotionMagicVoltage(0)
-            .withLimitForwardMotion(true)
-            .withLimitReverseMotion(true);
+            motionMagicRequest = new MotionMagicVoltage(0);
+            // .withLimitForwardMotion(true)
+            // .withLimitReverseMotion(true);
         }
         else {
             pigeon = new Pigeon2(V1IntakeConstants.kPigeonID, "rio");
@@ -90,7 +90,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     //****************************** SETUP METHODS ******************************//
 
     private void configurePID(TalonFXConfiguration motorConfigs) {
-        if (V1){
+        //if (V1){
             motorConfigurator.refresh(motorConfigs);
 
             // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
@@ -112,12 +112,12 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             // motorConfigs.Slot0.kG = V1IntakeConstants.kGMotor;
 
             // Motion Magic settings
-            motorConfigs.Slot0.kP = 0.1; // Tune these
-            motorConfigs.Slot0.kI = 0.01;
-            motorConfigs.Slot0.kD = 0.005;
+            motorConfigs.Slot0.kP = 0.6; // Tune these
+            motorConfigs.Slot0.kI = 0.0;
+            motorConfigs.Slot0.kD = 0.0;
             motorConfigs.Slot0.kV = 0.12; // Velocity feedforward (V per rotation/s), estimate from motor specs (e.g., 0.12V per rotation/s).
             motorConfigs.Slot0.kS = 0.2;  // Static feedforward (V), start low (0.2V).
-            motorConfigs.Slot0.kG = 1.5;  // Gravity feedforward (V, tune for 90°), tune to hold at 90° (start at 1.5V).
+            motorConfigs.Slot0.kG = 1.8;  // Gravity feedforward (V, tune for 90°), tune to hold at 90° (start at 1.5V).
 
             motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  60.0/360.0;//V1IntakeConstants.kCruiseVelocity;
             motorConfigs.MotionMagic.MotionMagicAcceleration = 90.0/360.0;//V1IntakeConstants.kAcceleration;
@@ -127,30 +127,30 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             if (!response.isOK()){
                 DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
             }
-        } else {
-            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
-            motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
-            motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+        // } else {
+        //     motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        //     motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
+        //     motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
+        //     motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        //     motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
+        //     motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+        //     motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         
-            motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor;
-            motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor;
-            motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor;
-            motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor;
-            motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
-            motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
+        //     motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor;
+        //     motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor;
+        //     motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor;
+        //     motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor;
+        //     motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
+        //     motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
     
-            motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
-            motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
+        //     motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
+        //     motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
         
-            StatusCode response = motorConfigurator.apply(motorConfigs);
-            if (!response.isOK()){
-                DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
-            }
-        }
+        //     StatusCode response = motorConfigurator.apply(motorConfigs);
+        //     if (!response.isOK()){
+        //         DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
+        //     }
+        // }
     }
 
     private void zeroEncoder() {
@@ -188,7 +188,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
 
     public void setArmPosition(double position) {
-        setpoint = Math.max(DOWN_POSITION, Math.min(MAX_POSITION, position));
+        //setpoint = Math.max(DOWN_POSITION, Math.min(MAX_POSITION, position));
         double setpointRotations = setpoint / DEGREES_PER_ARM_ROTATION;
         motor.setControl(motionMagicRequest.withPosition(setpointRotations));
     }
