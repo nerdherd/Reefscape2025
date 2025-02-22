@@ -81,10 +81,8 @@ public class Controller {
     public boolean getBumperLeft() { return isPS4 ? PS4.getL1Button() : (isPS5 ? PS5.getL1Button() : guliKit.getL()); }
     public boolean getBumperRight() { return isPS4 ? PS4.getR1Button() : (isPS5 ? PS5.getR1Button() : guliKit.getR()); }
 
-    // TODO: figure out what these two are on the PS5 controller
-    public boolean getControllerLeft() { return isPS4 ? PS4.getShareButton() : guliKit.getMinus(); }
-    public boolean getControllerRight() { return isPS4 ? PS4.getOptionsButton() : guliKit.getPlus(); }
-    
+    public boolean getControllerLeft() { return isPS4 ? PS4.getShareButton() : (isPS5 ? PS5.getCreateButton() : guliKit.getMinus()); }
+    public boolean getControllerRight() { return isPS4 ? PS4.getOptionsButton() : (isPS5 ? PS5.getOptionsButton() : guliKit.getPlus()); }
     public boolean getJoystickLeft() { return isPS4 ? PS4.getL3Button() : (isPS5 ? PS5.getL3Button() : guliKit.getLeftJoy()); }
     public boolean getJoystickRight() { return isPS4 ? PS4.getR3Button() : (isPS5 ? PS5.getR3Button() : guliKit.getRightJoy()); }
 
@@ -117,10 +115,8 @@ public class Controller {
     public Trigger bumperLeft() { return isPS4 ? cmdPS4.L1() : (isPS5 ? cmdPS5.L1() : guliKit.bumperL()); }
     public Trigger bumperRight() { return isPS4 ? cmdPS4.R1() : (isPS5 ? cmdPS5.R1() : guliKit.bumperR()); }
 
-    // TODO: figure out what these two are on the PS5 controller
-    public Trigger controllerLeft() { return isPS4 ? cmdPS4.share() : guliKit.buttonMinus(); }
-    public Trigger controllerRight() { return isPS4 ? cmdPS4.options() : guliKit.buttonPlus(); }
-
+    public Trigger controllerLeft() { return isPS4 ? cmdPS4.share() : (isPS5 ? cmdPS5.create() : guliKit.buttonMinus()); }
+    public Trigger controllerRight() { return isPS4 ? cmdPS4.options() : (isPS5 ? cmdPS5.options() : guliKit.buttonPlus()); }
     public Trigger joystickLeft() { return isPS4 ? cmdPS4.L3() : (isPS5 ? cmdPS5.L3() : guliKit.buttonLeftJoy()); }
     public Trigger joystickRight() { return isPS4 ? cmdPS4.R3() : (isPS5 ? cmdPS5.R3() : guliKit.buttonRightJoy()); }
 
