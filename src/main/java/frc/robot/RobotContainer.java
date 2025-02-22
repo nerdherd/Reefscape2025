@@ -410,7 +410,7 @@ public class RobotContainer {
     if (USE_ELEV) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
-      if(USE_WRIST_COPY)
+      if(!USE_WRIST_COPY)
         intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
     }
