@@ -146,7 +146,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
 
         //Vision
-        // layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);  
+        layout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);  
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -216,6 +216,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //******************************  Vision ******************************/
 
     private void visionupdateOdometry(String limelightName,double robotRotation) {
+
+        // Needs to be tested on field to see if accurate, because it uses the robots rotation
+        // to help figure out where it is
 
         LimelightHelpers.SetRobotOrientation(limelightName, robotRotation, 0, 0, 0, 0, 0);
 
