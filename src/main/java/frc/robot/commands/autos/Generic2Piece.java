@@ -33,22 +33,24 @@ public class Generic2Piece extends SequentialCommandGroup {
         addCommands(
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            runAuto("L3", "L3")
+            runAuto("L2", "L2")
         );
     }
+
 
     public Command runAuto(String pos1, String pos2) {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-            Commands.runOnce(() -> {
-                switch (pos1) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos2) {
+            //     case "L1": elevator.moveToReefL1();
+            //     case "L2": elevator.moveToReefL2();
+            //     case "L3": elevator.moveToReefL3();
+            //     case "L4": elevator.moveToReefL4();
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             intakeRoller.stop(),
@@ -68,14 +70,15 @@ public class Generic2Piece extends SequentialCommandGroup {
                 elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            Commands.runOnce(() -> {
-                switch (pos2) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos2) {
+            //     case "L1": elevator.moveToReefL1();
+            //     case "L2": elevator.moveToReefL2();
+            //     case "L3": elevator.moveToReefL3();
+            //     case "L4": elevator.moveToReefL4();
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
 

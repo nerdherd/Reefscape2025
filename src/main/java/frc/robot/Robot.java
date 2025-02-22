@@ -53,7 +53,9 @@ public class Robot extends TimedRobot {
   
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.elevatorPivot.holdPosition();
+    if (RobotContainer.USE_ELEV) {
+      m_robotContainer.elevatorPivot.holdPosition();
+    }
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */

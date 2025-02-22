@@ -41,14 +41,15 @@ public class Generic3Piece extends SequentialCommandGroup {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-            Commands.runOnce(() -> {
-                switch (pos1) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos1) {
+            //     case "L1": elevator.moveToReefL1(); break;
+            //     case "L2": elevator.moveToReefL2(); break;
+            //     case "L3": elevator.moveToReefL3(); break;
+            //     case "L4": elevator.moveToReefL4(); break;
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             intakeRoller.stop(),
@@ -68,14 +69,15 @@ public class Generic3Piece extends SequentialCommandGroup {
                 elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            Commands.runOnce(() -> {
-                switch (pos2) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos2) {
+            //     case "L1": elevator.moveToReefL1(); break;
+            //     case "L2": elevator.moveToReefL2(); break;
+            //     case "L3": elevator.moveToReefL3(); break;
+            //     case "L4": elevator.moveToReefL4(); break;
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             intakeRoller.stop(),
@@ -95,14 +97,15 @@ public class Generic3Piece extends SequentialCommandGroup {
                 elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(4))
             ),
-            Commands.runOnce(() -> {
-                switch (pos3) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos3) {
+            //     case "L1": elevator.moveToReefL1(); break;
+            //     case "L2": elevator.moveToReefL2(); break;
+            //     case "L3": elevator.moveToReefL3(); break;
+            //     case "L4": elevator.moveToReefL4(); break;
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             stopAuto()

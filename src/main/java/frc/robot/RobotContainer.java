@@ -65,7 +65,7 @@ public class RobotContainer {
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
   static boolean isRedSide = false;
-  private static boolean USE_ELEV = false;
+  public static boolean USE_ELEV = true;
   
   /**
    * The container for the robot. Contain
@@ -147,7 +147,7 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
 
-    autoChooser.addOption("Bottom 2 Piece", bottom2Piece);
+    autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
     autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
     autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
 
@@ -204,47 +204,47 @@ public class RobotContainer {
             .onFalse(intakeRoller.stop());
 
         // Bumpers
-        driverController.bumperLeft()
-            .onTrue(superSystem.intakeCoralStation())
-            .onFalse(superSystem.stow());
+        // driverController.bumperLeft()
+        //     .onTrue(superSystem.intakeCoralStation())
+        //     .onFalse(superSystem.stow());
 
         // driverController.bumperRight()
             // .onTrue(superSystem.intakeCoralGround())
             // .onFalse(superSystem.stow());
 
         // Buttons
-        driverController.buttonUp()
-            .onTrue(superSystem.placeCoralL1())
-            .onFalse(superSystem.stow());
+        // driverController.buttonUp()
+        //     .onTrue(superSystem.placeCoralL1())
+        //     .onFalse(superSystem.stow());
 
-        driverController.buttonLeft()
-            .onTrue(superSystem.placeCoralL2())
-            .onFalse(superSystem.stow());
+        // driverController.buttonLeft()
+        //     .onTrue(superSystem.placeCoralL2())
+        //     .onFalse(superSystem.stow());
 
-        driverController.buttonRight()
-            .onTrue(superSystem.placeCoralL3())
-            .onFalse(superSystem.stow());
+        // driverController.buttonRight()
+        //     .onTrue(superSystem.placeCoralL3())
+        //     .onFalse(superSystem.stow());
 
-        driverController.buttonDown()
-            .onTrue(superSystem.placeCoralL4())
-            .onFalse(superSystem.stow());
+        // driverController.buttonDown()
+        //     .onTrue(superSystem.placeCoralL4())
+        //     .onFalse(superSystem.stow());
 
         // Dpad Test
-        driverController.dpadUp()
-            .onTrue(wrist.moveToReefL24())
-            .onFalse(wrist.stow());
+        // driverController.dpadUp()
+        //     .onTrue(wrist.moveToReefL24())
+        //     .onFalse(wrist.stow());
 
         driverController.dpadLeft()
             .onTrue(elevator.moveToReefL2())
             .onFalse(elevator.stow());
 
         driverController.dpadDown()
-            .onTrue(elevator.moveToReefL4())
+            .onTrue(elevator.moveToReefL3())
             .onFalse(elevator.stow());
         
-        driverController.bumperRight()
-            .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-            .onFalse(elevatorPivot.moveToStart());
+        // driverController.bumperRight()
+        //     .onTrue(elevatorPivot.moveToPickup()) // hold it :)
+        //     .onFalse(elevatorPivot.moveToStart());
     }
   }
   

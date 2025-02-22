@@ -41,19 +41,20 @@ public class Generic4Piece extends SequentialCommandGroup {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-            Commands.runOnce(() -> {
-                switch (pos1) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos1) {
+            //     case "L1": elevator.moveToReefL1(); break;
+            //     case "L2": elevator.moveToReefL2(); break;
+            //     case "L3": elevator.moveToReefL3(); break;
+            //     case "L4": elevator.moveToReefL4(); break;
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             intakeRoller.stop(),
 
-            // Drive to Coral Station and intake coral 2
+            // Drive to Coral Station and intake coral 2%
             Commands.parallel(
                 elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(1))
@@ -68,14 +69,15 @@ public class Generic4Piece extends SequentialCommandGroup {
                 elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            Commands.runOnce(() -> {
-                switch (pos2) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos2) {
+            //     case "L1": elevator.moveToReefL1(); break;
+            //     case "L2": elevator.moveToReefL2(); break;
+            //     case "L3": elevator.moveToReefL3(); break;
+            //     case "L4": elevator.moveToReefL4(); break;
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             intakeRoller.stop(),
@@ -95,14 +97,15 @@ public class Generic4Piece extends SequentialCommandGroup {
                 elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(4))
             ),
-            Commands.runOnce(() -> {
-                switch (pos3) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos3) {
+            //     case "L1": elevator.moveToReefL1(); break;
+            //     case "L2": elevator.moveToReefL2(); break;
+            //     case "L3": elevator.moveToReefL3(); break;
+            //     case "L4": elevator.moveToReefL4(); break;
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             intakeRoller.stop(),
@@ -110,7 +113,7 @@ public class Generic4Piece extends SequentialCommandGroup {
             // Drive to Coral Station and intake coral 4
             Commands.parallel(
                 elevator.stow(),
-                AutoBuilder.followPath(pathGroup.get(3))
+                AutoBuilder.followPath(pathGroup.get(5))
             ),
             elevator.moveToStation(),
             intakeRoller.intake(),
@@ -120,16 +123,17 @@ public class Generic4Piece extends SequentialCommandGroup {
             // Drive to Reef and place coral 4
             Commands.parallel(
                 elevator.stow(),
-                AutoBuilder.followPath(pathGroup.get(4))
+                AutoBuilder.followPath(pathGroup.get(6))
             ),
-            Commands.runOnce(() -> {
-                switch (pos3) {
-                case "L1": elevator.moveToReefL1(); break;
-                case "L2": elevator.moveToReefL2(); break;
-                case "L3": elevator.moveToReefL3(); break;
-                case "L4": elevator.moveToReefL4(); break;
-                }
-            }),
+            elevator.moveToReefL2(),
+            // Commands.runOnce(() -> {
+            //     switch (pos4) {
+            //     case "L1": elevator.moveToReefL1(); break;
+            //     case "L2": elevator.moveToReefL2(); break;
+            //     case "L3": elevator.moveToReefL3(); break;
+            //     case "L4": elevator.moveToReefL4(); break;
+            //     }
+            // }),
             intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
             stopAuto()
