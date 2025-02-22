@@ -8,34 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-<<<<<<< Updated upstream
-        "x": 8.179056368822739,
-        "y": 2.9437726554167165
-=======
         "x": 8.20151851517894,
         "y": 2.3411742836987424
->>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "S5"
     },
     {
       "anchor": {
-<<<<<<< Updated upstream
-        "x": 5.008,
-        "y": 2.2
-      },
-      "prevControl": {
-        "x": 4.751619753861666,
-        "y": 2.7310348368447115
-=======
         "x": 5.149,
         "y": 2.63
       },
       "prevControl": {
         "x": 5.408381082759462,
         "y": 2.60202084549018
->>>>>>> Stashed changes
       },
       "nextControl": null,
       "isLocked": false,

@@ -3,15 +3,6 @@
   "waypoints": [
     {
       "anchor": {
-<<<<<<< Updated upstream
-        "x": 5.008,
-        "y": 2.2
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 4.639241803278688,
-        "y": 2.388678278688524
-=======
         "x": 5.148598451967592,
         "y": 2.5962764033564802
       },
@@ -19,28 +10,18 @@
       "nextControl": {
         "x": 4.77984025524628,
         "y": 2.248954682045004
->>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "R6"
     },
     {
       "anchor": {
-<<<<<<< Updated upstream
-        "x": 1.582,
-        "y": 0.78
-      },
-      "prevControl": {
-        "x": 2.0978483606557377,
-        "y": 1.0201782786885238
-=======
         "x": 1.4496979890046284,
         "y": 0.9218135127314804
       },
       "prevControl": {
         "x": 1.9655463496603647,
         "y": 1.161991791420004
->>>>>>> Stashed changes
       },
       "nextControl": null,
       "isLocked": false,
