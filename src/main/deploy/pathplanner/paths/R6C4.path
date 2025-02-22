@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.77984025524628,
-        "y": 2.248954682045004
+        "x": 4.570014331227013,
+        "y": 2.2998962045211275
       },
       "isLocked": false,
       "linkedName": "R6"
@@ -20,8 +20,8 @@
         "y": 0.9218135127314804
       },
       "prevControl": {
-        "x": 1.9655463496603647,
-        "y": 1.161991791420004
+        "x": 1.9241335003477844,
+        "y": 1.1421273331534494
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -126.0
+    "rotation": 54.03957555992522
   },
   "reversed": false,
   "folder": "Bottom Half Paths",
