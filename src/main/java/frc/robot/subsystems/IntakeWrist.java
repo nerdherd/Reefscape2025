@@ -218,19 +218,19 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
 
     public Command moveToStow() {
-        return setPositionCommand(WristConstants.kWristStowPosition);
+        return setPositionCommand(WristConstants.kStowPosition);
     }
 
     public Command moveToStation() {
-        return setPositionCommand(WristConstants.kWristStationPosition);
+        return setPositionCommand(WristConstants.kStationPosition);
     }
 
     public Command moveToReefL14() {
-        return setPositionCommand(WristConstants.kWristL14Position);
+        return setPositionCommand(WristConstants.kL14Position);
     }
 
     public Command moveToReefL23() {
-        return setPositionCommand(WristConstants.kWristL23Position);
+        return setPositionCommand(WristConstants.kL23Position);
     }
 
     public Command stop() {
