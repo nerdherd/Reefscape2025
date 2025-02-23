@@ -282,7 +282,8 @@ public final class Constants {
   public static final class ElevatorConstants {
 
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    public static final int kElevatorMotorID = 18;            // TODO change later 
+    public static final int kElevatorMotorID = 8;
+    public static final int kElevatorMotorID2 = 9; 
     public static final double kElevatorStowPosition    = -1; // TODO change later
     public static final double kElevatorStationPosition = -2 ; // TODO change later
     public static final double kElevatorL1Position =   -2;     // TODO change later
@@ -294,6 +295,10 @@ public final class Constants {
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
+
+    public static final double kElevatorCruiseVelocity = 20; //16.333
+    public static final double kElevatorCruiseAcceleration = 40.000;
+    public static final double kElevatorJerk = 400.0;
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
     public static final int kLeftPivotMotorID = 17; 
@@ -411,7 +416,7 @@ public final class Constants {
   public static final class WristConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor = 201.7675; //20 max
+    public static final double kPMotor = 4.147 / 2; // max
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0; //0.12;

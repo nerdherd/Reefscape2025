@@ -83,7 +83,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
             // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
             motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = (1/5.5555555556); 
+            motorConfigs.Feedback.SensorToMechanismRatio = 13.89; 
             // motorConfigs.Feedback.RotorToSensorRatio;
             motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
             motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -149,11 +149,9 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
 
 
-        // ff = Math.abs(1.9 * Math.cos(pigeon.getRoll().getValueAsDouble() - 120));
-
         // TODO: Uncomment when ready to do position control
 
-        ff = 1.652 + (-6.438 * desiredPosition);
+        ff = (-3.2787 * desiredPosition) - 1.5475; // desiredPosition + pivot * constantToChangeUnit
 
         if (enabled) {
             motor.setControl(motionMagicRequest.withFeedForward(ff));

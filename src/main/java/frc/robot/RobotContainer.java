@@ -77,7 +77,7 @@ public class RobotContainer {
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
   public double desiredAngle = 0.0; //164, 99.8
-  public double desiredRotation = 1;
+  public double desiredRotation = -0.1;
 
   /**
    * The container for the robot. Contain
@@ -194,19 +194,33 @@ public class RobotContainer {
     //     desiredRotation += 0.005; // 1/60 for GR 1/50 for 20 times per second
     //     intakeWrist.setPosition(desiredRotation);
     // }));
+    
+    // Position Ramp Wrist
+    driverController.bumperLeft()
+      .whileTrue(Commands.run(() -> {
+        desiredRotation -= 0.007; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
+        intakeWrist.setPosition(desiredRotation);
+    }));
+
+    // Position Ramp Elevator
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += 0; // 1/ for GR 1/50 for 20 times per second
+    //     elevator.setPosition(desiredRotation);
+    // }));
 
     // driverController.bumperRight()
     //   .whileTrue(intakeWrist.moveToStow()
     // );
-    driverController.triggerRight()
-      .whileTrue(intakeWrist.moveToStation()
-    );
-    driverController.bumperLeft()
-      .whileTrue(intakeWrist.moveToReefL14()
-    );
-    driverController.triggerLeft()
-      .whileTrue(intakeWrist.moveToReefL23()
-    );
+    // driverController.triggerRight()
+    //   .whileTrue(intakeWrist.moveToStation()
+    // );
+    // driverController.bumperLeft()
+    //   .whileTrue(intakeWrist.moveToReefL14()
+    // );
+    // driverController.triggerLeft()
+    //   .whileTrue(intakeWrist.moveToReefL23()
+    // );
 
     driverController.buttonUp()
       .whileTrue(intakeWrist.setEnabledCommand()
