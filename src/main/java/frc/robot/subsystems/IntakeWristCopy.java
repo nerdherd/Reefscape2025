@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.V1IntakeConstants;
+import frc.robot.subsystems.Reportable.LOG_LEVEL;
 
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -12,6 +13,8 @@ import com.ctre.phoenix6.controls.VoltageOut;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /*
@@ -25,17 +28,17 @@ Adjust kF if it droops at 90°.
 
 public class IntakeWristCopy extends SubsystemBase {
     // Hardware declarations
-    private final TalonFX armMotor = new TalonFX(V1IntakeConstants.kMotorID); 
+    private final TalonFX motor = new TalonFX(V1IntakeConstants.kMotorID); 
 
     // Profiled PID Controller
     //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/profiled-pidcontroller.html
     private final ProfiledPIDController pidController;
     
     // Constants (tune these values)
-    private static final double kP = 0.4;    // Proportional gain (volts/degree)
+    private static final double kP = 0.25;    // Proportional gain (volts/degree)
     private static final double kI = 0.0;   // Integral gain (volts/degree-second)
     private static final double kD = 0.0;   // Derivative gain (volts/degree-per-second)
-    private static final double kF = 1.8;    // Feedforward gain (volts) Set to the voltage needed to hold the arm at 90° (e.g., 1.0–2.0V).
+    private static final double kF = 0.6;    // Feedforward gain (volts) Set to the voltage needed to hold the arm at 90° (e.g., 1.0–2.0V).
     private static final double TOLERANCE = 2.0; // Degrees tolerance
     private static final double MAX_VOLTAGE = 3.0;// 2 initially to avoid damage.//8.0; // Max voltage (volts)
     private static final double MAX_VELOCITY = V1IntakeConstants.kCruiseVelocity; // Degrees per second
@@ -48,7 +51,7 @@ public class IntakeWristCopy extends SubsystemBase {
     private double setpoint = DOWN_POSITION; // Target position in degrees
 
     // Encoder configuration
-    private static final double GEAR_RATIO = 5.5556; //it means 6 motor rotations equal 1 arm rotation.
+    private static final double GEAR_RATIO = 13.89; //it means 6 motor rotations equal 1 arm rotation.
     private static final double DEGREES_PER_ARM_ROTATION = 360.0;
 
     // Voltage control request
@@ -62,7 +65,7 @@ public class IntakeWristCopy extends SubsystemBase {
         config.MotorOutput.NeutralMode = com.ctre.phoenix6.signals.NeutralModeValue.Brake;
         config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
         // config.Feedback.RotorToSensorRatio = 1.0; //JD
-        armMotor.getConfigurator().apply(config);
+        motor.getConfigurator().apply(config);
         
         // Configure Profiled PID controller
         pidController = new ProfiledPIDController(
@@ -77,15 +80,12 @@ public class IntakeWristCopy extends SubsystemBase {
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Arm Position", getArmPosition());
-        SmartDashboard.putNumber("Arm Setpoint", setpoint);
-        SmartDashboard.putNumber("Rotor Position", armMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Arm Voltage", armMotor.getMotorVoltage().getValueAsDouble());
+        runPID();
     }
 
     // Get current arm position in degrees
     public double getArmPosition() {
-        double rotorPosition = armMotor.getPosition().getValueAsDouble(); // Rotations
+        double rotorPosition = motor.getPosition().getValueAsDouble(); // Rotations
         return rotorPosition * DEGREES_PER_ARM_ROTATION; // Degrees
     }
 
@@ -98,7 +98,7 @@ public class IntakeWristCopy extends SubsystemBase {
     // Manual voltage control
     public void setArmVoltage(double voltage) {
         double limitedVoltage = Math.max(-MAX_VOLTAGE, Math.min(MAX_VOLTAGE, voltage));
-        armMotor.setControl(voltageControl.withOutput(limitedVoltage));
+        motor.setControl(voltageControl.withOutput(limitedVoltage));
         pidController.reset(getArmPosition());
     }
 
@@ -115,7 +115,7 @@ public class IntakeWristCopy extends SubsystemBase {
         totalVoltage = Math.max(-MAX_VOLTAGE, Math.min(MAX_VOLTAGE, totalVoltage));
         
         // Apply voltage
-        armMotor.setControl(voltageControl.withOutput(totalVoltage));
+        motor.setControl(voltageControl.withOutput(totalVoltage));
     }
 
     // Check if arm is at setpoint
@@ -125,7 +125,7 @@ public class IntakeWristCopy extends SubsystemBase {
 
     // Stop the arm
     public void stop() {
-        armMotor.setControl(voltageControl.withOutput(0));
+        motor.setControl(voltageControl.withOutput(0));
         setpoint = getArmPosition();
     }
 
@@ -136,8 +136,39 @@ public class IntakeWristCopy extends SubsystemBase {
 
     // Reset encoder to zero (call when arm is fully down)
     public void resetEncoder() {
-        armMotor.setPosition(0);
+        motor.setPosition(0);
         setpoint = DOWN_POSITION;
         pidController.reset(getArmPosition());
+    }
+
+    
+    // @Override
+    public void initShuffleboard(LOG_LEVEL level) { 
+        if (level == LOG_LEVEL.OFF || level == LOG_LEVEL.MINIMAL) {
+            return;
+        }
+        ShuffleboardTab tab = Shuffleboard.getTab("Coral Wrist");
+        switch (level) {
+            case OFF:
+                break;
+            case ALL:
+                tab.addString("Control Mode", motor.getControlMode()::toString);
+            case MEDIUM:
+                // tab.addDouble("MM Position", () -> motionMagicRequest.Position);
+                // tab.addDouble("Desired Position", () -> desiredPosition);
+            case MINIMAL:
+            
+            tab.addNumber("Arm Position", ()->getArmPosition());
+            tab.addNumber("Arm Setpoint", ()->setpoint);
+            tab.addNumber("Rotor Position", ()->motor.getPosition().getValueAsDouble());
+            tab.addNumber("Arm Voltage", ()->motor.getMotorVoltage().getValueAsDouble());
+        
+                // tab.addBoolean("Enabled", () -> enabled);
+                tab.addNumber("Current Coral Wrist Angle", () -> motor.getPosition().getValueAsDouble());
+                // tab.addNumber("Coral Wrist pigeon angle", () -> pigeon.getRoll().getValueAsDouble());
+                tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
+                // tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
+                break;
+        }
     }
 }

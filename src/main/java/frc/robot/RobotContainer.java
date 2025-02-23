@@ -224,26 +224,26 @@ public class RobotContainer {
     // );
       operatorController.dpadDown().onTrue(new SetArmPosition(intakeWristCopy, 0.0));
       operatorController.triggerRight().onTrue(new SetArmPosition(intakeWristCopy, 45.0));
-      // operatorController.bumperRight().onTrue(new SetArmPosition(intakeWristCopy, 90.0));
-      // operatorController.triggerLeft().onTrue(new SetArmPosition(intakeWristCopy, 135.0));
-      // operatorController.bumperLeft().onTrue(new SetArmPosition(intakeWristCopy, 180.0));
-      // operatorController.dpadUp().onTrue(new SetArmPosition(intakeWristCopy, 210.0));
+      operatorController.bumperRight().onTrue(new SetArmPosition(intakeWristCopy, 90.0));
+      operatorController.triggerLeft().onTrue(new SetArmPosition(intakeWristCopy, 135.0));
+      operatorController.bumperLeft().onTrue(new SetArmPosition(intakeWristCopy, 180.0));
+      operatorController.dpadUp().onTrue(new SetArmPosition(intakeWristCopy, 210.0));
 
       operatorController.controllerLeft().onTrue(new InstantCommand(() -> intakeWristCopy.resetEncoder(), intakeWristCopy));
 
       operatorController.buttonUp().onTrue(new InstantCommand(() -> {
-        manualVoltage -= 0.1;
-        if (manualVoltage < -2) {
-            manualVoltage = -1.8; // Reset to a V if exceeds max
+        manualVoltage += 0.1;
+        if (manualVoltage > 2) {
+            manualVoltage = 1.8; // Reset to a V if exceeds max
         }
         intakeWristCopy.setArmVoltage(manualVoltage);
         SmartDashboard.putNumber("Manual Voltage", manualVoltage); // Display voltage
       }, intakeWristCopy));
 
       operatorController.buttonDown().onTrue(new InstantCommand(() -> {
-        manualVoltage += 0.05;
-        if (manualVoltage > 0) {
-            manualVoltage = -0.1; // Reset to b V if exceeds min
+        manualVoltage -= 0.1;
+        if (manualVoltage < 0) {
+            manualVoltage = 0.1; // Reset to b V if exceeds min
         }
         intakeWristCopy.setArmVoltage(manualVoltage);
         SmartDashboard.putNumber("Manual Voltage", manualVoltage); // Display voltage
@@ -397,7 +397,7 @@ public class RobotContainer {
     if (USE_ELEV) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
-      //intakeWristCopy.initShuffleboard(loggingLevel);
+      intakeWristCopy.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
