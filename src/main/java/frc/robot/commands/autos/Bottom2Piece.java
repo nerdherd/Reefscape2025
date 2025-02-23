@@ -52,7 +52,7 @@ public class Bottom2Piece extends SequentialCommandGroup {
                 AutoBuilder.followPath(pathGroup.get(1))
             ),
             elevator.moveToStation(),
-            intakeRoller.intake(),
+            intakeRoller.intakeCoral(),
             Commands.waitSeconds(2.5),
             intakeRoller.stop(),
 

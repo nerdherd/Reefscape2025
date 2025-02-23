@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -30,7 +29,6 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private boolean enabled = false;
-    private boolean enableFollowRequest = true;
     private boolean velocityControl = true;
 
     public IntakeRoller() {
@@ -164,7 +162,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     // ****************************** NAMED COMMANDS ****************************** //
 
-    public Command intake() {
+    public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             setVelocityCommandLeft(IntakeConstants.kIntakePower),
@@ -179,7 +177,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         );
     }
 
-    public Command intakeRight() {
+    public Command intakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
             setVelocityCommandRight(IntakeConstants.kIntakePower)
@@ -192,6 +190,15 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
             setVelocityCommand(IntakeConstants.kOuttakePower)
         );
     }
+
+    public Command outtakeL1() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommandLeft(IntakeConstants.kOuttakePower)
+            
+        );
+    }
+
 
     public Command stop() {
         return stopCommand();

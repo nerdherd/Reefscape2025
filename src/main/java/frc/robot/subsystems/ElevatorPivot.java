@@ -30,15 +30,14 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFX pivotMotor;
     private TalonFX pivotMotorRight;
 
-
     private TalonFXConfigurator pivotConfigurator;
     private TalonFXConfigurator pivotConfiguratorRight; 
     private Pigeon2 pigeon;
 
     public boolean enabled = false; // Change back to true
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition/360.0);
+    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition);
     private final NeutralOut brakeRequest = new NeutralOut();
-    private final Follower followRequest = new Follower(17, enabled);
+    private final Follower followRequest = new Follower(ElevatorConstants.kLeftPivotMotorID, true);
 
     public ElevatorPivot (boolean V1) {
         pivotMotor = new TalonFX(ElevatorConstants.kLeftPivotMotorID);
@@ -49,46 +48,12 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             pivotMotorRight.setControl(followRequest);
             pivotConfiguratorRight = pivotMotorRight.getConfigurator();
         }
-        CommandScheduler.getInstance().registerSubsystem(this);
-        if(V1) {
-            configureMotorV1();
-            configurePIDV1();
-        } else {
-            configureMotorIsMe();
-            configurePIDIsMe();
-        }
-        pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition/360);
-        pivotMotor.setControl(motionMagicRequest);
-        motionMagicRequest.withSlot(0);
+        configureMotorV1();
+        configurePIDV1();
+        pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition);
     }
     
     // ******************************** SETUP METHODS *************************************** //
-    
-    private void configurePIDIsMe() {
-        TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
-        
-        pivotConfigurator.refresh(pivotConfiguration);
-
-        pivotConfiguration.Slot0.kP = ElevatorConstants.kPElevatorPivot;
-        pivotConfiguration.Slot0.kI = ElevatorConstants.kIElevatorPivot;
-        pivotConfiguration.Slot0.kD = ElevatorConstants.kDElevatorPivot;
-        pivotConfiguration.Slot0.kV = ElevatorConstants.kVElevatorPivot;
-        pivotConfiguration.Slot0.kS = ElevatorConstants.kSElevatorPivot;
-        pivotConfiguration.Slot0.kA = ElevatorConstants.kAElevatorPivot;
-        pivotConfiguration.Slot0.kG = ElevatorConstants.kGElevatorPivot;
-        
-        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = ElevatorConstants.kEPivotCruiseVelocity;
-        pivotConfiguration.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorPivotCruiseAcceleration;
-        pivotConfiguration.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorPivotJerk;
-        pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0.4;
-        pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0.01;
-        
-        StatusCode statusCode = pivotConfigurator.apply(pivotConfiguration);
-        if(!statusCode.isOK()){
-            DriverStation.reportError(" Could not apply elevator pivot configs, error code =(", true);
-        }
-    }
-
     private void configurePIDV1() {
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
@@ -105,8 +70,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = V1ElevatorConstants.kEPivotCruiseVelocity;
         pivotConfiguration.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorPivotCruiseAcceleration;
         pivotConfiguration.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorPivotJerk;
-        pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0.4;
-        pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0.01;
+        pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0;
+        pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0;
         
         TalonFXConfiguration pivotConfigurationRight = new TalonFXConfiguration();
 
@@ -123,8 +88,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfigurationRight.MotionMagic.MotionMagicCruiseVelocity = V1ElevatorConstants.kEPivotCruiseVelocity;
         pivotConfigurationRight.MotionMagic.MotionMagicAcceleration = V1ElevatorConstants.kElevatorPivotCruiseAcceleration;
         pivotConfigurationRight.MotionMagic.MotionMagicJerk = V1ElevatorConstants.kElevatorPivotJerk;
-        pivotConfigurationRight.MotionMagic.MotionMagicExpo_kV = 0.4;
-        pivotConfigurationRight.MotionMagic.MotionMagicExpo_kA = 0.01;
+        pivotConfigurationRight.MotionMagic.MotionMagicExpo_kV = 0;
+        pivotConfigurationRight.MotionMagic.MotionMagicExpo_kA = 0;
         
         StatusCode statusCode = pivotConfigurator.apply(pivotConfiguration);
         if(!statusCode.isOK()){
@@ -137,42 +102,19 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         }
     }
 
-    private void configureMotorIsMe() {
-        TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
-        
-        pivotConfigurator.refresh(pivotConfiguration);
-        pivotConfiguration.Feedback.FeedbackRemoteSensorID = ElevatorConstants.kPivotPigeonID;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; //TODO change orientation later
-        pivotConfiguration.Feedback.RotorToSensorRatio = ElevatorConstants.kElevatorPivotGearRatio / 360;
-        pivotConfiguration.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
-        pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TODO change later
-        pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
-        pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
-        pivotConfiguration.CurrentLimits.SupplyCurrentLimit = 40;
-        pivotConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
-        pivotConfiguration.CurrentLimits.StatorCurrentLimit = 100;
-        pivotConfiguration.CurrentLimits.StatorCurrentLimitEnable = false;
-        pivotConfiguration.Audio.AllowMusicDurDisable = true;
-
-        StatusCode statusCode = pivotConfigurator.apply(pivotConfiguration);
-        if (!statusCode.isOK()){
-            DriverStation.reportError("Could not apply Elevator configs, fix code??? =(", true);
-        }
-    }
-
     private void configureMotorV1() {
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
-        pivotConfiguration.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; //TODO change orientation later
-        pivotConfiguration.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio / 360;
+        // pivotConfiguration.Feedback.FeedbackRemoteSensorID = FeedbackSensorSourceValue.RotorSensor;
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; //TODO change orientation later
+        pivotConfiguration.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
         pivotConfiguration.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TODO change later
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
         pivotConfiguration.CurrentLimits.SupplyCurrentLimit = 40;
-        pivotConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
+        pivotConfiguration.CurrentLimits.SupplyCurrentLimitEnable = false;
         pivotConfiguration.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfiguration.CurrentLimits.StatorCurrentLimitEnable = false;
         pivotConfiguration.Audio.AllowMusicDurDisable = true;
@@ -185,20 +127,20 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         TalonFXConfiguration pivotConfigurationRight = new TalonFXConfiguration();
 
         pivotConfiguratorRight.refresh(pivotConfigurationRight);
-        pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
-        pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; //TODO change orientation later
-        pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio / 360;
+        // pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
+        pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; //TODO change orientation later
+        pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
         pivotConfigurationRight.Feedback.SensorToMechanismRatio = 1.0; //TODO change later
         pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TODO change later
         pivotConfigurationRight.Voltage.PeakForwardVoltage = 11.5;
         pivotConfigurationRight.Voltage.PeakReverseVoltage = -11.5;
         pivotConfigurationRight.CurrentLimits.SupplyCurrentLimit = 40;
-        pivotConfigurationRight.CurrentLimits.SupplyCurrentLimitEnable = true;
+        pivotConfigurationRight.CurrentLimits.SupplyCurrentLimitEnable = false;
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimitEnable = false;
         pivotConfigurationRight.Audio.AllowMusicDurDisable = true;
 
-        StatusCode RightstatusCode = pivotConfiguratorRight.apply(pivotConfiguration);
+        StatusCode RightstatusCode = pivotConfiguratorRight.apply(pivotConfigurationRight);
         if (!RightstatusCode.isOK()){
             DriverStation.reportError("Could not apply Elevator configs, fix code??? =(", true);
         }
@@ -208,11 +150,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     public void periodic() {
         if (enabled){
             // pivotMotor.setControl(motionMagicRequest);
-            pivotMotor.setControl(motionMagicRequest);
-            pivotMotorRight.setControl(followRequest);
+            // pivotMotor.setControl(motionMagicRequest);
+            // pivotMotorRight.setControl(followRequest);
             // DriverStation.reportWarning("SDKLJLDSHFKJSFGKJFS: " + Double.toString(motionMagicRequest.Position), false);
         } else {
-            pivotMotor.setControl(brakeRequest);
+            // pivotMotor.setControl(brakeRequest);
         }
 
     }

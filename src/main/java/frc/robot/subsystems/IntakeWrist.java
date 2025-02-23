@@ -5,6 +5,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -18,9 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.V1IntakeConstants;
+import frc.robot.Constants.WristConstants;
 import frc.robot.util.NerdyMath;;
 
 public class IntakeWrist extends SubsystemBase implements Reportable{
@@ -28,22 +27,43 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFXConfigurator motorConfigurator;
     private Pigeon2 pigeon;
 
-    private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(0);
+
+
+
+    private final MotionMagicVoltage motionMagicRequest; // Was 0 during initialization
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private double desiredPosition;
+    private double desiredPosition; // Should be ~90 or wherever initial position is
+    private double desiredAngle;
     private boolean enabled = false;
     private boolean V1 = true;
+    double ff = 0;
+
+
 
     public IntakeWrist(boolean V1) {
         this.V1 = V1;
-        motor = new TalonFX(V1IntakeConstants.kMotorID);
+        motor = new TalonFX(WristConstants.kMotorID);
         motorConfigurator = motor.getConfigurator();
         
-        desiredPosition = IntakeConstants.kWristStowPosition;
+        // TODO: Took out immediate stow to work on Wrist tuning
+        
+
+        
+
         if(V1) {
-            pigeon = new Pigeon2(V1IntakeConstants.kPigeonID);
-            desiredPosition = V1IntakeConstants.kStowPosition;
+            pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
+            // desiredPosition = 89;
+            desiredPosition = pigeon.getRoll().getValueAsDouble();
+            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
+        }
+        else {
+            pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
+            // desiredPosition = 89;
+            desiredPosition = pigeon.getRoll().getValueAsDouble();
+
+
+            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
         }
 
         // configure motor
@@ -61,26 +81,26 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         if (V1){
             motorConfigurator.refresh(motorConfigs);
 
-            motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
-            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch;
-            motorConfigs.Feedback.SensorToMechanismRatio = 1/(5.5555555556 * 360);
+            // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
+            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+            motorConfigs.Feedback.SensorToMechanismRatio = 13.89; 
             // motorConfigs.Feedback.RotorToSensorRatio;
-            motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
+            motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
             motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
+            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 45;
             motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-            motorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         
-            motorConfigs.Slot0.kP = V1IntakeConstants.kPMotor;
-            motorConfigs.Slot0.kI = V1IntakeConstants.kItMotor;
-            motorConfigs.Slot0.kD = V1IntakeConstants.kDMotor;
-            motorConfigs.Slot0.kV = V1IntakeConstants.kVMotor;
-            motorConfigs.Slot0.kS = V1IntakeConstants.kSMotor;
-            motorConfigs.Slot0.kG = V1IntakeConstants.kGMotor;
+            motorConfigs.Slot0.kP = WristConstants.kPMotor;
+            motorConfigs.Slot0.kI = WristConstants.kItMotor;
+            motorConfigs.Slot0.kD = WristConstants.kDMotor;
+            motorConfigs.Slot0.kV = WristConstants.kVMotor;
+            motorConfigs.Slot0.kS = WristConstants.kSMotor;
+            motorConfigs.Slot0.kG = WristConstants.kGMotor;
 
-            motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  V1IntakeConstants.kCruiseVelocity;
-            motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
-            motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
+            motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  WristConstants.kCruiseVelocity;
+            motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
+            motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
         
             StatusCode response = motorConfigurator.apply(motorConfigs);
             if (!response.isOK()){
@@ -95,15 +115,15 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
             motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         
-            motorConfigs.Slot0.kP = IntakeConstants.kPWristMotor;
-            motorConfigs.Slot0.kI = IntakeConstants.kIWristMotor;
-            motorConfigs.Slot0.kD = IntakeConstants.kDWristMotor;
-            motorConfigs.Slot0.kV = IntakeConstants.kVWristMotor;
-            motorConfigs.Slot0.kS = IntakeConstants.kSWristMotor;
-            motorConfigs.Slot0.kG = IntakeConstants.kGWristMotor;
+            motorConfigs.Slot0.kP = WristConstants.kPMotor;
+            motorConfigs.Slot0.kI = WristConstants.kItMotor;
+            motorConfigs.Slot0.kD = WristConstants.kDMotor;
+            motorConfigs.Slot0.kV = WristConstants.kVMotor;
+            motorConfigs.Slot0.kS = WristConstants.kSMotor;
+            motorConfigs.Slot0.kG = WristConstants.kGMotor;
     
-            motorConfigs.MotionMagic.MotionMagicAcceleration = V1IntakeConstants.kAcceleration;
-            motorConfigs.MotionMagic.MotionMagicJerk = V1IntakeConstants.kJerk;
+            motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
+            motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
         
             StatusCode response = motorConfigurator.apply(motorConfigs);
             if (!response.isOK()){
@@ -118,8 +138,23 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
+
+        SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Current Rotations", motor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Current Velocity", motor.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("Current Acceleration", motor.getAcceleration().getValueAsDouble());
+        SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
+        SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
+        
+
+
+
+        // TODO: Uncomment when ready to do position control
+
+        ff = (-3.2787 * desiredPosition) - 1.5475; // desiredPosition + pivot * constantToChangeUnit
+
         if (enabled) {
-            motor.setControl(motionMagicRequest);
+            motor.setControl(motionMagicRequest.withFeedForward(ff));
         }
         else {
             motor.setControl(brakeRequest);
@@ -132,18 +167,21 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         this.enabled = e;
     }
     
-    private void setPosition(double position) {
+    public void setPosition(double position) {
         desiredPosition = position;
+        motionMagicRequest.Position = desiredPosition;
     }
 
-    private void setPositionDegrees(double positionDegrees) {
-        double newPos = NerdyMath.clamp(
-            positionDegrees, 
-            V1IntakeConstants.kMinPosition, 
-            V1IntakeConstants.kMaxPosition
-        );
+    public void setPositionDegrees(double positionDegrees) {
+        desiredAngle = positionDegrees;
+        desiredPosition = (desiredAngle * 0.015432) - 0.00011;
+        
+        // double newPos = NerdyMath.clamp(
+        //     positionDegrees, 
 
-        motionMagicRequest.Position = (newPos / 360.0);  
+        // );
+
+        motionMagicRequest.Position = (desiredPosition);  // = (newPos / 360.0)
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -157,7 +195,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     private Command setPositionCommand(double position) {
         return Commands.sequence(
-            Commands.runOnce(() -> setPositionDegrees(position))
+            Commands.runOnce(() -> setPosition(position))
         );
     }
 
@@ -170,21 +208,30 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     // ****************************** NAMED COMMANDS ****************************** //
 
+    // public StatusCode setControl(VoltageOut request)
+    // {
+    //     return motor.setControlPrivate(request);
+    // }
+
+    public TalonFX getMotor()
+    {
+        return motor;
+    }
 
     public Command moveToStow() {
-        return setPositionCommand(IntakeConstants.kWristStowPosition);
+        return setPositionCommand(WristConstants.kStowPosition);
     }
 
     public Command moveToStation() {
-        return setPositionCommand(IntakeConstants.kWristStationPosition);
+        return setPositionCommand(WristConstants.kStationPosition);
     }
 
     public Command moveToReefL14() {
-        return setPositionCommand(IntakeConstants.kWristL14Position);
+        return setPositionCommand(WristConstants.kL14Position);
     }
 
     public Command moveToReefL23() {
-        return setPositionCommand(IntakeConstants.kWristL23Position);
+        return setPositionCommand(WristConstants.kL23Position);
     }
 
     public Command stop() {
@@ -224,6 +271,9 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             case MINIMAL:
                 tab.addBoolean("Enabled", () -> enabled);
                 tab.addNumber("Current Coral Wrist Angle", () -> motor.getPosition().getValueAsDouble());
+                tab.addNumber("Coral Wrist pigeon angle", () -> pigeon.getRoll().getValueAsDouble());
+                tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
+                tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 break;
         }
     }

@@ -86,6 +86,7 @@ public class Robot extends TimedRobot {
       m_autonomousCommand.cancel();
     }
     m_robotContainer.configureBindings_teleop();
+    m_robotContainer.initDefaultCommands_teleop();
   }
 
   /** This function is called periodically during operator control. */
@@ -98,6 +99,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
 
     m_robotContainer.swerveDrive.refreshModulePID();
+    m_robotContainer.configureBindings_test();
   }
 
   /** This function is called periodically during test mode. */

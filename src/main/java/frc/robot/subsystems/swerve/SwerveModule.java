@@ -104,7 +104,7 @@ public class SwerveModule implements Reportable {
         this.turnMotor.setInverted(invertTurningMotor);
         this.invertTurningEncoder = CANCoderReversed;
         
-        this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0)); //TODO: change to 90 degrees
+        this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(90));
 
         TalonFXConfiguration driveMotorConfigs = new TalonFXConfiguration();
         driveConfigurator.refresh(driveMotorConfigs);
