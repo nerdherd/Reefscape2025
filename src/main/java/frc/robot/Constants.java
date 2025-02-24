@@ -394,7 +394,7 @@ public final class Constants {
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
   
-    public static final double kPWristMotor = 0.3;
+    public static final double kPWristMotor = 3; // max 4 
     public static final double kIWristMotor = 0;
     public static final double kDWristMotor = 0;
     public static final double kVWristMotor = 0;
@@ -416,21 +416,21 @@ public final class Constants {
   public static final class WristConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor = 4.147 / 2; // max
+    public static final double kPMotor =  4.147; // 4.147  max
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0; //0.12;
     public static final double kSMotor = 0; //0.015; //Static Friction
-    public static final double kGMotor = 0; //1.928; //0.015; //Gravity
+    public static final double kGMotor = 0.55; //1.928; //0.015; //Gravity
     // kGMotor = -2.310 + (0.002420 * theta)
     public static final double kCruiseVelocity = 70;
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
 
-    public static final double kStowPosition = 5;
-    public static final double kStationPosition = 20;
-    public static final double kL23Position = 15;
-    public static final double kL14Position = 10;
+    public static final double kStowPosition = -0.15;
+    public static final double kStationPosition = -0.3;
+    public static final double kL23Position = -0.6;
+    public static final double kL14Position = -0.3;
     public static final double kWristStowPosition = 0.092;//0.0
     public static final double kWristStationPosition = 0.54;
     public static final double kWristL23Position = 0.36;

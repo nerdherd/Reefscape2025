@@ -37,7 +37,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private double desiredAngle;
     private boolean enabled = false;
     private boolean V1 = true;
-    double ff = 0;
+    private double ff = 0;
 
 
 
@@ -52,9 +52,9 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         
 
         if(V1) {
-            pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
-            // desiredPosition = 89;
-            desiredPosition = pigeon.getRoll().getValueAsDouble();
+            // pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
+            desiredPosition = 0;
+            // desiredPosition = pigeon.getRoll().getValueAsDouble();
             motionMagicRequest = new MotionMagicVoltage(desiredPosition);
         }
         else {
@@ -65,6 +65,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
             motionMagicRequest = new MotionMagicVoltage(desiredPosition);
         }
+        motor.setControl(brakeRequest);
 
         // configure motor
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
@@ -120,7 +121,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             motorConfigs.Slot0.kD = WristConstants.kDMotor;
             motorConfigs.Slot0.kV = WristConstants.kVMotor;
             motorConfigs.Slot0.kS = WristConstants.kSMotor;
-            motorConfigs.Slot0.kG = WristConstants.kGMotor;
+            // motorConfigs.Slot0.kG = WristConstants.kGMotor; kG applied in ff
     
             motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
             motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
@@ -145,14 +146,12 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         SmartDashboard.putNumber("Current Acceleration", motor.getAcceleration().getValueAsDouble());
         SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
         SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
-        
-
-
 
         // TODO: Uncomment when ready to do position control
 
-        ff = (-3.2787 * desiredPosition) - 1.5475; // desiredPosition + pivot * constantToChangeUnit
-
+        // desiredPosition + pivot * constantToChangeUnit
+        // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
+        ff = WristConstants.kGMotor * Math.cos(((getPosition() + 0.5437) % 1) * 2 * Math.PI); // 0.5437 is wrist horizontal 
         if (enabled) {
             motor.setControl(motionMagicRequest.withFeedForward(ff));
         }
@@ -174,7 +173,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public void setPositionDegrees(double positionDegrees) {
         desiredAngle = positionDegrees;
-        desiredPosition = (desiredAngle * 0.015432) - 0.00011;
+        desiredPosition = (desiredAngle * 0.015432) - 0.00011; // Depricated values
         
         // double newPos = NerdyMath.clamp(
         //     positionDegrees, 
@@ -182,6 +181,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         // );
 
         motionMagicRequest.Position = (desiredPosition);  // = (newPos / 360.0)
+    }
+
+    private double getPosition() {
+        return motor.getPosition().getValueAsDouble();
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -271,7 +274,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             case MINIMAL:
                 tab.addBoolean("Enabled", () -> enabled);
                 tab.addNumber("Current Coral Wrist Angle", () -> motor.getPosition().getValueAsDouble());
-                tab.addNumber("Coral Wrist pigeon angle", () -> pigeon.getRoll().getValueAsDouble());
+                // tab.addNumber("Coral Wrist pigeon angle", () -> pigeon.getRoll().getValueAsDouble());
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 break;
