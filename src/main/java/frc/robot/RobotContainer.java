@@ -77,7 +77,8 @@ public class RobotContainer {
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
   public double desiredAngle = 0.0; //164, 99.8
-  public double desiredRotation = -0.1;
+
+  public double desiredRotation = 0.0;//ElevatorConstants.kElevatorPivotStowPosition; -1.6
 
   /**
    * The container for the robot. Contain
@@ -196,11 +197,60 @@ public class RobotContainer {
     // }));
     
     // Position Ramp Wrist
-    driverController.bumperLeft()
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation -= 0.007; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
+    //     intakeWrist.setPosition(desiredRotation);
+    // }));
+
+/* 
+    // Position Ramp Pivot Positive
+    operatorController.bumperRight()
       .whileTrue(Commands.run(() -> {
-        desiredRotation -= 0.007; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
-        intakeWrist.setPosition(desiredRotation);
+        desiredRotation += 0.02; // 1 for GR 1/50 for 20 times per second
+        elevatorPivot.setPosition(desiredRotation);
     }));
+
+    // POSITIVE POSITION = UP
+    // TODO: Find min and max position rotations of pivot. Find where 0 'ground' is, needs to be parallel to floor. See which way is rotation positive.
+    // Min (Parallel): -25.9      Vertical: 
+    // TODO: Fill in sensortomechaanism ratio for pivot and pivotRight. Calculate kP After.
+
+    // // Position Ramp Pivot Negative
+    operatorController.bumperLeft()
+      .whileTrue(Commands.run(() -> {
+        desiredRotation -= 0.02; // 1 for GR 1/50 for 20 times per second
+        elevatorPivot.setPosition(desiredRotation);
+    }));
+    
+*/
+
+
+    // Enable Pivot
+    // operatorController.buttonDown()
+    //   .whileTrue(elevatorPivot.setEnabledCommand(true)
+    // );
+
+    // Voltage Ramp Pivot Positive
+    operatorController.bumperRight()
+      .whileTrue(Commands.run(() -> {
+        voltage += 0.2 / 50.0;
+        elevatorPivot.setPivotVoltage(voltage);
+    }, elevatorPivot));
+
+    // Voltage Ramp Pivot Negative
+    operatorController.bumperLeft()
+      .whileTrue(Commands.run(() -> {
+        voltage -= 0.2 / 50.0;
+        elevatorPivot.setPivotVoltage(voltage);
+    }, elevatorPivot));
+    
+    // Hold to Voltage Ramp Pivot
+    // operatorController.buttonUp()
+    //   .whileTrue(Commands.run(() -> {
+    //     elevatorPivot.setPivotVoltage(voltage);
+    // }));
+
 
     // Position Ramp Elevator
     // driverController.bumperLeft()
@@ -222,9 +272,7 @@ public class RobotContainer {
     //   .whileTrue(intakeWrist.moveToReefL23()
     // );
 
-    driverController.buttonUp()
-      .whileTrue(intakeWrist.setEnabledCommand()
-    );
+    
 
     // driverController.buttonUp()
     //   .whileTrue(
