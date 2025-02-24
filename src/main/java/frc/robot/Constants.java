@@ -282,7 +282,8 @@ public final class Constants {
   public static final class ElevatorConstants {
 
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    public static final int kElevatorMotorID = 18;            // TODO change later 
+    public static final int kElevatorMotorID = 8;
+    public static final int kElevatorMotorID2 = 9; 
     public static final double kElevatorStowPosition    = -1; // TODO change later
     public static final double kElevatorStationPosition = -2 ; // TODO change later
     public static final double kElevatorL1Position =   -2;     // TODO change later
@@ -294,6 +295,10 @@ public final class Constants {
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
+
+    public static final double kElevatorCruiseVelocity = 20; //16.333
+    public static final double kElevatorCruiseAcceleration = 40.000;
+    public static final double kElevatorJerk = 400.0;
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
     public static final int kLeftPivotMotorID = 17; 
@@ -326,8 +331,8 @@ public final class Constants {
 
  public static final class V1ElevatorConstants {
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    public static final int kElevatorMotorID = 18;            // TODO change later 
-    public static final int kElevatorMotorRightID = 0;            // TODO change later 
+    public static final int kElevatorMotorID = 17;            // TODO change later 
+    public static final int kElevatorMotorRightID = 18;            // TODO change later 
     public static final double kElevatorStowPosition    = 0; // TODO change later
     public static final double kElevatorStationPosition = 0 ; // TODO change later
     public static final double kElevatorL1Position =   0;     // TODO change later
@@ -386,8 +391,26 @@ public final class Constants {
     public static final double kIntakePower  = 30;
     public static final double kOuttakePower = -30;
 
-    // ************************************** POSITION MOTOR CONSTANTS *************************************** //
-    public static final int kPositionMotorID = 0; //TODO change later
+    // ************************************** WRIST CONSTANTS *************************************** //
+    public static final int kPositionMotorID = 54;
+  
+    public static final double kPWristMotor = 3; // max 4 
+    public static final double kIWristMotor = 0;
+    public static final double kDWristMotor = 0;
+    public static final double kVWristMotor = 0;
+    public static final double kSWristMotor = 0; //Static Friction
+    public static final double kGWristMotor = 0; //Gravity
+    public static final double kWristAcceleration = 100; //Rotations per second squared
+    public static final double kWristJerk = 700; //Rotations per second cubed
+
+    public static final double kWristStowPosition = 5;//0.0
+    public static final double kWristStationPosition = 10;
+    public static final double kWristL23Position = 15;
+    public static final double kWristL14Position = 20; //0.5
+
+    public static final double kWristSpeed = 0.5;
+    public static final int kWristPigeonID = 0;
+
   
     public static final double kPPositionMotor = 0.3;
     public static final double kIPositionMotor = 0;
@@ -415,23 +438,27 @@ public final class Constants {
   public static final class WristConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor = 6.667; //20 max
+    public static final double kPMotor =  4.147 * 6; // 4.147  max
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0; //0.12;
     public static final double kSMotor = 0; //0.015; //Static Friction
-    public static final double kGMotor = 0; //1.928; //0.015; //Gravity
+    public static final double kGMotor = 0.6; //1.928; //0.015; //Gravity
     // kGMotor = -2.310 + (0.002420 * theta)
-    public static final double kCruiseVelocity = 70;
-    public static final double kAcceleration = 700; //Rotations per second squared
-    public static final double kJerk = 700; //Rotations per second cubed
+    public static final double kCruiseVelocity = 2;
+    public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
+    public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
 
-    public static final double kStowPosition = -5;
-    public static final double kStationPosition = -20;
-    public static final double kL23Position = -15;
-    public static final double kL14Position = -10;
+    public static final double kStowPosition = -0.15;
+    public static final double kStationPosition = -0.3;
+    public static final double kL23Position = -0.6;
+    public static final double kL14Position = -0.8;
+    public static final double kWristStowPosition = 0.092;//0.0
+    public static final double kWristStationPosition = 0.54;
+    public static final double kWristL23Position = 0.36;
+    public static final double kWristL14Position = 0.708;
     public static final double kMaxPosition = 0.14; //156
-    public static final double kMinPosition = -28.8;
+    public static final double kMinPosition = 0;
 
     public static final double kSpeed = 0.5;
     public static final int kPigeonID = 2;

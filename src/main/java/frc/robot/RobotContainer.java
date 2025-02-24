@@ -77,7 +77,7 @@ public class RobotContainer {
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
   public double desiredAngle = 0.0; //164, 99.8
-  public double desiredRotation = 1;
+  public double desiredRotation = -0.01;
 
   /**
    * The container for the robot. Contain
@@ -189,18 +189,28 @@ public class RobotContainer {
     //   .onTrue(intakeRoller.intake())
     //   .onFalse(intakeRoller.stop());
 
-
-    // driverController.bumperRight()
-    //   .whileTrue(Commands.run(() -> {
-    //     desiredRotation -= 1.0 / 50.0; // 2 degrees per second ish
-    //     // voltage = -1.928;
-    // }));
-
     // driverController.bumperLeft()
     //   .whileTrue(Commands.run(() -> {
     //     desiredRotation += 0.005; // 1/60 for GR 1/50 for 20 times per second
-    //     // voltage = -1.928;
     //     intakeWrist.setPosition(desiredRotation);
+    // }));
+    
+    // Position Ramp Wrist
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation -= 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
+    // }));
+    // driverController.bumperRight()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
+    //     intakeWrist.setPosition(desiredRotation);
+    // }));
+
+    // Position Ramp Elevator
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += 0; // 1/ for GR 1/50 for 20 times per second
+    //     elevator.setPosition(desiredRotation);
     // }));
 
     driverController.bumperRight()
@@ -217,8 +227,8 @@ public class RobotContainer {
     );
 
     driverController.buttonUp()
-      .whileTrue(intakeWrist.setEnabledCommand()
-    );
+      .onTrue(intakeWrist.setEnabledCommand()
+    ).onFalse(intakeWrist.setDisabledCommand());
 
     // driverController.buttonUp()
     //   .whileTrue(
@@ -240,15 +250,15 @@ public class RobotContainer {
     //   .onTrue(intakeWrist.setEnabledCommand())
     //   .onFalse(intakeWrist.setDisabledCommand());
     
-    // driverController.buttonLeft()
-    //   .onTrue(intakeWrist.moveToReefL14())
-    //   .onFalse(intakeWrist.moveToStow());
+    driverController.buttonLeft()
+      .onTrue(intakeWrist.moveToReefL14())
+      .onFalse(intakeWrist.moveToStow());
 
 
     
-    // driverController.buttonRight()
-    //   .onTrue(intakeWrist.moveToReefL23())
-    //   .onFalse(intakeWrist.setDisabledCommand()); 
+    driverController.buttonRight()
+      .onTrue(intakeWrist.moveToReefL23())
+      .onFalse(intakeWrist.setDisabledCommand()); 
     
     if(USE_ELEV) {
       // driverController.triggerRight()

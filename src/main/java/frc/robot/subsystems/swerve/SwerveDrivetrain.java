@@ -28,8 +28,8 @@ import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
-import frc.robot.subsystems.LimelightHelpers;
-import frc.robot.subsystems.LimelightHelpers.PoseEstimate;
+import frc.robot.vision.LimelightHelpers;
+import frc.robot.vision.LimelightHelpers.PoseEstimate;
 import frc.robot.subsystems.Reportable;
 
 import static frc.robot.Constants.SwerveDriveConstants.*;
@@ -180,80 +180,100 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());
 
-        field.setRobotPose(poseEstimator.getEstimatedPosition());
+        Pose2d estimatedPosition = poseEstimator.getEstimatedPosition();
 
-        // visionupdateOdometry("limelight-back");
-        // visionupdateOdometry("limelight-kads");
+        field.setRobotPose(estimatedPosition);
+
+        double robotRotation = estimatedPosition.getRotation().getDegrees();
+
+        SmartDashboard.putNumber("Robot Rotation", robotRotation);
+
+        // visionupdateOdometry("limelight-touch",robotRotation);
+        // visionupdateOdometry("limelight-awesome",robotRotation);
+        // visionupdateOdometry("limelight-zzzzach",robotRotation);
+        // visionupdateOdometry("limelight-duaalex",robotRotation);
 
     }
 
     //******************************  Vision ******************************/
 
-    // private void visionupdateOdometry(String limelightName) {
-    //     boolean doRejectUpdate = false;
+    private void visionupdateOdometry(String limelightName,double robotRotation) {
 
-    //     LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName); //TODO: test if we need to account for alliance
-    //     double xyStds = 0.5; //Tune 
-    //     double degStds = 999999; //
+        // Needs to be tested on field to see if accurate, because it uses the robots rotation
+        // to help figure out where it is
 
-    //     boolean receivedValidData = LimelightHelpers.getTV(limelightName);
-    //     PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
-    //     Pose2d botPose1 = estimate.pose;
+        LimelightHelpers.SetRobotOrientation(limelightName, robotRotation, 0, 0, 0, 0, 0);
+
+        String log = limelightName;
+
+        // LimelightHelpers.SetRobotOrientation("limelightName")
+        boolean doRejectUpdate = false;
+
+        LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName); //TODO: test if we need to account for alliance
+        double xyStds = 0.5; //Tune 
+        double degStds = 999999; //
+
+        boolean receivedValidData = LimelightHelpers.getTV(limelightName);
+        PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+
+        if (estimate == null){
+            doRejectUpdate = true;
+        }
         
-    //     if(!receivedValidData)
-    //         doRejectUpdate = true;
-    //     // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
-    //     //     doRejectUpdate = true;
-    //     else if(megaTag2.tagCount == 1 && megaTag2.rawFiducials.length == 1)
-    //     {
-    //         if(megaTag2.rawFiducials[0].ambiguity > .7)
-    //         {
-    //             doRejectUpdate = true;
-    //         }
-    //         if(megaTag2.rawFiducials[0].distToCamera > 3)
-    //         {
-    //             doRejectUpdate = true;
-    //         }
+        if(!receivedValidData)
+            doRejectUpdate = true;
+        // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
+        //     doRejectUpdate = true;
+        // else if(Math.abs(m_gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        // {
+        //     doRejectUpdate = true;
+        // }
+        else if(megaTag2.tagCount == 0)
+        {
+            doRejectUpdate = true;
+        }
 
+        // SmartDashboard.putBoolean(limelightName+" Valid Data", !doRejectUpdate);
+        log+="Valid Data: "+ Boolean.toString(!doRejectUpdate)+"\n";
+        log+="Is Null: "+Boolean.toString(estimate == null)+"\n";
+        log+="Megatag Count"+Integer.toString(megaTag2.tagCount)+"\n";
+        // SmartDashboard.putBoolean(limelightName+" Is Null", estimate == null);
+        // SmartDashboard.putNumber(limelightName+" Megatag Count", megaTag2.tagCount);
 
+        SmartDashboard.putString(limelightName + "Info", log);
 
+        if(!doRejectUpdate)
+        {
+            Pose2d botPose1 = estimate.pose;
 
+            SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
+            SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
+;
+            if (megaTag2.tagCount >= 2) {
+                xyStds = 0.5;
+                degStds = 6;
+            }
+            // 1 target with large area and close to estimated pose
+            else if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
+                xyStds = 1.0;
+                degStds = 12;
+            }
+            // 1 target farther away and estimated pose is close
+            else if (megaTag2.avgTagArea > 0.1 && megaTag2.rawFiducials[0].distToCamera < 0.3) {
+                xyStds = 2.0;
+                degStds = 30;
+            }
 
+            poseEstimator.setVisionMeasurementStdDevs(
+                VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
 
-
-
-
-    
-            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
-            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
-            
-    //         // 1 target with large area and close to estimated pose
-    //         if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
-    //             xyStds = 1.0;
-    //             degStds = 12;
-    //         }
-    //         // 1 target farther away and estimated pose is close
-    //         else if (megaTag2.avgTagArea > 0.1 && megaTag2.rawFiducials[0].distToCamera < 0.3) {
-    //             xyStds = 2.0;
-    //             degStds = 30;
-    //         }
-    //     }
-    //     else if (megaTag2.tagCount >= 2) {
-    //         xyStds = 0.5;
-    //         degStds = 6;
-    //     }
-
-    //     if(!doRejectUpdate)
-    //     {
-    //         poseEstimator.setVisionMeasurementStdDevs(
-    //           VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-
-    //         //poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
-    //         poseEstimator.addVisionMeasurement(
-    //             megaTag2.pose,
-    //             megaTag2.timestampSeconds);
-    //     }
-    // }
+            //poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+            poseEstimator.addVisionMeasurement(
+                megaTag2.pose,
+                megaTag2.timestampSeconds);
+        }
+    }
     
     //****************************** RESETTERS ******************************/
 
