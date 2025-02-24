@@ -196,15 +196,15 @@ public class RobotContainer {
     // }));
     
     // Position Ramp Wrist
-    driverController.bumperLeft()
-      .whileTrue(Commands.run(() -> {
-        desiredRotation -= 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
-    }));
-    driverController.bumperRight()
-      .whileTrue(Commands.run(() -> {
-        desiredRotation += 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
-        intakeWrist.setPosition(desiredRotation);
-    }));
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation -= 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
+    // }));
+    // driverController.bumperRight()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
+    //     intakeWrist.setPosition(desiredRotation);
+    // }));
 
     // Position Ramp Elevator
     // driverController.bumperLeft()
@@ -213,18 +213,18 @@ public class RobotContainer {
     //     elevator.setPosition(desiredRotation);
     // }));
 
-    // driverController.bumperRight()
-    //   .whileTrue(intakeWrist.moveToStow()
-    // );
-    // driverController.triggerRight()
-    //   .whileTrue(intakeWrist.moveToStation()
-    // );
-    // driverController.bumperLeft()
-    //   .whileTrue(intakeWrist.moveToReefL14()
-    // );
-    // driverController.triggerLeft()
-    //   .whileTrue(intakeWrist.moveToReefL23()
-    // );
+    driverController.bumperRight()
+      .whileTrue(intakeWrist.moveToStow()
+    );
+    driverController.triggerRight()
+      .whileTrue(intakeWrist.moveToStation()
+    );
+    driverController.bumperLeft()
+      .whileTrue(intakeWrist.moveToReefL14()
+    );
+    driverController.triggerLeft()
+      .whileTrue(intakeWrist.moveToReefL23()
+    );
 
     driverController.buttonUp()
       .onTrue(intakeWrist.setEnabledCommand()
