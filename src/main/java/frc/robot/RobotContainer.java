@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
+import com.ctre.phoenix6.controls.VoltageOut;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -26,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.ROBOT_ID;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
@@ -47,7 +49,7 @@ import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public Gyro imu = new PigeonV2(1);
+  public Gyro imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
@@ -119,8 +121,6 @@ public class RobotContainer {
           bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
         }
       }
-
-
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -159,7 +159,7 @@ public class RobotContainer {
     if (USE_ELEV) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
-      wrist.initShuffleboard(loggingLevel);
+      intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
