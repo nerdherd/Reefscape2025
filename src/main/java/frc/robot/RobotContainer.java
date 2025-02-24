@@ -76,7 +76,12 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private static boolean USE_ELEV = true;
+//////////////////////////////////////////////////////
+  // PLEASE ONLY ENABLE THE SUBSYSTEM YOU ARE TESTING
+  private static boolean USE_ELEV = false; // keep thie value is false before you check in your code
+  private static boolean USE_PIVOT = false;// keep thie value is false before you check in your code
+/////////////////////////////////////////////////////
+
   private static boolean V1 = true;
 
 
@@ -103,15 +108,18 @@ public class RobotContainer {
       // add your code only for isme 
     }
 
-    if (USE_ELEV) {
-      intakeRoller = new IntakeRoller();
-      intakeWrist = new IntakeWrist(V1);
-      elevator = new Elevator();
-      elevatorPivot = new ElevatorPivot(V1);
-    }
+   
+    intakeRoller = new IntakeRoller();
+    intakeWrist = new IntakeWrist(V1);
+    elevator = new Elevator();
+    elevatorPivot = new ElevatorPivot(V1);
+
+    Elevator.enabled = USE_ELEV;
+    ElevatorPivot.enabled = USE_PIVOT;
+
 
     try { // ide displayed error fix
-      if(USE_ELEV) {
+
         if(Constants.ROBOT_NAME == ROBOT_ID.ISME)
         {
           isMeBottom2Piece = new isMeBottom2Piece(swerveDrive, intakeRoller, elevator, "isMeBottom2Piece");
@@ -120,7 +128,7 @@ public class RobotContainer {
         {
           bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
         }
-      }
+
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -156,12 +164,12 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
-    if (USE_ELEV) { 
+
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
-    }
+
   }
   
   private void initAutoChoosers() {
@@ -317,29 +325,24 @@ public class RobotContainer {
       .onTrue(intakeWrist.moveToReefL23())
       .onFalse(intakeWrist.setDisabledCommand()); 
     
-    if(USE_ELEV) {
-      // driverController.triggerRight()
-      // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      // .onFalse(elevatorPivot.moveToStow());
-    }
 
     /*******************************
      * Pivot Section
      *******************************/
     
-    // Voltage Ramp Pivot Positive
-    operatorController.bumperRight()
-      .whileTrue(Commands.run(() -> {
-        voltage += 0.2 / 50.0;
-        elevatorPivot.setPivotVoltage(voltage);
-    }, elevatorPivot));
+      // Voltage Ramp Pivot Positive
+      operatorController.bumperRight()
+        .whileTrue(Commands.run(() -> {
+          voltage += 0.2 / 50.0;
+          elevatorPivot.setPivotVoltage(voltage);
+      }, elevatorPivot));
 
-    // Voltage Ramp Pivot Negative
-    operatorController.bumperLeft()
-      .whileTrue(Commands.run(() -> {
-        voltage -= 0.2 / 50.0;
-        elevatorPivot.setPivotVoltage(voltage);
-    }, elevatorPivot));
+      // Voltage Ramp Pivot Negative
+      operatorController.bumperLeft()
+        .whileTrue(Commands.run(() -> {
+          voltage -= 0.2 / 50.0;
+          elevatorPivot.setPivotVoltage(voltage);
+      }, elevatorPivot));
 
     /*******************************
     * Elevtor Section

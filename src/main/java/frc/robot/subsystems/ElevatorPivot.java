@@ -28,6 +28,8 @@ import frc.robot.Constants.V1ElevatorConstants;
 import frc.robot.util.NerdyMath;
 
 public class ElevatorPivot extends SubsystemBase implements Reportable{
+    public static boolean enabled = false; // DO NOT CHECK IN WITH "TRUE"
+
     private TalonFX pivotMotor;
     private TalonFX pivotMotorRight;
 
@@ -35,7 +37,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFXConfigurator pivotConfiguratorRight; 
     private Pigeon2 pigeon;
 
-    public boolean enabled = true; // Change back to true
+
     private double desiredPosition; // = ElevatorConstants.kElevatorPivotStowPosition;
     private final MotionMagicVoltage motionMagicRequest;  // = new MotionMagicVoltage(desiredPosition); // (ElevatorConstants.kElevatorPivotStowPosition)
     private final NeutralOut brakeRequest = new NeutralOut();
@@ -61,7 +63,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             pivotConfiguratorRight = pivotMotorRight.getConfigurator();
         }
         configureMotorV1();
-        configurePIDV1();
+
+        // DO NOT ENABLE IT BEFORE YOU TESTED THE VOLTAGES AND POSITIONS
+        //configurePIDV1();
 
         pivotPositionOffset = pivotMotor.getPosition().getValueAsDouble();
         // pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition);
@@ -162,6 +166,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
+        if (!enabled) {
+            pivotMotor.setControl(brakeRequest);
+            return;
+        }
         SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Commanded Rotations", desiredPosition);
@@ -202,22 +210,39 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     // ****************************** STATE METHODS ***************************** //
 
-    private void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    private void setEnabled(boolean isEnable) {
+        enabled = isEnable;
     }
 
     public void setPosition(double position) {
+        if(enabled == false)
+        {
+            return;
+        }
         desiredPosition = position + pivotPositionOffset; // 0 + (-1.6) => = -1.6
-        motionMagicRequest.Position = desiredPosition;
+        double newPos = NerdyMath.clamp(
+            desiredPosition, 
+            -0.11,//ElevatorConstants.kElevatorPivotMin, 
+            -0.1//ElevatorConstants.kElevatorPivotMax
+        );
+        motionMagicRequest.Position = newPos;
     }
 
     public void setPivotVoltage(double voltage) {
-        commandedVoltage = voltage;
+        if(enabled == false)
+        {
+            return;
+        }
+        double newVlot = NerdyMath.clamp(
+            voltage, 
+            -0.3,//ElevatorConstants.kElevatorPivotVoltMin, 
+            0.3//ElevatorConstants.kElevatorPivotVoltMax
+        );
+        commandedVoltage = newVlot;
         // pivotMotor.setControl(voltageRequest.withOutput(commandedVoltage));
         pivotMotor.setVoltage(commandedVoltage);
         // pivotMotorRight.setControl(voltageRequest.withOutput(commandedVoltage));
         pivotMotorRight.setControl(followRequest);
-
     }
 
     // private void setPositionDegrees(double positionDegrees) {

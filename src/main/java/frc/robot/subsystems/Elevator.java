@@ -23,13 +23,14 @@ import frc.robot.Constants.WristConstants;
 import frc.robot.util.NerdyMath;
 
 public class Elevator extends SubsystemBase implements Reportable {
+    public static boolean enabled = false; // DO NOT CHECK IN WITH "TRUE"
+
     private final TalonFX elevatorMotor;
     private final TalonFX elevatorMotor2;
 
     // private final PIDController elevatorPID;
     private double desiredPosition;
     private double desiredVelocity;
-    private boolean enabled = false;
     private TalonFXConfigurator motorConfigurator;
     private TalonFXConfigurator motorConfigurator2;
     private MotionMagicVoltage motionMagicVoltage;
@@ -40,21 +41,20 @@ public class Elevator extends SubsystemBase implements Reportable {
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
-        motionMagicVoltage = new MotionMagicVoltage(0);
         brakeRequest = new NeutralOut();
-        // elevatorPID = new PIDController(
-        //     ElevatorConstants.kPElevatorMotor,
-        //     ElevatorConstants.kIElevatorMotor,
-        //     ElevatorConstants.kDElevatorMotor);
-        elevatorMotor.setPosition(0.0);
-
-        motorConfigurator = elevatorMotor.getConfigurator();
-        motorConfigurator2 = elevatorMotor2.getConfigurator();
-
-        setMotorConfigs();
-
         followRequest = new Follower(ElevatorConstants.kElevatorMotorID2, true);
-        motionMagicVoltage.withSlot(0);
+
+        /////////////////////////////////////////////////////////////////////////
+        // DO NOT ENABLE THEM BEFORE YOU TESTED THE VOLTAGES AND POSITIONS!!!!!!!
+        /////////////////////////////////////////////////////////////////////////
+        // motionMagicVoltage = new MotionMagicVoltage(0);
+        // elevatorMotor.setPosition(0.0);
+
+        // motorConfigurator = elevatorMotor.getConfigurator();
+        // motorConfigurator2 = elevatorMotor2.getConfigurator();
+
+        // setMotorConfigs();
+        // motionMagicVoltage.withSlot(0);
     }
     
     private void setMotorConfigs() {
@@ -111,17 +111,24 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // ****************************** STATE METHODS ****************************** //
 
-    private void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        if (!enabled) desiredPosition = ElevatorConstants.kElevatorStowPosition;
+    private void setEnabled(boolean isEnable) {
+        enabled = isEnable;
     }
     
     public void setPosition(double position) {
+        if(enabled == false)
+        {
+            return;
+        }
         desiredPosition = position;
         motionMagicVoltage.Position = desiredPosition;
     }
 
     private void setVelocity(double velocity) {
+        if(enabled == false)
+        {
+            return;
+        }
         desiredVelocity = NerdyMath.clamp(velocity, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         elevatorMotor.set(desiredVelocity);
     }
