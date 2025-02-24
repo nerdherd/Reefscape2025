@@ -14,7 +14,7 @@ public class SuperSystem {
         this.roller = roller;
         this.elevator = elevator;
         this.pivot = pivot;
-        this.pivot.elevatorPosition = () -> this.elevator.getPosition();
+        // this.pivot.elevatorPosition = () -> this.elevator.getPosition();
     }
 
     // Intake Commands
@@ -22,8 +22,8 @@ public class SuperSystem {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToStation(),
-            wrist.moveToStation(),
-            roller.intake()
+            wrist.moveToStation()
+            // roller.intake()
         );
         command.addRequirements(elevator, pivot, wrist, roller);
         return command;
@@ -31,9 +31,9 @@ public class SuperSystem {
     public Command intakeCoralGround() {
         Command command = Commands.sequence(
             pivot.moveToPickup(),
-            elevator.stow(),
-            wrist.moveToPickup(),
-            roller.intake()
+            elevator.stow()
+            // wrist.moveToPickup(),
+            // roller.intake()
         );
         command.addRequirements(elevator, pivot, wrist, roller);
         return command;
@@ -42,8 +42,8 @@ public class SuperSystem {
         Command command = Commands.sequence(
             pivot.moveToStart(),
             elevator.moveToStation(),
-            wrist.moveToStation(),
-            roller.intake()
+            wrist.moveToStation()
+            // roller.intake()
         );
         command.addRequirements(elevator, pivot, wrist, roller);
         return command;
@@ -53,8 +53,8 @@ public class SuperSystem {
     public Command placeCoralL1() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
-            elevator.moveToReefL1(),
-            wrist.moveToReefL13()
+            elevator.moveToReefL1()
+            // wrist.moveToReefL13()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;
@@ -62,8 +62,8 @@ public class SuperSystem {
     public Command placeCoralL2() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
-            elevator.moveToReefL2(),
-            wrist.moveToReefL24()
+            elevator.moveToReefL2()
+            // wrist.moveToReefL24()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;
@@ -72,8 +72,8 @@ public class SuperSystem {
     public Command placeCoralL3() {
         Command command = Commands.sequence(
             pivot.moveToStart(),
-            elevator.moveToReefL3(),
-            wrist.moveToReefL13()
+            elevator.moveToReefL3()
+            // wrist.moveToReefL13()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;
@@ -81,9 +81,9 @@ public class SuperSystem {
 
     public Command placeCoralL4() {
         Command command = Commands.sequence(
-            pivot.movetoL4(),
-            elevator.moveToReefL4(),
-            wrist.moveToReefL24()
+            // pivot.movetoL4(),
+            elevator.moveToReefL4()
+            // wrist.moveToReefL24()
         );
         command.addRequirements(elevator, pivot, wrist);
         return command;
@@ -103,9 +103,9 @@ public class SuperSystem {
     public Command stow() {
         Command command = Commands.sequence(
             roller.stop(),
-            wrist.stow(),
-            elevator.stow(),
-            pivot.stow()
+            // wrist.stow(),
+            elevator.stow()
+            // pivot.stow()
         );
         command.addRequirements(elevator, pivot, wrist, roller);
         return command;
