@@ -322,6 +322,40 @@ public class RobotContainer {
       // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
       // .onFalse(elevatorPivot.moveToStow());
     }
+
+    /*******************************
+     * Pivot Section
+     *******************************/
+    
+    // Voltage Ramp Pivot Positive
+    operatorController.bumperRight()
+      .whileTrue(Commands.run(() -> {
+        voltage += 0.2 / 50.0;
+        elevatorPivot.setPivotVoltage(voltage);
+    }, elevatorPivot));
+
+    // Voltage Ramp Pivot Negative
+    operatorController.bumperLeft()
+      .whileTrue(Commands.run(() -> {
+        voltage -= 0.2 / 50.0;
+        elevatorPivot.setPivotVoltage(voltage);
+    }, elevatorPivot));
+
+    /*******************************
+    * Elevtor Section
+    *******************************/
+
+
+    /*******************************
+    * Intake Section
+    *******************************/
+
+    
+
+    /*******************************
+    * Intake Section
+    *******************************/
+
   }
   
 

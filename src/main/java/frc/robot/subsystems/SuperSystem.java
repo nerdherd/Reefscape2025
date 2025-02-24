@@ -20,7 +20,7 @@ public class SuperSystem {
     // Intake Commands
     public Command intakeCoralStation() {
         Command command = Commands.sequence(
-            pivot.moveToStart(),
+            // pivot.moveToStart(),
             elevator.moveToStation(),
             wrist.moveToStation()
             // roller.intake()
@@ -30,7 +30,7 @@ public class SuperSystem {
     }
     public Command intakeCoralGround() {
         Command command = Commands.sequence(
-            pivot.moveToPickup(),
+            // pivot.moveToPickup(),
             elevator.stow()
             // wrist.moveToPickup(),
             // roller.intake()
@@ -40,7 +40,7 @@ public class SuperSystem {
     }
     public Command intakeAlgaeGround() { // TODO is this real
         Command command = Commands.sequence(
-            pivot.moveToStart(),
+            // pivot.moveToStart(),
             elevator.moveToStation(),
             wrist.moveToStation()
             // roller.intake()
@@ -52,7 +52,7 @@ public class SuperSystem {
     // OUttake Commands
     public Command placeCoralL1() {
         Command command = Commands.sequence(
-            pivot.moveToStart(),
+            // pivot.moveToStart(),
             elevator.moveToReefL1()
             // wrist.moveToReefL13()
         );
@@ -61,7 +61,7 @@ public class SuperSystem {
     }
     public Command placeCoralL2() {
         Command command = Commands.sequence(
-            pivot.moveToStart(),
+            // pivot.moveToStart(),
             elevator.moveToReefL2()
             // wrist.moveToReefL24()
         );
@@ -71,7 +71,7 @@ public class SuperSystem {
     
     public Command placeCoralL3() {
         Command command = Commands.sequence(
-            pivot.moveToStart(),
+            // pivot.moveToStart(),
             elevator.moveToReefL3()
             // wrist.moveToReefL13()
         );

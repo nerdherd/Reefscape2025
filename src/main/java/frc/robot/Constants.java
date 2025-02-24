@@ -322,7 +322,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; //0.01
     public static final double kGElevatorPivot = 0; //0.08
 
-    public static final double kElevatorPivotStowPosition = -26; //TODO change later -22
+    public static final double kElevatorPivotStowPosition = -1.6; // Was -26 //TODO change later -22
     public static final double kElevatorPivotStartPosition = 0; //TODO change later
     public static final double kElevatorPivotPickUpPosition = -40; //TODO change later   -60
 
@@ -357,10 +357,10 @@ public final class Constants {
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
     public static final int kLeftPivotMotorID = 17; 
-    public static final int kRightPivotMotorID = 0;
+    public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 0; 
+    public static final double kPElevatorPivot = 0.0; // TODO: NEED TO CALCULATE AND INPUT A kP
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
     public static final double kVElevatorPivot = 0; 
@@ -375,7 +375,7 @@ public final class Constants {
     public static final double kElevatorPivotMin = 0; // TODO change later   
     public static final double kElevatorPivotMax = 0; // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 0; // TODO change later
+    public static final double kElevatorPivotGearRatio = 16.0 / 1.0; // TODO change later
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
