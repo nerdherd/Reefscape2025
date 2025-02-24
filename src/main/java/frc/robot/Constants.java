@@ -40,7 +40,7 @@ public final class Constants {
     V2,
   }
 
-  public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
+  public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.V1;
 
   public static class ControllerConstants {
 
@@ -70,9 +70,11 @@ public final class Constants {
     public static final double kTurnMotorDeadband = 0.001;
 
     public static final double kPTurning = 0.26; // 0.55
-    public static final double kITurning = 0.01;
+    //public static final double kITurning = 0.01; // is me?
+	public static final double kITurning = 0.0;
     public static final double kDTurning = 0.0015;//0.02 
-    public static final double kFTurning = 0; //0.015
+    //public static final double kFTurning = 0; //0.015 // isme?
+	public static final double kFTurning = 0.015;//0.015
 
     public static final double kPDrive = 0.13; // 0.6
     public static final double kIDrive = 0;
@@ -99,9 +101,11 @@ public final class Constants {
     public static final double kDThetaTeleop = 0;
 
     // Distance between right and left wheels
-    public static final double kTrackWidth = Units.inchesToMeters(21);
+    //public static final double kTrackWidth = Units.inchesToMeters(21); isme?
+	public static final double kTrackWidth = Units.inchesToMeters(24.125);
     // Distance between front and back wheels
-    public static final double kWheelBase = Units.inchesToMeters(21);
+    //public static final double kWheelBase = Units.inchesToMeters(21); isme?
+	public static final double kWheelBase = Units.inchesToMeters(24.125);
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
       new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -287,21 +291,26 @@ public final class Constants {
   public static final class ElevatorConstants {
 
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    public static final int kElevatorMotorID = 18;            // TODO change later 
+    public static final int kElevatorMotorID = 8;
+    public static final int kElevatorMotorID2 = 9; 
     public static final double kElevatorStowPosition    = -1; // TODO change later
     public static final double kElevatorStationPosition = -2 ; // TODO change later
     public static final double kElevatorL1Position =   -2;     // TODO change later
-    public static final double kElevatorL2Position =  -1;    
-    public static final double kElevatorL3Position = -35;     // TODO change later
-    public static final double kElevatorL4Position = -68.2;     // TODO change later
+    public static final double kElevatorL2Position =  -9;     // TODO change later
+    public static final double kElevatorL3Position = -18;     // TODO change later
+    public static final double kElevatorL4Position = -28;     // TODO change later
     public static final double kElevatorSpeed = 1.0;          // TODO change later
     public static final double kPElevatorMotor = 0.1;
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
 
+    public static final double kElevatorCruiseVelocity = 20; //16.333
+    public static final double kElevatorCruiseAcceleration = 40.000;
+    public static final double kElevatorJerk = 400.0;
+
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kPivotMotorID = 17; // TODO IDs cant go over 62
+    public static final int kLeftPivotMotorID = 17; 
     public static final int kPivotPigeonID = 2; // TODO change later
     
     public static final double kPElevatorPivot = 40; //1.2
@@ -315,8 +324,6 @@ public final class Constants {
     public static final double kElevatorPivotStowPosition = -26; //TODO change later -22
     public static final double kElevatorPivotStartPosition = 0; //TODO change later
     public static final double kElevatorPivotPickUpPosition = -40; //TODO change later   -60
-    public static final double kElevatorPivotL23Position = -0.078;
-    public static final double kElevatorPivotL4Position = -0.068;
 
     public static final double kElevatorPivotMin = -56.3; // TODO change later    -61.3
     public static final double kElevatorPivotMax = -25.4; // TODO change later   -20.4
@@ -325,11 +332,56 @@ public final class Constants {
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 16.333; //20
-    public static final double kElevatorPivotCruiseAcceleration = 50; //100.000
-    public static final double kElevatorPivotJerk = 200.0;
+    public static final double kEPivotCruiseVelocity = 100; //16.333
+    public static final double kElevatorPivotCruiseAcceleration = 1000.000;
+    public static final double kElevatorPivotJerk = 900.0;
     
  }
+
+ public static final class V1ElevatorConstants {
+    // ************************************** ELEVATOR CONSTANTS *************************************** //
+    public static final int kElevatorMotorID = 17;            // TODO change later 
+    public static final int kElevatorMotorRightID = 18;            // TODO change later 
+    public static final double kElevatorStowPosition    = 0; // TODO change later
+    public static final double kElevatorStationPosition = 0 ; // TODO change later
+    public static final double kElevatorL1Position =   0;     // TODO change later
+    public static final double kElevatorL2Position =  0;     // TODO change later
+    public static final double kElevatorL3Position = 0;     // TODO change later
+    public static final double kElevatorL4Position = 0;     // TODO change later
+    public static final double kElevatorSpeed = 1.0;          // TODO change later
+    public static final double kPElevatorMotor = 0.1;
+    public static final double kIElevatorMotor = 0;
+    public static final double kDElevatorMotor = 0;
+    public static final double kVElevatorMotor = 0;
+
+    // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
+    public static final int kLeftPivotMotorID = 17; 
+    public static final int kRightPivotMotorID = 0;
+    public static final int kPivotPigeonID = 2; // TODO change later
+    
+    public static final double kPElevatorPivot = 0; 
+    public static final double kIElevatorPivot = 0;
+    public static final double kDElevatorPivot = 0;
+    public static final double kVElevatorPivot = 0; 
+    public static final double kSElevatorPivot = 0; 
+    public static final double kAElevatorPivot = 0.0; 
+    public static final double kGElevatorPivot = 0; 
+
+    public static final double kElevatorPivotStowPosition = 0; 
+    public static final double kElevatorPivotStartPosition = 0; //TODO change later
+    public static final double kElevatorPivotPickUpPosition = 0; 
+
+    public static final double kElevatorPivotMin = 0; // TODO change later   
+    public static final double kElevatorPivotMax = 0; // TODO change later   
+
+    public static final double kElevatorPivotGearRatio = 0; // TODO change later
+    public static final double kElevatorPivotDeadBand = 0;
+    public static final double kElevatorPivotOffSet = 0;
+
+    public static final double kEPivotCruiseVelocity = 10;
+    public static final double kElevatorPivotCruiseAcceleration = 20.000;
+    public static final double kElevatorPivotJerk = 200.0;
+  }
 
   public static final class IntakeConstants {
 
@@ -351,24 +403,52 @@ public final class Constants {
     // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kWristMotorID = 54;
   
-    public static final double kPWristMotor = 2.0;
+    public static final double kPWristMotor = 3; // max 4 
     public static final double kIWristMotor = 0;
     public static final double kDWristMotor = 0;
-    public static final double kVWristMotor = 0.12;
+    public static final double kVWristMotor = 0;
     public static final double kSWristMotor = 0; //Static Friction
-    public static final double kGWristMotor = 0.015; //Gravity
-    public static final double kWristCruiseVelocity = 40; //Rotations per second 
+    public static final double kGWristMotor = 0; //Gravity
     public static final double kWristAcceleration = 100; //Rotations per second squared
     public static final double kWristJerk = 700; //Rotations per second cubed
 
-    public static final double kWristStowPosition = -0.1;
-    public static final double kWristStationPosition = 0;
-    public static final double kWristPickupPosition = -0.1; // TODO change later
+    public static final double kWristStowPosition = 5;//0.0
+    public static final double kWristStationPosition = 10;
+    public static final double kWristL23Position = 15;
+    public static final double kWristL14Position = 20; //0.5
 
-    public static final double kWristL24Position = -10.92;
-    public static final double kWristL13Position = -4.85; //TODO change ltr
     public static final double kWristSpeed = 0.5;
+    public static final int kWristPigeonID = 0;
 
+  
  }
+  public static final class WristConstants{
+    public static final int kMotorID = 54;
+  
+    public static final double kPMotor =  4.147 * 6; // 4.147  max
+    public static final double kItMotor = 0;
+    public static final double kDMotor = 0;
+    public static final double kVMotor = 0; //0.12;
+    public static final double kSMotor = 0; //0.015; //Static Friction
+    public static final double kGMotor = 0.6; //1.928; //0.015; //Gravity
+    // kGMotor = -2.310 + (0.002420 * theta)
+    public static final double kCruiseVelocity = 2;
+    public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
+    public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
+
+    public static final double kStowPosition = -0.15;
+    public static final double kStationPosition = -0.3;
+    public static final double kL23Position = -0.6;
+    public static final double kL14Position = -0.8;
+    public static final double kWristStowPosition = 0.092;//0.0
+    public static final double kWristStationPosition = 0.54;
+    public static final double kWristL23Position = 0.36;
+    public static final double kWristL14Position = 0.708;
+    public static final double kMaxPosition = 0.14; //156
+    public static final double kMinPosition = 0;
+
+    public static final double kSpeed = 0.5;
+    public static final int kPigeonID = 2;
+  }
 
 }
