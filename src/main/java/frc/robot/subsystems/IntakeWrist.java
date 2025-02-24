@@ -72,8 +72,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         configurePID(motorConfigs);
         
         motor.setNeutralMode(NeutralModeValue.Brake);
-        zeroEncoder();
-        
     }
 
     //****************************** SETUP METHODS ******************************//
@@ -131,10 +129,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
             }
         }
-    }
-
-    private void zeroEncoder() {
-        motor.setPosition(0);
     }
 
     @Override
