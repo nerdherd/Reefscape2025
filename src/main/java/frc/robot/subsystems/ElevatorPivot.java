@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -35,11 +36,12 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFXConfigurator pivotConfiguratorRight; 
     private Pigeon2 pigeon;
 
-    public boolean enabled = true; // Change back to true
+    public boolean enabled = false; // Change back to true
     private double desiredPosition; // = ElevatorConstants.kElevatorPivotStowPosition;
     private final MotionMagicVoltage motionMagicRequest;  // = new MotionMagicVoltage(desiredPosition); // (ElevatorConstants.kElevatorPivotStowPosition)
     private final NeutralOut brakeRequest = new NeutralOut();
-    private final Follower followRequest = new Follower(ElevatorConstants.kLeftPivotMotorID, true);
+
+    private final Follower followRequest = new Follower(V1ElevatorConstants.kLeftPivotMotorID, true);
 
     public final VoltageOut voltageRequest = new VoltageOut(0);
     private double ff;
@@ -52,12 +54,13 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     public ElevatorPivot (boolean V1) {
         desiredPosition = 0.0;
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
-        pivotMotor = new TalonFX(ElevatorConstants.kLeftPivotMotorID);
+        pivotMotor = new TalonFX(V1ElevatorConstants.kLeftPivotMotorID);
         pivotConfigurator = pivotMotor.getConfigurator();
         if(V1) {
             pivotMotorRight = new TalonFX(V1ElevatorConstants.kRightPivotMotorID);
             // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
-            pivotMotorRight.setControl(followRequest);
+            
+            pivotMotorRight.setControl(followRequest); // TODO: Commented out to isolate for motor testing 2/24/25
             pivotConfiguratorRight = pivotMotorRight.getConfigurator();
         }
         configureMotorV1();
@@ -216,7 +219,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // pivotMotor.setControl(voltageRequest.withOutput(commandedVoltage));
         pivotMotor.setVoltage(commandedVoltage);
         // pivotMotorRight.setControl(voltageRequest.withOutput(commandedVoltage));
-        pivotMotorRight.setControl(followRequest);
+
+        // pivotMotorRight.setControl(followRequest);
 
     }
 

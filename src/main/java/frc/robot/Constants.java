@@ -331,8 +331,8 @@ public final class Constants {
 
  public static final class V1ElevatorConstants {
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    public static final int kElevatorMotorID = 17;            // TODO change later 
-    public static final int kElevatorMotorRightID = 18;            // TODO change later 
+    public static final int kElevatorMotorID = 0;            // TODO change later 
+    public static final int kElevatorMotorRightID = 0;            // TODO change later 
     public static final double kElevatorStowPosition    = 0; // TODO change later
     public static final double kElevatorStationPosition = 0 ; // TODO change later
     public static final double kElevatorL1Position =   0;     // TODO change later
@@ -346,7 +346,7 @@ public final class Constants {
     public static final double kVElevatorMotor = 0;
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kLeftPivotMotorID = 17; 
+    public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
@@ -362,10 +362,10 @@ public final class Constants {
     public static final double kElevatorPivotStartPosition = 0; //TODO change later
     public static final double kElevatorPivotPickUpPosition = 0; 
 
-    public static final double kElevatorPivotMin = 0; // TODO change later   
+    public static final double kElevatorPivotMin = -1.6; // TODO change later   
     public static final double kElevatorPivotMax = 0; // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 16.0 / 1.0; // TODO change later
+    public static final double kElevatorPivotGearRatio = 80.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 

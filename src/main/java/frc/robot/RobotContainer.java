@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -227,14 +228,16 @@ public class RobotContainer {
 
 
     // Enable Pivot
-    // operatorController.buttonDown()
-    //   .whileTrue(elevatorPivot.setEnabledCommand(true)
-    // );
+    operatorController.buttonDown()
+      .whileTrue(elevatorPivot.setEnabledCommand(true)
+    );
 
     // Voltage Ramp Pivot Positive
     operatorController.bumperRight()
       .whileTrue(Commands.run(() -> {
         voltage += 0.2 / 50.0;
+        voltage = MathUtil.clamp(voltage, -1.0, 1.0);
+
         elevatorPivot.setPivotVoltage(voltage);
     }, elevatorPivot));
 
@@ -242,6 +245,8 @@ public class RobotContainer {
     operatorController.bumperLeft()
       .whileTrue(Commands.run(() -> {
         voltage -= 0.2 / 50.0;
+        voltage = MathUtil.clamp(voltage, -1.0, 1.0);
+        
         elevatorPivot.setPivotVoltage(voltage);
     }, elevatorPivot));
     
