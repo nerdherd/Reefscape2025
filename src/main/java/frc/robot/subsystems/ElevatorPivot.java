@@ -41,15 +41,16 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest;  // = new MotionMagicVoltage(desiredPosition); // (ElevatorConstants.kElevatorPivotStowPosition)
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private final Follower followRequest = new Follower(V1ElevatorConstants.kLeftPivotMotorID, false);
+    private final Follower followRequest = new Follower(V1ElevatorConstants.kLeftPivotMotorID, true);
     // public final VoltageOut voltageRequest = new VoltageOut(0);
 
     private double ff;
     private double ffInverse;
-    private double pivotPositionOffset = 0.0;
+    // private double pivotPositionOffset = 0.0;
 
-    private double commandedVoltageLeft = 0.0;
-    private double commandedVoltageRight = 0.0;
+    private double commandedVoltage = 0.0;
+
+    private double error;
 
 
 
@@ -70,7 +71,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         configureMotorV1();
         configurePIDV1();
 
-        pivotPositionOffset = pivotMotor.getPosition().getValueAsDouble();
+        // pivotPositionOffset = pivotMotor.getPosition().getValueAsDouble();
+        pivotMotor.setPosition(0);
+        pivotMotorRight.setPosition(0);
 
     }
     
@@ -80,7 +83,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         
         pivotConfigurator.refresh(pivotConfiguration);
 
-        pivotConfiguration.Slot0.kP = V1ElevatorConstants.kPElevatorPivot;
+        pivotConfiguration.Slot0.kP = V1ElevatorConstants.kPElevatorPivot; // TODO Gonna view kP error first 
         pivotConfiguration.Slot0.kI = V1ElevatorConstants.kIElevatorPivot;
         pivotConfiguration.Slot0.kD = V1ElevatorConstants.kDElevatorPivot;
         pivotConfiguration.Slot0.kV = V1ElevatorConstants.kVElevatorPivot;
@@ -98,7 +101,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
         pivotConfiguratorRight.refresh(pivotConfigurationRight);
 
-        pivotConfigurationRight.Slot0.kP = V1ElevatorConstants.kPElevatorPivot;
+        pivotConfigurationRight.Slot0.kP = V1ElevatorConstants.kPElevatorPivot; // TODO Gonna view kP error first
         pivotConfigurationRight.Slot0.kI = V1ElevatorConstants.kIElevatorPivot;
         pivotConfigurationRight.Slot0.kD = V1ElevatorConstants.kDElevatorPivot;
         pivotConfigurationRight.Slot0.kV = V1ElevatorConstants.kVElevatorPivot;
@@ -108,7 +111,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         
         pivotConfigurationRight.MotionMagic.MotionMagicCruiseVelocity = V1ElevatorConstants.kEPivotCruiseVelocity;
         pivotConfigurationRight.MotionMagic.MotionMagicAcceleration = V1ElevatorConstants.kElevatorPivotCruiseAcceleration;
-        pivotConfigurationRight.MotionMagic.MotionMagicJerk = V1ElevatorConstants.kElevatorPivotJerk;
+        // pivotConfigurationRight.MotionMagic.MotionMagicJerk = V1ElevatorConstants.kElevatorPivotJerk; // TODO
         pivotConfigurationRight.MotionMagic.MotionMagicExpo_kV = 0;
         pivotConfigurationRight.MotionMagic.MotionMagicExpo_kA = 0;
         
@@ -179,14 +182,16 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
         // SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
 
-        SmartDashboard.putNumber("Commanded Pivot Voltage Left (ID 17)", commandedVoltageLeft);
-        SmartDashboard.putNumber("Commanded Pivot Voltage Right (ID 18)", commandedVoltageRight);
+        SmartDashboard.putNumber("Commanded Pivot Voltage", commandedVoltage);
 
         SmartDashboard.putNumber("Applied feedforward", ff);
         SmartDashboard.putNumber("Feedforward inverse", ffInverse);
 
+        SmartDashboard.putNumber("Error Left (Rotations)", error);
+        // SmartDashboard.putNumber("Error Right (Rotations)", errorRight);
 
-        
+        SmartDashboard.putNumber("kP Left Applied Volts", error * 20);
+        // SmartDashboard.putNumber("kP Right Applied Volts", errorRight * 20);
 
 
         // ff = (-4.32028 * getPositionRev()) + 6.497105;
@@ -200,10 +205,15 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
         ffInverse = ff * -1;
 
+        
+
         if (enabled) {
-            pivotMotor.setControl(motionMagicRequest.withFeedForward(ffInverse));
-            pivotMotorRight.setControl(motionMagicRequest.withFeedForward(ff));
-            // pivotMotorRight.setControl(followRequest); // TODO: See if this syncs or reverse the Control
+            pivotMotor.setControl(motionMagicRequest.withFeedForward(ffInverse)); // TODO
+            // pivotMotorRight.setControl(motionMagicRequest.withFeedForward(ff));
+
+            error = desiredPosition - pivotMotor.getPosition().getValueAsDouble();
+
+            pivotMotorRight.setControl(followRequest); // TODO: See if this syncs or reverse the Control
         }
         else {
             pivotMotor.setControl(brakeRequest);
@@ -230,11 +240,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
         // Test if the motors are still reversed. If they aren't after the motor direction switching, then do follow request for pivotRight
 
-        commandedVoltageLeft = voltage;
-        commandedVoltageRight = commandedVoltageLeft * -1.0;
+        commandedVoltage = voltage;
+        // commandedVoltageRight = commandedVoltage * -1.0;
 
-        pivotMotor.setVoltage(commandedVoltageLeft);
-        pivotMotorRight.setVoltage(commandedVoltageRight);
+        pivotMotor.setVoltage(commandedVoltage);
+        // pivotMotorRight.setVoltage(commandedVoltageRiRght);
 
 
         // pivotMotor.setControl(voltageRequest.withOutput(commandedVoltage));

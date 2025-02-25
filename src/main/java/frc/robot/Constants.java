@@ -350,7 +350,8 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 0.0; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 20.0 / 1.0; // TODO: NEED TO CALCULATE AND INPUT A kP
+    // 1V = kP * 0.05         kP = 20
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
     public static final double kVElevatorPivot = 0; 
@@ -369,9 +370,9 @@ public final class Constants {
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 10;
-    public static final double kElevatorPivotCruiseAcceleration = 20.000;
-    public static final double kElevatorPivotJerk = 200.0;
+    public static final double kEPivotCruiseVelocity = 0.5;
+    public static final double kElevatorPivotCruiseAcceleration = 0.5;
+    // public static final double kElevatorPivotJerk = 200.0; // TODO
   }
 
   public static final class IntakeConstants {
