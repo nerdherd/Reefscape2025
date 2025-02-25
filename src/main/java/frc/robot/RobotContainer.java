@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.ClawConstants;
 import frc.robot.Constants.ModuleConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
@@ -40,6 +40,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
+import frc.robot.subsystems.IntakeV2;
 import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.ElevatorPivot;
 
@@ -51,15 +52,17 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
+  public IntakeV2 intakeV2;
+
   public IntakeRoller intakeRoller;
+  public IntakeWrist intakeWrist;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
-  public IntakeWrist intakeWrist;
 
   public Bottom2Piece bottom2Piece;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
-  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
+  // private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
@@ -92,6 +95,7 @@ public class RobotContainer {
     }
 
     if (USE_ELEV) {
+      intakeV2 = new IntakeV2();
       intakeRoller = new IntakeRoller();
       intakeWrist = new IntakeWrist(V1);
       elevator = new Elevator();
@@ -160,6 +164,33 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
+    // Triggers/Bumpers
+    driverController.bumperRight()
+      .whileTrue(intakeWrist.moveToStow()
+    );
+    driverController.triggerRight()
+      .whileTrue(intakeWrist.moveToStation()
+    );
+    driverController.bumperLeft()
+      .whileTrue(intakeWrist.moveToReefL14()
+    );
+    driverController.triggerLeft()
+      .whileTrue(intakeWrist.moveToReefL23()
+    );
+
+    // Buttons
+    driverController.buttonUp()
+      .onTrue(intakeWrist.setEnabledCommand())
+      .onFalse(intakeWrist.setDisabledCommand());
+
+    driverController.buttonLeft()
+      .onTrue(intakeV2.intakeCoral())
+      .onFalse(intakeV2.stow());
+
+      driverController.buttonRight()
+      .onTrue(intakeV2.intakeAlgae())
+      .onFalse(intakeV2.stow());
+
     // TODO someone tell me how useful this is
     // try {
     //   driverController.triggerLeft()
@@ -213,23 +244,6 @@ public class RobotContainer {
     //     elevator.setPosition(desiredRotation);
     // }));
 
-    driverController.bumperRight()
-      .whileTrue(intakeWrist.moveToStow()
-    );
-    driverController.triggerRight()
-      .whileTrue(intakeWrist.moveToStation()
-    );
-    driverController.bumperLeft()
-      .whileTrue(intakeWrist.moveToReefL14()
-    );
-    driverController.triggerLeft()
-      .whileTrue(intakeWrist.moveToReefL23()
-    );
-
-    driverController.buttonUp()
-      .onTrue(intakeWrist.setEnabledCommand()
-    ).onFalse(intakeWrist.setDisabledCommand());
-
     // driverController.buttonUp()
     //   .whileTrue(
     //     Commands.parallel(
@@ -260,7 +274,7 @@ public class RobotContainer {
       .onTrue(intakeWrist.moveToReefL23())
       .onFalse(intakeWrist.setDisabledCommand()); 
     
-    if(USE_ELEV) {
+    if (USE_ELEV) {
       // driverController.triggerRight()
       // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
       // .onFalse(elevatorPivot.moveToStow());

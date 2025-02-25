@@ -35,7 +35,7 @@ import edu.wpi.first.wpilibj.util.Color;
 
 public final class Constants {
 
-  public final static int ROBOT_NAME = 1;// 1= is me; 2 = demo
+  public final static int ROBOT_NAME = 1; // 1 = is me; 2 = demo
 
   public static class ControllerConstants {
 
@@ -330,6 +330,7 @@ public final class Constants {
  }
 
  public static final class V1ElevatorConstants {
+
     // ************************************** ELEVATOR CONSTANTS *************************************** //
     public static final int kElevatorMotorID = 17;            // TODO change later 
     public static final int kElevatorMotorRightID = 18;            // TODO change later 
@@ -374,72 +375,50 @@ public final class Constants {
     public static final double kElevatorPivotJerk = 200.0;
   }
 
-  public static final class IntakeConstants {
+  public static final class RollerConstants {
 
-    // ************************************** ROLLER MOTOR CONSTANTS *************************************** //
-    public static final int kRollerMotorID = 0; //TODO change later
-    public static final double kPRollerMotor = 0.05;
-    public static final double kIRollerMotor = 0;
-    public static final double kDRollerMotor = 0;
-    public static final double kVRollerMotor = 0;
+    public static final int kMotorID = 0; //TODO change later
+    public static final double kPMotor = 0.05;
+    public static final double kIMotor = 0;
+    public static final double kDMotor = 0;
+    public static final double kVMotor = 0;
 
-    public static final double kRollerMaxVelocityRPS =  100;
-    public static final double kRollerMinVelocityRPS = -100;
+    public static final double kMaxVelocityRPS =  100;
+    public static final double kMinVelocityRPS = -100;
 
-    public static final double kRollerNeutralDeadband = 0.01; // In revolutions!
+    public static final double kNeutralDeadband = 0.01; // In revolutions!
 
     public static final double kIntakePower  = 30;
     public static final double kOuttakePower = -30;
 
-    // ************************************** WRIST CONSTANTS *************************************** //
-    public static final int kPositionMotorID = 54;
+  }
+
+  public static final class ClawConstants {
+
+    public static final int kMotorID = 54;
   
-    public static final double kPWristMotor = 3; // max 4 
-    public static final double kIWristMotor = 0;
-    public static final double kDWristMotor = 0;
-    public static final double kVWristMotor = 0;
-    public static final double kSWristMotor = 0; //Static Friction
-    public static final double kGWristMotor = 0; //Gravity
-    public static final double kWristAcceleration = 100; //Rotations per second squared
-    public static final double kWristJerk = 700; //Rotations per second cubed
+    public static final double kPMotor = 3; // max 4 
+    public static final double kIMotor = 0;
+    public static final double kDMotor = 0;
+    public static final double kVMotor = 0;
+    public static final double kSMotor = 0; //Static Friction
+    public static final double kGMotor = 0; //Gravity
 
-    public static final double kWristStowPosition = 5;//0.0
-    public static final double kWristStationPosition = 10;
-    public static final double kWristL23Position = 15;
-    public static final double kWristL14Position = 20; //0.5
-
-    public static final double kWristSpeed = 0.5;
-    public static final int kWristPigeonID = 0;
-
-  
-    public static final double kPPositionMotor = 0.3;
-    public static final double kIPositionMotor = 0;
-    public static final double kDPositionMotor = 0;
-    public static final double kVPositionMotor = 0;
-    public static final double kSPositionMotor = 0; //Static Friction
-    public static final double kGPositionMotor = 0; //Gravity
-
-    public static final double kPositionCruiseVelocity = 50; // TODO change later
-    public static final double kPositionAcceleration = kPositionCruiseVelocity * 2; //Rotations per second squared
-    public static final double kPositionJerk = kPositionAcceleration * 10; //Rotations per second cubed
-
-    public static final double kIntakeStowPosition = 5;//0.0
-    public static final double kIntakeStationPosition = 10;
-    public static final double kIntakeL23Position = 15;
-    public static final double kIntakeL14Position = 20; //0.5
-
-    // ************************************** POSITION CONSTANTS *************************************** //
+    public static final double kCruiseVelocity = 50; // TODO change later
+    public static final double kAcceleration = kCruiseVelocity * 2; //Rotations per second squared
+    public static final double kJerk = kAcceleration * 10; //Rotations per second cubed
 
     public static final double kAlgaePosition = 0; // TODO change later
     public static final double kCoralPosition = 0; // TODO change later
     public static final double kStowPosition = 0; // TODO change later
  }
 
-  public static final class WristConstants{
+  public static final class WristConstants {
+    
     public static final int kMotorID = 54;
   
     public static final double kPMotor =  4.147 * 6; // 4.147  max
-    public static final double kItMotor = 0;
+    public static final double kIMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0; //0.12;
     public static final double kSMotor = 0; //0.015; //Static Friction

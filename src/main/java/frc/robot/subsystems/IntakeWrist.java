@@ -93,7 +93,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         
             motorConfigs.Slot0.kP = WristConstants.kPMotor;
-            motorConfigs.Slot0.kI = WristConstants.kItMotor;
+            motorConfigs.Slot0.kI = WristConstants.kIMotor;
             motorConfigs.Slot0.kD = WristConstants.kDMotor;
             motorConfigs.Slot0.kV = WristConstants.kVMotor;
             motorConfigs.Slot0.kS = WristConstants.kSMotor;
@@ -117,7 +117,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         
             motorConfigs.Slot0.kP = WristConstants.kPMotor;
-            motorConfigs.Slot0.kI = WristConstants.kItMotor;
+            motorConfigs.Slot0.kI = WristConstants.kIMotor;
             motorConfigs.Slot0.kD = WristConstants.kDMotor;
             motorConfigs.Slot0.kV = WristConstants.kVMotor;
             motorConfigs.Slot0.kS = WristConstants.kSMotor;

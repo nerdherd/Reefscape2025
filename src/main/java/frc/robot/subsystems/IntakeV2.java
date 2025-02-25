@@ -13,8 +13,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.ClawConstants;
+import frc.robot.Constants.RollerConstants;
+
 
 public class IntakeV2 extends SubsystemBase {
     private final TalonFX rollerMotor;
@@ -28,16 +29,15 @@ public class IntakeV2 extends SubsystemBase {
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPosition;
-    private double desiredAngle;
     private double desiredVelocity;
     private boolean enabled = false;
 
     public IntakeV2() {
-        rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
+        rollerMotor = new TalonFX(RollerConstants.kMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
 
 
-        positionMotor = new TalonFX(IntakeConstants.kPositionMotorID);
+        positionMotor = new TalonFX(ClawConstants.kMotorID);
         positionConfigurator = positionMotor.getConfigurator();
 
         TalonFXConfiguration rollerConfigs = new TalonFXConfiguration();
@@ -54,10 +54,10 @@ public class IntakeV2 extends SubsystemBase {
         // roller configs
         rollerConfigurator.refresh(rollerConfigs);
 
-        rollerConfigs.Slot0.kP = IntakeConstants.kPRollerMotor;
-        rollerConfigs.Slot0.kI = IntakeConstants.kIRollerMotor;
-        rollerConfigs.Slot0.kD = IntakeConstants.kDRollerMotor;
-        rollerConfigs.Slot0.kV = IntakeConstants.kVRollerMotor;
+        rollerConfigs.Slot0.kP = RollerConstants.kPMotor;
+        rollerConfigs.Slot0.kI = RollerConstants.kIMotor;
+        rollerConfigs.Slot0.kD = RollerConstants.kDMotor;
+        rollerConfigs.Slot0.kV = RollerConstants.kVMotor;
  
         StatusCode rollerResponse = rollerConfigurator.apply(rollerConfigs);
         if (!rollerResponse.isOK())
@@ -67,16 +67,16 @@ public class IntakeV2 extends SubsystemBase {
 
         // position configs
         positionConfigurator.refresh(positionConfigs);
-        positionConfigs.Slot0.kP = IntakeConstants.kPPositionMotor;
-        positionConfigs.Slot0.kI = IntakeConstants.kIPositionMotor;
-        positionConfigs.Slot0.kD = IntakeConstants.kDPositionMotor;
-        positionConfigs.Slot0.kV = IntakeConstants.kVPositionMotor;
-        positionConfigs.Slot0.kS = IntakeConstants.kSPositionMotor;
-        positionConfigs.Slot0.kG = IntakeConstants.kGPositionMotor;
+        positionConfigs.Slot0.kP = ClawConstants.kPMotor;
+        positionConfigs.Slot0.kI = ClawConstants.kIMotor;
+        positionConfigs.Slot0.kD = ClawConstants.kDMotor;
+        positionConfigs.Slot0.kV = ClawConstants.kVMotor;
+        positionConfigs.Slot0.kS = ClawConstants.kSMotor;
+        positionConfigs.Slot0.kG = ClawConstants.kGMotor;
 
-        positionConfigs.MotionMagic.MotionMagicCruiseVelocity =  WristConstants.kCruiseVelocity;
-        positionConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
-        positionConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
+        positionConfigs.MotionMagic.MotionMagicCruiseVelocity = ClawConstants.kCruiseVelocity;
+        positionConfigs.MotionMagic.MotionMagicAcceleration   = ClawConstants.kAcceleration;
+        positionConfigs.MotionMagic.MotionMagicJerk = ClawConstants.kJerk;
     
         StatusCode positionResponse = positionConfigurator.apply(positionConfigs);
         if (!positionResponse.isOK()){
@@ -115,17 +115,21 @@ public class IntakeV2 extends SubsystemBase {
         this.enabled = enabled;
     }
 
-    private void setVelocity(double velocity) {
-        desiredVelocity = velocity;
-        velocityRequest.Velocity = velocity;
-    }
-
     private void setPosition(double position){
         desiredPosition = position;
         motionMagicRequest.Position = desiredPosition;
     }
 
+    private void setVelocity(double velocity) {
+        desiredVelocity = velocity;
+        velocityRequest.Velocity = velocity;
+    }
+
     // ****************************** COMMAND METHODS ****************************** //
+    
+    public Command setEnabledCommand(boolean enable) {
+        return Commands.runOnce(() -> setEnabled(enable));
+    }
 
     private Command setPositionCommand(double position) {
         return Commands.runOnce(() -> setPosition(position));
@@ -135,17 +139,14 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
-    public Command setEnabledCommand(boolean enable) {
-        return Commands.runOnce(() -> setEnabled(enable));
-    }
-
      // ****************************** NAMED COMMANDS ****************************** //
+
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(IntakeConstants.kAlgaePosition),
-                setVelocityCommand(IntakeConstants.kIntakePower)
+                setPositionCommand(ClawConstants.kAlgaePosition),
+                setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
     }
@@ -154,16 +155,16 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(IntakeConstants.kCoralPosition),
-                setVelocityCommand(IntakeConstants.kIntakePower)
+                setPositionCommand(ClawConstants.kCoralPosition),
+                setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
     }
 
-    public Command goToStow() {
+    public Command stow() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setPositionCommand(IntakeConstants.kStowPosition),
+            setPositionCommand(ClawConstants.kStowPosition),
             setVelocityCommand(0)  
         );
     }
