@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -331,7 +332,7 @@ public class RobotContainer {
      *******************************/
     
       // Voltage Ramp Pivot Positive
-      operatorController.bumperRight()
+      /*operatorController.bumperRight()
         .whileTrue(Commands.run(() -> {
           voltage += 0.2 / 50.0;
           elevatorPivot.setPivotVoltage(voltage);
@@ -342,7 +343,34 @@ public class RobotContainer {
         .whileTrue(Commands.run(() -> {
           voltage -= 0.2 / 50.0;
           elevatorPivot.setPivotVoltage(voltage);
-      }, elevatorPivot));
+      }, elevatorPivot));*/
+	  
+	  // Position Ramp Pivot Positive
+    operatorController.bumperRight()
+      .whileTrue(Commands.run(() -> {
+        desiredRotation += (1.0 / 360.0); // 1 degree per second in terms of rotations
+        elevatorPivot.setTargetPosition(desiredRotation);
+    }));
+
+    // POSITIVE POSITION = UP
+    // TODO: Find min and max position rotations of pivot. Find where 0 'ground' is, needs to be parallel to floor. See which way is rotation positive.
+    // Min (Parallel): -25.9      Vertical: 
+    // TODO: Fill in sensortomechaanism ratio for pivot and pivotRight. Calculate kP After.
+
+    // // Position Ramp Pivot Negative
+    operatorController.bumperLeft()
+      .whileTrue(Commands.run(() -> {
+        desiredRotation -= (1.0 / 360.0); // 1 degree per second in terms of rotations
+        elevatorPivot.setTargetPosition(desiredRotation);
+    }));
+    
+
+
+    // Enable Pivot
+    operatorController.buttonDown()
+      .whileTrue(elevatorPivot.setEnabledCommand(true)
+      // ,elevatorPivot.resetEncoders() // Don't think there's a way to do this
+    );
 
     /*******************************
     * Elevtor Section
