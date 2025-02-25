@@ -204,11 +204,20 @@ public class RobotContainer {
     //     intakeWrist.setPosition(desiredRotation);
     // }));
 
-/* 
+
+
+
+
+
+
+
+
+/*
+
     // Position Ramp Pivot Positive
     operatorController.bumperRight()
       .whileTrue(Commands.run(() -> {
-        desiredRotation += 0.02; // 1 for GR 1/50 for 20 times per second
+        desiredRotation += (1.0 / 360.0); // 1 degree per second in terms of rotations
         elevatorPivot.setPosition(desiredRotation);
     }));
 
@@ -220,16 +229,16 @@ public class RobotContainer {
     // // Position Ramp Pivot Negative
     operatorController.bumperLeft()
       .whileTrue(Commands.run(() -> {
-        desiredRotation -= 0.02; // 1 for GR 1/50 for 20 times per second
+        desiredRotation -= (1.0 / 360.0); // 1 degree per second in terms of rotations
         elevatorPivot.setPosition(desiredRotation);
     }));
     
 */
 
-
     // Enable Pivot
     operatorController.buttonDown()
       .whileTrue(elevatorPivot.setEnabledCommand(true)
+      // ,elevatorPivot.resetEncoders() // Don't think there's a way to do this
     );
 
     // Voltage Ramp Pivot Positive

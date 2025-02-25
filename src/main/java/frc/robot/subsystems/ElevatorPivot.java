@@ -42,20 +42,23 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private final Follower followRequest = new Follower(V1ElevatorConstants.kLeftPivotMotorID, true);
+    // public final VoltageOut voltageRequest = new VoltageOut(0);
 
-    public final VoltageOut voltageRequest = new VoltageOut(0);
     private double ff;
     private double pivotPositionOffset = 0.0;
 
-    private double commandedVoltage = 0.0;
+    private double commandedVoltageLeft = 0.0;
+    private double commandedVoltageRight = 0.0;
 
 
 
     public ElevatorPivot (boolean V1) {
         desiredPosition = 0.0;
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
+
         pivotMotor = new TalonFX(V1ElevatorConstants.kLeftPivotMotorID);
         pivotConfigurator = pivotMotor.getConfigurator();
+
         if(V1) {
             pivotMotorRight = new TalonFX(V1ElevatorConstants.kRightPivotMotorID);
             // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
@@ -67,7 +70,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         configurePIDV1();
 
         pivotPositionOffset = pivotMotor.getPosition().getValueAsDouble();
-        // pivotMotor.setPosition(ElevatorConstants.kElevatorPivotStowPosition);
+
     }
     
     // ******************************** SETUP METHODS *************************************** //
@@ -166,18 +169,19 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     @Override
     public void periodic() {
         SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Commanded Rotations", desiredPosition);
-
         SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
 
-        SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations", getPositionRev());
-        SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations", desiredPosition - pivotPositionOffset);
+        // SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
+        // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
+        // SmartDashboard.putNumber("Pivot Commanded Rotations", desiredPosition);
 
-        SmartDashboard.putNumber("Commanded Pivot Voltage", commandedVoltage);
-        
+        SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
+        SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
 
+        SmartDashboard.putNumber("Commanded Pivot Voltage Left (ID 17)", commandedVoltageLeft);
+        SmartDashboard.putNumber("Commanded Pivot Voltage Right (ID 18)", commandedVoltageRight);
+
+    
         
 
 
@@ -209,17 +213,25 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         this.enabled = enabled;
     }
 
-    public void setPosition(double position) {
+    public void setTargetPosition(double position) {
         desiredPosition = position + pivotPositionOffset; // 0 + (-1.6) => = -1.6
         motionMagicRequest.Position = desiredPosition;
+
+
     }
 
     public void setPivotVoltage(double voltage) {
-        commandedVoltage = voltage;
-        // pivotMotor.setControl(voltageRequest.withOutput(commandedVoltage));
-        pivotMotor.setVoltage(commandedVoltage);
-        // pivotMotorRight.setControl(voltageRequest.withOutput(commandedVoltage));
 
+        // Test if the motors are still reversed. If they aren't after the motor direction switching, then do follow request for pivotRight
+
+        commandedVoltageLeft = voltage;
+        commandedVoltageRight = commandedVoltageLeft * -1.0;
+
+        pivotMotor.setVoltage(commandedVoltageLeft);
+        pivotMotorRight.setVoltage(commandedVoltageRight);
+
+
+        // pivotMotor.setControl(voltageRequest.withOutput(commandedVoltage));
         // pivotMotorRight.setControl(followRequest);
 
     }
@@ -271,6 +283,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     // }
 
     // ****************************** COMMAND METHODS ***************************** //
+
+    // public Object resetEncoders() { // Reset both pivot encoders to 0. Can delete after use
+    //     pivotMotor.setSelectedSensorPosition(0);
+
+    // }
 
     public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
