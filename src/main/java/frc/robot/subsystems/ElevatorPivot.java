@@ -51,6 +51,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private double commandedVoltage = 0.0;
 
     private double error;
+    private double sim_kP_Volts;
+    private double totalSimulatedVolts;
 
 
 
@@ -176,22 +178,25 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
 
         SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Commanded Rotations", desiredPosition);
+        // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Pivot Target Rotations", desiredPosition);
+        SmartDashboard.putNumber("Error Left (Rotations)", error);
 
         // SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
         // SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
+        // SmartDashboard.putNumber("Commanded kP Pivot Voltage", commandedVoltage);
 
-        SmartDashboard.putNumber("Commanded Pivot Voltage", commandedVoltage);
-
-        SmartDashboard.putNumber("Applied feedforward", ff);
+        // SmartDashboard.putNumber("Applied feedforward", ff);
         SmartDashboard.putNumber("Feedforward inverse", ffInverse);
 
-        SmartDashboard.putNumber("Error Left (Rotations)", error);
         // SmartDashboard.putNumber("Error Right (Rotations)", errorRight);
 
-        SmartDashboard.putNumber("kP Left Applied Volts", error * 20);
+        sim_kP_Volts = error * V1ElevatorConstants.kPElevatorPivot;
+        SmartDashboard.putNumber("kP Applied Volts", sim_kP_Volts);
         // SmartDashboard.putNumber("kP Right Applied Volts", errorRight * 20);
+
+        totalSimulatedVolts = sim_kP_Volts + ffInverse;
+        SmartDashboard.putNumber("Left Total Applied Volts", totalSimulatedVolts);
 
 
         // ff = (-4.32028 * getPositionRev()) + 6.497105;
