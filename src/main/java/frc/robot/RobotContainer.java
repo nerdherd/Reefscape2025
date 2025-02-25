@@ -212,28 +212,26 @@ public class RobotContainer {
 
 
 
-/*
+    // // Position Ramp Pivot Positive
+    // operatorController.bumperRight()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += (1.0 / 360.0); // 1 degree per second in terms of rotations
+    //     elevatorPivot.setPosition(desiredRotation);
+    // }));
 
-    // Position Ramp Pivot Positive
-    operatorController.bumperRight()
-      .whileTrue(Commands.run(() -> {
-        desiredRotation += (1.0 / 360.0); // 1 degree per second in terms of rotations
-        elevatorPivot.setPosition(desiredRotation);
-    }));
+    // // POSITIVE POSITION = UP
+    // // TODO: Find min and max position rotations of pivot. Find where 0 'ground' is, needs to be parallel to floor. See which way is rotation positive.
+    // // Min (Parallel): -25.9      Vertical: 
+    // // TODO: Fill in sensortomechaanism ratio for pivot and pivotRight. Calculate kP After.
 
-    // POSITIVE POSITION = UP
-    // TODO: Find min and max position rotations of pivot. Find where 0 'ground' is, needs to be parallel to floor. See which way is rotation positive.
-    // Min (Parallel): -25.9      Vertical: 
-    // TODO: Fill in sensortomechaanism ratio for pivot and pivotRight. Calculate kP After.
-
-    // // Position Ramp Pivot Negative
-    operatorController.bumperLeft()
-      .whileTrue(Commands.run(() -> {
-        desiredRotation -= (1.0 / 360.0); // 1 degree per second in terms of rotations
-        elevatorPivot.setPosition(desiredRotation);
-    }));
+    // // // Position Ramp Pivot Negative
+    // operatorController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation -= (1.0 / 360.0); // 1 degree per second in terms of rotations
+    //     elevatorPivot.setPosition(desiredRotation);
+    // }));
     
-*/
+
 
     // Enable Pivot
     operatorController.buttonDown()
@@ -241,6 +239,7 @@ public class RobotContainer {
       // ,elevatorPivot.resetEncoders() // Don't think there's a way to do this
     );
 
+    /*
     // Voltage Ramp Pivot Positive
     operatorController.bumperRight()
       .whileTrue(Commands.run(() -> {
@@ -258,7 +257,12 @@ public class RobotContainer {
         
         elevatorPivot.setPivotVoltage(voltage);
     }, elevatorPivot));
+
+    */
     
+
+
+
     // Hold to Voltage Ramp Pivot
     // operatorController.buttonUp()
     //   .whileTrue(Commands.run(() -> {

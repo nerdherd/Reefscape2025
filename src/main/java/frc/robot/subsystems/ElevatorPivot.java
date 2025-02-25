@@ -41,10 +41,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest;  // = new MotionMagicVoltage(desiredPosition); // (ElevatorConstants.kElevatorPivotStowPosition)
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private final Follower followRequest = new Follower(V1ElevatorConstants.kLeftPivotMotorID, true);
+    private final Follower followRequest = new Follower(V1ElevatorConstants.kLeftPivotMotorID, false);
     // public final VoltageOut voltageRequest = new VoltageOut(0);
 
     private double ff;
+    private double ffInverse;
     private double pivotPositionOffset = 0.0;
 
     private double commandedVoltageLeft = 0.0;
@@ -63,7 +64,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             pivotMotorRight = new TalonFX(V1ElevatorConstants.kRightPivotMotorID);
             // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
             
-            pivotMotorRight.setControl(followRequest); // TODO: Commented out to isolate for motor testing 2/24/25
+            // pivotMotorRight.setControl(followRequest); // TODO: Commented out to isolate for motor testing 2/24/25
             pivotConfiguratorRight = pivotMotorRight.getConfigurator();
         }
         configureMotorV1();
@@ -151,7 +152,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; //TODO change orientation later
         // pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
         pivotConfigurationRight.Feedback.SensorToMechanismRatio = V1ElevatorConstants.kElevatorPivotGearRatio; //TODO change later
-        pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; //TODO change later
+        pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; //TODO change later
         pivotConfigurationRight.Voltage.PeakForwardVoltage = 11.5;
         pivotConfigurationRight.Voltage.PeakReverseVoltage = -11.5;
         pivotConfigurationRight.CurrentLimits.SupplyCurrentLimit = 40;
@@ -171,17 +172,20 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
 
-        // SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
-        // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
-        // SmartDashboard.putNumber("Pivot Commanded Rotations", desiredPosition);
+        SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Pivot Commanded Rotations", desiredPosition);
 
-        SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
-        SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
+        // SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
+        // SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
 
         SmartDashboard.putNumber("Commanded Pivot Voltage Left (ID 17)", commandedVoltageLeft);
         SmartDashboard.putNumber("Commanded Pivot Voltage Right (ID 18)", commandedVoltageRight);
 
-    
+        SmartDashboard.putNumber("Applied feedforward", ff);
+        SmartDashboard.putNumber("Feedforward inverse", ffInverse);
+
+
         
 
 
@@ -191,19 +195,21 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // cos(PI / 2 )
                 // ff = kG * cos(getPositionRev() *360)
 
-        /*
 
-        ff = kG * Math.cos(Math.PI * getPositionRev() / 0.5);
+        ff = 0.5 * Math.cos(2 * Math.PI * getPositionRev()); // ff = kG * cos(PI times encoderRotations)
+
+        ffInverse = ff * -1;
 
         if (enabled) {
-            pivotMotor.setControl(motionMagicRequest.withFeedForward(ff));
-            pivotMotorRight.setControl(followRequest);
+            pivotMotor.setControl(motionMagicRequest.withFeedForward(ffInverse));
+            pivotMotorRight.setControl(motionMagicRequest.withFeedForward(ff));
+            // pivotMotorRight.setControl(followRequest); // TODO: See if this syncs or reverse the Control
         }
         else {
             pivotMotor.setControl(brakeRequest);
         }
         
-        */
+        // */
 
     }
 
@@ -214,7 +220,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     public void setTargetPosition(double position) {
-        desiredPosition = position + pivotPositionOffset; // 0 + (-1.6) => = -1.6
+        desiredPosition = position; //TODO Got rid of Offset accounting 2/24 // + pivotPositionOffset; // 0 + (-1.6) => = -1.6
         motionMagicRequest.Position = desiredPosition;
 
 
@@ -263,7 +269,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     // }
 
     private double getPositionRev() {
-        return pivotMotor.getPosition().getValueAsDouble() - pivotPositionOffset;
+        return pivotMotor.getPosition().getValueAsDouble(); // - pivotPositionOffset; // TODO: Don't need anymore as of 2/24 since I reset both pivot encoders to 0 at Gravity Position
     }
     
     // private double getPositionDegrees() {
