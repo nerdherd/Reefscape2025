@@ -45,7 +45,7 @@ public class IntakeV2 extends SubsystemBase {
 
 
         configurePID(rollerConfigs, positionConfigs);
-        // zeroEncoder();
+        zeroEncoder();
     }
 
     //****************************** SETUP METHODS ******************************//
@@ -96,7 +96,7 @@ public class IntakeV2 extends SubsystemBase {
             positionMotor.setControl(brakeRequest);
         } else {
             rollerMotor.setControl(velocityRequest);
-            positionMotor.setControl(motionMagicRequest);
+            // positionMotor.setControl(motionMagicRequest);
         }
 
         SmartDashboard.putNumber("Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());

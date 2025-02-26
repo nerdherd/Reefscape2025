@@ -96,6 +96,7 @@ public class RobotContainer {
       intakeWrist = new IntakeWrist(V1);
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot(V1);
+      intakeV2 = new IntakeV2();
     }
 
     try { // ide displayed error fix
@@ -268,85 +269,40 @@ public class RobotContainer {
   }
 
   public void configureBindings_test() {
-    // driverController.buttonRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "bye")));
-    // driverController.buttonDown()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "bye")));
-    // driverController.buttonUp()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "bye")));
-    // driverController.buttonLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "bye")));
-
-    // driverController.bumperLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "bye")));
     // driverController.bumperRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "bye")));
-    // driverController.triggerLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "bye")));
-    // driverController.triggerRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "bye")));
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredAngle -= 1 / 50; // 1 degree per second ish
+    //     // voltage = -1.928;
+    //   }));
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     intakeWrist.setPositionDegrees(desiredAngle);
+    //   }));
+    // driverController.buttonDown()
+    //   .onTrue(Commands.runOnce(() -> {
+    //     desiredAngle = 90.0; //Top: -85.4
+    //   }));
 
-    // driverController.dpadUp()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "bye")));
-    // driverController.dpadRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "bye")));
-    // driverController.dpadDown()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "bye")));
-    // driverController.dpadLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "bye")));
+    driverController.triggerLeft()
+    .whileTrue(elevator.setEnabledCommand(true))
+    .onFalse(elevator.setEnabledCommand(false));
 
-    // driverController.controllerLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "bye")));
-    // driverController.controllerRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "bye")));
-    // driverController.joystickLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "bye")));
-    // driverController.joystickRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
+    driverController.buttonUp()
+    .whileTrue(elevator.moveToReefL1())
+    .onFalse(elevator.stow());
 
-    driverController.bumperRight()
-      .whileTrue(Commands.run(() -> {
-        desiredAngle -= 1 / 50; // 1 degree per second ish
-        // voltage = -1.928;
-      }));
-    driverController.bumperLeft()
-      .whileTrue(Commands.run(() -> {
-        intakeWrist.setPositionDegrees(desiredAngle);
-      }));
+    driverController.buttonLeft()
+    .whileTrue(elevator.moveToReefL2())
+    .onFalse(elevator.stow());
+
+    driverController.buttonRight()
+    .whileTrue(elevator.moveToReefL3())
+    .onFalse(elevator.stow());
+
     driverController.buttonDown()
-      .onTrue(Commands.runOnce(() -> {
-        desiredAngle = 90.0; //Top: -85.4
-      }));
-
-      // driverController.bumperRight()
-      // .whileTrue(Commands.run(() -> {
-      //   voltage += 0.2 / 50.0;
-      //   // voltage = -1.928;
-      // }));
-      // driverController.bumperLeft()
-      //   .whileTrue(Commands.run(() -> {
-      //     intakeWrist.getMotor().setControl(voltageRequest.withOutput(voltage));
-      // }));
-      // driverController.buttonDown()
-      //   .onTrue(Commands.runOnce(() -> {
-      //     voltage = 0;
-      // }));
+    .whileTrue(elevator.moveToReefL4())
+    .onFalse(elevator.stow());
+      
   }
   
   private void initAutoChoosers() {
@@ -374,7 +330,7 @@ public class RobotContainer {
     // swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_ELEV) { 
       intakeRoller.initShuffleboard(loggingLevel); 
-      // elevator.initShuffleboard(loggingLevel);
+      elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       // elevatorPivot.initShuffleboard(loggingLevel);
     }
