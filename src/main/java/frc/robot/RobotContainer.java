@@ -40,6 +40,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
+import frc.robot.subsystems.IntakeV2;
 import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.ElevatorPivot;
 
@@ -51,6 +52,7 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
+  public IntakeV2 intakeV2;
   public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
