@@ -30,6 +30,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.ROBOT_ID;
+import frc.robot.Constants.V1ElevatorConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -366,8 +367,25 @@ public class RobotContainer {
     
 
 
-    // Enable Pivot
+    operatorController.buttonUp()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotStowPosition))
+    );
+
+    operatorController.buttonRight()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition30))
+    );
+
     operatorController.buttonDown()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition60))
+    );
+
+    operatorController.buttonLeft()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPositionVertical))
+    );
+
+
+    // Enable Pivot
+    operatorController.triggerRight()
       .whileTrue(elevatorPivot.setEnabledCommand(true)
       // ,elevatorPivot.resetEncoders() // Don't think there's a way to do this
     );

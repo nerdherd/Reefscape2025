@@ -369,12 +369,15 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; 
     public static final double kGElevatorPivot = 0; 
 
-    public static final double kElevatorPivotStowPosition = 0; 
-    public static final double kElevatorPivotStartPosition = 0; //TODO change later
-    public static final double kElevatorPivotPickUpPosition = 0; 
+    public static final double kElevatorPivotStowPosition = 0;  
+    public static final double kElevatorPivotPosition30 = 0.0833; //TODO change later
+    public static final double kElevatorPivotPosition60 = 0.1667;
+    public static final double kElevatorPivotPositionVertical = 0.25; 
 
-    public static final double kElevatorPivotMin = -0.3269; // This is Stow with Foam underneath // TODO change later   
-    public static final double kElevatorPivotMax = 0; // =0.08667 is Vertical    // TODO change later   
+
+    public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
+    public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
+
 
     public static final double kElevatorPivotGearRatio = 80.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
