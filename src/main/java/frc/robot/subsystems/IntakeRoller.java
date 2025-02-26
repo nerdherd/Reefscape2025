@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.RollerConstants;
  
 public class IntakeRoller extends SubsystemBase implements Reportable {
     private final TalonFX rollerMotor;
@@ -32,7 +32,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private boolean velocityControl = true;
 
     public IntakeRoller() {
-        rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
+        rollerMotor = new TalonFX(RollerConstants.kMotorID);
         rollerMotorRight = new TalonFX(62);
         rollerConfigurator = rollerMotor.getConfigurator();
         rollerConfiguratorRight = rollerMotorRight.getConfigurator();
@@ -66,7 +66,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         motorConfigs.Voltage.PeakForwardVoltage = 11.5;
         motorConfigs.Voltage.PeakReverseVoltage = -11.5;
         motorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        motorConfigs.MotorOutput.DutyCycleNeutralDeadband = IntakeConstants.kRollerNeutralDeadband;
+        motorConfigs.MotorOutput.DutyCycleNeutralDeadband = RollerConstants.kNeutralDeadband;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
         motorConfigs.CurrentLimits.StatorCurrentLimit = 100;
@@ -88,10 +88,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private void configurePID(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
 
-        motorConfigs.Slot0.kP = IntakeConstants.kPRollerMotor;
-        motorConfigs.Slot0.kI = IntakeConstants.kIRollerMotor;
-        motorConfigs.Slot0.kD = IntakeConstants.kDRollerMotor;
-        motorConfigs.Slot0.kV = IntakeConstants.kVRollerMotor;
+        motorConfigs.Slot0.kP = RollerConstants.kPMotor;
+        motorConfigs.Slot0.kI = RollerConstants.kIMotor;
+        motorConfigs.Slot0.kD = RollerConstants.kDMotor;
+        motorConfigs.Slot0.kV = RollerConstants.kVMotor;
  
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
@@ -165,36 +165,36 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandLeft(IntakeConstants.kIntakePower),
-            setVelocityCommandRight(IntakeConstants.kIntakePower)
+            setVelocityCommandLeft(RollerConstants.kIntakePower),
+            setVelocityCommandRight(RollerConstants.kIntakePower)
         );
     }
 
     public Command intakeLeft() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandLeft(IntakeConstants.kIntakePower)
+            setVelocityCommandLeft(RollerConstants.kIntakePower)
         );
     }
 
     public Command intakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandRight(IntakeConstants.kIntakePower)
+            setVelocityCommandRight(RollerConstants.kIntakePower)
         );
     }
 
     public Command outtake() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(IntakeConstants.kOuttakePower)
+            setVelocityCommand(RollerConstants.kOuttakePower)
         );
     }
 
     public Command outtakeL1() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandLeft(IntakeConstants.kOuttakePower)
+            setVelocityCommandLeft(RollerConstants.kOuttakePower)
             
         );
     }
