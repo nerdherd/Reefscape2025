@@ -29,6 +29,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.V1ElevatorConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -221,8 +222,7 @@ public class RobotContainer {
 
     // POSITIVE POSITION = UP
     // TODO: Find min and max position rotations of pivot. Find where 0 'ground' is, needs to be parallel to floor. See which way is rotation positive.
-    // Min (Parallel): -25.9      Vertical: 
-    // TODO: Fill in sensortomechaanism ratio for pivot and pivotRight. Calculate kP After.
+    // Pivot should be Green-Green assuming PivotLeft Counterclockwise and PivotRight Clockwise
 
     // // Position Ramp Pivot Negative
     operatorController.bumperLeft()
@@ -232,12 +232,34 @@ public class RobotContainer {
     }));
     
 
+    operatorController.buttonUp()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotStowPosition))
+    );
+
+    operatorController.buttonRight()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition30))
+    );
+
+    operatorController.buttonDown()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition60))
+    );
+
+    operatorController.buttonLeft()
+      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPositionVertical))
+    );
+
 
     // Enable Pivot
-    operatorController.buttonDown()
+    operatorController.triggerRight()
       .whileTrue(elevatorPivot.setEnabledCommand(true)
       // ,elevatorPivot.resetEncoders() // Don't think there's a way to do this
     );
+
+
+
+
+
+
 
     /*
 
