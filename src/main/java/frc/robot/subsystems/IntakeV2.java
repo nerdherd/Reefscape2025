@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.RollerConstants;
+import frc.robot.Constants.ClawConstants;
 
 public class IntakeV2 extends SubsystemBase {
     private final TalonFX rollerMotor;
@@ -28,16 +28,15 @@ public class IntakeV2 extends SubsystemBase {
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPosition;
-    private double desiredAngle;
     private double desiredVelocity;
     private boolean enabled = false;
 
     public IntakeV2() {
-        rollerMotor = new TalonFX(IntakeConstants.kRollerMotorID);
+        rollerMotor = new TalonFX(RollerConstants.kMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
 
 
-        positionMotor = new TalonFX(IntakeConstants.kPositionMotorID);
+        positionMotor = new TalonFX(ClawConstants.kMotorID);
         positionConfigurator = positionMotor.getConfigurator();
 
         TalonFXConfiguration rollerConfigs = new TalonFXConfiguration();
@@ -54,38 +53,37 @@ public class IntakeV2 extends SubsystemBase {
         // roller configs
         rollerConfigurator.refresh(rollerConfigs);
 
-        rollerConfigs.Slot0.kP = IntakeConstants.kPRollerMotor;
-        rollerConfigs.Slot0.kI = IntakeConstants.kIRollerMotor;
-        rollerConfigs.Slot0.kD = IntakeConstants.kDRollerMotor;
-        rollerConfigs.Slot0.kV = IntakeConstants.kVRollerMotor;
+        rollerConfigs.Slot0.kP = RollerConstants.kPMotor;
+        rollerConfigs.Slot0.kI = RollerConstants.kIMotor;
+        rollerConfigs.Slot0.kD = RollerConstants.kDMotor;
+        rollerConfigs.Slot0.kV = RollerConstants.kVMotor;
  
         StatusCode rollerResponse = rollerConfigurator.apply(rollerConfigs);
         if (!rollerResponse.isOK())
-            DriverStation.reportError("Could not apply PID configs, error code:" + rollerResponse.toString(), new Error().getStackTrace());
+            DriverStation.reportError("Could not apply roller PID configs, error code:" + rollerResponse.toString(), new Error().getStackTrace());
         rollerConfigurator.refresh(rollerConfigs);
 
 
         // position configs
         positionConfigurator.refresh(positionConfigs);
-        positionConfigs.Slot0.kP = IntakeConstants.kPPositionMotor;
-        positionConfigs.Slot0.kI = IntakeConstants.kIPositionMotor;
-        positionConfigs.Slot0.kD = IntakeConstants.kDPositionMotor;
-        positionConfigs.Slot0.kV = IntakeConstants.kVPositionMotor;
-        positionConfigs.Slot0.kS = IntakeConstants.kSPositionMotor;
-        positionConfigs.Slot0.kG = IntakeConstants.kGPositionMotor;
+        positionConfigs.Slot0.kP = ClawConstants.kPMotor;
+        positionConfigs.Slot0.kI = ClawConstants.kIMotor;
+        positionConfigs.Slot0.kD = ClawConstants.kDMotor;
+        positionConfigs.Slot0.kV = ClawConstants.kVMotor;
+        positionConfigs.Slot0.kS = ClawConstants.kSMotor;
+        positionConfigs.Slot0.kG = ClawConstants.kGMotor;
 
-        positionConfigs.MotionMagic.MotionMagicCruiseVelocity =  WristConstants.kCruiseVelocity;
-        positionConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
-        positionConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
+        positionConfigs.MotionMagic.MotionMagicCruiseVelocity =  ClawConstants.kCruiseVelocity;
+        positionConfigs.MotionMagic.MotionMagicAcceleration = ClawConstants.kAcceleration;
+        positionConfigs.MotionMagic.MotionMagicJerk = ClawConstants.kJerk;
     
         StatusCode positionResponse = positionConfigurator.apply(positionConfigs);
         if (!positionResponse.isOK()){
-            DriverStation.reportError("Could not apply motor configs to position motor, error code:" + positionResponse.toString(), new Error().getStackTrace());
+            DriverStation.reportError("Could not apply claw PID configs, error code:" + positionResponse.toString(), new Error().getStackTrace());
         } 
     }
 
     private void zeroEncoder() {
-        // rollerMotor.setPosition(0);
         positionMotor.setPosition(0);    
     }
 
@@ -96,7 +94,7 @@ public class IntakeV2 extends SubsystemBase {
             positionMotor.setControl(brakeRequest);
         } else {
             rollerMotor.setControl(velocityRequest);
-            // positionMotor.setControl(motionMagicRequest);
+            positionMotor.setControl(motionMagicRequest);
         }
 
         SmartDashboard.putNumber("Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
@@ -104,9 +102,9 @@ public class IntakeV2 extends SubsystemBase {
         SmartDashboard.putNumber("Roller Desired Velocity", desiredVelocity);
         SmartDashboard.putNumber("Roller Current Velocity", rollerMotor.getVelocity().getValueAsDouble());
         
-        SmartDashboard.putNumber("Position Wrist Voltage", positionMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Position Current Rotations", positionMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Position Desired Rotations", desiredPosition);
+        SmartDashboard.putNumber("Claw Wrist Voltage", positionMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Claw Current Rotations", positionMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Claw Desired Rotations", desiredPosition);
     }
 
     // ****************************** STATE METHODS ***************************** //
@@ -140,12 +138,13 @@ public class IntakeV2 extends SubsystemBase {
     }
 
      // ****************************** NAMED COMMANDS ****************************** //
+     
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(IntakeConstants.kAlgaePosition),
-                setVelocityCommand(IntakeConstants.kIntakePower)
+                setPositionCommand(ClawConstants.kAlgaePosition),
+                setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
     }
@@ -154,8 +153,8 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(IntakeConstants.kCoralPosition),
-                setVelocityCommand(IntakeConstants.kIntakePower)
+                setPositionCommand(ClawConstants.kCoralPosition),
+                setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
     }
@@ -163,7 +162,7 @@ public class IntakeV2 extends SubsystemBase {
     public Command goToStow() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setPositionCommand(IntakeConstants.kStowPosition),
+            setPositionCommand(ClawConstants.kStowPosition),
             setVelocityCommand(0)  
         );
     }
