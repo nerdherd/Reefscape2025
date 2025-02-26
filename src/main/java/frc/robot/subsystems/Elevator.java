@@ -41,20 +41,22 @@ public class Elevator extends SubsystemBase implements Reportable {
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
+        motionMagicVoltage = new MotionMagicVoltage(0);
         brakeRequest = new NeutralOut();
-        followRequest = new Follower(ElevatorConstants.kElevatorMotorID2, true);
+        //followRequest = new Follower(ElevatorConstants.kElevatorMotorID2, true);
 
         /////////////////////////////////////////////////////////////////////////
         // DO NOT ENABLE THEM BEFORE YOU TESTED THE VOLTAGES AND POSITIONS!!!!!!!
         /////////////////////////////////////////////////////////////////////////
-        // motionMagicVoltage = new MotionMagicVoltage(0);
-        // elevatorMotor.setPosition(0.0);
+        elevatorMotor.setPosition(0.0);
 
-        // motorConfigurator = elevatorMotor.getConfigurator();
-        // motorConfigurator2 = elevatorMotor2.getConfigurator();
+        motorConfigurator = elevatorMotor.getConfigurator();
+        motorConfigurator2 = elevatorMotor2.getConfigurator();
 
-        // setMotorConfigs();
-        // motionMagicVoltage.withSlot(0);
+        setMotorConfigs();
+
+        followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
+        motionMagicVoltage.withSlot(0);
     }
     
     private void setMotorConfigs() {
@@ -71,6 +73,13 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ElevatorConstants.kElevatorCruiseVelocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
+
+        motorConfigs.Slot0.kP = 3;
+        motorConfigs.Slot0.kI = 0.0;
+        motorConfigs.Slot0.kD = 0.0;
+        motorConfigs.Slot0.kG = 0.22;
+        motorConfigs.Slot0.kS = 0.11;
+        motorConfigs.Slot0.kV = 0.0;
 
         StatusCode response = motorConfigurator.apply(motorConfigs);
         if (!response.isOK()){
@@ -91,6 +100,13 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs2.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
         motorConfigs2.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
+        motorConfigs2.Slot0.kP = 3;
+        motorConfigs2.Slot0.kI = 0.0;
+        motorConfigs2.Slot0.kD = 0.0;
+        motorConfigs2.Slot0.kG = 0.22;
+        motorConfigs2.Slot0.kS = 0.11;
+        motorConfigs2.Slot0.kV = 0.0;
+
         StatusCode response2 = motorConfigurator2.apply(motorConfigs2);
         if (!response2.isOK()){
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
@@ -105,7 +121,7 @@ public class Elevator extends SubsystemBase implements Reportable {
             return;
         }
         elevatorMotor2.setControl(followRequest);
-        ff = 0;
+        ff = 0.0;
         elevatorMotor.setControl(motionMagicVoltage.withFeedForward(ff));
     }
 
@@ -113,6 +129,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     private void setEnabled(boolean isEnable) {
         enabled = isEnable;
+        if (!enabled) desiredPosition = ElevatorConstants.kElevatorStowPosition;
     }
     
     public void setPosition(double position) {
@@ -135,7 +152,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // ****************************** COMMAND METHODS ***************************** //
 
-    private Command setEnabledCommand(boolean enabled) {
+    public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> this.setEnabled(enabled));
     }
 
@@ -204,14 +221,13 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     @Override
     public void initShuffleboard(LOG_LEVEL level) {
-        ShuffleboardTab tab;
+        ShuffleboardTab tab = Shuffleboard.getTab("Elevator");;
         switch (level) {
             case OFF:
                 break;
             case ALL:
             case MEDIUM:
             case MINIMAL:
-                tab = Shuffleboard.getTab("Elevator");
                 tab.addNumber("Elevator Desired Velocity", () -> desiredVelocity);
                 tab.addNumber("Elevator Current Velocity", () -> elevatorMotor.getVelocity().getValueAsDouble());
                 tab.addNumber("Elevator Desired Position", () -> desiredPosition);

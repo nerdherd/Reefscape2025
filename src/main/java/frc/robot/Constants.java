@@ -294,14 +294,15 @@ public final class Constants {
     // ************************************** ELEVATOR CONSTANTS *************************************** //
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
-    public static final double kElevatorStowPosition    = -1; // TODO change later
+    public static final double kElevatorStowPosition    =  0.5;   // TODO change later
     public static final double kElevatorStationPosition = -2 ; // TODO change later
-    public static final double kElevatorL1Position =   -2;     // TODO change later
-    public static final double kElevatorL2Position =  -9;     // TODO change later
-    public static final double kElevatorL3Position = -18;     // TODO change later
-    public static final double kElevatorL4Position = -28;     // TODO change later
-    public static final double kElevatorSpeed = 1.0;          // TODO change later
-    public static final double kPElevatorMotor = 0.1;
+    public static final double kElevatorL1Position =   0.5;      // TODO change later
+    public static final double kElevatorL2Position =  1;      // TODO change later
+    public static final double kElevatorL3Position = 1.5;      // TODO change later
+    public static final double kElevatorL4Position = 2;      // TODO change later
+    public static final double kElevatorSpeed = 1.0;           // TODO change later
+
+    public static final double kPElevatorMotor = 0.5;
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
