@@ -38,8 +38,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private boolean enabled = false;
     private boolean V1 = true;
     private double ff = 0;
-
-
+    private double pivotAngle = 0;
 
     public IntakeWrist(boolean V1) {
         this.V1 = V1;
@@ -146,7 +145,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
-        ff = WristConstants.kGMotor * Math.cos(((getPosition() + 0.5437) % 1) * 2 * Math.PI); // 0.5437 is wrist horizontal 
+        ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.5437 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
         if (enabled) {
             motor.setControl(motionMagicRequest.withFeedForward(ff));
         }
@@ -186,16 +185,16 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motor.setPosition(0);
     }
 
+    public void setPivotAngle(double pivotAngle) {
+        this.pivotAngle = pivotAngle;
+    }
+
     // ****************************** COMMAND METHODS ****************************** //
-
-    public Command setDisabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(false));
-    }
-    public Command setEnabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(true));
+    public Command setEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> this.setEnabled(enabled));
     }
 
-    private Command setPositionCommand(double position) {
+    public Command setPositionCommand(double position) {
         return Commands.sequence(
             Commands.runOnce(() -> setPosition(position))
         );
@@ -203,7 +202,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     private Command stopCommand() {
         return Commands.sequence(
-            setDisabledCommand(),
+            setEnabledCommand(false),
             Commands.runOnce(() -> motor.setControl(brakeRequest))
         );
     }
@@ -279,5 +278,4 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 break;
         }
     }
-
 }

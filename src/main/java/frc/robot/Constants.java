@@ -292,10 +292,12 @@ public final class Constants {
     public static final double kElevatorL4Position = 2;      // TODO change later
     public static final double kElevatorSpeed = 1.0;           // TODO change later
 
-    public static final double kPElevatorMotor = 0.5;
+    public static final double kPElevatorMotor = 3;
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
+    public static final double kGElevatorMotor = 0.33;
+    public static final double kSElevatorMotor = 0.11;
 
     public static final double kElevatorCruiseVelocity = 20; //16.333
     public static final double kElevatorCruiseAcceleration = 40.000;

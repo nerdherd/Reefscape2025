@@ -28,6 +28,7 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.commands.SuperSystemCommand;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -70,11 +71,16 @@ public class RobotContainer {
   static boolean isRedSide = false;
   
   private SwerveJoystickCommand swerveJoystickCommand;
+  public SuperSystemCommand superSystemCommand;
   
-  private static boolean USE_ELEV = true;
+  private static boolean USE_SUBSYSTEMS = true;
+  private static boolean USE_ELEV = false;
+  private static boolean USE_WRIST = false;
+  private static boolean USE_PIVOT = false;
+  private static boolean USE_INTAKE = false;
   private static boolean V1 = true;
-
-
+  
+  
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
@@ -93,25 +99,31 @@ public class RobotContainer {
       DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     }
 
-    if (USE_ELEV) {
-      intakeRoller = new IntakeRoller();
+    if (USE_SUBSYSTEMS) {
+      // intake = new IntakeV2();
       intakeWrist = new IntakeWrist(V1);
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot(V1);
       intakeV2 = new IntakeV2();
     }
 
+    intakeWrist.setEnabledCommand(USE_WRIST);
+    elevator.setEnabledCommand(USE_ELEV);
+    elevatorPivot.setEnabledCommand(USE_PIVOT);
+    intakeV2.setEnabledCommand(USE_INTAKE);
+
+/*  TODO: Fix Bottom2Piece to take in IntakeV2
     try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+      bottom2Piece = new Bottom2Piece(swerveDrive, intake, elevator, "Bottom2Piece");
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
       DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
     }
-
+*/
     initShuffleboard();
     initAutoChoosers();
-    
+
     SmartDashboard.putData("Swerve Drive", swerveDrive);
     DriverStation.reportWarning("Initalization complete", false);
   }
@@ -216,22 +228,7 @@ public class RobotContainer {
     //     elevator.setPosition(desiredRotation);
     // }));
 
-    driverController.bumperRight()
-      .whileTrue(intakeWrist.moveToStow()
-    );
-    driverController.triggerRight()
-      .whileTrue(intakeWrist.moveToStation()
-    );
-    driverController.bumperLeft()
-      .whileTrue(intakeWrist.moveToReefL14()
-    );
-    driverController.triggerLeft()
-      .whileTrue(intakeWrist.moveToReefL23()
-    );
-
-    driverController.buttonUp()
-      .onTrue(intakeWrist.setEnabledCommand()
-    ).onFalse(intakeWrist.setDisabledCommand());
+    
 
     // driverController.buttonUp()
     //   .whileTrue(
@@ -261,9 +258,9 @@ public class RobotContainer {
     
     driverController.buttonRight()
       .onTrue(intakeWrist.moveToReefL23())
-      .onFalse(intakeWrist.setDisabledCommand()); 
+      .onFalse(intakeWrist.setEnabledCommand(false)); 
     
-    if(USE_ELEV) {
+    if(USE_SUBSYSTEMS) {
       // driverController.triggerRight()
       // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
       // .onFalse(elevatorPivot.moveToStow());
@@ -305,6 +302,7 @@ public class RobotContainer {
     .whileTrue(elevator.moveToReefL4())
     .onFalse(elevator.stow());
       
+    driverController.bumperLeft();
   }
   
   private void initAutoChoosers() {
@@ -330,7 +328,7 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     // swerveDrive.initShuffleboard(loggingLevel);
     // swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
-    if (USE_ELEV) { 
+    if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);

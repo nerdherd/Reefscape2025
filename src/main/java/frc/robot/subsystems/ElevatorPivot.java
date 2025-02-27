@@ -33,6 +33,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private TalonFXConfigurator pivotConfigurator;
     private TalonFXConfigurator pivotConfiguratorRight; 
     private Pigeon2 pigeon;
+    private double elevatorPosition;
 
     public boolean enabled = false; // Change back to true
     private final MotionMagicVoltage motionMagicRequest = new MotionMagicVoltage(ElevatorConstants.kElevatorPivotStowPosition);
@@ -182,6 +183,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         setPositionDegrees(getTargetPositionDegrees() + incrementDegrees);
     }
 
+    public void setElevatorPosition(double elevatorPosition) {
+        this.elevatorPosition = elevatorPosition;
+    }
+
+    // ****************************** GET METHODS ***************************** //
 
     private double getTargetPositionRev() {
         return motionMagicRequest.Position;
@@ -195,7 +201,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return pivotMotor.getPosition().getValueAsDouble();
     }
     
-    private double getPositionDegrees() {
+    public double getPositionDegrees() {
         return getPositionRev() * 360;
     }
 
