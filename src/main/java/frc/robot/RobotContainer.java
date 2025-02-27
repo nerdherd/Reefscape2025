@@ -233,19 +233,19 @@ public class RobotContainer {
     
 
     operatorController.buttonUp()
-      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotStowPosition))
+      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotStowPosition))
     );
 
     operatorController.buttonRight()
-      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition30))
+      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition30))
     );
 
     operatorController.buttonDown()
-      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition60))
+      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition60))
     );
 
     operatorController.buttonLeft()
-      .whileTrue(Commands.run(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPositionVertical))
+      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPositionVertical))
     );
 
 
