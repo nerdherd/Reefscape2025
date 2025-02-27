@@ -58,29 +58,36 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
 
 
-    public ElevatorPivot (boolean V1) {
-        desiredPosition = 0.0;
+    public ElevatorPivot () 
+    {
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
 
         pivotMotor = new TalonFX(V1ElevatorConstants.kLeftPivotMotorID);
-        pivotConfigurator = pivotMotor.getConfigurator();
 
-        if(V1) {
-            pivotMotorRight = new TalonFX(V1ElevatorConstants.kRightPivotMotorID);
-            // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
-            
-            // pivotMotorRight.setControl(followRequest); // TODO: Commented out to isolate for motor testing 2/24/25
-            pivotConfiguratorRight = pivotMotorRight.getConfigurator();
-        }
+        pivotMotorRight = new TalonFX(V1ElevatorConstants.kRightPivotMotorID);
+        // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
+        
+        resetPivot();
+    }
+
+    public void resetPivot()
+    {
+        enabled = false;
+        desiredPosition = 0.0;
+        commandedVoltage = 0.0;
+        // pivotMotorRight.setControl(followRequest); // TODO: Commented out to isolate for motor testing 2/24/25
+                
+        pivotConfigurator = pivotMotor.getConfigurator();
+        pivotConfiguratorRight = pivotMotorRight.getConfigurator();
+
         configureMotorV1();
 
         // DO NOT ENABLE IT BEFORE YOU TESTED THE VOLTAGES AND POSITIONS
-        //configurePIDV1();
+        configurePIDV1();
 
         // pivotPositionOffset = pivotMotor.getPosition().getValueAsDouble();
         pivotMotor.setPosition(0);
         pivotMotorRight.setPosition(0);
-
     }
     
     // ******************************** SETUP METHODS *************************************** //
@@ -182,43 +189,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
             pivotMotor.setControl(brakeRequest);
             return;
         }
-        SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
-
-        SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
-        // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Target Rotations", desiredPosition);
-        SmartDashboard.putNumber("Error Left (Rotations)", error);
-
-        // SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
-        // SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
-        // SmartDashboard.putNumber("Commanded kP Pivot Voltage", commandedVoltage);
-
-        // SmartDashboard.putNumber("Applied feedforward", ff);
-        SmartDashboard.putNumber("Feedforward inverse", ffInverse);
-
-        // SmartDashboard.putNumber("Error Right (Rotations)", errorRight);
-
-        sim_kP_Volts = error * V1ElevatorConstants.kPElevatorPivot;
-        SmartDashboard.putNumber("kP Applied Volts", sim_kP_Volts);
-        // SmartDashboard.putNumber("kP Right Applied Volts", errorRight * 20);
-
-        totalSimulatedVolts = sim_kP_Volts + ffInverse;
-        SmartDashboard.putNumber("Left Total Applied Volts", totalSimulatedVolts);
-
-
-        // ff = (-4.32028 * getPositionRev()) + 6.497105;
-
-        // kG * cos(pi * currentRotations / 2 * verticalRotations)
-        // cos(PI / 2 )
-                // ff = kG * cos(getPositionRev() *360)
-
 
         ff = 0.5 * Math.cos(2 * Math.PI * getPositionRev()); // ff = kG * cos(PI times encoderRotations)
 
         ffInverse = ff * -1;
-
-        
 
         if (enabled) {
             pivotMotor.setControl(motionMagicRequest.withFeedForward(ffInverse)); // TODO
@@ -230,7 +204,13 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         }
         else {
             pivotMotor.setControl(brakeRequest);
-        }
+        }       
+
+        // ff = (-4.32028 * getPositionRev()) + 6.497105;
+
+        // kG * cos(pi * currentRotations / 2 * verticalRotations)
+        // cos(PI / 2 )
+                // ff = kG * cos(getPositionRev() *360)
         
         // */
 
@@ -299,7 +279,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     //     return getTargetPositionRev() * 360;
     // }
 
-    private double getPositionRev() {
+    public double getPositionRev() {
         return pivotMotor.getPosition().getValueAsDouble(); // - pivotPositionOffset; // TODO: Don't need anymore as of 2/24 since I reset both pivot encoders to 0 at Gravity Position
     }
     
@@ -307,13 +287,14 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     //     return getPositionRev() * 360;
     // }
 
-    // public boolean hasReachedPosition(double positionDegrees) {
-    //     return NerdyMath.inRange(
-    //         getPositionDegrees(),
-    //             positionDegrees - ElevatorConstants.kElevatorPivotDeadBand,
-    //             positionDegrees + ElevatorConstants.kElevatorPivotDeadBand
-    //         );
-    // }
+    // Check if Motion Magic has reached the target
+    public boolean hasReachedPosition(double position) {
+        return NerdyMath.inRange(
+            getPositionRev(),
+                position - ElevatorConstants.kElevatorPivotDeadBand,
+                position + ElevatorConstants.kElevatorPivotDeadBand
+            );
+    }
 
     // public boolean atTargetPosition() {
     //     return hasReachedPosition(getPositionDegrees());
@@ -371,7 +352,29 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     @Override
     public void reportToSmartDashboard(LOG_LEVEL priority) {
-        throw new UnsupportedOperationException("Unimplemented method 'reportToSmartDashboard'");
+        SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
+        SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
+
+        SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
+        // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Pivot Target Rotations", desiredPosition);
+        SmartDashboard.putNumber("Error Left (Rotations)", error);
+
+        // SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
+        // SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
+        // SmartDashboard.putNumber("Commanded kP Pivot Voltage", commandedVoltage);
+
+        // SmartDashboard.putNumber("Applied feedforward", ff);
+        SmartDashboard.putNumber("Feedforward inverse", ffInverse);
+
+        // SmartDashboard.putNumber("Error Right (Rotations)", errorRight);
+
+        sim_kP_Volts = error * V1ElevatorConstants.kPElevatorPivot;
+        SmartDashboard.putNumber("kP Applied Volts", sim_kP_Volts);
+        // SmartDashboard.putNumber("kP Right Applied Volts", errorRight * 20);
+
+        totalSimulatedVolts = sim_kP_Volts + ffInverse;
+        SmartDashboard.putNumber("Left Total Applied Volts", totalSimulatedVolts);
     }
     
     @Override
@@ -382,6 +385,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         tab.addNumber("Set Position Rev", () -> motionMagicRequest.Position);
         tab.addNumber("Velocity", () -> pivotMotor.getVelocity().getValueAsDouble());
         tab.addBoolean("Enabled", ()-> enabled);
+    }
+
+    public void setTargetAngleRaw(double pivotAngleRaw) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setTargetAngleRaw'");
     }
     
 }

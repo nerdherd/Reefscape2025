@@ -19,52 +19,44 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.util.NerdyMath;;
 
 public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
-    private final TalonFXConfigurator motorConfigurator;
+    private TalonFXConfigurator motorConfigurator;
     private Pigeon2 pigeon;
-
-
-
 
     private final MotionMagicVoltage motionMagicRequest; // Was 0 during initialization
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPosition; // Should be ~90 or wherever initial position is
     private double desiredAngle;
-    private boolean enabled = false;
-    private boolean V1 = true;
+    public static boolean enabled = false;
     private double ff = 0;
 
-
-
-    public IntakeWrist(boolean V1) {
-        this.V1 = V1;
+    public IntakeWrist() {
         motor = new TalonFX(WristConstants.kMotorID);
-        motorConfigurator = motor.getConfigurator();
+        motionMagicRequest = new MotionMagicVoltage(0);     
         
+        resetWrist();
+    }
+
+    //****************************** SETUP METHODS ******************************//
+
+
+    public void resetWrist() 
+    {
+        enabled = false;
+        motorConfigurator = motor.getConfigurator();       
         // TODO: Took out immediate stow to work on Wrist tuning
         
-
+        // pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
+        desiredPosition = 0;
+        desiredAngle= 0;
+        // desiredPosition = pigeon.getRoll().getValueAsDouble();
         
-
-        if(V1) {
-            // pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
-            desiredPosition = 0;
-            // desiredPosition = pigeon.getRoll().getValueAsDouble();
-            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
-        }
-        else {
-            pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
-            // desiredPosition = 89;
-            desiredPosition = pigeon.getRoll().getValueAsDouble();
-
-
-            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
-        }
         motor.setControl(brakeRequest);
 
         // configure motor
@@ -75,10 +67,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         zeroEncoder();
     }
 
-    //****************************** SETUP METHODS ******************************//
-
     private void configurePID(TalonFXConfiguration motorConfigs) {
-        if (V1){
             motorConfigurator.refresh(motorConfigs);
 
             // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
@@ -106,30 +95,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             if (!response.isOK()){
                 DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
             }
-        } else {
-            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
-            motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
-            motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        
-            motorConfigs.Slot0.kP = WristConstants.kPMotor;
-            motorConfigs.Slot0.kI = WristConstants.kItMotor;
-            motorConfigs.Slot0.kD = WristConstants.kDMotor;
-            motorConfigs.Slot0.kV = WristConstants.kVMotor;
-            motorConfigs.Slot0.kS = WristConstants.kSMotor;
-            // motorConfigs.Slot0.kG = WristConstants.kGMotor; kG applied in ff
-    
-            motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
-            motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
-        
-            StatusCode response = motorConfigurator.apply(motorConfigs);
-            if (!response.isOK()){
-                DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
-            }
-        }
     }
 
     @Override
@@ -178,12 +143,22 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motionMagicRequest.Position = (desiredPosition);  // = (newPos / 360.0)
     }
 
-    private double getPosition() {
+    public double getPosition() {
         return motor.getPosition().getValueAsDouble();
     }
 
     private void zeroEncoder() {
         motor.setPosition(0);
+    }
+
+    // Check if Motion Magic has reached the target
+    public boolean hasReachedPosition(double position) {
+        return true; //todo
+        // return NerdyMath.inRange(
+        //     getPosition(),
+        //         positionDegrees - ElevatorConstants.kElevatorPivotDeadBand,
+        //         positionDegrees + ElevatorConstants.kElevatorPivotDeadBand
+        //     );
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -278,6 +253,11 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 break;
         }
+    }
+
+    public void setTargetAngleRaw(double wristAngleRaw) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setTargetAngleRaw'");
     }
 
 }

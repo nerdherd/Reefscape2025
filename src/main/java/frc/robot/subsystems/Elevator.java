@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.WristConstants;
 import frc.robot.util.NerdyMath;
 
 public class Elevator extends SubsystemBase implements Reportable {
@@ -28,7 +26,6 @@ public class Elevator extends SubsystemBase implements Reportable {
     private final TalonFX elevatorMotor;
     private final TalonFX elevatorMotor2;
 
-    // private final PIDController elevatorPID;
     private double desiredPosition;
     private double desiredVelocity;
     private TalonFXConfigurator motorConfigurator;
@@ -41,25 +38,26 @@ public class Elevator extends SubsystemBase implements Reportable {
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
-        motionMagicVoltage = new MotionMagicVoltage(0);
         brakeRequest = new NeutralOut();
-        //followRequest = new Follower(ElevatorConstants.kElevatorMotorID2, true);
+        followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
 
         /////////////////////////////////////////////////////////////////////////
         // DO NOT ENABLE THEM BEFORE YOU TESTED THE VOLTAGES AND POSITIONS!!!!!!!
         /////////////////////////////////////////////////////////////////////////
+        
+        resetElevator();
+    }
+    
+    public void resetElevator() {
+        enabled = false;
+        desiredPosition = 0;
+        desiredVelocity = 0;
+        motionMagicVoltage = new MotionMagicVoltage(0);
         elevatorMotor.setPosition(0.0);
 
         motorConfigurator = elevatorMotor.getConfigurator();
         motorConfigurator2 = elevatorMotor2.getConfigurator();
 
-        setMotorConfigs();
-
-        followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
-        motionMagicVoltage.withSlot(0);
-    }
-    
-    private void setMotorConfigs() {
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         motorConfigurator.refresh(motorConfigs);
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
@@ -111,6 +109,8 @@ public class Elevator extends SubsystemBase implements Reportable {
         if (!response2.isOK()){
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
         }
+        
+        motionMagicVoltage.withSlot(0);
     }
 
 
@@ -148,6 +148,21 @@ public class Elevator extends SubsystemBase implements Reportable {
         }
         desiredVelocity = NerdyMath.clamp(velocity, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
         elevatorMotor.set(desiredVelocity);
+    }
+
+    public double getPosition()
+    {
+        return elevatorMotor.getPosition().getValueAsDouble();
+    }
+
+    // Check if Motion Magic has reached the target
+    public boolean hasReachedPosition(double position) {
+        return true; //todo
+        // return NerdyMath.inRange(
+        //     getPosition(),
+        //         positionDegrees - ElevatorConstants.kElevatorPivotDeadBand,
+        //         positionDegrees + ElevatorConstants.kElevatorPivotDeadBand
+        //     );
     }
 
     // ****************************** COMMAND METHODS ***************************** //
@@ -215,7 +230,7 @@ public class Elevator extends SubsystemBase implements Reportable {
                 SmartDashboard.putNumber("Elevator Current Position", elevatorMotor.getPosition().getValueAsDouble());
                 SmartDashboard.putNumber("Elevator Desired Velocity", desiredVelocity);
                 SmartDashboard.putNumber("Elevator Current Velocity", elevatorMotor.getVelocity().getValueAsDouble());
-                SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
+                SmartDashboard.putBoolean("Elevator Enabled", enabled);
         }
     }
 
@@ -235,6 +250,11 @@ public class Elevator extends SubsystemBase implements Reportable {
                 tab.addBoolean("Elevator Enabled", () -> enabled);
                 break;
         }
+    }
+
+    public void setTargetHeightRaw(double elevatorHeightRaw) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'setTargetHeightRaw'");
     }
 
 }
