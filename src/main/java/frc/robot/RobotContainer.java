@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.IntakeConstants;
+import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.ROBOT_ID;
 import frc.robot.Constants.V1ElevatorConstants;
@@ -86,9 +86,6 @@ public class RobotContainer {
   private static boolean USE_PIVOT = false;// keep thie value is false before you check in your code
 /////////////////////////////////////////////////////
 
-  private static boolean V1 = true;
-
-
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
@@ -114,10 +111,10 @@ public class RobotContainer {
 
    
     intakeRoller = new IntakeRoller();
-    intakeWrist = new IntakeWrist(V1);
+    intakeWrist = new IntakeWrist();
     elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot(V1);
-	intakeV2 = new IntakeV2();
+    elevatorPivot = new ElevatorPivot();
+	  intakeV2 = new IntakeV2();
 
     Elevator.enabled = USE_ELEV;
     ElevatorPivot.enabled = USE_PIVOT;
@@ -161,7 +158,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command currentAuto = autoChooser.getSelected();
     
-    swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);//AUTONOMOUS);
+    swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
     return currentAuto;
   }
 
@@ -175,6 +172,13 @@ public class RobotContainer {
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
 
+  }
+
+  public void reinitElevatorPivotWrist()
+  {
+    elevator.resetElevator();
+    elevatorPivot.resetPivot();
+    intakeWrist.resetWrist();
   }
   
   private void initAutoChoosers() {
@@ -335,19 +339,7 @@ public class RobotContainer {
      * Pivot Section
      *******************************/
     
-      // Voltage Ramp Pivot Positive
-      /*operatorController.bumperRight()
-        .whileTrue(Commands.run(() -> {
-          voltage += 0.2 / 50.0;
-          elevatorPivot.setPivotVoltage(voltage);
-      }, elevatorPivot));
-
-      // Voltage Ramp Pivot Negative
-      operatorController.bumperLeft()
-        .whileTrue(Commands.run(() -> {
-          voltage -= 0.2 / 50.0;
-          elevatorPivot.setPivotVoltage(voltage);
-      }, elevatorPivot));*/
+      
 	  
 	  // Position Ramp Pivot Positive
     operatorController.bumperRight()
@@ -427,86 +419,26 @@ public class RobotContainer {
     swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
   }
 
-  public void configureBindings_test() {
-    // driverController.buttonRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button A Test", "bye")));
-    // driverController.buttonDown()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button B Test", "bye")));
-    // driverController.buttonUp()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button X Test", "bye")));
-    // driverController.buttonLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Y Test", "bye")));
+  public void configureBindings_test() 
+  {
+      // Voltage Ramp Pivot Positive
+      operatorController.bumperRight()
+        .whileTrue(Commands.run(() -> {
+          voltage += 0.2 / 50.0;
+          elevatorPivot.setPivotVoltage(voltage);
+      }, elevatorPivot));
 
-    // driverController.bumperLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper L Test", "bye")));
-    // driverController.bumperRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Bumper R Test", "bye")));
-    // driverController.triggerLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZL Test", "bye")));
-    // driverController.triggerRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Trigger ZR Test", "bye")));
+      // Voltage Ramp Pivot Negative
+      operatorController.bumperLeft()
+        .whileTrue(Commands.run(() -> {
+          voltage -= 0.2 / 50.0;
+          elevatorPivot.setPivotVoltage(voltage);
+      }, elevatorPivot));
 
-    // driverController.dpadUp()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Up Test", "bye")));
-    // driverController.dpadRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Right Test", "bye")));
-    // driverController.dpadDown()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Down Test", "bye")));
-    // driverController.dpadLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Dpad Left Test", "bye")));
-
-    // driverController.controllerLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Minus Test", "bye")));
-    // driverController.controllerRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Plus Test", "bye")));
-    // driverController.joystickLeft()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Left Joy Test", "bye")));
-    // driverController.joystickRight()
-    //   .onTrue(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "hi")))
-    //   .onFalse(Commands.runOnce(() -> SmartDashboard.putString("Button Right Joy Test", "bye")));
-
-    driverController.bumperRight()
-      .whileTrue(Commands.run(() -> {
-        desiredAngle -= 1 / 50; // 1 degree per second ish
-        // voltage = -1.928;
-      }));
-    driverController.bumperLeft()
-      .whileTrue(Commands.run(() -> {
-        intakeWrist.setPositionDegrees(desiredAngle);
-      }));
-    driverController.buttonDown()
-      .onTrue(Commands.runOnce(() -> {
-        desiredAngle = 90.0; //Top: -85.4
-      }));
-
-      // driverController.bumperRight()
-      // .whileTrue(Commands.run(() -> {
-      //   voltage += 0.2 / 50.0;
-      //   // voltage = -1.928;
-      // }));
-      // driverController.bumperLeft()
-      //   .whileTrue(Commands.run(() -> {
-      //     intakeWrist.getMotor().setControl(voltageRequest.withOutput(voltage));
-      // }));
-      // driverController.buttonDown()
-      //   .onTrue(Commands.runOnce(() -> {
-      //     voltage = 0;
-      // }));
-  }
+      // Enable Pivot
+      operatorController.triggerRight()
+      .whileTrue(elevatorPivot.setEnabledCommand(true)
+    );
+  } 
   
 }
