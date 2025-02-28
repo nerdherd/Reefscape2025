@@ -109,11 +109,12 @@ public class IntakeV2 extends SubsystemBase {
         SmartDashboard.putNumber("Claw Wrist Voltage", positionMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Claw Current Rotations", positionMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Claw Desired Rotations", desiredPosition);
+        SmartDashboard.putNumber("Claw Desired Rotations", ff);
     }
 
     // ****************************** STATE METHODS ***************************** //
 
-    private void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -122,7 +123,7 @@ public class IntakeV2 extends SubsystemBase {
         velocityRequest.Velocity = velocity;
     }
 
-    private void setPosition(double position){
+    public void setPosition(double position){
         desiredPosition = position;
         motionMagicRequest.Position = desiredPosition;
     }

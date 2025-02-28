@@ -382,7 +382,7 @@ public final class Constants {
 
   public static final class RollerConstants {
 
-    public static final int kMotorID = 61; //TODO check 
+    public static final int kMotorID = 62;  
     public static final double kPMotor = 0.05;
     public static final double kIMotor = 0;
     public static final double kDMotor = 0;
@@ -400,9 +400,10 @@ public final class Constants {
 
   public static final class ClawConstants {
 
-    public static final int kMotorID = 62;
+    public static final int kMotorID = 61;
 
-    public static final double kPMotor = 0.3;
+    public static final double kPMotor = 20; 
+    // 3 degrees error / 360 degrees * kP = 0.4V
     public static final double kIMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0;

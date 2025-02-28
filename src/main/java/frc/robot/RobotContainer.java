@@ -336,19 +336,19 @@ public class RobotContainer {
 
     operatorController.controllerLeft()
     .whileTrue(Commands.run(() -> {
-      desiredRotation += 1.0 / 50.0;
-      intakeWrist.setEnabled(true);
-      intakeWrist.setPosition(desiredRotation);
+      desiredRotation += 0.001;
+      intakeV2.setEnabled(true);
+      intakeV2.setPosition(desiredRotation);
     }))
-    .onFalse(intakeWrist.setEnabledCommand(false));
+    .onFalse(intakeV2.setEnabledCommand(false));
 
     operatorController.controllerRight()
     .whileTrue(Commands.run(() -> {
-      desiredRotation -= 1.0 / 50.0;
-      intakeWrist.setEnabled(true);
-      intakeWrist.setPosition(desiredRotation);
+      desiredRotation -= 0.001;
+      intakeV2.setEnabled(true);
+      intakeV2.setPosition(desiredRotation);
     }))
-    .onFalse(intakeWrist.setEnabledCommand(false));
+    .onFalse(intakeV2.setEnabledCommand(false));
   }
   
   private void initAutoChoosers() {
