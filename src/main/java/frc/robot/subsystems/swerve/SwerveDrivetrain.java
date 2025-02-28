@@ -73,6 +73,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private NerdyLine angleToleranceSpline = new NerdyLine(angles, toleranceScales);
     
     private Field2d field;
+    private boolean visionEnabled = false;
 
     public enum DRIVE_MODE {
         FIELD_ORIENTED,
@@ -174,24 +175,30 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      */
     @Override
     public void periodic() {
-        if (!isTest) {
-            runModules();
+
+        if(visionEnabled) {
+            if (!isTest) {
+                runModules();
+            }
+            
+            poseEstimator.update(gyro.getRotation2d(), getModulePositions());
+    
+            Pose2d estimatedPosition = poseEstimator.getEstimatedPosition();
+    
+            field.setRobotPose(estimatedPosition);
+    
+            double robotRotation = estimatedPosition.getRotation().getDegrees();
+    
+            SmartDashboard.putNumber("Robot Rotation", robotRotation);
+    
+            visionupdateOdometry("limelight-touch",robotRotation);
+            visionupdateOdometry("limelight-awesome",robotRotation);
+            visionupdateOdometry("limelight-zzzzach",robotRotation);
+            visionupdateOdometry("limelight-duaalex",robotRotation);
         }
-        
-        poseEstimator.update(gyro.getRotation2d(), getModulePositions());
-
-        Pose2d estimatedPosition = poseEstimator.getEstimatedPosition();
-
-        field.setRobotPose(estimatedPosition);
-
-        double robotRotation = estimatedPosition.getRotation().getDegrees();
-
-        SmartDashboard.putNumber("Robot Rotation", robotRotation);
-
-        // visionupdateOdometry("limelight-touch",robotRotation);
-        // visionupdateOdometry("limelight-awesome",robotRotation);
-        // visionupdateOdometry("limelight-zzzzach",robotRotation);
-        // visionupdateOdometry("limelight-duaalex",robotRotation);
+        else {
+            // Disabled Vision
+        }
 
     }
 

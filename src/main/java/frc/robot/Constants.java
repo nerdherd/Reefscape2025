@@ -315,7 +315,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; //0.01
     public static final double kGElevatorPivot = 0; //0.08
 
-    public static final double kElevatorPivotStowPosition = -26; //TODO change later -22
+    public static final double kElevatorPivotStowPosition = -1.6; // Was -26 //TODO change later -22
     public static final double kElevatorPivotStartPosition = 0; //TODO change later
     public static final double kElevatorPivotPickUpPosition = -40; //TODO change later   -60
 
@@ -334,8 +334,8 @@ public final class Constants {
 
  public static final class V1ElevatorConstants {
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    public static final int kElevatorMotorID = 17;            // TODO change later 
-    public static final int kElevatorMotorRightID = 18;            // TODO change later 
+    public static final int kElevatorMotorID = 0;            // TODO change later 
+    public static final int kElevatorMotorRightID = 0;            // TODO change later 
     public static final double kElevatorStowPosition    = 0; // TODO change later
     public static final double kElevatorStationPosition = 0 ; // TODO change later
     public static final double kElevatorL1Position =   0;     // TODO change later
@@ -349,11 +349,12 @@ public final class Constants {
     public static final double kVElevatorMotor = 0;
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kLeftPivotMotorID = 17; 
-    public static final int kRightPivotMotorID = 0;
+    public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
+    public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 0; 
+    public static final double kPElevatorPivot = 50.0;; // TODO: NEED TO CALCULATE AND INPUT A kP
+    // 1V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
     public static final double kVElevatorPivot = 0; 
@@ -362,19 +363,22 @@ public final class Constants {
     public static final double kGElevatorPivot = 0; 
 
     public static final double kElevatorPivotStowPosition = 0; 
-    public static final double kElevatorPivotStartPosition = 0; //TODO change later
-    public static final double kElevatorPivotPickUpPosition = 0; 
+    public static final double kElevatorPivotPosition30 = 0.0333; // .0833 //TODO change later
+    public static final double kElevatorPivotPosition60 = 0.11; // 0.1667; 
+    public static final double kElevatorPivotPosition90 = 0.23;
+    public static final double kElevatorPivotPositionVertical = 0.1; // 0.25
 
-    public static final double kElevatorPivotMin = 0; // TODO change later   
-    public static final double kElevatorPivotMax = 0; // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 0; // TODO change later
+    public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
+    public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
+
+    public static final double kElevatorPivotGearRatio = 80.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 10;
-    public static final double kElevatorPivotCruiseAcceleration = 20.000;
-    public static final double kElevatorPivotJerk = 200.0;
+    public static final double kEPivotCruiseVelocity = 0.1; // 0.5
+    public static final double kElevatorPivotCruiseAcceleration = 0.5;
+    // public static final double kElevatorPivotJerk = 200.0; // TODO
   }
 
   public static final class RollerConstants {

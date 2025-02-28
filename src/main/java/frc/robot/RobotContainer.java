@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -29,6 +30,7 @@ import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.commands.SuperSystemCommand;
+import frc.robot.Constants.V1ElevatorConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -62,7 +64,7 @@ public class RobotContainer {
   public Bottom2Piece bottom2Piece;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
-  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
+  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
@@ -85,7 +87,8 @@ public class RobotContainer {
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
   public double desiredAngle = 0.0; //164, 99.8
-  public double desiredRotation = -0.01;
+
+  public double desiredRotation = 0.0;//ElevatorConstants.kElevatorPivotStowPosition; -1.6
 
   /**
    * The container for the robot. Contain
@@ -228,7 +231,22 @@ public class RobotContainer {
     //     elevator.setPosition(desiredRotation);
     // }));
 
-    
+    // driverController.bumperRight()
+    //   .whileTrue(intakeWrist.moveToStow()
+    // );
+    // driverController.triggerRight()
+    //   .whileTrue(intakeWrist.moveToStation()
+    // );
+    // driverController.bumperLeft()
+    //   .whileTrue(intakeWrist.moveToReefL14()
+    // );
+    // driverController.triggerLeft()
+    //   .whileTrue(intakeWrist.moveToReefL23()
+    // );
+
+    // driverController.buttonUp()
+    //   .whileTrue(intakeWrist.setEnabledCommand()
+    // );
 
     // driverController.buttonUp()
     //   .whileTrue(
@@ -332,7 +350,7 @@ public class RobotContainer {
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
-      // elevatorPivot.initShuffleboard(loggingLevel);
+      elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
   
