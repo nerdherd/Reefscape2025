@@ -73,6 +73,8 @@ public class IntakeV2 extends SubsystemBase {
         positionConfigs.Slot0.kS = ClawConstants.kSMotor;
         positionConfigs.Slot0.kG = ClawConstants.kGMotor;
 
+        positionConfigs.Feedback.SensorToMechanismRatio = 42.0 / 18.0 * 5.0;
+
         positionConfigs.MotionMagic.MotionMagicCruiseVelocity =  ClawConstants.kCruiseVelocity;
         positionConfigs.MotionMagic.MotionMagicAcceleration = ClawConstants.kAcceleration;
         positionConfigs.MotionMagic.MotionMagicJerk = ClawConstants.kJerk;
@@ -89,12 +91,14 @@ public class IntakeV2 extends SubsystemBase {
 
     @Override
     public void periodic() {
+        double ff = 0.37 * Math.cos(positionMotor.getPosition().getValueAsDouble() * 2 * Math.PI);
+
         if (!enabled){
             rollerMotor.setControl(brakeRequest);
             positionMotor.setControl(brakeRequest);
         } else {
             rollerMotor.setControl(velocityRequest);
-            positionMotor.setControl(motionMagicRequest);
+            positionMotor.setControl(motionMagicRequest.withFeedForward(ff));
         }
 
         SmartDashboard.putNumber("Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());

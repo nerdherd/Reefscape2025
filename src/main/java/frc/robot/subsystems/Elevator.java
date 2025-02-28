@@ -142,8 +142,8 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public boolean atPosition() {
         return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
-        elevatorMotor.getPosition().getValueAsDouble() - 0.01,
-        elevatorMotor.getPosition().getValueAsDouble() + 0.01);
+        desiredPosition - 0.01,
+        desiredPosition + 0.01);
         // return false;
     }
 

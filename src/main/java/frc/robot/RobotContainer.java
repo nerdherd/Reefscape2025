@@ -334,12 +334,21 @@ public class RobotContainer {
     operatorController.buttonDown()
     .whileTrue(superSystem.moveToL2());
 
-    operatorController.buttonLeft()
-    .onTrue(Commands.runOnce(() -> {
-      elevatorPivot.setTargetPosition(0.15);
-      elevatorPivot.setEnabled(true);
+    operatorController.controllerLeft()
+    .whileTrue(Commands.run(() -> {
+      desiredRotation += 1.0 / 50.0;
+      intakeWrist.setEnabled(true);
+      intakeWrist.setPosition(desiredRotation);
     }))
-    .onFalse(elevatorPivot.setEnabledCommand(false));
+    .onFalse(intakeWrist.setEnabledCommand(false));
+
+    operatorController.controllerRight()
+    .whileTrue(Commands.run(() -> {
+      desiredRotation -= 1.0 / 50.0;
+      intakeWrist.setEnabled(true);
+      intakeWrist.setPosition(desiredRotation);
+    }))
+    .onFalse(intakeWrist.setEnabledCommand(false));
   }
   
   private void initAutoChoosers() {
