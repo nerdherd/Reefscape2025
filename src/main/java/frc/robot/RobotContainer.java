@@ -24,12 +24,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.autos.StowCommand;
-
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.commands.StationCommand;
+import frc.robot.commands.StowCommand;
 import frc.robot.commands.SuperSystemCommand;
 import frc.robot.Constants.V1ElevatorConstants;
 import frc.robot.Constants.WristConstants;
@@ -75,6 +75,7 @@ public class RobotContainer {
   static boolean isRedSide = false;
   
   private SwerveJoystickCommand swerveJoystickCommand;
+  public StationCommand stationCommand;
   public SuperSystemCommand superSystemCommand;
   private StowCommand stowCommand;
   
@@ -118,8 +119,8 @@ public class RobotContainer {
     // elevatorPivot.setEnabledCommand(USE_PIVOT);
     // intakeV2.setEnabledCommand(USE_INTAKE);
 
-  superSystemCommand = new SuperSystemCommand(elevatorPivot, elevator, intakeWrist, 0.15, 0.789, -0.4, 321, 10);
-  stowCommand = new StowCommand(elevatorPivot, elevator, intakeWrist, 0.0, 0.0, 0.0, 321, 10);
+  stationCommand = new StationCommand(elevatorPivot, elevator, intakeWrist, 0.15, 0.789, -0.4, 10.0);
+  stowCommand = new StowCommand(elevatorPivot, elevator, intakeWrist, 0.0, 0.0, 0.0, 10);
 
 /*  TODO: Fix Bottom2Piece to take in IntakeV2
     try { // ide displayed error fix
@@ -329,7 +330,7 @@ public class RobotContainer {
     // driverController.bumperLeft();
 
     operatorController.buttonUp()
-    .whileTrue(superSystemCommand);
+    .whileTrue(stationCommand);
     operatorController.buttonRight()
     .whileTrue(stowCommand);
     operatorController.buttonLeft()

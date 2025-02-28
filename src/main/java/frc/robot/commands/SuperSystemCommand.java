@@ -7,8 +7,9 @@ import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeWrist;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class SuperSystemCommand extends SequentialCommandGroup{
+public class SuperSystemCommand extends Command{
     private final ElevatorPivot pivot;
     private final Elevator elevator;
     private final IntakeWrist wrist;
@@ -16,20 +17,25 @@ public class SuperSystemCommand extends SequentialCommandGroup{
     private final double elevatorHeight;
     private final double wristAngle;
 
-    private final static int ALL_TOGETHER = 0;
-    private final static int ELV_PVT_WRT = 123;
-    private final static int PVT_ELV_WRT = 213;
-    private final static int WRT_ELV_PVT = 312;
-    private final static int WRT_PVT_ELV = 321;
+    public enum ExecutionOrder {
+        ALL_TOGETHER,
+        ELV_PVT_WRT,
+        ELV_WRT_PVT,
+        PVT_ELV_WRT,
+        PVT_WRT_ELV,
+        WRT_ELV_PVT,
+        WRT_PVT_ELV
+    }
 
     private boolean isStarted = false;
-    private int currentTime = 0;
+    private double lastTime = 0;
+    private double timeout;
 
-    private int exeOrder;
+    private ExecutionOrder exeOrder;
 
     public SuperSystemCommand(ElevatorPivot pivot, Elevator elevator, IntakeWrist wrist,
                               double pivotAngle, double elevatorHeight, double wristAngle,
-                              int exeOrder, int timeout) {
+                              ExecutionOrder exeOrder, double timeout) {
         this.pivot = pivot;
         this.elevator = elevator;
         this.wrist = wrist;
@@ -38,79 +44,112 @@ public class SuperSystemCommand extends SequentialCommandGroup{
         this.exeOrder = exeOrder;
         this.wristAngle = wristAngle;
         addRequirements(pivot, elevator, wrist);
-        addCommands(
-            Commands.parallel(
-                Commands.sequence(
-                    elevator.setPivotAngleCommand(pivot.getPositionDegrees()),
-                    wrist.setPivotAngleCommand(pivot.getPositionDegrees())
-                ),
-                Commands.sequence(
-                        Commands.runOnce(() -> pivot.setTargetPosition(pivotAngle)),
-                        pivot.setEnabledCommand(true),
-
-                        Commands.waitSeconds(0.5),
-                        wrist.setPositionCommand(wristAngle),
-                        wrist.setEnabledCommand(true),
-
-                        Commands.waitSeconds(0.5),
-                        elevator.setPositionCommand(elevatorHeight),
-                        elevator.setEnabledCommand(true),
-
-                        Commands.waitSeconds(0.5),
-                        wrist.setPositionCommand(wristAngle * 2)
-                        
-                )
-            )
-        );
     }
 
-    // @Override
-    // public void initialize() {
-    //     pivot.setEnabled(true);
-    //     wrist.setEnabled(false);
-    //     elevator.setEnabled(false);
-    //     pivot.setTargetPosition(pivotAngle);
-    //     elevator.setPosition(elevatorHeight);
-    //     wrist.setPosition(wristAngle);
-    // }
+    @Override
+    public void initialize() {
+        pivot.setEnabled(false);
+        wrist.setEnabled(false);
+        elevator.setEnabled(false);
+        pivot.setTargetPosition(pivotAngle);
+        elevator.setPosition(elevatorHeight);
+        wrist.setPosition(wristAngle);
+    }
 
-    // @Override
-    // public void execute()
-    // {
-    //     double lastTime = Timer.getFPGATimestamp();
-    //     updateDependencies(); 
-    //     pivot.setTargetPosition(pivotAngle);
+    @Override
+    public void execute()
+    {
+        lastTime = Timer.getFPGATimestamp();
+        updateDependencies(); 
 
-    //     // if(Timer.getFPGATimestamp() - lastTime > 4.0) {
-    //     //     wrist.setPosition(-0.8);
-    //     // }
+        switch (exeOrder) {
+            case ALL_TOGETHER:
+                pivot.setEnabled(true);
+                wrist.setEnabled(true);
+                elevator.setEnabled(true);
+                break;
 
-    //     if(pivot.atPosition()) {
-    //         wrist.setEnabled(true);
-    //         if(wrist.atPosition()) {
-    //             elevator.setEnabled(true);
-    //         }
-    //     }
-    //      elevator.setPositionCommand(elevatorHeight);
-    //     wrist.setPositionCommand(wristAngle);
-    // }
+            case ELV_PVT_WRT:
+                elevator.setEnabled(true);
+                if(elevator.atPosition()) {
+                    pivot.setEnabled(true);
+                }
+                if(pivot.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                break;
 
-    // public void updateDependencies() { 
-    //     double curPivotAngle = pivot.getPositionDegrees();
-    //     // pivot.setTargetPosition(elevator.getPosition()); 
-    //     elevator.setPivotAngle(curPivotAngle);
-    //     wrist.setPivotAngle(curPivotAngle);
-    // }
+            case ELV_WRT_PVT:
+                elevator.setEnabled(true);
+                if(elevator.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                if(wrist.atPosition()) {
+                    pivot.setEnabled(true);
+                }
+                break;
 
-    // @Override
-    // public void end(boolean interrupted) {
-    //     pivot.stop();
-    //     elevator.stop();
-    //     wrist.stop();
-    // }
+            case PVT_WRT_ELV:
+                pivot.setEnabled(true);
+                if(pivot.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                if(wrist.atPosition()) {
+                    elevator.setEnabled(true);
+                }
+                break;
 
-    // @Override
-    // public boolean isFinished() {
-    //     return (pivot.atSetpoint() && elevator.atSetpoint() && wrist.atSetpoint());
-    // }
+            case PVT_ELV_WRT:
+                pivot.setEnabled(true);
+                if(pivot.atPosition()) {
+                    elevator.setEnabled(true);
+                }
+                if(elevator.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                break;
+
+            case WRT_ELV_PVT:
+                wrist.setEnabled(true);
+                if(wrist.atPosition()) {
+                    elevator.setEnabled(true);
+                }
+                if(elevator.atPosition()) {
+                    pivot.setEnabled(true);
+                }
+                break;
+
+            case WRT_PVT_ELV:
+                wrist.setEnabled(true);
+                if(wrist.atPosition()) {
+                    pivot.setEnabled(true);
+                }
+                if(pivot.atPosition()) {
+                    elevator.setEnabled(true);
+                }
+                break;
+        
+            default:
+                break;
+        }
+    }
+
+    public void updateDependencies() { 
+        double curPivotAngle = pivot.getPositionDegrees();
+        // pivot.setTargetPosition(elevator.getPosition()); 
+        elevator.setPivotAngle(curPivotAngle);
+        wrist.setPivotAngle(curPivotAngle);
+    }
+
+    @Override
+    public void end(boolean interrupted) {
+        pivot.stop();
+        elevator.stop();
+        wrist.stop();
+    }
+
+    @Override
+    public boolean isFinished() {
+        return (pivot.atPosition() && elevator.atPosition() && wrist.atPosition()) || (Timer.getFPGATimestamp() - lastTime > timeout);
+    }
 }
