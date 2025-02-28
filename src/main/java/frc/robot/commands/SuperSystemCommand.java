@@ -2,12 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeWrist;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class SuperSystemCommand extends Command{
     private final ElevatorPivot pivot;
@@ -28,7 +25,7 @@ public class SuperSystemCommand extends Command{
     }
 
     private boolean isStarted = false;
-    private double lastTime = 0;
+    private double startTime = 0;
     private double timeout;
 
     private ExecutionOrder exeOrder;
@@ -59,7 +56,11 @@ public class SuperSystemCommand extends Command{
     @Override
     public void execute()
     {
-        lastTime = Timer.getFPGATimestamp();
+        if(!isStarted) {
+            isStarted = true;
+            startTime = Timer.getFPGATimestamp();
+        }
+
         updateDependencies(); 
 
         switch (exeOrder) {
@@ -141,15 +142,16 @@ public class SuperSystemCommand extends Command{
         wrist.setPivotAngle(curPivotAngle);
     }
 
+    //TODO: see if we want to stop at the end of the command, maybe not bcuz we might want to hold it there
     @Override
     public void end(boolean interrupted) {
-        pivot.stop();
-        elevator.stop();
-        wrist.stop();
+        // pivot.stop();
+        // elevator.stop();
+        // wrist.stop();
     }
 
     @Override
     public boolean isFinished() {
-        return (pivot.atPosition() && elevator.atPosition() && wrist.atPosition()) || (Timer.getFPGATimestamp() - lastTime > timeout);
+        return (pivot.atPosition() && elevator.atPosition() && wrist.atPosition()) || (Timer.getFPGATimestamp() - startTime > timeout);
     }
 }

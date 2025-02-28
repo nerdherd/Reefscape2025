@@ -47,6 +47,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.IntakeV2;
 import frc.robot.subsystems.IntakeWrist;
+import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.ElevatorPivot;
 
 import frc.robot.util.Controller;
@@ -62,6 +63,7 @@ public class RobotContainer {
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
   public IntakeWrist intakeWrist;
+  public SuperSystem superSystem;
 
   public Bottom2Piece bottom2Piece;
 
@@ -75,9 +77,6 @@ public class RobotContainer {
   static boolean isRedSide = false;
   
   private SwerveJoystickCommand swerveJoystickCommand;
-  public StationCommand stationCommand;
-  public SuperSystemCommand superSystemCommand;
-  private StowCommand stowCommand;
   
   private static boolean USE_SUBSYSTEMS = true;
   private static boolean USE_ELEV = false;
@@ -112,15 +111,13 @@ public class RobotContainer {
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot(V1);
       intakeV2 = new IntakeV2();
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist);
     }
 
     // intakeWrist.setEnabledCommand(USE_WRIST);
     // elevator.setEnabledCommand(USE_ELEV);
     // elevatorPivot.setEnabledCommand(USE_PIVOT);
     // intakeV2.setEnabledCommand(USE_INTAKE);
-
-  stationCommand = new StationCommand(elevatorPivot, elevator, intakeWrist, 0.15, 0.789, -0.4, 10.0);
-  stowCommand = new StowCommand(elevatorPivot, elevator, intakeWrist, 0.0, 0.0, 0.0, 10);
 
 /*  TODO: Fix Bottom2Piece to take in IntakeV2
     try { // ide displayed error fix
@@ -330,9 +327,9 @@ public class RobotContainer {
     // driverController.bumperLeft();
 
     operatorController.buttonUp()
-    .whileTrue(stationCommand);
+    .whileTrue(superSystem.moveToStation());
     operatorController.buttonRight()
-    .whileTrue(stowCommand);
+    .whileTrue(superSystem.moveToStow());
     operatorController.buttonLeft()
     .onTrue(Commands.runOnce(() -> {
       elevatorPivot.setTargetPosition(0.15);
