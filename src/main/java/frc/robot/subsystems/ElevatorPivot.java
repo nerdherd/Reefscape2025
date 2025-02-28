@@ -195,7 +195,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         ffInverse = ff * -1;
 
         if (enabled) {
-            pivotMotor.setControl(motionMagicRequest.withFeedForward(ffInverse)); // TODO
+            pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); // TODO
             // pivotMotorRight.setControl(motionMagicRequest.withFeedForward(ff));
 
             error = desiredPosition - pivotMotor.getPosition().getValueAsDouble();
@@ -385,6 +385,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         tab.addNumber("Set Position Rev", () -> motionMagicRequest.Position);
         tab.addNumber("Velocity", () -> pivotMotor.getVelocity().getValueAsDouble());
         tab.addBoolean("Enabled", ()-> enabled);
+        tab.addNumber("Actual Voltage", ()-> pivotMotor.getMotorVoltage().getValueAsDouble());
+        tab.addNumber("Desired Position", ()-> desiredPosition);
+        tab.addNumber("Actual Position", ()-> pivotMotor.getPosition().getValueAsDouble());
+        tab.addNumber("feedForward", ()-> ff);
     }
 
     public void setTargetAngleRaw(double pivotAngleRaw) {

@@ -34,6 +34,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     private final Follower followRequest;
     private final NeutralOut brakeRequest;
     private double ff; 
+    private double pivotAngle;
 
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
@@ -72,12 +73,9 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
-        motorConfigs.Slot0.kP = 3;
-        motorConfigs.Slot0.kI = 0.0;
-        motorConfigs.Slot0.kD = 0.0;
-        motorConfigs.Slot0.kG = 0.22;
-        motorConfigs.Slot0.kS = 0.11;
-        motorConfigs.Slot0.kV = 0.0;
+        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor;
+        // motorConfigs.Slot0.kG = ElevatorConstants.kGElevatorMotor;
+        // motorConfigs.Slot0.kS = ElevatorConstants.kSElevatorMotor;
 
         StatusCode response = motorConfigurator.apply(motorConfigs);
         if (!response.isOK()){
@@ -98,12 +96,9 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs2.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
         motorConfigs2.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
-        motorConfigs2.Slot0.kP = 3;
-        motorConfigs2.Slot0.kI = 0.0;
-        motorConfigs2.Slot0.kD = 0.0;
-        motorConfigs2.Slot0.kG = 0.22;
-        motorConfigs2.Slot0.kS = 0.11;
-        motorConfigs2.Slot0.kV = 0.0;
+        motorConfigs2.Slot0.kP = ElevatorConstants.kPElevatorMotor;
+        // motorConfigs2.Slot0.kG = ElevatorConstants.kGElevatorMotor;
+        // motorConfigs2.Slot0.kS = ElevatorConstants.kSElevatorMotor;
 
         StatusCode response2 = motorConfigurator2.apply(motorConfigs2);
         if (!response2.isOK()){
@@ -121,7 +116,7 @@ public class Elevator extends SubsystemBase implements Reportable {
             return;
         }
         elevatorMotor2.setControl(followRequest);
-        ff = 0.0;
+        ff = (ElevatorConstants.kGElevatorMotor + ElevatorConstants.kSElevatorMotor) * Math.sin(pivotAngle * 2 * Math.PI);
         elevatorMotor.setControl(motionMagicVoltage.withFeedForward(ff));
     }
 
@@ -141,13 +136,8 @@ public class Elevator extends SubsystemBase implements Reportable {
         motionMagicVoltage.Position = desiredPosition;
     }
 
-    private void setVelocity(double velocity) {
-        if(enabled == false)
-        {
-            return;
-        }
-        desiredVelocity = NerdyMath.clamp(velocity, -ElevatorConstants.kElevatorSpeed, ElevatorConstants.kElevatorSpeed);
-        elevatorMotor.set(desiredVelocity);
+    public void setPivotAngle(double pivotAngle) {
+        this.pivotAngle = pivotAngle;
     }
 
     public double getPosition()
@@ -175,15 +165,14 @@ public class Elevator extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setPosition(position));
     }
 
-    private Command setVelocityCommand(double velocity) {
-        return Commands.runOnce(() -> setVelocity(velocity));
-    }
-
     private Command stopCommand() {
         return Commands.sequence(
-            setVelocityCommand(0),
             setEnabledCommand(false)
         );
+    }
+
+    public Command setPivotAngleCommand(double pivotAngle) {
+        return Commands.runOnce(() -> setPivotAngle(pivotAngle));
     }
 
     // ****************************** NAMED COMMANDS ****************************** //

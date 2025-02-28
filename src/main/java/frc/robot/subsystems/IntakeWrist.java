@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.util.NerdyMath;;
 
@@ -35,6 +34,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private double desiredAngle;
     public static boolean enabled = false;
     private double ff = 0;
+    private double pivotAngle = 0;
 
     public IntakeWrist() {
         motor = new TalonFX(WristConstants.kMotorID);
@@ -66,6 +66,8 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motor.setNeutralMode(NeutralModeValue.Brake);
         zeroEncoder();
     }
+
+    //****************************** SETUP METHODS ******************************//
 
     private void configurePID(TalonFXConfiguration motorConfigs) {
             motorConfigurator.refresh(motorConfigs);
@@ -99,6 +101,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
+        if(!enabled) {
+            motor.setControl(brakeRequest);
+            return;
+        }
 
         SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Current Rotations", motor.getPosition().getValueAsDouble());
@@ -111,18 +117,13 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
-        ff = WristConstants.kGMotor * Math.cos(((getPosition() + 0.5437) % 1) * 2 * Math.PI); // 0.5437 is wrist horizontal 
-        if (enabled) {
-            motor.setControl(motionMagicRequest.withFeedForward(ff));
-        }
-        else {
-            motor.setControl(brakeRequest);
-        }
+        ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.5437 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
+        motor.setControl(motionMagicRequest.withFeedForward(ff));
     }
 
     // ****************************** STATE METHODS ****************************** //
 
-    private void setEnabled(boolean e) {
+    public void setEnabled(boolean e) {
         this.enabled = e;
     }
     
@@ -151,6 +152,17 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motor.setPosition(0);
     }
 
+    public void setPivotAngle(double pivotAngle) {
+        this.pivotAngle = pivotAngle;
+    }
+
+    public boolean atPosition() {
+        return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
+        motor.getPosition().getValueAsDouble() - 0.01,
+        motor.getPosition().getValueAsDouble() + 0.01);
+        // return false;
+    }
+
     // Check if Motion Magic has reached the target
     public boolean hasReachedPosition(double position) {
         return true; //todo
@@ -162,15 +174,11 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
 
     // ****************************** COMMAND METHODS ****************************** //
-
-    public Command setDisabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(false));
-    }
-    public Command setEnabledCommand() {
-        return Commands.runOnce(() -> this.setEnabled(true));
+    public Command setEnabledCommand(boolean enabled) {
+        return Commands.runOnce(() -> this.setEnabled(enabled));
     }
 
-    private Command setPositionCommand(double position) {
+    public Command setPositionCommand(double position) {
         return Commands.sequence(
             Commands.runOnce(() -> setPosition(position))
         );
@@ -178,9 +186,13 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     private Command stopCommand() {
         return Commands.sequence(
-            setDisabledCommand(),
+            setEnabledCommand(false),
             Commands.runOnce(() -> motor.setControl(brakeRequest))
         );
+    }
+
+    public Command setPivotAngleCommand(double pivotAngle) {
+        return Commands.runOnce(() -> setPivotAngle(pivotAngle));
     }
 
     // ****************************** NAMED COMMANDS ****************************** //
@@ -253,11 +265,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 break;
         }
-    }
+    }    
 
     public void setTargetAngleRaw(double wristAngleRaw) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'setTargetAngleRaw'");
     }
-
 }

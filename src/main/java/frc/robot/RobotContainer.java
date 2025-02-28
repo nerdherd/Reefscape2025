@@ -90,7 +90,8 @@ public class RobotContainer {
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
   public double desiredAngle = 0.0; //164, 99.8
-  public double desiredRotation = -0.01;
+
+  public double desiredRotation = 0.0;//ElevatorConstants.kElevatorPivotStowPosition; -1.6
 
   /**
    * The container for the robot. Contain
@@ -287,22 +288,22 @@ public class RobotContainer {
     //     elevator.setPosition(desiredRotation);
     // }));
 
-    driverController.bumperRight()
-      .whileTrue(intakeWrist.moveToStow()
-    );
-    driverController.triggerRight()
-      .whileTrue(intakeWrist.moveToStation()
-    );
-    driverController.bumperLeft()
-      .whileTrue(intakeWrist.moveToReefL14()
-    );
-    driverController.triggerLeft()
-      .whileTrue(intakeWrist.moveToReefL23()
-    );
+    // driverController.bumperRight()
+    //   .whileTrue(intakeWrist.moveToStow()
+    // );
+    // driverController.triggerRight()
+    //   .whileTrue(intakeWrist.moveToStation()
+    // );
+    // driverController.bumperLeft()
+    //   .whileTrue(intakeWrist.moveToReefL14()
+    // );
+    // driverController.triggerLeft()
+    //   .whileTrue(intakeWrist.moveToReefL23()
+    // );
 
-    driverController.buttonUp()
-      .onTrue(intakeWrist.setEnabledCommand()
-    ).onFalse(intakeWrist.setDisabledCommand());
+    // driverController.buttonUp()
+    //   .whileTrue(intakeWrist.setEnabledCommand()
+    // );
 
     // driverController.buttonUp()
     //   .whileTrue(
@@ -332,7 +333,7 @@ public class RobotContainer {
     
     driverController.buttonRight()
       .onTrue(intakeWrist.moveToReefL23())
-      .onFalse(intakeWrist.setDisabledCommand()); 
+      .onFalse(intakeWrist.setEnabledCommand(false)); 
     
 
     /*******************************
