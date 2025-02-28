@@ -330,6 +330,10 @@ public class RobotContainer {
     .whileTrue(superSystem.moveToStation());
     operatorController.buttonRight()
     .whileTrue(superSystem.moveToStow());
+
+    operatorController.buttonDown()
+    .whileTrue(superSystem.moveToL2());
+
     operatorController.buttonLeft()
     .onTrue(Commands.runOnce(() -> {
       elevatorPivot.setTargetPosition(0.15);

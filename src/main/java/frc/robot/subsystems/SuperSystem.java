@@ -57,14 +57,28 @@ public class SuperSystem {
         ExecutionOrder.ALL_TOGETHER, 10.0);
 
         return superSystemCommand;
+
+        
     }
 
     public Command moveToL2() {
-        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kL23Position, 
-        ExecutionOrder.ALL_TOGETHER, 10.0);
+        // SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        // V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kL23Position, 
+        // ExecutionOrder.ALL_TOGETHER, 10.0);
 
-        return superSystemCommand;
+        // return superSystemCommand;
+
+        // TODO Check kElevatorPivotPositionVertical is reasonable
+        // TODO Wrist intermediate @ -0.1
+        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kIntermediatePosition, 
+        ExecutionOrder.WRT_PVT_ELV, 10.0);
+
+        return Commands.sequence(
+            superSystemCommand,
+            wrist.setPositionCommand(WristConstants.kL23Position),
+            wrist.setEnabledCommand(true)
+        );
     }
 
     public Command moveToL3() {

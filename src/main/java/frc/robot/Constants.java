@@ -287,7 +287,7 @@ public final class Constants {
     public static final double kElevatorStowPosition    =  0.0; //0.5   // TODO change later
     public static final double kElevatorStationPosition = 0.789;//-2 // TODO change later
     public static final double kElevatorL1Position =   0.5;      // TODO change later
-    public static final double kElevatorL2Position =  1;      // TODO change later
+    public static final double kElevatorL2Position =  0.0; // was 1.0      // TODO change later
     public static final double kElevatorL3Position = 1.5;      // TODO change later
     public static final double kElevatorL4Position = 2;      // TODO change later
     public static final double kElevatorSpeed = 1.0;           // TODO change later
@@ -365,7 +365,7 @@ public final class Constants {
 
     public static final double kElevatorPivotStowPosition = 0.0; 
     public static final double kElevatorPivotStationPosition = 0.15; // .0833 //TODO change later
-    public static final double kElevatorPivotPositionVertical = 0.23;//0.1 // 0.25
+    public static final double kElevatorPivotPositionVertical = 0.22; // Was 0.23 as of 2/28 // 0.25
 
 
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
@@ -434,13 +434,13 @@ public final class Constants {
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
 
     public static final double kStowPosition = 0.0;//-0.15//0.092//0.0
-    public static final double kIntermediatePosition = -0.4;
+    public static final double kIntermediatePosition = -0.2; // was -0.4
     public static final double kStationPosition = -0.8;//-0.3//0.54
-    public static final double kL23Position = -0.6;
+    public static final double kL23Position = -0.3; // was -0.6
     public static final double kL14Position = -0.8;
     public static final double kWristStowPosition = 0.0;
-    public static final double kWristL23Position = 0.36;
-    public static final double kWristL14Position = 0.708;
+    // public static final double kWristL23Position = 0.36; // TODO These do not look correct
+    // public static final double kWristL14Position = 0.708; // TODO These do not look correct
     public static final double kMaxPosition = 0.14; //156
     public static final double kMinPosition = 0;
 
