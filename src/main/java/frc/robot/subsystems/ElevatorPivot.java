@@ -289,9 +289,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         return pivotMotor.getPosition().getValueAsDouble(); // - pivotPositionOffset; // TODO: Don't need anymore as of 2/24 since I reset both pivot encoders to 0 at Gravity Position
     }
     
-    // private double getPositionDegrees() {
-    //     return getPositionRev() * 360;
-    // }
+    public double getPositionDegrees() {
+        return getPositionRev() * 360;
+    }
 
     // public boolean hasReachedPosition(double positionDegrees) {
     //     return NerdyMath.inRange(
