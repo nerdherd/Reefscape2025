@@ -181,6 +181,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Pivot Target Rotations", desiredPosition);
         SmartDashboard.putNumber("Error Left (Rotations)", error);
+        
 
         // SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
         // SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
@@ -191,12 +192,12 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
         // SmartDashboard.putNumber("Error Right (Rotations)", errorRight);
 
-        sim_kP_Volts = error * V1ElevatorConstants.kPElevatorPivot;
-        SmartDashboard.putNumber("kP Applied Volts", sim_kP_Volts);
+        // sim_kP_Volts = error * V1ElevatorConstants.kPElevatorPivot;
+        // SmartDashboard.putNumber("kP Applied Volts", sim_kP_Volts);
         // SmartDashboard.putNumber("kP Right Applied Volts", errorRight * 20);
 
-        totalSimulatedVolts = sim_kP_Volts + ffInverse;
-        SmartDashboard.putNumber("Left Total Applied Volts", totalSimulatedVolts);
+        // totalSimulatedVolts = sim_kP_Volts + ffInverse;
+        // SmartDashboard.putNumber("Left Total Applied Volts", totalSimulatedVolts);
 
 
         // ff = (-4.32028 * getPositionRev()) + 6.497105;
@@ -213,7 +214,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         
 
         if (enabled) {
-            pivotMotor.setControl(motionMagicRequest.withFeedForward(ffInverse)); // TODO
+            pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); // TODO
             // pivotMotorRight.setControl(motionMagicRequest.withFeedForward(ff));
 
             error = desiredPosition - pivotMotor.getPosition().getValueAsDouble();
@@ -366,6 +367,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         tab.addNumber("Set Position Rev", () -> motionMagicRequest.Position);
         tab.addNumber("Velocity", () -> pivotMotor.getVelocity().getValueAsDouble());
         tab.addBoolean("Enabled", ()-> enabled);
+        tab.addNumber("Actual Voltage", ()-> pivotMotor.getMotorVoltage().getValueAsDouble());
+        tab.addNumber("Desired Position", ()-> desiredPosition);
+        tab.addNumber("Actual Position", ()-> pivotMotor.getPosition().getValueAsDouble());
+        tab.addNumber("feedForward", ()-> ff);
     }
     
 }

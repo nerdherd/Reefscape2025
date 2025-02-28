@@ -350,8 +350,8 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 20.0 / 1.0; // TODO: NEED TO CALCULATE AND INPUT A kP
-    // 1V = kP * 0.05         kP = 20
+    public static final double kPElevatorPivot = 50.0;; // TODO: NEED TO CALCULATE AND INPUT A kP
+    // 1V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
     public static final double kVElevatorPivot = 0; 
@@ -360,9 +360,10 @@ public final class Constants {
     public static final double kGElevatorPivot = 0; 
 
     public static final double kElevatorPivotStowPosition = 0; 
-    public static final double kElevatorPivotPosition30 = 0.0833; //TODO change later
-    public static final double kElevatorPivotPosition60 = 0.1667;
-    public static final double kElevatorPivotPositionVertical = 0.25; 
+    public static final double kElevatorPivotPosition30 = 0.0333; // .0833 //TODO change later
+    public static final double kElevatorPivotPosition60 = 0.11; // 0.1667; 
+    public static final double kElevatorPivotPosition90 = 0.23;
+    public static final double kElevatorPivotPositionVertical = 0.1; // 0.25
 
 
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
@@ -372,7 +373,7 @@ public final class Constants {
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 0.5;
+    public static final double kEPivotCruiseVelocity = 0.1; // 0.5
     public static final double kElevatorPivotCruiseAcceleration = 0.5;
     // public static final double kElevatorPivotJerk = 200.0; // TODO
   }

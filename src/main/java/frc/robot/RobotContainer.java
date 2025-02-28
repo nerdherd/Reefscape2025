@@ -61,7 +61,7 @@ public class RobotContainer {
   public Bottom2Piece bottom2Piece;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
-  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort, true, true);
+  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
   
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
   
@@ -214,46 +214,51 @@ public class RobotContainer {
 
 
     // Position Ramp Pivot Positive
-    operatorController.bumperRight()
-      .whileTrue(Commands.run(() -> {
-        desiredRotation += (1.0 / 360.0); // 1 degree per second in terms of rotations
-        elevatorPivot.setTargetPosition(desiredRotation);
-    }));
+    // operatorController.bumperRight()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += (0.00006); // 1/360/50 // 1 degree per second in terms of rotations
+    //     elevatorPivot.setTargetPosition(desiredRotation);
+    // }));
 
     // POSITIVE POSITION = UP
     // TODO: Find min and max position rotations of pivot. Find where 0 'ground' is, needs to be parallel to floor. See which way is rotation positive.
     // Pivot should be Green-Green assuming PivotLeft Counterclockwise and PivotRight Clockwise
 
     // // Position Ramp Pivot Negative
+    // operatorController.bumperRight()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredRotation += (1.0 / 360.0); // 1 degree per second in terms of rotations
+    //     elevatorPivot.setTargetPosition(desiredRotation);
+    // }));
     operatorController.bumperLeft()
       .whileTrue(Commands.run(() -> {
-        desiredRotation -= (1.0 / 360.0); // 1 degree per second in terms of rotations
+        desiredRotation -= (0.00006); // 1 degree per second in terms of rotations
         elevatorPivot.setTargetPosition(desiredRotation);
     }));
     
 
     operatorController.buttonUp()
-      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotStowPosition))
+      .onTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotStowPosition))
     );
 
     operatorController.buttonRight()
-      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition30))
+      .onTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition30))
     );
 
     operatorController.buttonDown()
-      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition60))
+      .onTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition60))
     );
 
     operatorController.buttonLeft()
-      .whileTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPositionVertical))
+      .onTrue(Commands.runOnce(() -> elevatorPivot.setTargetPosition(V1ElevatorConstants.kElevatorPivotPosition90))
     );
 
 
     // Enable Pivot
-    operatorController.triggerRight()
+    operatorController.bumperRight() 
       .whileTrue(elevatorPivot.setEnabledCommand(true)
       // ,elevatorPivot.resetEncoders() // Don't think there's a way to do this
-    );
+    ).onFalse(elevatorPivot.setEnabledCommand(false));
 
 
 
@@ -463,7 +468,7 @@ public class RobotContainer {
       intakeRoller.initShuffleboard(loggingLevel); 
       // elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
-      // elevatorPivot.initShuffleboard(loggingLevel);
+      elevatorPivot.initShuffleboard(loggingLevel);
     }
   }
   
