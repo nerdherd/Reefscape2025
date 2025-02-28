@@ -114,13 +114,13 @@ public class Elevator extends SubsystemBase implements Reportable {
             return;
         }
         elevatorMotor2.setControl(followRequest);
-        ff = (ElevatorConstants.kGElevatorMotor + ElevatorConstants.kSElevatorMotor) * Math.cos(pivotAngle * 2 * Math.PI);
+        ff = (ElevatorConstants.kGElevatorMotor + ElevatorConstants.kSElevatorMotor) * Math.sin(pivotAngle * 2 * Math.PI);
         elevatorMotor.setControl(motionMagicVoltage.withFeedForward(ff));
     }
 
     // ****************************** STATE METHODS ****************************** //
 
-    private void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (!enabled) desiredPosition = ElevatorConstants.kElevatorStowPosition;
     }
@@ -140,6 +140,13 @@ public class Elevator extends SubsystemBase implements Reportable {
         return elevatorMotor.getPosition().getValueAsDouble();
     }
 
+    public boolean atPosition() {
+        return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
+        elevatorMotor.getPosition().getValueAsDouble() - 0.01,
+        elevatorMotor.getPosition().getValueAsDouble() + 0.01);
+        // return false;
+    }
+
     // ****************************** COMMAND METHODS ***************************** //
 
     public Command setEnabledCommand(boolean enabled) {
@@ -154,6 +161,10 @@ public class Elevator extends SubsystemBase implements Reportable {
         return Commands.sequence(
             setEnabledCommand(false)
         );
+    }
+
+    public Command setPivotAngleCommand(double pivotAngle) {
+        return Commands.runOnce(() -> setPivotAngle(pivotAngle));
     }
 
     // ****************************** NAMED COMMANDS ****************************** //

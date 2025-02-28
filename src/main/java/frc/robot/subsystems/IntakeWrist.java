@@ -133,6 +133,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
+        if(!enabled) {
+            motor.setControl(brakeRequest);
+            return;
+        }
 
         SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Current Rotations", motor.getPosition().getValueAsDouble());
@@ -146,17 +150,12 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
         ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.5437 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
-        if (enabled) {
-            motor.setControl(motionMagicRequest.withFeedForward(ff));
-        }
-        else {
-            motor.setControl(brakeRequest);
-        }
+        motor.setControl(motionMagicRequest.withFeedForward(ff));
     }
 
     // ****************************** STATE METHODS ****************************** //
 
-    private void setEnabled(boolean e) {
+    public void setEnabled(boolean e) {
         this.enabled = e;
     }
     
@@ -189,6 +188,13 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         this.pivotAngle = pivotAngle;
     }
 
+    public boolean atPosition() {
+        return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
+        motor.getPosition().getValueAsDouble() - 0.01,
+        motor.getPosition().getValueAsDouble() + 0.01);
+        // return false;
+    }
+
     // ****************************** COMMAND METHODS ****************************** //
     public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> this.setEnabled(enabled));
@@ -205,6 +211,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             setEnabledCommand(false),
             Commands.runOnce(() -> motor.setControl(brakeRequest))
         );
+    }
+
+    public Command setPivotAngleCommand(double pivotAngle) {
+        return Commands.runOnce(() -> setPivotAngle(pivotAngle));
     }
 
     // ****************************** NAMED COMMANDS ****************************** //

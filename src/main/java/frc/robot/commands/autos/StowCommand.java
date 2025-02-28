@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.autos;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -8,7 +8,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeWrist;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
-public class SuperSystemCommand extends SequentialCommandGroup{
+public class StowCommand extends SequentialCommandGroup{
     private final ElevatorPivot pivot;
     private final Elevator elevator;
     private final IntakeWrist wrist;
@@ -27,7 +27,7 @@ public class SuperSystemCommand extends SequentialCommandGroup{
 
     private int exeOrder;
 
-    public SuperSystemCommand(ElevatorPivot pivot, Elevator elevator, IntakeWrist wrist,
+    public StowCommand(ElevatorPivot pivot, Elevator elevator, IntakeWrist wrist,
                               double pivotAngle, double elevatorHeight, double wristAngle,
                               int exeOrder, int timeout) {
         this.pivot = pivot;
@@ -45,19 +45,18 @@ public class SuperSystemCommand extends SequentialCommandGroup{
                     wrist.setPivotAngleCommand(pivot.getPositionDegrees())
                 ),
                 Commands.sequence(
-                        Commands.runOnce(() -> pivot.setTargetPosition(pivotAngle)),
-                        pivot.setEnabledCommand(true),
-
-                        Commands.waitSeconds(0.5),
-                        wrist.setPositionCommand(wristAngle),
+                        wrist.setPositionCommand(wristAngle - 0.4),
                         wrist.setEnabledCommand(true),
 
                         Commands.waitSeconds(0.5),
                         elevator.setPositionCommand(elevatorHeight),
                         elevator.setEnabledCommand(true),
 
+                        wrist.setPositionCommand(wristAngle),
+
                         Commands.waitSeconds(0.5),
-                        wrist.setPositionCommand(wristAngle * 2)
+                        Commands.runOnce(() ->pivot.setTargetPosition(pivotAngle)),
+                        pivot.setEnabledCommand(true)
                         
                 )
             )

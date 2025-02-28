@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.commands.autos.StowCommand;
 
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
@@ -75,6 +76,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   public SuperSystemCommand superSystemCommand;
+  private StowCommand stowCommand;
   
   private static boolean USE_SUBSYSTEMS = true;
   private static boolean USE_ELEV = false;
@@ -111,10 +113,13 @@ public class RobotContainer {
       intakeV2 = new IntakeV2();
     }
 
-    intakeWrist.setEnabledCommand(USE_WRIST);
-    elevator.setEnabledCommand(USE_ELEV);
-    elevatorPivot.setEnabledCommand(USE_PIVOT);
-    intakeV2.setEnabledCommand(USE_INTAKE);
+    // intakeWrist.setEnabledCommand(USE_WRIST);
+    // elevator.setEnabledCommand(USE_ELEV);
+    // elevatorPivot.setEnabledCommand(USE_PIVOT);
+    // intakeV2.setEnabledCommand(USE_INTAKE);
+
+  superSystemCommand = new SuperSystemCommand(elevatorPivot, elevator, intakeWrist, 0.15, 0.789, -0.4, 321, 10);
+  stowCommand = new StowCommand(elevatorPivot, elevator, intakeWrist, 0.0, 0.0, 0.0, 321, 10);
 
 /*  TODO: Fix Bottom2Piece to take in IntakeV2
     try { // ide displayed error fix
@@ -301,30 +306,38 @@ public class RobotContainer {
     //     desiredAngle = 90.0; //Top: -85.4
     //   }));
 
-    driverController.triggerLeft()
-    .whileTrue(elevator.setEnabledCommand(true))
-    .onFalse(elevator.setEnabledCommand(false));
+    // driverController.triggerLeft()
+    // .whileTrue(elevator.setEnabledCommand(true))
+    // .onFalse(elevator.setEnabledCommand(false));
 
-    driverController.buttonUp()
-    .whileTrue(elevator.moveToReefL1())
-    .onFalse(elevator.stow());
+    // driverController.buttonUp()
+    // .whileTrue(elevator.moveToReefL1())
+    // .onFalse(elevator.stow());
 
-    driverController.buttonLeft()
-    .whileTrue(elevator.moveToReefL2())
-    .onFalse(elevator.stow());
+    // driverController.buttonLeft()
+    // .whileTrue(elevator.moveToReefL2())
+    // .onFalse(elevator.stow());
 
-    driverController.buttonRight()
-    .whileTrue(elevator.moveToReefL3())
-    .onFalse(elevator.stow());
+    // driverController.buttonRight()
+    // .whileTrue(elevator.moveToReefL3())
+    // .onFalse(elevator.stow());
 
-    driverController.buttonDown()
-    .whileTrue(elevator.moveToReefL4())
-    .onFalse(elevator.stow());
+    // driverController.buttonDown()
+    // .whileTrue(elevator.moveToReefL4())
+    // .onFalse(elevator.stow());
       
-    driverController.bumperLeft();
+    // driverController.bumperLeft();
 
     operatorController.buttonUp()
-    .whileTrue(new SuperSystemCommand(elevatorPivot, elevator, intakeWrist, V1ElevatorConstants.kElevatorPivotPosition60, 0.0, WristConstants.kWristStationPosition, 321, 10).withTimeout(10.0));
+    .whileTrue(superSystemCommand);
+    operatorController.buttonRight()
+    .whileTrue(stowCommand);
+    operatorController.buttonLeft()
+    .onTrue(Commands.runOnce(() -> {
+      elevatorPivot.setTargetPosition(0.15);
+      elevatorPivot.setEnabled(true);
+    }))
+    .onFalse(elevatorPivot.setEnabledCommand(false));
   }
   
   private void initAutoChoosers() {

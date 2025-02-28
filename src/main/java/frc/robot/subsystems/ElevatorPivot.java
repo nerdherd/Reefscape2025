@@ -232,7 +232,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     // ****************************** STATE METHODS ***************************** //
 
-    private void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -257,6 +257,13 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // pivotMotor.setControl(voltageRequest.withOutput(commandedVoltage));
         // pivotMotorRight.setControl(followRequest);
 
+    }
+
+    public boolean atPosition() {
+        return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
+        pivotMotor.getPosition().getValueAsDouble() - 0.01,
+        pivotMotor.getPosition().getValueAsDouble() + 0.01);
+        // return false;
     }
 
     // private void setPositionDegrees(double positionDegrees) {
