@@ -37,9 +37,11 @@ public class SuperSystemCommand extends Command {
 
     @Override
     public void initialize() {
-        // pivot.setTargetAngle(pivotAngle); TODO
-        // elevator.setTargetHeight(elevatorHeight); TODO
-        // wrist.setArmPosition(wristAngle); TODO 
+        pivot.setTargetPosition(pivotAngle);
+        //elevator.setPosition(elevatorHeight);
+        wrist.setPosition(wristAngle);
+        pivot.setEnabledCommand(true);
+        wrist.setEnabledCommand(true);
     }
 
     @Override
@@ -47,14 +49,14 @@ public class SuperSystemCommand extends Command {
     {
         double lastTime = Timer.getFPGATimestamp();
         updateDependencies(); 
-        // pivot.setPositionCommand(pivotAngle); TODO: Do after pivot merge
-        elevator.setPositionCommand(elevatorHeight);
+        pivot.setTargetPosition(pivotAngle);
+         //elevator.setPositionCommand(elevatorHeight);
         wrist.setPositionCommand(wristAngle);
     }
 
     public void updateDependencies() { 
         double curPivotAngle = pivot.getPositionDegrees();
-        pivot.setTargetPosition(elevator.getPosition()); 
+        // pivot.setTargetPosition(elevator.getPosition()); 
         elevator.setPivotAngle(curPivotAngle);
         wrist.setPivotAngle(curPivotAngle);
     }

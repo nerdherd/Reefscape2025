@@ -31,6 +31,7 @@ import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.commands.SuperSystemCommand;
 import frc.robot.Constants.V1ElevatorConstants;
+import frc.robot.Constants.WristConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -56,7 +57,7 @@ public class RobotContainer {
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
   public IntakeV2 intakeV2;
-  public IntakeRoller intakeRoller;
+  // public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
   public IntakeWrist intakeWrist;
@@ -321,6 +322,9 @@ public class RobotContainer {
     .onFalse(elevator.stow());
       
     driverController.bumperLeft();
+
+    operatorController.buttonUp()
+    .whileTrue(new SuperSystemCommand(elevatorPivot, elevator, intakeWrist, V1ElevatorConstants.kElevatorPivotPosition60, 0.0, WristConstants.kWristStationPosition, 321, 10).withTimeout(10.0));
   }
   
   private void initAutoChoosers() {
@@ -347,7 +351,7 @@ public class RobotContainer {
     // swerveDrive.initShuffleboard(loggingLevel);
     // swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_SUBSYSTEMS) { 
-      intakeRoller.initShuffleboard(loggingLevel); 
+      // intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);

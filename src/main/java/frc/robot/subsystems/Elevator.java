@@ -125,7 +125,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         if (!enabled) desiredPosition = ElevatorConstants.kElevatorStowPosition;
     }
     
-    private void setPosition(double position) {
+    public void setPosition(double position) {
         desiredPosition = position;
         motionMagicVoltage.Position = desiredPosition;
     }
