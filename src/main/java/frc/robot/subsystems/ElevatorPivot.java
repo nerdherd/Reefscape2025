@@ -296,7 +296,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     //     return getTargetPositionRev() * 360;
     // }
 
-    private double getPositionRev() {
+    public double getPositionRev() {
         return pivotMotor.getPosition().getValueAsDouble(); // - pivotPositionOffset; // TODO: Don't need anymore as of 2/24 since I reset both pivot encoders to 0 at Gravity Position
     }
     
@@ -383,6 +383,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         tab.addNumber("Desired Position", ()-> desiredPosition);
         tab.addNumber("Actual Position", ()-> pivotMotor.getPosition().getValueAsDouble());
         tab.addNumber("feedForward", ()-> ff);
+        tab.addBoolean("At position", () -> atPosition());
     }
     
 }

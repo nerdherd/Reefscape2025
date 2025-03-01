@@ -337,8 +337,8 @@ public class RobotContainer {
     operatorController.buttonLeft()
     .onTrue(intakeV2.intakeAlgae());
 
-    operatorController.buttonRight()
-    .onTrue(intakeV2.intakeCoral());
+    // operatorController.buttonRight()
+    // .onTrue(intakeV2.intakeCoral());
 
     operatorController.dpadUp()
     .onTrue(intakeV2.outtakeAlgae());
@@ -354,14 +354,14 @@ public class RobotContainer {
     // operatorController.buttonDown()
     // .whileTrue(superSystem.moveToL2());
 
-    operatorController.triggerLeft()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation += 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setPosition(desiredRotation);
-    }))
-    .onFalse(elevatorPivot.setEnabledCommand(false));
-    operatorController.buttonLeft().onTrue(superSystem.moveTogroundIntake());
+    // operatorController.triggerLeft()
+    // .whileTrue(Commands.run(() -> {
+    //   desiredRotation += 0.001;
+    //   intakeV2.setEnabled(true);
+    //   intakeV2.setPosition(desiredRotation);
+    // }))
+    // .onFalse(elevatorPivot.setEnabledCommand(false));
+    // operatorController.buttonLeft().onTrue(superSystem.moveTogroundIntake());
 
   }
   

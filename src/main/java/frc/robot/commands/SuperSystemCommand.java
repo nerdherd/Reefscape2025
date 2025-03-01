@@ -1,18 +1,26 @@
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeWrist;
+import frc.robot.util.NerdyMath;
 
-public class SuperSystemCommand extends Command{
+public class SuperSystemCommand {
     private final ElevatorPivot pivot;
     private final Elevator elevator;
     private final IntakeWrist wrist;
     private final double pivotAngle;
     private final double elevatorHeight;
     private final double wristAngle;
+    private final BooleanSupplier pivotAtPosition;
+    private final BooleanSupplier elevatorAtPosition;
+    private final BooleanSupplier wristAtPosition;
+    private int ammountCalled = 0;
 
     public enum ExecutionOrder {
         ALL_TOGETHER,
@@ -32,7 +40,7 @@ public class SuperSystemCommand extends Command{
     // rotations for angles
     public SuperSystemCommand(ElevatorPivot pivot, Elevator elevator, IntakeWrist wrist,
                               double pivotAngle, double elevatorHeight, double wristAngle,
-                              ExecutionOrder exeOrder, double timeout) {
+                              ExecutionOrder exeOrder, double timeout, BooleanSupplier pivotAtPosition, BooleanSupplier elevatorAtPosition, BooleanSupplier wristAtPosition) {
         this.pivot = pivot;
         this.elevator = elevator;
         this.wrist = wrist;
@@ -40,10 +48,13 @@ public class SuperSystemCommand extends Command{
         this.elevatorHeight = elevatorHeight;
         this.exeOrder = exeOrder;
         this.wristAngle = wristAngle;
-        addRequirements(pivot, elevator, wrist);
+        this.pivotAtPosition = pivotAtPosition;
+        this.elevatorAtPosition = elevatorAtPosition;
+        this.wristAtPosition = wristAtPosition;
+        // addRequirements(pivot, elevator, wrist);
     }
 
-    @Override
+    // @Override
     public void initialize() {
         pivot.setEnabled(false);
         wrist.setEnabled(false);
@@ -51,9 +62,10 @@ public class SuperSystemCommand extends Command{
         pivot.setTargetPosition(pivotAngle);
         elevator.setPosition(elevatorHeight);
         wrist.setPosition(wristAngle);
+        ammountCalled = 0;
     }
 
-    @Override
+    // @Override
     public void execute()
     {
         if(!isStarted) {
@@ -121,11 +133,18 @@ public class SuperSystemCommand extends Command{
                 break;
 
             case WRT_PVT_ELV:
+                ammountCalled += 1;
+                SmartDashboard.putNumber("Ammount Called", ammountCalled);
                 wrist.setEnabled(true);
-                if(wrist.atPosition()) {
+                SmartDashboard.putBoolean("Wrist at Position", false);
+                if(wristAtPosition.getAsBoolean()) {
+                    SmartDashboard.putBoolean("Wrist at Position", true);
                     pivot.setEnabled(true);
                 }
-                if(pivot.atPosition()) {
+
+                SmartDashboard.putBoolean("Pivot at Position", false);
+                if(pivotAtPosition.getAsBoolean()) {
+                    SmartDashboard.putBoolean("Pivot at position", false);
                     elevator.setEnabled(true);
                 }
                 break;
@@ -143,15 +162,17 @@ public class SuperSystemCommand extends Command{
     }
 
     //TODO: see if we want to stop at the end of the command, maybe not bcuz we might want to hold it there
-    @Override
+    // @Override
     public void end(boolean interrupted) {
         // pivot.stop();
         // elevator.stop();
         // wrist.stop();
     }
 
-    @Override
+    // @Override
     public boolean isFinished() {
-        return (pivot.atPosition() && elevator.atPosition() && wrist.atPosition()) || (Timer.getFPGATimestamp() - startTime > timeout);
+        boolean isFinished = (pivotAtPosition.getAsBoolean() && elevatorAtPosition.getAsBoolean() && wristAtPosition.getAsBoolean()) || (Timer.getFPGATimestamp() - startTime > timeout);
+        SmartDashboard.putBoolean("Is Finished", isFinished);
+        return isFinished;
     }
 }

@@ -176,7 +176,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motionMagicRequest.Position = (desiredPosition);  // = (newPos / 360.0)
     }
 
-    private double getPosition() {
+    public double getPosition() {
         return motor.getPosition().getValueAsDouble();
     }
 
@@ -189,10 +189,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
 
     public boolean atPosition() {
-        return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-                                desiredPosition - 0.01,
-                                desiredPosition + 0.01);
-        // return false;
+        boolean inRange = NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
+                                desiredPosition - 0.03,
+                                desiredPosition + 0.03);
+        return inRange;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -285,6 +285,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 // tab.addNumber("Coral Wrist pigeon angle", () -> pigeon.getRoll().getValueAsDouble());
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
+                tab.addBoolean("At position", () -> atPosition());
                 break;
         }
     }
