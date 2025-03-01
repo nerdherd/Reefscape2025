@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.ejml.dense.row.decomposition.eig.WatchedDoubleStepQRDecomposition_FDRM;
+
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -30,6 +32,8 @@ public class IntakeV2 extends SubsystemBase {
     private double desiredPosition;
     private double desiredVelocity;
     private boolean enabled = false;
+    private double pivotAngle = 0;
+    private double wristAngle = 0.0; //need to find
 
     public IntakeV2() {
         rollerMotor = new TalonFX(RollerConstants.kMotorID);
@@ -91,7 +95,7 @@ public class IntakeV2 extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double ff = 0.37 * Math.cos(positionMotor.getPosition().getValueAsDouble() * 2 * Math.PI);
+        double ff = 0.37 * Math.cos(positionMotor.getPosition().getValueAsDouble() + pivotAngle + (wristAngle) * 2 * Math.PI);// 0.788
 
         if (!enabled){
             rollerMotor.setControl(brakeRequest);
@@ -128,9 +132,17 @@ public class IntakeV2 extends SubsystemBase {
         motionMagicRequest.Position = desiredPosition;
     }
 
+    public void setPivotAngle(double pivotAngle) {
+        this.pivotAngle = pivotAngle;
+    }
+
+    public void setWristAngle(double wristAngle) {
+        this.wristAngle = wristAngle;
+    }
+
     // ****************************** COMMAND METHODS ****************************** //
 
-    private Command setPositionCommand(double position) {
+    public Command setPositionCommand(double position) {
         return Commands.runOnce(() -> setPosition(position));
     }
 
@@ -160,6 +172,26 @@ public class IntakeV2 extends SubsystemBase {
             Commands.parallel(
                 setPositionCommand(ClawConstants.kCoralPosition),
                 setVelocityCommand(RollerConstants.kIntakePower)
+            )
+        );
+    }
+
+    public Command outtakeAlgae() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            Commands.parallel(
+                setPositionCommand(ClawConstants.kAlgaePosition),
+                setVelocityCommand(RollerConstants.kOuttakePower)
+            )
+        );
+    }
+    
+    public Command outtakeCoral() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            Commands.parallel(
+                setPositionCommand(ClawConstants.kCoralPosition),
+                setVelocityCommand(RollerConstants.kOuttakePower)
             )
         );
     }

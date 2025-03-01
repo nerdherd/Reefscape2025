@@ -136,7 +136,7 @@ public class SuperSystemCommand extends Command{
     }
 
     public void updateDependencies() { 
-        double curPivotAngle = pivot.getPositionDegrees();
+        double curPivotAngle = pivot.getPositionDegrees() / 360.0;
         // pivot.setTargetPosition(elevator.getPosition()); 
         elevator.setPivotAngle(curPivotAngle);
         wrist.setPivotAngle(curPivotAngle);

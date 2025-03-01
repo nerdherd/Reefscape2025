@@ -402,7 +402,7 @@ public final class Constants {
 
     public static final int kMotorID = 61;
 
-    public static final double kPMotor = 20; 
+    public static final double kPMotor = 45; //MAX 48
     // 3 degrees error / 360 degrees * kP = 0.4V
     public static final double kIMotor = 0;
     public static final double kDMotor = 0;

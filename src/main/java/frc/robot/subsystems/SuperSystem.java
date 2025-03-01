@@ -12,11 +12,13 @@ public class SuperSystem {
     public Elevator elevator;
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
+    public IntakeV2 claw;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeV2 claw) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
+        this.claw = claw;
     }
 
     public Command moveToStow() {

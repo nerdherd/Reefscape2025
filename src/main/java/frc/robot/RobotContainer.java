@@ -111,7 +111,7 @@ public class RobotContainer {
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot(V1);
       intakeV2 = new IntakeV2();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist);
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeV2);
     }
 
     // intakeWrist.setEnabledCommand(USE_WRIST);
@@ -334,7 +334,7 @@ public class RobotContainer {
     operatorController.buttonDown()
     .whileTrue(superSystem.moveToL2());
 
-    operatorController.controllerLeft()
+    operatorController.triggerLeft()
     .whileTrue(Commands.run(() -> {
       desiredRotation += 0.001;
       intakeV2.setEnabled(true);
@@ -342,7 +342,7 @@ public class RobotContainer {
     }))
     .onFalse(intakeV2.setEnabledCommand(false));
 
-    operatorController.controllerRight()
+    operatorController.triggerRight()
     .whileTrue(Commands.run(() -> {
       desiredRotation -= 0.001;
       intakeV2.setEnabled(true);
