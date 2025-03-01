@@ -5,6 +5,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.V1ElevatorConstants;
 import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 import frc.robot.commands.SuperSystemCommand;
 import frc.robot.commands.SuperSystemCommand.ExecutionOrder;
 
@@ -28,6 +29,19 @@ public class SuperSystem {
             wrist.zeroEncoder();
             claw.zeroEncoder();
         });
+    }
+
+    public Command moveTo(NamedPositions position) {
+        SuperSystemCommand superSystemCommand = 
+            new SuperSystemCommand(pivot, elevator, wrist, 
+                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition, 
+                position.executionOrder, 10.0);
+        if (position.intermediateWristPosition == position.finalWristPosition) return superSystemCommand;
+        return Commands.sequence(
+          superSystemCommand,
+          wrist.setPositionCommand(position.finalWristPosition),
+          wrist.setEnabledCommand(true)
+        );
     }
 
     public Command moveToStow() {
@@ -64,7 +78,7 @@ public class SuperSystem {
 
     public Command moveToL1() {
         SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL1Position, WristConstants.kL14Position, 
+        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL1Position, WristConstants.kWristL1Position, 
         ExecutionOrder.ALL_TOGETHER, 10.0);
 
         return superSystemCommand;
@@ -87,14 +101,14 @@ public class SuperSystem {
 
         return Commands.sequence(
             superSystemCommand,
-            wrist.setPositionCommand(WristConstants.kL23Position),
+            wrist.setPositionCommand(WristConstants.kWristL2Position),
             wrist.setEnabledCommand(true)
         );
     }
 
     public Command moveToL3() {
         SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL3Position, WristConstants.kL23Position, 
+        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL3Position, WristConstants.kWristL3Position, 
         ExecutionOrder.ALL_TOGETHER, 10.0);
 
         return superSystemCommand;
@@ -102,9 +116,14 @@ public class SuperSystem {
 
     public Command moveToL4() {
         SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL4Position, WristConstants.kL14Position, 
+        V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL4Position, WristConstants.kWristL4Position, 
         ExecutionOrder.ALL_TOGETHER, 10.0);
 
+        return superSystemCommand;
+    }
+
+    public Command moveTogroundIntake() {
+        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, V1ElevatorConstants.kElevatorPivotGroundIntake, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake, ExecutionOrder.ELV_WRT_PVT, 10);
         return superSystemCommand;
     }
 }

@@ -21,6 +21,7 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.commands.SuperSystemCommand.ExecutionOrder;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -285,12 +286,14 @@ public final class Constants {
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
     public static final double kElevatorStowPosition    =  0.0; //0.5   // TODO change later
-    public static final double kElevatorStationPosition = 0.789;//-2 // TODO change later
-    public static final double kElevatorL1Position =   0.5;      // TODO change later
-    public static final double kElevatorL2Position =  0.0; // was 1.0      // TODO change later
-    public static final double kElevatorL3Position = 1.5;      // TODO change later
+    public static final double kElevatorStationPosition = 0.75;//-2 // TODO change later
+    public static final double kElevatorL1Position =   0;      // TODO change later
+    public static final double kElevatorL2Position =  0;      // TODO change later
+    public static final double kElevatorL3Position = 1.36;      // TODO change later
     public static final double kElevatorL4Position = 2;      // TODO change later
     public static final double kElevatorSpeed = 1.0;           // TODO change later
+    public static final double kElevatorGroundIntake = 0.59;           // TODO change later
+
 
     public static final double kPElevatorMotor = 3;
     public static final double kIElevatorMotor = 0;
@@ -365,7 +368,8 @@ public final class Constants {
 
     public static final double kElevatorPivotStowPosition = 0.0; 
     public static final double kElevatorPivotStationPosition = 0.15; // .0833 //TODO change later
-    public static final double kElevatorPivotPositionVertical = 0.22; // Was 0.23 as of 2/28 // 0.25
+    public static final double kElevatorPivotPositionVertical = 0.23;//0.1 // 0.25
+
 
 
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
@@ -378,6 +382,7 @@ public final class Constants {
     public static final double kEPivotCruiseVelocity = 0.1; // 0.5
     public static final double kElevatorPivotCruiseAcceleration = 0.5;
     // public static final double kElevatorPivotJerk = 200.0; // TODO
+    public static final double kElevatorPivotGroundIntake = -0.001;
   }
 
   public static final class RollerConstants {
@@ -435,13 +440,18 @@ public final class Constants {
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
 
     public static final double kStowPosition = 0.0;//-0.15//0.092//0.0
-    public static final double kIntermediatePosition = -0.2; // was -0.4
-    public static final double kStationPosition = -0.8;//-0.3//0.54
+    public static final double kIntermediatePosition = -0.4;
+    public static final double kStationPosition = -0.89;//-0.3//0.54
     public static final double kL23Position = -0.3; // was -0.6
     public static final double kL14Position = -0.8;
     public static final double kWristStowPosition = 0.0;
-    // public static final double kWristL23Position = 0.36; // TODO These do not look correct
-    // public static final double kWristL14Position = 0.708; // TODO These do not look correct
+    public static final double kWristL3Position = -0.28;
+    public static final double kWristL2Position = -0.28;
+    public static final double kWristL1Position = -0.21;
+    public static final double kWristL4Position = 0.708;
+    public static final double kWristGroundIntake = -0.78;
+
+
     public static final double kMaxPosition = 0.14; //156
     public static final double kMinPosition = 0;
 
@@ -449,4 +459,22 @@ public final class Constants {
     public static final int kPigeonID = 2;
   }
 
+  public static final class SuperSystemConstants {
+    public enum NamedPositions { // positions are all in human-readable, converted internally
+      Stow(ExecutionOrder.WRT_ELV_PVT, 0.0, 0.0, 0.0, -0.4),
+      ;
+      public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
+      public ExecutionOrder executionOrder;
+      NamedPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
+        intermediateWristPosition = iwp; // TODO: add conversions
+        finalWristPosition = fwp;
+        elevatorPosition = ep;
+        pivotPosition = pp;
+        executionOrder = eo;
+      }
+      NamedPositions(ExecutionOrder eo, double pp, double ep, double fwp) {
+        this(eo, pp, ep, fwp, fwp);
+      }
+    }
+  }
 }

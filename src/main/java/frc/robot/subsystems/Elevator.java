@@ -37,7 +37,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     private final NeutralOut brakeRequest;
     private double ff; 
     private double pivotAngle = 0.25; // TODO: Change this to 0 when supersystem tuned
-
+    
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");

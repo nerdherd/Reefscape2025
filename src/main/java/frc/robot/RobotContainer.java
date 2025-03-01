@@ -360,15 +360,9 @@ public class RobotContainer {
       intakeV2.setEnabled(true);
       intakeV2.setPosition(desiredRotation);
     }))
-    .onFalse(intakeV2.setEnabledCommand(false));
+    .onFalse(elevatorPivot.setEnabledCommand(false));
+    operatorController.buttonLeft().onTrue(superSystem.moveTogroundIntake());
 
-    operatorController.triggerRight()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation -= 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setPosition(desiredRotation);
-    }))
-    .onFalse(intakeV2.setEnabledCommand(false));
   }
   
   private void initAutoChoosers() {
