@@ -8,6 +8,7 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -205,17 +206,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     }
 
-    public Command driveToPoseCommand( double maxVelocityMps, double maxAccelerationMpsSq, Pose2d positionToGoTo) {
-        Translation2d translation = new Translation2d()
-        Pose2d targetPose = positionToGoTo.transformBy(null);
-        layout.getTagPose
-        return Commands.sequence(
-            driveToPose(targetPose, maxVelocityMps, maxAccelerationMpsSq)
-        );
+    public Command driveToRelativePose(double maxVelocityMps, double maxAccelerationMpsSq, Transform2d translation) {
+        Pose2d targetPose = getPose().plus(translation);
+        return driveToPose(targetPose, maxVelocityMps, maxAccelerationMpsSq);
     }
 
-    public int getReefTagID(String limelightName) {
-        long id = NetworkTableInstance.getDefault().getTable(limelightName).getEntry("tid").getInteger(-1);
+    public static int getReefTagID() {
+        long id = NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontName).getEntry("tid").getInteger(-1);
         return (int) id;
     }
 

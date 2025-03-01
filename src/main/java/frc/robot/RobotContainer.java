@@ -32,6 +32,7 @@ import frc.robot.commands.StationCommand;
 import frc.robot.commands.StowCommand;
 import frc.robot.commands.SuperSystemCommand;
 import frc.robot.Constants.V1ElevatorConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.WristConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
@@ -111,7 +112,7 @@ public class RobotContainer {
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot(V1);
       intakeV2 = new IntakeV2();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist);
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, swerveDrive);
     }
 
     // intakeWrist.setEnabledCommand(USE_WRIST);
@@ -327,7 +328,10 @@ public class RobotContainer {
     // driverController.bumperLeft();
 
     driverController.bumperLeft()
-      .whileTrue(SwerveDrivetrain)
+      .whileTrue(superSystem.moveLeftOf(SwerveDrivetrain.getReefTagID()));
+
+    driverController.bumperRight()
+    .whileTrue(superSystem.moveRightOf(SwerveDrivetrain.getReefTagID()));
 
     operatorController.buttonUp()
     .whileTrue(superSystem.moveToStation());
