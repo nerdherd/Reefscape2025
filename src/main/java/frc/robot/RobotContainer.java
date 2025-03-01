@@ -51,6 +51,7 @@ import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.ElevatorPivot;
 
 import frc.robot.util.Controller;
+import frc.robot.util.filters.OldDriverFilter2;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
@@ -230,10 +231,36 @@ public class RobotContainer {
     //TODO for roller operatorController.bumperLeftRight();
     //TODO for roller operatorController.bumperLeftRight();
 
+
+  }
+
+
+  public void operatorController_teleop() {
+    OldDriverFilter2 xFilter = new OldDriverFilter2(
+                0.05,//ControllerConstants.kDeadband,
+                0.05,//kMinimumMotorOutput,
+                5,//kTeleDriveMaxSpeedMetersPerSecond,
+                0.11765,//kDriveAlpha,
+                5,//kTeleMaxAcceleration,
+                -5);//kTeleMaxDeceleration);
+    
+    OldDriverFilter2 yFilter = new OldDriverFilter2(
+                0.05,//ControllerConstants.kDeadband,
+                0.05,//kMinimumMotorOutput,
+                5,//kTeleDriveMaxSpeedMetersPerSecond,
+                0.11765,//kDriveAlpha,
+                5,//kTeleMaxAcceleration,
+                -5);//kTeleMaxDeceleration);
+
     // TODO pivot ctrl operatorController.getLeftX();
     // TODO wrist ctrl operatorController.getLeftY();
     // TODO elevator ctrl operatorController.getLeftX();
     // TODO intake ctrl operatorController.getLeftY();
+    double pivotPosition = yFilter.calculate(operatorController.getLeftY());
+    double elevatorPosition = xFilter.calculate(operatorController.getLeftX());
+
+    SmartDashboard.putNumber("Operator L-Y", pivotPosition);
+    SmartDashboard.putNumber("Operator L-X", elevatorPosition);
   }
 
   public void configureBindings_test() {
