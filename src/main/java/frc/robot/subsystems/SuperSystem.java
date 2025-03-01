@@ -60,7 +60,7 @@ public class SuperSystem {
         });
     }
 
-    // public Command moveTo(NamedPositions position) {
+    public Command moveTo(NamedPositions position) {
     //     SuperSystemCommand superSystemCommand = 
     //         new SuperSystemCommand(pivot, elevator, wrist, 
     //             position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition, 
@@ -71,9 +71,10 @@ public class SuperSystem {
     //       wrist.setPositionCommand(position.finalWristPosition),
     //       wrist.setEnabledCommand(true)
     //     );
-    // }
+    return Commands.none();
+    }
 
-    // public Command moveToStow() {
+    public Command moveToStow() {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
     //     ExecutionOrder.WRT_ELV_PVT, 10.0);
@@ -83,19 +84,8 @@ public class SuperSystem {
     //         wrist.setPositionCommand(WristConstants.kStowPosition),
     //         wrist.setEnabledCommand(true)
     //     );
-    // }
-
-    // public Command moveToSemiStow() { //TODO: see if this is legit
-    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-    //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
-    //     ExecutionOrder.WRT_ELV_PVT, 10.0);
-    // public Command moveToProcs() { //TODO: 
-    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-    //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
-    //     ExecutionOrder.WRT_ELV_PVT, 10.0);
-
-    //     return superSystemCommand;
-    // }
+    return Commands.none();
+    }
 
     public Command moveToCage() { //TODO
         return Commands.none();
@@ -105,8 +95,12 @@ public class SuperSystem {
         return Commands.none();
     }
 
+    public Command moveToProcs() { //TODO
+        return Commands.none();
+    }    
 
-    // public Command moveToSemiStow() { //TODO: see if this is legit
+
+    public Command moveToSemiStow() { //TODO: see if this is legit
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
     //     ExecutionOrder.WRT_ELV_PVT, 10.0,
@@ -117,7 +111,8 @@ public class SuperSystem {
     //         Commands.runOnce(() -> superSystemCommand.initialize()),
     //         Commands.run(() -> superSystemCommand.execute())
     //     );
-    // }
+        return Commands.none();
+    }
 
     public Command moveToStation() {
         return Commands.sequence(
@@ -131,15 +126,15 @@ public class SuperSystem {
         );
     }
 
-    // public Command moveToL1() {
+    public Command moveToL1() {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL1Position, WristConstants.kWristL1Position, 
     //     ExecutionOrder.ALL_TOGETHER, 10.0);
 
     //     return superSystemCommand;
 
-        
-    // }
+        return Commands.none();
+    }
 
     public Command moveToL2() {
         // SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
@@ -171,15 +166,16 @@ public class SuperSystem {
         );
     }
 
-    // public Command moveToL3() {
+    public Command moveToL3() {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL3Position, WristConstants.kWristL3Position, 
     //     ExecutionOrder.ALL_TOGETHER, 10.0);
 
     //     return superSystemCommand;
-    // }
+        return Commands.none();
+    }
 
-    // public Command moveToL4() {
+    public Command moveToL4() {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL4Position, WristConstants.kWristL4Position, 
     //     ExecutionOrder.ALL_TOGETHER, 10.0);
@@ -190,7 +186,8 @@ public class SuperSystem {
     // public Command moveTogroundIntake() {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, V1ElevatorConstants.kElevatorPivotGroundIntake, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake, ExecutionOrder.ELV_WRT_PVT, 10);
     //     return superSystemCommand;
-    // }
+        return Commands.none();
+    }
 
     public void initialize() {
         pivot.setEnabled(true);

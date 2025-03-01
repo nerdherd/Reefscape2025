@@ -193,26 +193,26 @@ public class RobotContainer {
       operatorController.buttonUp()
       .whileTrue(superSystem.moveToStation());
       
-      // operatorController.buttonLeft()
-      // .onTrue(superSystem.moveToSemiStow());
+      operatorController.buttonLeft()
+      .onTrue(superSystem.moveToSemiStow());
   
-      // operatorController.buttonRight()
-      // .onTrue(superSystem.moveToProcs());
+      operatorController.buttonRight()
+      .onTrue(superSystem.moveToProcs());
 
-      // operatorController.buttonDown()
-      // .onTrue(superSystem.moveToStow());
+      operatorController.buttonDown()
+      .onTrue(superSystem.moveToStow());
   
-      // operatorController.dpadUp()
-      // .onTrue(superSystem.moveToL4());
+      operatorController.dpadUp()
+      .onTrue(superSystem.moveToL4());
   
-      // operatorController.dpadLeft()
-      // .onTrue(superSystem.moveToL2());
+      operatorController.dpadLeft()
+      .onTrue(superSystem.moveToL2());
   
-      // operatorController.dpadRight()
-      // .onTrue(superSystem.moveToL3());
+      operatorController.dpadRight()
+      .onTrue(superSystem.moveToL3());
   
-      // operatorController.dpadDown()
-      // .onTrue(superSystem.moveToL1());
+      operatorController.dpadDown()
+      .onTrue(superSystem.moveToL1());
 
       operatorController.triggerLeft()
     .whileTrue(Commands.run(() -> {
