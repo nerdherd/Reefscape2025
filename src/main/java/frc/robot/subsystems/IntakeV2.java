@@ -131,7 +131,7 @@ public class IntakeV2 extends SubsystemBase {
         voltage = velocity < 0.0 ? -2.0 : 2.0;
     }
 
-    public void setPosition(double position){
+    public void setJawPosition(double position){
         desiredPosition = position;
         motionMagicRequest.Position = desiredPosition;
     }
@@ -146,8 +146,8 @@ public class IntakeV2 extends SubsystemBase {
 
     // ****************************** COMMAND METHODS ****************************** //
 
-    public Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPosition(position));
+    public Command setJawPositionCommand(double position) {
+        return Commands.runOnce(() -> setJawPosition(position));
     }
 
     public Command setVelocityCommand(double velocity) {
@@ -158,13 +158,25 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.runOnce(() -> setEnabled(enable));
     }
 
+    public Command stopJawCommand() { //TODO
+        return Commands.sequence(
+            Commands.runOnce(() -> positionMotor.setControl(brakeRequest))
+        );
+    }
+
+    public Command stopRollerCommand() { //TODO
+        return Commands.sequence(
+            Commands.runOnce(() -> rollerMotor.setControl(brakeRequest))
+        );
+    }
+
      // ****************************** NAMED COMMANDS ****************************** //
      
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(ClawConstants.kAlgaePosition),
+                setJawPositionCommand(ClawConstants.kAlgaePosition),
                 setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
@@ -174,7 +186,7 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(ClawConstants.kCoralPosition),
+                setJawPositionCommand(ClawConstants.kCoralPosition),
                 setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
@@ -184,7 +196,7 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(ClawConstants.kAlgaePosition),
+                setJawPositionCommand(ClawConstants.kAlgaePosition),
                 setVelocityCommand(RollerConstants.kOuttakePower)
             )
         );
@@ -194,7 +206,7 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setPositionCommand(ClawConstants.kCoralPosition),
+                setJawPositionCommand(ClawConstants.kCoralPosition),
                 setVelocityCommand(RollerConstants.kOuttakePower)
             )
         );
@@ -203,7 +215,7 @@ public class IntakeV2 extends SubsystemBase {
     public Command goToStow() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setPositionCommand(ClawConstants.kStowPosition),
+            setJawPositionCommand(ClawConstants.kStowPosition),
             setVelocityCommand(0)  
         );
     }

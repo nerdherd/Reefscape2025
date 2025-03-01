@@ -60,9 +60,35 @@ public class SuperSystem {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
     //     ExecutionOrder.WRT_ELV_PVT, 10.0);
+    public Command moveToProcs() { //TODO: 
+        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
+        ExecutionOrder.WRT_ELV_PVT, 10.0);
 
-    //     return superSystemCommand;
-    // }
+        return superSystemCommand;
+    }
+
+    public Command moveToCage() { //TODO
+        return Commands.none();
+    }
+
+    public Command moveToNet() { //TODO
+        return Commands.none();
+    }
+
+
+    public Command moveToSemiStow() { //TODO: see if this is legit
+        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
+        ExecutionOrder.WRT_ELV_PVT, 10.0,
+        () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()
+        );
+
+        return Commands.sequence(
+            Commands.runOnce(() -> superSystemCommand.initialize()),
+            Commands.run(() -> superSystemCommand.execute())
+        );
+    }
 
     public Command moveToStation() {
         SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
