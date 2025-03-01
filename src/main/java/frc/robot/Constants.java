@@ -414,8 +414,8 @@ public final class Constants {
     public static final double kAcceleration = kCruiseVelocity * 2; //Rotations per second squared
     public static final double kJerk = kAcceleration * 10; //Rotations per second cubed
 
-    public static final double kAlgaePosition = 3.0; 
-    public static final double kCoralPosition = 0.98; 
+    public static final double kAlgaePosition = 0.169; 
+    public static final double kCoralPosition = 0.023; 
     public static final double kStowPosition = 0; 
     
  }

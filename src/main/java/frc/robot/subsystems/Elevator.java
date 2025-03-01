@@ -134,6 +134,11 @@ public class Elevator extends SubsystemBase implements Reportable {
         this.pivotAngle = pivotAngle;
     }
 
+    public void zeroEncoder() {
+        elevatorMotor.setPosition(0);
+        elevatorMotor2.setPosition(0);
+    }
+
     // ****************************** GET METHODS ***************************** //
 
     public double getPosition() {

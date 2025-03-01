@@ -71,7 +71,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         configurePID(motorConfigs);
         
         motor.setNeutralMode(NeutralModeValue.Brake);
-        zeroEncoder();
+        // zeroEncoder();
     }
 
     //****************************** SETUP METHODS ******************************//
@@ -180,7 +180,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         return motor.getPosition().getValueAsDouble();
     }
 
-    private void zeroEncoder() {
+    public void zeroEncoder() {
         motor.setPosition(0);
     }
 

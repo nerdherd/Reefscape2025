@@ -75,8 +75,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         configurePIDV1();
 
         // pivotPositionOffset = pivotMotor.getPosition().getValueAsDouble();
-        pivotMotor.setPosition(0);
-        pivotMotorRight.setPosition(0);
+        
 
     }
     
@@ -231,6 +230,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     }
 
     // ****************************** STATE METHODS ***************************** //
+    public void zeroEncoder() {
+        pivotMotor.setPosition(0);
+        pivotMotorRight.setPosition(0);
+    }
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

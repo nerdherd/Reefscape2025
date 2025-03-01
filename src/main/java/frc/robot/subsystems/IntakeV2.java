@@ -35,6 +35,8 @@ public class IntakeV2 extends SubsystemBase {
     private double pivotAngle = 0;
     private double wristAngle = 0.0; //need to find
 
+    private double voltage = 0.0;
+
     public IntakeV2() {
         rollerMotor = new TalonFX(RollerConstants.kMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
@@ -48,7 +50,7 @@ public class IntakeV2 extends SubsystemBase {
 
 
         configurePID(rollerConfigs, positionConfigs);
-        zeroEncoder();
+        // zeroEncoder();
     }
 
     //****************************** SETUP METHODS ******************************//
@@ -89,7 +91,7 @@ public class IntakeV2 extends SubsystemBase {
         } 
     }
 
-    private void zeroEncoder() {
+    public void zeroEncoder() {
         positionMotor.setPosition(0);    
     }
 
@@ -101,7 +103,8 @@ public class IntakeV2 extends SubsystemBase {
             rollerMotor.setControl(brakeRequest);
             positionMotor.setControl(brakeRequest);
         } else {
-            rollerMotor.setControl(velocityRequest);
+            // rollerMotor.setControl(velocityRequest);
+            rollerMotor.setVoltage(voltage);
             positionMotor.setControl(motionMagicRequest.withFeedForward(ff));
         }
 
@@ -123,8 +126,9 @@ public class IntakeV2 extends SubsystemBase {
     }
 
     private void setVelocity(double velocity) {
-        desiredVelocity = velocity;
-        velocityRequest.Velocity = velocity;
+        // desiredVelocity = velocity;
+        // velocityRequest.Velocity = velocity;
+        voltage = velocity < 0.0 ? -2.0 : 2.0;
     }
 
     public void setPosition(double position){
@@ -146,7 +150,7 @@ public class IntakeV2 extends SubsystemBase {
         return Commands.runOnce(() -> setPosition(position));
     }
 
-    private Command setVelocityCommand(double velocity) {
+    public Command setVelocityCommand(double velocity) {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 

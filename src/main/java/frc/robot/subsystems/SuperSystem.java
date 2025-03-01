@@ -21,6 +21,15 @@ public class SuperSystem {
         this.claw = claw;
     }
 
+    public Command zeroEncoders() {
+        return Commands.runOnce(()-> {
+            pivot.zeroEncoder();
+            elevator.zeroEncoder();
+            wrist.zeroEncoder();
+            claw.zeroEncoder();
+        });
+    }
+
     public Command moveToStow() {
         SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
         V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 

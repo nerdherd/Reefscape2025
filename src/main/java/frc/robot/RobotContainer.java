@@ -67,6 +67,7 @@ public class RobotContainer {
 
   public Bottom2Piece bottom2Piece;
 
+
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
   
@@ -290,6 +291,8 @@ public class RobotContainer {
   }
 
   public void configureBindings_test() {
+    operatorController.controllerLeft()
+    .onTrue(superSystem.zeroEncoders());
     // driverController.bumperRight()
     //   .whileTrue(Commands.run(() -> {
     //     desiredAngle -= 1 / 50; // 1 degree per second ish
@@ -325,14 +328,31 @@ public class RobotContainer {
     // .onFalse(elevator.stow());
       
     // driverController.bumperLeft();
+    
 
     operatorController.buttonUp()
     .whileTrue(superSystem.moveToStation());
-    operatorController.buttonRight()
-    .whileTrue(superSystem.moveToStow());
+    // operatorController.buttonRight()
+    // .whileTrue(superSystem.moveToStow());
+    operatorController.buttonLeft()
+    .onTrue(intakeV2.intakeAlgae());
 
-    operatorController.buttonDown()
-    .whileTrue(superSystem.moveToL2());
+    operatorController.buttonRight()
+    .onTrue(intakeV2.intakeCoral());
+
+    operatorController.dpadUp()
+    .onTrue(intakeV2.outtakeAlgae());
+
+    operatorController.dpadDown()
+    .onTrue(intakeV2.outtakeCoral());
+
+    operatorController.dpadRight()
+    .onTrue(intakeV2.setEnabledCommand(false));
+
+    
+
+    // operatorController.buttonDown()
+    // .whileTrue(superSystem.moveToL2());
 
     operatorController.triggerLeft()
     .whileTrue(Commands.run(() -> {
