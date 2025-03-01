@@ -10,7 +10,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeWrist;
 import frc.robot.util.NerdyMath;
 
-public class SuperSystemCommand {
+public class SuperSystemCommand extends Command{
     private final ElevatorPivot pivot;
     private final Elevator elevator;
     private final IntakeWrist wrist;
@@ -40,21 +40,21 @@ public class SuperSystemCommand {
     // rotations for angles
     public SuperSystemCommand(ElevatorPivot pivot, Elevator elevator, IntakeWrist wrist,
                               double pivotAngle, double elevatorHeight, double wristAngle,
-                              ExecutionOrder exeOrder, double timeout, BooleanSupplier pivotAtPosition, BooleanSupplier elevatorAtPosition, BooleanSupplier wristAtPosition) {
+                              ExecutionOrder wrtElvPvt, double timeout, BooleanSupplier pivotAtPosition, BooleanSupplier elevatorAtPosition, BooleanSupplier wristAtPosition) {
         this.pivot = pivot;
         this.elevator = elevator;
         this.wrist = wrist;
         this.pivotAngle = pivotAngle;
         this.elevatorHeight = elevatorHeight;
-        this.exeOrder = exeOrder;
+        this.exeOrder = wrtElvPvt;
         this.wristAngle = wristAngle;
         this.pivotAtPosition = pivotAtPosition;
         this.elevatorAtPosition = elevatorAtPosition;
         this.wristAtPosition = wristAtPosition;
-        // addRequirements(pivot, elevator, wrist);
+        addRequirements(pivot, elevator, wrist);
     }
 
-    // @Override
+    @Override
     public void initialize() {
         pivot.setEnabled(false);
         wrist.setEnabled(false);
@@ -65,7 +65,7 @@ public class SuperSystemCommand {
         ammountCalled = 0;
     }
 
-    // @Override
+    @Override
     public void execute()
     {
         if(!isStarted) {
@@ -162,14 +162,14 @@ public class SuperSystemCommand {
     }
 
     //TODO: see if we want to stop at the end of the command, maybe not bcuz we might want to hold it there
-    // @Override
+    @Override
     public void end(boolean interrupted) {
         // pivot.stop();
         // elevator.stop();
         // wrist.stop();
     }
 
-    // @Override
+    @Override
     public boolean isFinished() {
         boolean isFinished = (pivotAtPosition.getAsBoolean() && elevatorAtPosition.getAsBoolean() && wristAtPosition.getAsBoolean()) || (Timer.getFPGATimestamp() - startTime > timeout);
         SmartDashboard.putBoolean("Is Finished", isFinished);

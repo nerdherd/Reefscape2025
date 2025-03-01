@@ -1,5 +1,10 @@
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants;
@@ -14,6 +19,22 @@ public class SuperSystem {
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
     public IntakeV2 claw;
+
+    public enum ExecutionOrder {
+        ALL_TOGETHER,
+        ELV_PVT_WRT,
+        ELV_WRT_PVT,
+        PVT_ELV_WRT,
+        PVT_WRT_ELV,
+        WRT_ELV_PVT,
+        WRT_PVT_ELV
+    }
+    private ExecutionOrder exeOrder;
+
+    private boolean isStarted = false;
+    private int ammountCalled = 0;
+    private double startTime = 0;
+    private double timeout;
 
     public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeV2 claw) {
         this.elevator = elevator;
@@ -60,13 +81,13 @@ public class SuperSystem {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
     //     ExecutionOrder.WRT_ELV_PVT, 10.0);
-    public Command moveToProcs() { //TODO: 
-        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
-        ExecutionOrder.WRT_ELV_PVT, 10.0);
+    // public Command moveToProcs() { //TODO: 
+    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+    //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
+    //     ExecutionOrder.WRT_ELV_PVT, 10.0);
 
-        return superSystemCommand;
-    }
+    //     return superSystemCommand;
+    // }
 
     public Command moveToCage() { //TODO
         return Commands.none();
@@ -77,32 +98,40 @@ public class SuperSystem {
     }
 
 
-    public Command moveToSemiStow() { //TODO: see if this is legit
-        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
-        ExecutionOrder.WRT_ELV_PVT, 10.0,
-        () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()
-        );
+    // public Command moveToSemiStow() { //TODO: see if this is legit
+    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+    //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
+    //     ExecutionOrder.WRT_ELV_PVT, 10.0,
+    //     () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()
+    //     );
 
-        return Commands.sequence(
-            Commands.runOnce(() -> superSystemCommand.initialize()),
-            Commands.run(() -> superSystemCommand.execute())
-        );
-    }
+    //     return Commands.sequence(
+    //         Commands.runOnce(() -> superSystemCommand.initialize()),
+    //         Commands.run(() -> superSystemCommand.execute())
+    //     );
+    // }
 
     public Command moveToStation() {
-        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition, 
-        ExecutionOrder.WRT_PVT_ELV, 10.0,
-        () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()
-        );
+        // SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        // V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition, 
+        // ExecutionOrder.WRT_PVT_ELV, 10.0,
+        // () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()
+        // );
 
+        // return Commands.sequence(
+        //     Commands.runOnce(() -> superSystemCommand.initialize()),
+        //     Commands.run(() -> superSystemCommand.execute()),
+        //         // Commands.run(() -> superSystemCommand.isFinished())
+        //     wrist.setPositionCommand(WristConstants.kStationPosition),
+        //     wrist.setEnabledCommand(true)
+        // );
+        exeOrder = ExecutionOrder.WRT_PVT_ELV;
         return Commands.sequence(
-            Commands.runOnce(() -> superSystemCommand.initialize()),
-            Commands.run(() -> superSystemCommand.execute()),
-                // Commands.run(() -> superSystemCommand.isFinished())
-            wrist.setPositionCommand(WristConstants.kStationPosition),
-            wrist.setEnabledCommand(true)
+            Commands.runOnce(() -> initialize(V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition)),
+            Commands.run(() -> execute(() -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition())).until(
+                () -> (pivot.atPosition() && elevator.atPosition() && wrist.atPosition())
+            ),
+            wrist.setPositionCommand(WristConstants.kStationPosition)
         );
     }
 
@@ -156,4 +185,109 @@ public class SuperSystem {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, V1ElevatorConstants.kElevatorPivotGroundIntake, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake, ExecutionOrder.ELV_WRT_PVT, 10);
     //     return superSystemCommand;
     // }
+
+    public void initialize(double pivotAngle, double elevatorPosition, double wristAngle) {
+        pivot.setEnabled(false);
+        wrist.setEnabled(false);
+        elevator.setEnabled(false);
+        pivot.setTargetPosition(pivotAngle);
+        elevator.setPosition(elevatorPosition);
+        wrist.setPosition(wristAngle);
+        ammountCalled = 0;
+    }
+
+    public void updateDependencies() { 
+        double curPivotAngle = pivot.getPositionDegrees() / 360.0;
+        // pivot.setTargetPosition(elevator.getPosition()); 
+        elevator.setPivotAngle(curPivotAngle);
+        wrist.setPivotAngle(curPivotAngle);
+    }
+
+    public void execute(BooleanSupplier pivotAtPosition, BooleanSupplier elevatorAtPosition, BooleanSupplier wristAtPosition)
+    {
+        if(!isStarted) {
+            isStarted = true;
+            startTime = Timer.getFPGATimestamp();
+        }
+
+        updateDependencies(); 
+
+        switch (exeOrder) {
+            case ALL_TOGETHER:
+                pivot.setEnabled(true);
+                wrist.setEnabled(true);
+                elevator.setEnabled(true);
+                break;
+
+            case ELV_PVT_WRT:
+                elevator.setEnabled(true);
+                if(elevator.atPosition()) {
+                    pivot.setEnabled(true);
+                }
+                if(pivot.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                break;
+
+            case ELV_WRT_PVT:
+                elevator.setEnabled(true);
+                if(elevator.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                if(wrist.atPosition()) {
+                    pivot.setEnabled(true);
+                }
+                break;
+
+            case PVT_WRT_ELV:
+                pivot.setEnabled(true);
+                if(pivot.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                if(wrist.atPosition()) {
+                    elevator.setEnabled(true);
+                }
+                break;
+
+            case PVT_ELV_WRT:
+                pivot.setEnabled(true);
+                if(pivot.atPosition()) {
+                    elevator.setEnabled(true);
+                }
+                if(elevator.atPosition()) {
+                    wrist.setEnabled(true);
+                }
+                break;
+
+            case WRT_ELV_PVT:
+                wrist.setEnabled(true);
+                if(wrist.atPosition()) {
+                    elevator.setEnabled(true);
+                }
+                if(elevator.atPosition()) {
+                    pivot.setEnabled(true);
+                }
+                break;
+
+            case WRT_PVT_ELV:
+                ammountCalled += 1;
+                SmartDashboard.putNumber("Ammount Called", ammountCalled);
+                wrist.setEnabled(true);
+                SmartDashboard.putBoolean("Wrist at Position", false);
+                if(wristAtPosition.getAsBoolean()) {
+                    SmartDashboard.putBoolean("Wrist at Position", true);
+                    pivot.setEnabled(true);
+                }
+
+                SmartDashboard.putBoolean("Pivot at Position", false);
+                if(pivotAtPosition.getAsBoolean()) {
+                    SmartDashboard.putBoolean("Pivot at position", false);
+                    elevator.setEnabled(true);
+                }
+                break;
+        
+            default:
+                break;
+        }
+    }
 }
