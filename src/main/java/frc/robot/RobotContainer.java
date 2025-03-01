@@ -183,111 +183,57 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
-    // TODO someone tell me how useful this is
-    // try {
-    //   driverController.triggerLeft()
-    //     .whileTrue(new AutoDriving(swerveDrive, "Bottom2Piece"))
-    //     .onFalse(AutoDriving.stopDriving(algaeRoller, coralWrist, elevator, elevatorPivot));
-    // } catch (IOException e) { DriverStation.reportError("Auto Driving IOException for Left Trigger", e.getStackTrace());
-    // } catch (ParseException e) { DriverStation.reportError("Auto Driving ParseException for Left Trigger", e.getStackTrace()); }
+    operatorController.controllerLeft()
+      .onTrue(superSystem.moveToCage());
+
+      operatorController.controllerRight()
+      .onTrue(superSystem.moveToNet());
     
-    // driverController.triggerRight()
-    //   .whileTrue(bottom2Piece.runAuto())
-    //   .onFalse(bottom2Piece.stopAuto());
-    
-    // driverController.buttonUp()
-    //   .onTrue(intakeWrist.moveToStation())
-    //   .onFalse(intakeWrist.moveToStow());
-    // driverController.buttonLeft()
-    //   .onTrue(intakeWrist.setEnabledCommand());
-    // driverController.buttonRight()
-    //   .onTrue(intakeWrist.setDisabledCommand());
-    // driverController.buttonUp()
-    //   .onTrue(intakeRoller.intakeLeft())
-    //   .onFalse(intakeRoller.stop());
-    // driverController.buttonDown()
-    //   .onTrue(intakeRoller.outtake())
-    //   .onFalse(intakeRoller.stop());
-    // driverController.buttonLeft()
-    //   .onTrue(intakeRoller.intake())
-    //   .onFalse(intakeRoller.stop());
-
-    // driverController.bumperLeft()
-    //   .whileTrue(Commands.run(() -> {
-    //     desiredRotation += 0.005; // 1/60 for GR 1/50 for 20 times per second
-    //     intakeWrist.setPosition(desiredRotation);
-    // }));
-    
-    // Position Ramp Wrist
-    // driverController.bumperLeft()
-    //   .whileTrue(Commands.run(() -> {
-    //     desiredRotation -= 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
-    // }));
-    // driverController.bumperRight()
-    //   .whileTrue(Commands.run(() -> {
-    //     desiredRotation += 0.0004; // one degree / 360 per second times 13.889 for GR 1/50 for 20 times per second
-    //     intakeWrist.setPosition(desiredRotation);
-    // }));
-
-    // Position Ramp Elevator
-    // driverController.bumperLeft()
-    //   .whileTrue(Commands.run(() -> {
-    //     desiredRotation += 0; // 1/ for GR 1/50 for 20 times per second
-    //     elevator.setPosition(desiredRotation);
-    // }));
-
-    // driverController.bumperRight()
-    //   .whileTrue(intakeWrist.moveToStow()
-    // );
-    // driverController.triggerRight()
-    //   .whileTrue(intakeWrist.moveToStation()
-    // );
-    // driverController.bumperLeft()
-    //   .whileTrue(intakeWrist.moveToReefL14()
-    // );
-    // driverController.triggerLeft()
-    //   .whileTrue(intakeWrist.moveToReefL23()
-    // );
-
-    // driverController.buttonUp()
-    //   .whileTrue(intakeWrist.setEnabledCommand()
-    // );
-
-    // driverController.buttonUp()
-    //   .whileTrue(
-    //     Commands.parallel(
-    //       // Commands.run(() -> intakeWrist.setPositionDegrees(desiredAngle)),
-    //       Commands.run(() -> intakeWrist.setPosition(desiredRotation)),
-    //       intakeWrist.setEnabledCommand()
-    //   ))
-    //   .onFalse(intakeWrist.setDisabledCommand()
-    //   );
-
-    // driverController.buttonDown()
-    //   .onTrue(Commands.runOnce(() -> {
-    //     desiredRotation = -0.19;
-    //     // desiredAngle = 90.0; //Top: -85.4
-    //   }));
+      operatorController.buttonUp()
+      .onTrue(superSystem.moveToStation());
+      
+      operatorController.buttonLeft()
+      .onTrue(superSystem.moveToSemiStow());
   
-    // driverController.buttonUp()
-    //   .onTrue(intakeWrist.setEnabledCommand())
-    //   .onFalse(intakeWrist.setDisabledCommand());
-    
-    driverController.buttonLeft()
-      .onTrue(intakeWrist.moveToReefL14())
-      .onFalse(intakeWrist.moveToStow());
+      operatorController.buttonRight()
+      .onTrue(superSystem.moveToProcs());
 
+      operatorController.buttonDown()
+      .onTrue(superSystem.moveToStow());
+  
+      operatorController.dpadUp()
+      .onTrue(superSystem.moveToL4());
+  
+      operatorController.dpadLeft()
+      .onTrue(superSystem.moveToL2());
+  
+      operatorController.dpadRight()
+      .onTrue(superSystem.moveToL3());
+  
+      operatorController.dpadDown()
+      .onTrue(superSystem.moveToL1());
 
-    
-    driverController.buttonRight()
-      .onTrue(intakeWrist.moveToReefL23())
-      .onFalse(intakeWrist.setEnabledCommand(false)); 
-    
-    if(USE_SUBSYSTEMS) {
-      // driverController.triggerRight()
-      // .onTrue(elevatorPivot.moveToPickup()) // hold it :)
-      // .onFalse(elevatorPivot.moveToStow());
-    }
+      operatorController.triggerLeft()
+    .whileTrue(Commands.run(() -> {
+      desiredRotation += 0.001;
+      intakeV2.setJawPosition(desiredRotation);
+    }))
+    .onFalse(intakeV2.stopJawCommand());
+
+    operatorController.triggerRight()
+    .whileTrue(Commands.run(() -> {
+      desiredRotation -= 0.001;
+      intakeV2.setJawPosition(desiredRotation);
+    }))
+    .onFalse(intakeV2.stopJawCommand());
+
+    //TODO for roller operatorController.bumperLeftRight();
+    //TODO for roller operatorController.bumperLeftRight();
+
+    // TODO pivot ctrl operatorController.getLeftX();
+    // TODO wrist ctrl operatorController.getLeftY();
+    // TODO elevator ctrl operatorController.getLeftX();
+    // TODO intake ctrl operatorController.getLeftY();
   }
 
   public void configureBindings_test() {
@@ -330,24 +276,7 @@ public class RobotContainer {
     // driverController.bumperLeft();
     
 
-    operatorController.buttonUp()
-    .whileTrue(superSystem.moveToStation());
-    // operatorController.buttonRight()
-    // .whileTrue(superSystem.moveToStow());
-    operatorController.buttonLeft()
-    .onTrue(intakeV2.intakeAlgae());
-
-    operatorController.buttonRight()
-    .onTrue(intakeV2.intakeCoral());
-
-    operatorController.dpadUp()
-    .onTrue(intakeV2.outtakeAlgae());
-
-    operatorController.dpadDown()
-    .onTrue(intakeV2.outtakeCoral());
-
-    operatorController.dpadRight()
-    .onTrue(intakeV2.setEnabledCommand(false));
+    
 
     
 
@@ -358,9 +287,10 @@ public class RobotContainer {
     .whileTrue(Commands.run(() -> {
       desiredRotation += 0.001;
       intakeV2.setEnabled(true);
-      intakeV2.setPosition(desiredRotation);
+      intakeV2.setJawPosition(desiredRotation);
     }))
     .onFalse(elevatorPivot.setEnabledCommand(false));
+
     operatorController.buttonLeft().onTrue(superSystem.moveTogroundIntake());
 
   }

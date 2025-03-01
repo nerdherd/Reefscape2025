@@ -56,6 +56,23 @@ public class SuperSystem {
         );
     }
 
+    public Command moveToProcs() { //TODO: 
+        SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
+        ExecutionOrder.WRT_ELV_PVT, 10.0);
+
+        return superSystemCommand;
+    }
+
+    public Command moveToCage() { //TODO
+        return Commands.none();
+    }
+
+    public Command moveToNet() { //TODO
+        return Commands.none();
+    }
+
+
     public Command moveToSemiStow() { //TODO: see if this is legit
         SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
         V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
