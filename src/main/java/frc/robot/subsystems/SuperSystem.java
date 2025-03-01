@@ -7,16 +7,19 @@ import frc.robot.Constants.V1ElevatorConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.commands.SuperSystemCommand;
 import frc.robot.commands.SuperSystemCommand.ExecutionOrder;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 public class SuperSystem {
     public Elevator elevator;
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
+    public SwerveDrivetrain swerve;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, SwerveDrivetrain swerve) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
+        this.swerve = swerve;
     }
 
     public Command moveToStow() {
@@ -95,5 +98,9 @@ public class SuperSystem {
         ExecutionOrder.ALL_TOGETHER, 10.0);
 
         return superSystemCommand;
+    }
+
+    public Command moveLeftOf(int tagID) {
+        swerve.driveToPoseCommand(tagID)
     }
 }
