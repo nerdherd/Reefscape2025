@@ -109,13 +109,14 @@ public class RobotContainer {
     {
       // add your code only for isme 
     }
-
-   
-    intakeRoller = new IntakeRoller();
-    intakeWrist = new IntakeWrist();
-    elevator = new Elevator();
-    elevatorPivot = new ElevatorPivot();
-	  intakeV2 = new IntakeV2();
+    else
+    {
+      intakeRoller = new IntakeRoller();
+      intakeWrist = new IntakeWrist();
+      elevator = new Elevator();
+      elevatorPivot = new ElevatorPivot();
+      intakeV2 = new IntakeV2();
+    }
 
     Elevator.enabled = USE_ELEV;
     ElevatorPivot.enabled = USE_PIVOT;
@@ -167,19 +168,23 @@ public class RobotContainer {
     imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
     swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
-
+    if( Constants.ROBOT_NAME == ROBOT_ID.V1)
+    {
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
-
+    }
   }
 
   public void reinitElevatorPivotWrist()
   {
+    if( Constants.ROBOT_NAME == ROBOT_ID.V1)
+    {
     elevator.resetElevator();
     elevatorPivot.resetPivot();
     intakeWrist.resetWrist();
+    }
   }
   
   private void initAutoChoosers() {
@@ -325,15 +330,7 @@ public class RobotContainer {
     //   .onTrue(intakeWrist.setEnabledCommand())
     //   .onFalse(intakeWrist.setDisabledCommand());
     
-    driverController.buttonLeft()
-      .onTrue(intakeWrist.moveToReefL14())
-      .onFalse(intakeWrist.moveToStow());
 
-
-    
-    driverController.buttonRight()
-      .onTrue(intakeWrist.moveToReefL23())
-      .onFalse(intakeWrist.setEnabledCommand(false)); 
     
 
     /*******************************

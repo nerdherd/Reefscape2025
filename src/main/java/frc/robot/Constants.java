@@ -40,7 +40,7 @@ public final class Constants {
     V2,
   }
 
-  public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.V1;
+  public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
 
   public static class ControllerConstants {
 
