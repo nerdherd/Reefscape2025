@@ -190,8 +190,8 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.01,
-        desiredPosition + 0.01);
+                                desiredPosition - 0.01,
+                                desiredPosition + 0.01);
         // return false;
     }
 

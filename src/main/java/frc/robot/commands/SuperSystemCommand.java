@@ -29,7 +29,7 @@ public class SuperSystemCommand extends Command{
     private double timeout;
 
     private ExecutionOrder exeOrder;
-
+    // rotations for angles
     public SuperSystemCommand(ElevatorPivot pivot, Elevator elevator, IntakeWrist wrist,
                               double pivotAngle, double elevatorHeight, double wristAngle,
                               ExecutionOrder exeOrder, double timeout) {

@@ -327,28 +327,25 @@ public class RobotContainer {
     // driverController.bumperLeft();
 
     operatorController.buttonUp()
-    .whileTrue(superSystem.moveToStation());
+    .onTrue(superSystem.moveToStation());
+    operatorController.buttonDown()
+    .onTrue(superSystem.moveToStow());
+    operatorController.dpadLeft()
+    .onTrue(superSystem.moveToL1());
+    operatorController.dpadDown()
+    .onTrue(superSystem.moveToL2());
+    operatorController.dpadRight()
+    .onTrue(superSystem.moveToL3());
     operatorController.buttonRight()
     .whileTrue(superSystem.moveToStow());
-
-    operatorController.buttonDown()
-    .whileTrue(superSystem.moveToL2());
-
-    operatorController.controllerLeft()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation += 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setPosition(desiredRotation);
+    operatorController.triggerLeft()
+    .onTrue(Commands.runOnce(() -> {
+      elevatorPivot.setTargetPosition(0.15);
+      elevatorPivot.setEnabled(true);
     }))
-    .onFalse(intakeV2.setEnabledCommand(false));
+    .onFalse(elevatorPivot.setEnabledCommand(false));
+    operatorController.buttonLeft().onTrue(superSystem.moveTogroundIntake());
 
-    operatorController.controllerRight()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation -= 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setPosition(desiredRotation);
-    }))
-    .onFalse(intakeV2.setEnabledCommand(false));
   }
   
   private void initAutoChoosers() {
