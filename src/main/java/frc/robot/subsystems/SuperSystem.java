@@ -126,6 +126,14 @@ public class SuperSystem {
         );
     }
 
+    public Command moveToL2L3() {
+        return Commands.none();
+    }
+
+    public Command moveToL3L4() {
+        return Commands.none();
+    }
+
     public Command moveToL1() {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
     //     V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL1Position, WristConstants.kWristL1Position, 
