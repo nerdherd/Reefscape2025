@@ -52,6 +52,14 @@ public class SuperSystem {
         });
     }
 
+    public Command stop() {
+        return Commands.runOnce(() -> {
+            pivot.stop();
+            wrist.stop();
+            elevator.stop();
+        });
+    }
+
     // public Command moveTo(NamedPositions position) {
     //     SuperSystemCommand superSystemCommand = 
     //         new SuperSystemCommand(pivot, elevator, wrist, 
@@ -112,25 +120,13 @@ public class SuperSystem {
     // }
 
     public Command moveToStation() {
-        // SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-        // V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition, 
-        // ExecutionOrder.WRT_PVT_ELV, 10.0,
-        // () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()
-        // );
-
-        // return Commands.sequence(
-        //     Commands.runOnce(() -> superSystemCommand.initialize()),
-        //     Commands.run(() -> superSystemCommand.execute()),
-        //         // Commands.run(() -> superSystemCommand.isFinished())
-        //     wrist.setPositionCommand(WristConstants.kStationPosition),
-        //     wrist.setEnabledCommand(true)
-        // );
-        exeOrder = ExecutionOrder.WRT_PVT_ELV;
         return Commands.sequence(
-            Commands.runOnce(() -> initialize(V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition)),
-            Commands.run(() -> execute(() -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition())).until(
-                () -> (pivot.atPosition() && elevator.atPosition() && wrist.atPosition())
-            ),
+            Commands.runOnce(() -> initialize()),
+
+            execute(ExecutionOrder.WRT_PVT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition,
+            () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()),
+            
             wrist.setPositionCommand(WristConstants.kStationPosition)
         );
     }
@@ -145,25 +141,35 @@ public class SuperSystem {
         
     // }
 
-    // public Command moveToL2() {
-    //     // SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-    //     // V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kL23Position, 
-    //     // ExecutionOrder.ALL_TOGETHER, 10.0);
+    public Command moveToL2() {
+        // SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        // V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kL23Position, 
+        // ExecutionOrder.ALL_TOGETHER, 10.0);
 
-    //     // return superSystemCommand;
+        // return superSystemCommand;
 
-    //     // TODO Check kElevatorPivotPositionVertical is reasonable
-    //     // TODO Wrist intermediate @ -0.1
-    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-    //     V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kIntermediatePosition, 
-    //     ExecutionOrder.WRT_PVT_ELV, 10.0);
+        // TODO Check kElevatorPivotPositionVertical is reasonable
+        // TODO Wrist intermediate @ -0.1
+        // SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
+        // V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kIntermediatePosition, 
+        // ExecutionOrder.WRT_PVT_ELV, 10.0);
 
-    //     return Commands.sequence(
-    //         superSystemCommand,
-    //         wrist.setPositionCommand(WristConstants.kWristL2Position),
-    //         wrist.setEnabledCommand(true)
-    //     );
-    // }
+        // return Commands.sequence(
+        //     superSystemCommand,
+        //     wrist.setPositionCommand(WristConstants.kWristL2Position),
+        //     wrist.setEnabledCommand(true)
+        // );
+
+        return Commands.sequence(
+            Commands.runOnce(() -> initialize()),
+
+            execute(ExecutionOrder.WRT_PVT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kIntermediatePosition,
+            () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()),
+            
+            wrist.setPositionCommand(WristConstants.kWristL2Position)
+        );
+    }
 
     // public Command moveToL3() {
     //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
@@ -186,13 +192,13 @@ public class SuperSystem {
     //     return superSystemCommand;
     // }
 
-    public void initialize(double pivotAngle, double elevatorPosition, double wristAngle) {
-        pivot.setEnabled(false);
-        wrist.setEnabled(false);
-        elevator.setEnabled(false);
-        pivot.setTargetPosition(pivotAngle);
-        elevator.setPosition(elevatorPosition);
-        wrist.setPosition(wristAngle);
+    public void initialize() {
+        pivot.setEnabled(true);
+        wrist.setEnabled(true);
+        elevator.setEnabled(true);
+        pivot.setTargetPosition(pivot.getPositionRev());
+        elevator.setPosition(elevator.getPosition());
+        wrist.setPosition(wrist.getPosition());
         ammountCalled = 0;
     }
 
@@ -203,91 +209,181 @@ public class SuperSystem {
         wrist.setPivotAngle(curPivotAngle);
     }
 
-    public void execute(BooleanSupplier pivotAtPosition, BooleanSupplier elevatorAtPosition, BooleanSupplier wristAtPosition)
-    {
-        if(!isStarted) {
-            isStarted = true;
-            startTime = Timer.getFPGATimestamp();
-        }
-
-        updateDependencies(); 
-
-        switch (exeOrder) {
-            case ALL_TOGETHER:
-                pivot.setEnabled(true);
-                wrist.setEnabled(true);
-                elevator.setEnabled(true);
-                break;
-
-            case ELV_PVT_WRT:
-                elevator.setEnabled(true);
-                if(elevator.atPosition()) {
-                    pivot.setEnabled(true);
-                }
-                if(pivot.atPosition()) {
-                    wrist.setEnabled(true);
-                }
-                break;
-
-            case ELV_WRT_PVT:
-                elevator.setEnabled(true);
-                if(elevator.atPosition()) {
-                    wrist.setEnabled(true);
-                }
-                if(wrist.atPosition()) {
-                    pivot.setEnabled(true);
-                }
-                break;
-
-            case PVT_WRT_ELV:
-                pivot.setEnabled(true);
-                if(pivot.atPosition()) {
-                    wrist.setEnabled(true);
-                }
-                if(wrist.atPosition()) {
-                    elevator.setEnabled(true);
-                }
-                break;
-
-            case PVT_ELV_WRT:
-                pivot.setEnabled(true);
-                if(pivot.atPosition()) {
-                    elevator.setEnabled(true);
-                }
-                if(elevator.atPosition()) {
-                    wrist.setEnabled(true);
-                }
-                break;
-
-            case WRT_ELV_PVT:
-                wrist.setEnabled(true);
-                if(wrist.atPosition()) {
-                    elevator.setEnabled(true);
-                }
-                if(elevator.atPosition()) {
-                    pivot.setEnabled(true);
-                }
-                break;
-
-            case WRT_PVT_ELV:
-                ammountCalled += 1;
-                SmartDashboard.putNumber("Ammount Called", ammountCalled);
-                wrist.setEnabled(true);
-                SmartDashboard.putBoolean("Wrist at Position", false);
-                if(wristAtPosition.getAsBoolean()) {
-                    SmartDashboard.putBoolean("Wrist at Position", true);
-                    pivot.setEnabled(true);
-                }
-
-                SmartDashboard.putBoolean("Pivot at Position", false);
-                if(pivotAtPosition.getAsBoolean()) {
-                    SmartDashboard.putBoolean("Pivot at position", false);
-                    elevator.setEnabled(true);
-                }
-                break;
-        
-            default:
-                break;
-        }
+    public Command execute(
+        ExecutionOrder exeOrder, double timeout, 
+        double pivotAngle, double elevatorPosition, double wristAngle,
+        BooleanSupplier pivotAtPosition, BooleanSupplier elevatorAtPosition, BooleanSupplier wristAtPosition
+    ) {
+        return Commands.run(() -> {
+            if(!isStarted) {
+                isStarted = true;
+                startTime = Timer.getFPGATimestamp();
+            }
+    
+            updateDependencies(); 
+    
+            switch (exeOrder) {
+                case ALL_TOGETHER:
+                    pivot.setTargetPosition(pivotAngle);
+                    elevator.setPosition(elevatorPosition);
+                    wrist.setPosition(wristAngle);
+                    break;
+    
+                case ELV_PVT_WRT:
+                    elevator.setPosition(elevatorPosition);
+                    if(elevatorAtPosition.getAsBoolean()) {
+                        pivot.setTargetPosition(pivotAngle);
+                        if(pivotAtPosition.getAsBoolean()) {
+                            wrist.setPosition(wristAngle);
+                        }
+                    }
+                    break;
+    
+                case ELV_WRT_PVT:
+                    elevator.setPosition(elevatorPosition);
+                    if(elevatorAtPosition.getAsBoolean()) {
+                        wrist.setPosition(wristAngle);
+                        if(wristAtPosition.getAsBoolean()) {
+                            pivot.setTargetPosition(pivotAngle);
+                        }
+                    }
+                    break;
+    
+                case PVT_WRT_ELV:
+                    pivot.setTargetPosition(pivotAngle);
+                    if(pivotAtPosition.getAsBoolean()) {
+                        wrist.setPosition(wristAngle);
+                        if(wristAtPosition.getAsBoolean()) {
+                            elevator.setPosition(elevatorPosition);
+                        }
+                    }
+                    break;
+    
+                case PVT_ELV_WRT:
+                    pivot.setTargetPosition(pivotAngle);
+                    if(pivotAtPosition.getAsBoolean()) {
+                        elevator.setPosition(elevatorPosition);
+                        if(elevatorAtPosition.getAsBoolean()) {
+                            wrist.setPosition(wristAngle);
+                        }
+                    }
+                    break;
+    
+                case WRT_ELV_PVT:
+                    wrist.setPosition(wristAngle);
+                    if(wristAtPosition.getAsBoolean()) {
+                        elevator.setPosition(elevatorPosition);
+                        if(elevatorAtPosition.getAsBoolean()) {
+                            pivot.setTargetPosition(pivotAngle);
+                        }
+                    }
+                    break;
+    
+                case WRT_PVT_ELV:
+                    wrist.setPosition(wristAngle);
+                    if(wristAtPosition.getAsBoolean()) {
+                        pivot.setTargetPosition(pivotAngle);
+                        if(pivotAtPosition.getAsBoolean()) {
+                            elevator.setPosition(elevatorPosition);
+                        }
+                    }
+                    break;
+            
+                default:
+                    break;
+            }
+        })
+        .until(
+            () -> ((pivot.atPosition() && elevator.atPosition() && wrist.atPosition()) || (Timer.getFPGATimestamp() - startTime >= timeout))
+        )
+        ;
     }
+
+    // public void execute(BooleanSupplier pivotAtPosition, BooleanSupplier elevatorAtPosition, BooleanSupplier wristAtPosition)
+    // {
+    //     if(!isStarted) {
+    //         isStarted = true;
+    //         startTime = Timer.getFPGATimestamp();
+    //     }
+
+    //     updateDependencies(); 
+
+    //     switch (exeOrder) {
+    //         case ALL_TOGETHER:
+    //             pivot.setEnabled(true);
+    //             wrist.setEnabled(true);
+    //             elevator.setEnabled(true);
+    //             break;
+
+    //         case ELV_PVT_WRT:
+    //             elevator.setEnabled(true);
+    //             if(elevator.atPosition()) {
+    //                 pivot.setEnabled(true);
+    //             }
+    //             if(pivot.atPosition()) {
+    //                 wrist.setEnabled(true);
+    //             }
+    //             break;
+
+    //         case ELV_WRT_PVT:
+    //             elevator.setEnabled(true);
+    //             if(elevator.atPosition()) {
+    //                 wrist.setEnabled(true);
+    //             }
+    //             if(wrist.atPosition()) {
+    //                 pivot.setEnabled(true);
+    //             }
+    //             break;
+
+    //         case PVT_WRT_ELV:
+    //             pivot.setEnabled(true);
+    //             if(pivot.atPosition()) {
+    //                 wrist.setEnabled(true);
+    //             }
+    //             if(wrist.atPosition()) {
+    //                 elevator.setEnabled(true);
+    //             }
+    //             break;
+
+    //         case PVT_ELV_WRT:
+    //             pivot.setEnabled(true);
+    //             if(pivot.atPosition()) {
+    //                 elevator.setEnabled(true);
+    //             }
+    //             if(elevator.atPosition()) {
+    //                 wrist.setEnabled(true);
+    //             }
+    //             break;
+
+    //         case WRT_ELV_PVT:
+    //             wrist.setEnabled(true);
+    //             if(wrist.atPosition()) {
+    //                 elevator.setEnabled(true);
+    //             }
+    //             if(elevator.atPosition()) {
+    //                 pivot.setEnabled(true);
+    //             }
+    //             break;
+
+    //         case WRT_PVT_ELV:
+    //             ammountCalled += 1;
+    //             SmartDashboard.putNumber("Ammount Called", ammountCalled);
+    //             wrist.setEnabled(true);
+    //             SmartDashboard.putBoolean("Wrist at Position", false);
+    //             if(wristAtPosition.getAsBoolean()) {
+    //                 SmartDashboard.putBoolean("Wrist at Position", true);
+    //                 pivot.setEnabled(true);
+    //             }
+
+    //             SmartDashboard.putBoolean("Pivot at Position", false);
+    //             if(pivotAtPosition.getAsBoolean()) {
+    //                 SmartDashboard.putBoolean("Pivot at position", false);
+    //                 elevator.setEnabled(true);
+    //             }
+    //             break;
+        
+    //         default:
+    //             break;
+    //     }
+    // }
 }

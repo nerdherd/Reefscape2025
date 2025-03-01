@@ -265,8 +265,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.01,
-        desiredPosition + 0.01);
+        desiredPosition - 0.03,
+        desiredPosition + 0.03);
         // return false;
     }
 

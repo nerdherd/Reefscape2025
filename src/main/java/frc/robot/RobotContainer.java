@@ -305,10 +305,10 @@ public class RobotContainer {
 
     operatorController.buttonUp()
     .whileTrue(superSystem.moveToStation());
-    // operatorController.buttonRight()
-    // .whileTrue(superSystem.moveToStow());
+    operatorController.buttonRight()
+    .whileTrue(superSystem.moveToL2());
     operatorController.buttonLeft()
-    .onTrue(intakeV2.intakeAlgae());
+    .onTrue(superSystem.stop());
 
     // operatorController.buttonRight()
     // .onTrue(intakeV2.intakeCoral());

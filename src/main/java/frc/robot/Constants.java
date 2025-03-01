@@ -295,7 +295,7 @@ public final class Constants {
     public static final double kElevatorGroundIntake = 0.59;           // TODO change later
 
 
-    public static final double kPElevatorMotor = 3;
+    public static final double kPElevatorMotor = 3.0;
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
