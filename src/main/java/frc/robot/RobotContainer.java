@@ -201,18 +201,6 @@ public class RobotContainer {
 
       operatorController.buttonDown()
       .onTrue(superSystem.moveToStow());
-  
-      operatorController.dpadUp()
-      .onTrue(superSystem.moveToL4());
-  
-      operatorController.dpadLeft()
-      .onTrue(superSystem.moveToL2());
-  
-      operatorController.dpadRight()
-      .onTrue(superSystem.moveToL3());
-  
-      operatorController.dpadDown()
-      .onTrue(superSystem.moveToL1());
 
       operatorController.triggerLeft()
     .whileTrue(Commands.run(() -> {
@@ -233,6 +221,16 @@ public class RobotContainer {
 
 
   }
+
+  boolean keylock_crossup = false;
+  boolean keylock_crossleft = false;
+
+  boolean keylock_crossupleft = false;
+
+  boolean keylock_crossdown = false;
+  boolean keylock_crossright = false;
+
+  boolean keylock_crossdownright = false;
 
 
   public void operatorController_teleop() {
@@ -261,6 +259,94 @@ public class RobotContainer {
 
     SmartDashboard.putNumber("Operator L-Y", pivotPosition);
     SmartDashboard.putNumber("Operator L-X", elevatorPosition);
+
+
+    boolean upPressed = operatorController.getDpadUp();
+    boolean leftPressed = operatorController.getDpadLeft();
+
+    if( leftPressed && upPressed)
+    {
+      if (!keylock_crossupleft)
+      {
+        keylock_crossupleft = true;
+        Commands.run(()->superSystem.moveToL1()); // TODO: change to mid high
+      }      
+    }
+    else
+    {
+      keylock_crossupleft = false;
+
+      if (upPressed)
+      {
+          if (!keylock_crossup)
+          {
+              keylock_crossup = true;
+              Commands.run(()->superSystem.moveToL4());
+          }
+      }
+      else
+      {
+          keylock_crossup = false;
+      }
+
+      if (leftPressed)
+      {
+          if (!keylock_crossleft)
+          {
+              keylock_crossleft = true;
+              Commands.run(()->superSystem.moveToL2());
+          }
+      }
+      else
+      {
+          keylock_crossleft = false;
+      }
+    }
+
+
+    boolean downPressed = operatorController.getDpadDown();
+    boolean rightPressed = operatorController.getDpadRight();
+
+    if( rightPressed && downPressed)
+    {
+      if (!keylock_crossdownright)
+      {
+        keylock_crossdownright = true;
+        Commands.run(()->superSystem.moveToL4()); // TODO: change to mid low
+      }      
+    }
+    else
+    {
+      keylock_crossdownright = false;
+
+      if (downPressed)
+      {
+          if (!keylock_crossdown)
+          {
+              keylock_crossdown = true;
+              Commands.run(()->superSystem.moveToL1());
+          }
+      }
+      else
+      {
+          keylock_crossdown = false;
+      }
+
+      if (rightPressed)
+      {
+          if (!keylock_crossright)
+          {
+              keylock_crossright = true;
+              Commands.run(()->superSystem.moveToL3());
+          }
+      }
+      else
+      {
+          keylock_crossright = false;
+      }
+    }
+
+
   }
 
   public void configureBindings_test() {
