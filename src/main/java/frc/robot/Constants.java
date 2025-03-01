@@ -285,11 +285,11 @@ public final class Constants {
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
     public static final double kElevatorStowPosition    =  0.0; //0.5   // TODO change later
-    public static final double kElevatorStationPosition = 0.789;//-2 // TODO change later
-    public static final double kElevatorL1Position =   0.5;      // TODO change later
-    public static final double kElevatorL2Position =  0.0; // was 1.0      // TODO change later
-    public static final double kElevatorL3Position = 1.5;      // TODO change later
-    public static final double kElevatorL4Position = 2;      // TODO change later
+    public static final double kElevatorStationPosition = 0.0;//-2 // TODO change later
+    public static final double kElevatorL1Position =   0.0;      // TODO change later
+    public static final double kElevatorL2Position =  0.115967; // was 1.0      // TODO change later
+    public static final double kElevatorL3Position = 0.61621;      // TODO change later
+    public static final double kElevatorL4Position = 1.1831;      // TODO change later
     public static final double kElevatorSpeed = 1.0;           // TODO change later
 
     public static final double kPElevatorMotor = 3;
@@ -330,6 +330,11 @@ public final class Constants {
     public static final double kEPivotCruiseVelocity = 100; //16.333
     public static final double kElevatorPivotCruiseAcceleration = 1000.000;
     public static final double kElevatorPivotJerk = 900.0;
+
+    public static final double kElevatorPivotStowedFF = 0.5;
+    public static final double kElevatorPivotExtendedFF = 0.54117686;
+    public static final double kElevatorPivotDiffFF = kElevatorPivotExtendedFF-kElevatorPivotStowedFF;
+    public static final double kElevatorPivotExtendedFFPosition = 0.231934;
     
  }
 

@@ -79,9 +79,9 @@ public class RobotContainer {
   private SwerveJoystickCommand swerveJoystickCommand;
   
   private static boolean USE_SUBSYSTEMS = true;
-  private static boolean USE_ELEV = false;
+  private static boolean USE_ELEV = true;
   private static boolean USE_WRIST = false;
-  private static boolean USE_PIVOT = false;
+  private static boolean USE_PIVOT = true;
   private static boolean USE_INTAKE = false;
   private static boolean V1 = true;
   
@@ -92,6 +92,8 @@ public class RobotContainer {
   public double desiredAngle = 0.0; //164, 99.8
 
   public double desiredRotation = 0.0;//ElevatorConstants.kElevatorPivotStowPosition; -1.6
+
+  public double desiredPivotVoltage = 0;
 
   /**
    * The container for the robot. Contain
@@ -118,6 +120,9 @@ public class RobotContainer {
     // elevator.setEnabledCommand(USE_ELEV);
     // elevatorPivot.setEnabledCommand(USE_PIVOT);
     // intakeV2.setEnabledCommand(USE_INTAKE);
+
+    elevator.setEnabled(USE_ELEV);
+    elevatorPivot.setEnabled(USE_PIVOT);
 
 /*  TODO: Fix Bottom2Piece to take in IntakeV2
     try { // ide displayed error fix
@@ -326,29 +331,63 @@ public class RobotContainer {
       
     // driverController.bumperLeft();
 
-    operatorController.buttonUp()
-    .whileTrue(superSystem.moveToStation());
-    operatorController.buttonRight()
-    .whileTrue(superSystem.moveToStow());
+    // operatorController.buttonUp()
+    // .whileTrue(superSystem.moveToStation());
+    // operatorController.buttonRight()
+    // .whileTrue(superSystem.moveToStow());
 
-    operatorController.buttonDown()
-    .whileTrue(superSystem.moveToL2());
+    // operatorController.buttonDown()
+    // .whileTrue(superSystem.moveToL2());
 
-    operatorController.controllerLeft()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation += 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setPosition(desiredRotation);
-    }))
-    .onFalse(intakeV2.setEnabledCommand(false));
+    // operatorController.controllerLeft()
+    // .whileTrue(Commands.run(() -> {
+    //   desiredRotation += 0.001;
+    //   intakeV2.setEnabled(true);
+    //   intakeV2.setPosition(desiredRotation);
+    // }))
+    // .onFalse(intakeV2.setEnabledCommand(false));
 
-    operatorController.controllerRight()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation -= 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setPosition(desiredRotation);
-    }))
-    .onFalse(intakeV2.setEnabledCommand(false));
+    // operatorController.controllerRight()
+    // .whileTrue(Commands.run(() -> {
+    //   desiredRotation -= 0.001;
+    //   intakeV2.setEnabled(true);
+    //   intakeV2.setPosition(desiredRotation);
+    // }))
+    // .onFalse(intakeV2.setEnabledCommand(false));
+
+    // driverController.bumperRight()
+    //   .whileTrue(Commands.run(() -> {
+    //     desiredAngle -= 1 / 50; // 1 degree per second ish
+    //     // voltage = -1.928;
+    //   }));
+    // driverController.bumperLeft()
+    //   .whileTrue(Commands.run(() -> {
+    //     intakeWrist.setPositionDegrees(desiredAngle);
+    //   }));
+    // driverController.buttonDown()
+    //   .onTrue(Commands.runOnce(() -> {
+    //     desiredAngle = 90.0; //Top: -85.4
+    //   }));
+
+    operatorController.buttonUp().whileTrue(elevator.stow());
+    operatorController.buttonRight().whileTrue(elevator.moveToReefL2());
+    operatorController.buttonDown().whileTrue(elevator.moveToReefL3());
+    operatorController.buttonLeft().whileTrue(elevator.moveToReefL4());
+
+    operatorController.bumperRight().whileTrue(
+      Commands.run(() -> {
+        desiredPivotVoltage += 0.001;
+        elevatorPivot.setPivotVoltage(desiredPivotVoltage);
+      })
+    );
+    operatorController.bumperLeft().whileTrue(
+      Commands.run(() -> {
+        desiredPivotVoltage -= 0.001;
+        elevatorPivot.setPivotVoltage(desiredPivotVoltage);
+      })
+    );
+
+
   }
   
   private void initAutoChoosers() {
