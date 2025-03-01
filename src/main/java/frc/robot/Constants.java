@@ -333,6 +333,11 @@ public final class Constants {
     public static final double kEPivotCruiseVelocity = 100; //16.333
     public static final double kElevatorPivotCruiseAcceleration = 1000.000;
     public static final double kElevatorPivotJerk = 900.0;
+
+    public static final double kElevatorPivotStowedFF = 0.5;
+    public static final double kElevatorPivotExtendedFF = 0.54117686;
+    public static final double kElevatorPivotDiffFF = kElevatorPivotExtendedFF-kElevatorPivotStowedFF;
+    public static final double kElevatorPivotExtendedFFPosition = 0.231934;
     
  }
 

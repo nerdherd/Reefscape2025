@@ -207,7 +207,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
                 // ff = kG * cos(getPositionRev() *360)
 
 
-        ff = 0.5 * Math.cos(2 * Math.PI * getPositionRev()); // ff = kG * cos(PI times encoderRotations)
+        // ff = 0.5 * Math.cos(2 * Math.PI * getPositionRev()); // ff = kG * cos(PI times encoderRotations)
+        ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPositionRev());
 
         ffInverse = ff * -1;
 
