@@ -111,7 +111,7 @@ public class RobotContainer {
       // intake = new IntakeV2();
       intakeWrist = new IntakeWrist(V1);
       elevator = new Elevator();
-      elevatorPivot = new ElevatorPivot(V1);
+      elevatorPivot = new ElevatorPivot();
       intakeV2 = new IntakeV2();
       superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeV2);
     }
@@ -178,7 +178,7 @@ public class RobotContainer {
     elevatorPivot.setDefaultCommand(Commands.run(() -> {
       double leftY = -operatorController.getLeftY(); // Left Y (inverted for up = positive)
       if (Math.abs(leftY) > 0.05) {
-          double currentAngle = elevatorPivot.getPositionRev();
+          double currentAngle = elevatorPivot.getPosition();
           elevatorPivot.setTargetPosition(currentAngle + (leftY * PIVOT_SPEED * 0.02)); // 20ms loop
       }
   }, elevatorPivot));
