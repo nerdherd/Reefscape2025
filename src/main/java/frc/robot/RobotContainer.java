@@ -256,19 +256,19 @@ public class RobotContainer {
 
       operatorController.triggerLeft()
     .whileTrue(intakeV2.intakeCoral())
-    .onFalse(intakeV2.stopJawCommand()); // TODO
+    .onFalse(intakeV2.stopClawCommand()); // TODO
 
     operatorController.triggerRight()
     .whileTrue(intakeV2.outtakeCoral())
-    .onFalse(intakeV2.stopJawCommand());// TODO
+    .onFalse(intakeV2.stopClawCommand());// TODO
 
     operatorController.bumperLeft()
     .whileTrue(intakeV2.intakeAlgae())
-    .onFalse(intakeV2.stopJawCommand()); // TODO
+    .onFalse(intakeV2.stopClawCommand()); // TODO
 
     operatorController.bumperRight()
     .whileTrue(intakeV2.outtakeAlgae())
-    .onFalse(intakeV2.stopJawCommand());// TODO
+    .onFalse(intakeV2.stopClawCommand());// TODO
   }
 
 

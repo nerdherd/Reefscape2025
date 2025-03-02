@@ -42,6 +42,8 @@ public class SuperSystem {
         wristAtPosition = () -> wrist.atPosition();
 
         initialize(); // todo need to move to each mode's init in container 
+        //(after power on, during Disable mode, motors disabled and not applying brake)
+        //(after auto/teleop mode, During disable mode, motor disabled and applying brake)
     }
 
     public Command zeroEncoders() {
@@ -66,7 +68,7 @@ public class SuperSystem {
     }
 
     public Command closeClaw() {
-        return claw.setJawPositionCommand(ClawConstants.kClosedPosition);
+        return claw.setClawPositionCommand(ClawConstants.kClosedPosition);
     }
 
     public Command intakeCoral() {

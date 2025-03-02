@@ -40,10 +40,6 @@ public class Elevator extends SubsystemBase implements Reportable {
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
         motionMagicVoltage = new MotionMagicVoltage(0);
         brakeRequest = new NeutralOut();
-        // elevatorPID = new PIDController(
-        //     ElevatorConstants.kPElevatorMotor,
-        //     ElevatorConstants.kIElevatorMotor,
-        //     ElevatorConstants.kDElevatorMotor);
         elevatorMotor.setPosition(0.0);
 
         motorConfigurator = elevatorMotor.getConfigurator();

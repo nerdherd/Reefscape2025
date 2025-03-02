@@ -142,7 +142,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
 
     // ****************************** COMMAND METHODS ****************************** //
 
-    public Command setJawPositionCommand(double position) {
+    public Command setClawPositionCommand(double position) {
         return Commands.runOnce(() -> setClawPosition(position));
     }
 
@@ -154,7 +154,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         return Commands.runOnce(() -> setEnabled(enable));
     }
 
-    public Command stopJawCommand() { //TODO
+    public Command stopClawCommand() { //TODO
         return Commands.sequence(
             Commands.runOnce(() -> clawMotor.setControl(brakeRequest))
         );
@@ -172,7 +172,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setJawPositionCommand(ClawConstants.kAlgaePosition),
+                setClawPositionCommand(ClawConstants.kAlgaePosition),
                 setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
@@ -182,7 +182,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setJawPositionCommand(ClawConstants.kCoralPosition),
+                setClawPositionCommand(ClawConstants.kCoralPosition),
                 setVelocityCommand(RollerConstants.kIntakePower)
             )
         );
@@ -192,7 +192,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setJawPositionCommand(ClawConstants.kAlgaePosition),
+                setClawPositionCommand(ClawConstants.kAlgaePosition),
                 setVelocityCommand(RollerConstants.kOuttakePower)
             )
         );
@@ -202,7 +202,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
-                setJawPositionCommand(ClawConstants.kCoralPosition),
+                setClawPositionCommand(ClawConstants.kCoralPosition),
                 setVelocityCommand(RollerConstants.kOuttakePower)
             )
         );
@@ -211,7 +211,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
     public Command goToStow() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setJawPositionCommand(ClawConstants.kStowPosition),
+            setClawPositionCommand(ClawConstants.kStowPosition),
             setVelocityCommand(0)  
         );
     }
