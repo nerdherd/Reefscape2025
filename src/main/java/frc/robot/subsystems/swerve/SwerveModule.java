@@ -97,7 +97,7 @@ public class SwerveModule implements Reportable {
             ModuleConstants.kPTurning,
             ModuleConstants.kITurning,
             ModuleConstants.kDTurning);
-        turningController.enableContinuousInput(0, 2 * Math.PI); // Originally was -pi to pi
+        turningController.enableContinuousInput(-Math.PI, Math.PI); // Originally was -pi to pi
         turningController.setTolerance(.005);
 
         this.driveMotor.setInverted(invertDriveMotor);
