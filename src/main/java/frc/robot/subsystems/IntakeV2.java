@@ -50,7 +50,7 @@ public class IntakeV2 extends SubsystemBase {
 
 
         configurePID(rollerConfigs, positionConfigs);
-        // zeroEncoder();
+        zeroEncoder();
     }
 
     //****************************** SETUP METHODS ******************************//

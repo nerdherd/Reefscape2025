@@ -102,6 +102,7 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
 
+    // m_robotContainer.superSystem.initialize();
     m_robotContainer.swerveDrive.refreshModulePID();
     m_robotContainer.configureBindings_test();
   }

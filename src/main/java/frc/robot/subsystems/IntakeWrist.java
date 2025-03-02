@@ -71,7 +71,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         configurePID(motorConfigs);
         
         motor.setNeutralMode(NeutralModeValue.Brake);
-        // zeroEncoder();
+        zeroEncoder();
     }
 
     //****************************** SETUP METHODS ******************************//

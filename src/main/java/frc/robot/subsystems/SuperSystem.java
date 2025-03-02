@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Constants.ClawConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.V1ElevatorConstants;
 import frc.robot.Constants.WristConstants;
@@ -58,6 +59,30 @@ public class SuperSystem {
             wrist.stop();
             elevator.stop();
         });
+    }
+
+    public Command stopRoller() {
+        return claw.setVelocityCommand(0.0);
+    }
+
+    public Command closeClaw() {
+        return claw.setJawPositionCommand(ClawConstants.kClosedPosition);
+    }
+
+    public Command intakeCoral() {
+        return claw.intakeCoral();
+    }
+
+    public Command outtakeCoral() {
+        return claw.outtakeCoral();
+    }
+
+    public Command intakeAlgae() {
+        return claw.intakeAlgae();
+    }
+
+    public Command outtakeAlgae() {
+        return claw.outtakeAlgae();
     }
 
     public Command moveTo(NamedPositions position) {
@@ -201,9 +226,12 @@ public class SuperSystem {
         pivot.setEnabled(true);
         wrist.setEnabled(true);
         elevator.setEnabled(true);
-        pivot.setTargetPosition(pivot.getPositionRev());
-        elevator.setPosition(elevator.getPosition());
-        wrist.setPosition(wrist.getPosition());
+        claw.setEnabled(true);
+        pivot.setTargetPosition(0);
+        elevator.setPosition(0);
+        wrist.setPosition(0);
+        claw.setJawPosition(ClawConstants.kClosedPosition);
+        claw.setVelocityCommand(0.0);
         ammountCalled = 0;
     }
 

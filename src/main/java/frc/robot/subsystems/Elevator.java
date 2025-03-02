@@ -56,6 +56,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
         followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
         motionMagicVoltage.withSlot(0);
+        zeroEncoder();
     }
     
     private void setMotorConfigs() {
