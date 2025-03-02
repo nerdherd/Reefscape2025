@@ -356,18 +356,18 @@ public class RobotContainer {
     .onTrue(superSystem.stop());    
 
     operatorController.dpadDown()
-    .whileTrue(superSystem.moveToL1());
+    .onTrue(superSystem.moveToL1());
     operatorController.dpadLeft()
-    .whileTrue(superSystem.moveToL2());
+    .onTrue(superSystem.moveToL2());
     operatorController.dpadUp()
-    .whileTrue(superSystem.moveToL3());
+    .onTrue(superSystem.moveToL3());
     operatorController.dpadRight()
-    .whileTrue(superSystem.moveToL4());
+    .onTrue(superSystem.moveToL4());
 
     operatorController.buttonUp()
-    .whileTrue(superSystem.moveToStation());
+    .onTrue(superSystem.moveToStation());
     operatorController.buttonDown()
-    .whileTrue(superSystem.moveToStow());
+    .onTrue(superSystem.moveToStow());
     
     operatorController.bumperLeft()
     .onTrue(superSystem.intakeCoral());
@@ -384,9 +384,9 @@ public class RobotContainer {
     .onTrue(superSystem.closeClaw());
 
     driverController.buttonDown()
-    .whileTrue(superSystem.moveTogroundIntake());
+    .onTrue(superSystem.moveTogroundIntake());
     driverController.buttonUp()
-    .whileTrue(superSystem.moveToSemiStow());
+    .onTrue(superSystem.moveToSemiStow());
   }
   
   private void initAutoChoosers() {
