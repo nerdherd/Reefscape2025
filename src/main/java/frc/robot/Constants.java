@@ -427,6 +427,7 @@ public final class Constants {
     public static final double kAlgaePosition = 0.169; 
     public static final double kCoralPosition = -0.008789; 
     public static final double kStowPosition = 0; 
+    public static final double kClosedPosition = -0.068359;
     
  }
 
