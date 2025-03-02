@@ -160,21 +160,22 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
     
     public void setPosition(double position) {
+        //TODO NerdyMath.clamp(
         desiredPosition = position;
         motionMagicRequest.Position = desiredPosition;
     }
 
-    public void setPositionDegrees(double positionDegrees) {
-        desiredAngle = positionDegrees;
-        desiredPosition = (desiredAngle * 0.015432) - 0.00011; // Depricated values
+    // public void setPositionDegrees(double positionDegrees) {
+    //     desiredAngle = positionDegrees;
+    //     desiredPosition = (desiredAngle * 0.015432) - 0.00011; // Depricated values
         
-        // double newPos = NerdyMath.clamp(
-        //     positionDegrees, 
+    //     // double newPos = NerdyMath.clamp(
+    //     //     positionDegrees, 
 
-        // );
+    //     // );
 
-        motionMagicRequest.Position = (desiredPosition);  // = (newPos / 360.0)
-    }
+    //     motionMagicRequest.Position = (desiredPosition);  // = (newPos / 360.0)
+    // }
 
     public double getPosition() {
         return motor.getPosition().getValueAsDouble();
@@ -182,6 +183,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public void zeroEncoder() {
         motor.setPosition(0);
+        desiredPosition = 0;
     }
 
     public void setPivotAngle(double pivotAngle) {
