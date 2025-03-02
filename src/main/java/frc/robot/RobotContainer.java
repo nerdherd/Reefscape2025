@@ -30,9 +30,9 @@ import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.commands.StationCommand;
 import frc.robot.commands.StowCommand;
-import frc.robot.commands.SuperSystemCommand;
 import frc.robot.Constants.V1ElevatorConstants;
 import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -185,22 +185,22 @@ public class RobotContainer {
     );
 
     operatorController.controllerLeft()
-      .onTrue(superSystem.moveToCage());
+      .onTrue(superSystem.moveTo(NamedPositions.Cage));
 
       operatorController.controllerRight()
-      .onTrue(superSystem.moveToNet());
+      .onTrue(superSystem.moveTo(NamedPositions.Net));
     
       operatorController.buttonUp()
-      .whileTrue(superSystem.moveToStation());
+      .whileTrue(superSystem.moveTo(NamedPositions.Station));
       
       operatorController.buttonLeft()
-      .onTrue(superSystem.moveToSemiStow());
+      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
   
       operatorController.buttonRight()
-      .onTrue(superSystem.moveToProcs());
+      .onTrue(superSystem.moveTo(NamedPositions.Processor));
 
       operatorController.buttonDown()
-      .onTrue(superSystem.moveToStow());
+      .onTrue(superSystem.moveTo(NamedPositions.Stow));
 
       operatorController.triggerLeft()
     .whileTrue(Commands.run(() -> {
@@ -269,7 +269,7 @@ public class RobotContainer {
       if (!keylock_crossupleft)
       {
         keylock_crossupleft = true;
-        Commands.run(()->superSystem.moveToL1()); // TODO: change to mid high
+        Commands.run(()->superSystem.moveTo(NamedPositions.L1)); // TODO: change to mid high
       }      
     }
     else
@@ -281,7 +281,7 @@ public class RobotContainer {
           if (!keylock_crossup)
           {
               keylock_crossup = true;
-              Commands.run(()->superSystem.moveToL4());
+              Commands.run(()->superSystem.moveTo(NamedPositions.L4));
           }
       }
       else
@@ -294,7 +294,7 @@ public class RobotContainer {
           if (!keylock_crossleft)
           {
               keylock_crossleft = true;
-              Commands.run(()->superSystem.moveToL2());
+              Commands.run(()->superSystem.moveTo(NamedPositions.L2));
           }
       }
       else
@@ -312,7 +312,7 @@ public class RobotContainer {
       if (!keylock_crossdownright)
       {
         keylock_crossdownright = true;
-        Commands.run(()->superSystem.moveToL4()); // TODO: change to mid low
+        Commands.run(()->superSystem.moveTo(NamedPositions.L4)); // TODO: change to mid low
       }      
     }
     else
@@ -324,7 +324,7 @@ public class RobotContainer {
           if (!keylock_crossdown)
           {
               keylock_crossdown = true;
-              Commands.run(()->superSystem.moveToL1());
+              Commands.run(()->superSystem.moveTo(NamedPositions.L1));
           }
       }
       else
@@ -337,7 +337,7 @@ public class RobotContainer {
           if (!keylock_crossright)
           {
               keylock_crossright = true;
-              Commands.run(()->superSystem.moveToL3());
+              Commands.run(()->superSystem.moveTo(NamedPositions.L3));
           }
       }
       else

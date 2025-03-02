@@ -466,7 +466,17 @@ public final class Constants {
 
   public static final class SuperSystemConstants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
-      Stow(ExecutionOrder.WRT_ELV_PVT, 0.0, 0.0, 0.0, -0.4),
+      Stow(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      SemiStow(ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.4, -0.4),
+      GroundIntake(ExecutionOrder.PVT_WRT_ELV, 0.01, 0.562, -0.808, -0.4),
+      Station(ExecutionOrder.WRT_PVT_ELV, 0.15, 0.75, -0.89, -0.4),
+      Processor(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      Net(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      Cage(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      L1(ExecutionOrder.WRT_PVT_ELV, 0.23, 0.0, -0.21, -0.4),
+      L2(ExecutionOrder.WRT_PVT_ELV, 0.23, 0.0, -0.28, -0.4),
+      L3(ExecutionOrder.WRT_PVT_ELV, 0.23, 1.36, -0.28, -0.4),
+      L4(ExecutionOrder.WRT_PVT_ELV, 0.23, 3.15, -0.318, -0.4),
       ;
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
       public ExecutionOrder executionOrder;
