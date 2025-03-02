@@ -309,31 +309,54 @@ public class RobotContainer {
     .whileTrue(superSystem.moveToL2());
     operatorController.buttonLeft()
     .onTrue(superSystem.stop());
+    operatorController.buttonDown()
+    .whileTrue(superSystem.moveToL3());
+    operatorController.dpadLeft()
+    .whileTrue(superSystem.moveToL4());
+    operatorController.dpadDown()
+    .whileTrue(superSystem.moveToStow());
+    operatorController.dpadRight()
+    .whileTrue(superSystem.moveToL1());
+    operatorController.dpadUp()
+    .onTrue(superSystem.intakeCoral());
+    operatorController.controllerRight()
+    .onTrue(superSystem.outtakeCoral());
+    operatorController.triggerRight()
+    .onTrue(superSystem.stopRoller());
+    operatorController.bumperRight()
+    .onTrue(Commands.runOnce(() -> superSystem.initialize()));
 
     // operatorController.buttonRight()
     // .onTrue(intakeV2.intakeCoral());
 
-    operatorController.dpadUp()
-    .onTrue(intakeV2.outtakeAlgae());
+    // operatorController.dpadUp()
+    // .onTrue(intakeV2.outtakeAlgae());
 
-    operatorController.dpadDown()
-    .onTrue(intakeV2.outtakeCoral());
+    // operatorController.dpadDown()
+    // .onTrue(intakeV2.outtakeCoral());
 
-    operatorController.dpadRight()
-    .onTrue(intakeV2.setEnabledCommand(false));
+    // operatorController.dpadRight()
+    // .onTrue(intakeV2.setEnabledCommand(false));
 
     
 
     // operatorController.buttonDown()
     // .whileTrue(superSystem.moveToL2());
 
-    // operatorController.triggerLeft()
-    // .whileTrue(Commands.run(() -> {
-    //   desiredRotation += 0.001;
-    //   intakeV2.setEnabled(true);
-    //   intakeV2.setPosition(desiredRotation);
-    // }))
-    // .onFalse(elevatorPivot.setEnabledCommand(false));
+    operatorController.triggerLeft()
+    .whileTrue(Commands.run(() -> {
+      desiredRotation += 0.001;
+      intakeV2.setEnabled(true);
+      intakeV2.setJawPosition(desiredRotation);
+    }))
+    .onFalse(elevatorPivot.setEnabledCommand(false));
+    operatorController.bumperLeft()
+    .whileTrue(Commands.run(() -> {
+      desiredRotation -= 0.001;
+      intakeV2.setEnabled(true);
+      intakeV2.setJawPosition(desiredRotation);
+    }))
+    .onFalse(elevatorPivot.setEnabledCommand(false));
     // operatorController.buttonLeft().onTrue(superSystem.moveTogroundIntake());
 
   }
@@ -366,6 +389,7 @@ public class RobotContainer {
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
+      intakeV2.initShuffleboard(loggingLevel);
     }
   }
   
