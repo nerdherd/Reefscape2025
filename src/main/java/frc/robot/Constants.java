@@ -285,7 +285,7 @@ public final class Constants {
     // ************************************** ELEVATOR CONSTANTS *************************************** //
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
-    public static final double kElevatorStowPosition    =  0.05; //0.5   // TODO change later
+    public static final double kElevatorStowPosition    =  0.0; //0.5   // TODO change later
     public static final double kElevatorStationPosition = 0.75;//-2 // TODO change later
     public static final double kElevatorL1Position =   0;      // TODO change later
     public static final double kElevatorL2Position =  0;      // TODO change later
@@ -295,7 +295,7 @@ public final class Constants {
     public static final double kElevatorGroundIntake = 0.59;           // TODO change later
 
 
-    public static final double kPElevatorMotor = 4.0; // 3.0 as of 3/1/25
+    public static final double kPElevatorMotor = 3.0;
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
@@ -371,7 +371,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; 
     public static final double kGElevatorPivot = 0; 
 
-    public static final double kElevatorPivotStowPosition = 0.01; 
+    public static final double kElevatorPivotStowPosition = 0.0; 
     public static final double kElevatorPivotStationPosition = 0.15; // .0833 //TODO change later
     public static final double kElevatorPivotPositionVertical = 0.23;//0.1 // 0.25
 
@@ -412,7 +412,7 @@ public final class Constants {
 
     public static final int kMotorID = 61;
 
-    public static final double kPMotor = 40;//60 //MAX 4000
+    public static final double kPMotor = 45; //MAX 48
     // 3 degrees error / 360 degrees * kP = 0.4V
     public static final double kIMotor = 0;
     public static final double kDMotor = 0;
@@ -425,7 +425,7 @@ public final class Constants {
     public static final double kJerk = kAcceleration * 10; //Rotations per second cubed
 
     public static final double kAlgaePosition = 0.169; 
-    public static final double kCoralPosition = -0.008789; 
+    public static final double kCoralPosition = 0.023; 
     public static final double kStowPosition = 0; 
     
  }
@@ -444,7 +444,7 @@ public final class Constants {
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
 
-    public static final double kStowPosition = -0.1;//-0.15//0.092//0.0
+    public static final double kStowPosition = 0.0;//-0.15//0.092//0.0
     public static final double kIntermediatePosition = -0.4;
     public static final double kStationPosition = -0.89;//-0.3//0.54
     public static final double kL23Position = -0.3; // was -0.6

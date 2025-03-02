@@ -11,8 +11,6 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -20,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ClawConstants;
 
-public class IntakeV2 extends SubsystemBase implements Reportable{
+public class IntakeV2 extends SubsystemBase {
     private final TalonFX rollerMotor;
     private final TalonFX positionMotor;
     private final TalonFXConfigurator rollerConfigurator;
@@ -99,7 +97,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-        double ff = 0.4; // 0.4 * Math.cos((positionMotor.getPosition().getValueAsDouble() + pivotAngle + wristAngle) * 2 * Math.PI);// 0.788
+        double ff = 0.37 * Math.cos(positionMotor.getPosition().getValueAsDouble() + pivotAngle + (wristAngle) * 2 * Math.PI);// 0.788
 
         if (!enabled){
             rollerMotor.setControl(brakeRequest);
@@ -118,7 +116,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         SmartDashboard.putNumber("Claw Wrist Voltage", positionMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Claw Current Rotations", positionMotor.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("Claw Desired Rotations", desiredPosition);
-        SmartDashboard.putNumber("Claw ff", ff);
+        SmartDashboard.putNumber("Claw Desired Rotations", ff);
     }
 
     // ****************************** STATE METHODS ***************************** //
@@ -130,10 +128,6 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
     private void setVelocity(double velocity) {
         // desiredVelocity = velocity;
         // velocityRequest.Velocity = velocity;
-        if(velocity == 0.0) {
-            voltage = 0.0;
-            return;
-        }
         voltage = velocity < 0.0 ? -2.0 : 2.0;
     }
 
@@ -224,20 +218,5 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
             setJawPositionCommand(ClawConstants.kStowPosition),
             setVelocityCommand(0)  
         );
-    }
-
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'reportToSmartDashboard'");
-    }
-
-    @Override
-    public void initShuffleboard(LOG_LEVEL priority) {
-        // TODO Auto-generated method stub
-        ShuffleboardTab tab = Shuffleboard.getTab("Claw");
-        tab.addNumber("Desired Position", () -> desiredPosition);
-        tab.addNumber("Current Position", () -> positionMotor.getPosition().getValueAsDouble());
-        tab.addNumber("Positional Voltage", () -> positionMotor.getMotorVoltage().getValueAsDouble());
     }
 }
