@@ -10,7 +10,6 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -19,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.WristConstants;
 import frc.robot.util.NerdyMath;
 
 public class Elevator extends SubsystemBase implements Reportable {
@@ -28,7 +26,6 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // private final PIDController elevatorPID;
     private double desiredPosition;
-    private double desiredVelocity;
     private boolean enabled = false;
     private TalonFXConfigurator motorConfigurator;
     private TalonFXConfigurator motorConfigurator2;
@@ -123,10 +120,10 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        if (!enabled) desiredPosition = ElevatorConstants.kElevatorStowPosition;
     }
     
     public void setPosition(double position) {
+        //TODO NerdyMath.clamp(
         desiredPosition = position;
         motionMagicVoltage.Position = desiredPosition;
     }
@@ -138,6 +135,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     public void zeroEncoder() {
         elevatorMotor.setPosition(0);
         elevatorMotor2.setPosition(0);
+        desiredPosition = 0;
     }
 
     // ****************************** GET METHODS ***************************** //
@@ -150,7 +148,6 @@ public class Elevator extends SubsystemBase implements Reportable {
         return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
         desiredPosition - 0.125,
         desiredPosition + 0.125);
-        // return false;
     }
 
     // ****************************** COMMAND METHODS ***************************** //
@@ -215,7 +212,6 @@ public class Elevator extends SubsystemBase implements Reportable {
             case MINIMAL:
                 SmartDashboard.putNumber("Elevator Desired Position", desiredPosition);
                 SmartDashboard.putNumber("Elevator Current Position", elevatorMotor.getPosition().getValueAsDouble());
-                SmartDashboard.putNumber("Elevator Desired Velocity", desiredVelocity);
                 SmartDashboard.putNumber("Elevator Current Velocity", elevatorMotor.getVelocity().getValueAsDouble());
                 SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
         }
@@ -230,7 +226,6 @@ public class Elevator extends SubsystemBase implements Reportable {
             case ALL:
             case MEDIUM:
             case MINIMAL:
-                tab.addNumber("Elevator Desired Velocity", () -> desiredVelocity);
                 tab.addNumber("Elevator Current Velocity", () -> elevatorMotor.getVelocity().getValueAsDouble());
                 tab.addNumber("Elevator Desired Position", () -> desiredPosition);
                 tab.addNumber("Elevator Current Position", () -> elevatorMotor.getPosition().getValueAsDouble());
