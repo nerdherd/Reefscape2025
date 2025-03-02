@@ -352,65 +352,36 @@ public class RobotContainer {
   public void configureBindings_test() {
     operatorController.controllerLeft()
     .onTrue(superSystem.zeroEncoders());
-    // driverController.bumperRight()
-    //   .whileTrue(Commands.run(() -> {
-    //     desiredAngle -= 1 / 50; // 1 degree per second ish
-    //     // voltage = -1.928;
-    //   }));
-    // driverController.bumperLeft()
-    //   .whileTrue(Commands.run(() -> {
-    //     intakeWrist.setPositionDegrees(desiredAngle);
-    //   }));
-    // driverController.buttonDown()
-    //   .onTrue(Commands.runOnce(() -> {
-    //     desiredAngle = 90.0; //Top: -85.4
-    //   }));
+    operatorController.controllerRight()
+    .onTrue(superSystem.stop());    
 
-    // driverController.triggerLeft()
-    // .whileTrue(elevator.setEnabledCommand(true))
-    // .onFalse(elevator.setEnabledCommand(false));
-
-    // driverController.buttonUp()
-    // .whileTrue(elevator.moveToReefL1())
-    // .onFalse(elevator.stow());
-
-    // driverController.buttonLeft()
-    // .whileTrue(elevator.moveToReefL2())
-    // .onFalse(elevator.stow());
-
-    // driverController.buttonRight()
-    // .whileTrue(elevator.moveToReefL3())
-    // .onFalse(elevator.stow());
-
-    // driverController.buttonDown()
-    // .whileTrue(elevator.moveToReefL4())
-    // .onFalse(elevator.stow());
-      
-    // driverController.bumperLeft();
-    
+    operatorController.dpadDown()
+    .whileTrue(superSystem.moveToL1());
+    operatorController.dpadLeft()
+    .whileTrue(superSystem.moveToL2());
+    operatorController.dpadUp()
+    .whileTrue(superSystem.moveToL3());
+    operatorController.dpadRight()
+    .whileTrue(superSystem.moveToL4());
 
     operatorController.buttonUp()
     .whileTrue(superSystem.moveToStation());
-    operatorController.buttonRight()
-    .whileTrue(superSystem.moveToL2());
-    operatorController.buttonLeft()
-    .onTrue(superSystem.stop());
     operatorController.buttonDown()
-    .whileTrue(superSystem.moveToL3());
-    operatorController.dpadLeft()
-    .whileTrue(superSystem.moveToL4());
-    operatorController.dpadDown()
     .whileTrue(superSystem.moveToStow());
-    operatorController.dpadRight()
-    .whileTrue(superSystem.moveToL1());
-    operatorController.dpadUp()
+    
+    operatorController.bumperLeft()
     .onTrue(superSystem.intakeCoral());
-    operatorController.controllerRight()
+    operatorController.triggerLeft()
     .onTrue(superSystem.outtakeCoral());
-    operatorController.triggerRight()
-    .onTrue(superSystem.stopRoller());
     operatorController.bumperRight()
-    .onTrue(Commands.runOnce(() -> superSystem.initialize()));
+    .onTrue(superSystem.intakeAlgae());
+    operatorController.triggerRight()
+    .onTrue(superSystem.outtakeAlgae());
+
+    operatorController.buttonLeft()
+    .onTrue(superSystem.stopRoller());
+    operatorController.buttonRight()
+    .onTrue(superSystem.closeClaw());
 
     // operatorController.buttonRight()
     // .onTrue(intakeV2.intakeCoral());

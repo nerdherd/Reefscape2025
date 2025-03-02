@@ -76,7 +76,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
         // pivotPositionOffset = pivotMotor.getPosition().getValueAsDouble();
         
-
+        zeroEncoder();
     }
     
     // ******************************** SETUP METHODS *************************************** //

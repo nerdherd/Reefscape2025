@@ -52,7 +52,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
 
 
         configurePID(rollerConfigs, positionConfigs);
-        // zeroEncoder();
+        zeroEncoder();
     }
 
     //****************************** SETUP METHODS ******************************//
