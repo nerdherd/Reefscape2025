@@ -383,39 +383,10 @@ public class RobotContainer {
     operatorController.buttonRight()
     .onTrue(superSystem.closeClaw());
 
-    // operatorController.buttonRight()
-    // .onTrue(intakeV2.intakeCoral());
-
-    // operatorController.dpadUp()
-    // .onTrue(intakeV2.outtakeAlgae());
-
-    // operatorController.dpadDown()
-    // .onTrue(intakeV2.outtakeCoral());
-
-    // operatorController.dpadRight()
-    // .onTrue(intakeV2.setEnabledCommand(false));
-
-    
-
-    // operatorController.buttonDown()
-    // .whileTrue(superSystem.moveToL2());
-
-    operatorController.triggerLeft()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation += 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setJawPosition(desiredRotation);
-    }))
-    .onFalse(elevatorPivot.setEnabledCommand(false));
-    operatorController.bumperLeft()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation -= 0.001;
-      intakeV2.setEnabled(true);
-      intakeV2.setJawPosition(desiredRotation);
-    }))
-    .onFalse(elevatorPivot.setEnabledCommand(false));
-    // operatorController.buttonLeft().onTrue(superSystem.moveTogroundIntake());
-
+    driverController.buttonDown()
+    .whileTrue(superSystem.moveTogroundIntake());
+    driverController.buttonUp()
+    .whileTrue(superSystem.moveToSemiStow());
   }
   
   private void initAutoChoosers() {

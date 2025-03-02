@@ -121,8 +121,9 @@ public class SuperSystem {
         );
     }
 
-    public Command semiStow() {
+    public Command moveToSemiStow() {
         return Commands.sequence(
+            Commands.runOnce(() -> isStarted = false),
             execute(ExecutionOrder.WRT_ELV_PVT, 10.0, 
             V1ElevatorConstants.kElevatorPivotSemiStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition,
             () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition())
@@ -141,29 +142,14 @@ public class SuperSystem {
         return Commands.none();
     }    
 
-
-    public Command moveToSemiStow() { //TODO: see if this is legit
-    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-    //     V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition, 
-    //     ExecutionOrder.WRT_ELV_PVT, 10.0,
-    //     () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()
-    //     );
-
-    //     return Commands.sequence(
-    //         Commands.runOnce(() -> superSystemCommand.initialize()),
-    //         Commands.run(() -> superSystemCommand.execute())
-    //     );
-        return Commands.none();
-    }
-
     public Command moveTogroundIntake() {
         return Commands.sequence(
             Commands.runOnce(() -> isStarted = false),
-            execute(ExecutionOrder.PVT_ELV_WRT, 10.0, 
-            V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake,
+            execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorGroundIntake, WristConstants.kIntermediatePosition,
             () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()),
             
-            wrist.setPositionCommand(WristConstants.kStationPosition),
+            wrist.setPositionCommand(WristConstants.kWristGroundIntake),
             intakeCoral(),
             Commands.race(
                 Commands.waitSeconds(5),
@@ -186,14 +172,6 @@ public class SuperSystem {
                 stopRoller()
             )
         );
-    }
-
-    public Command moveToL2L3() {
-        return Commands.none();
-    }
-
-    public Command moveToL3L4() {
-        return Commands.none();
     }
 
     public Command moveToL1() {
@@ -231,16 +209,6 @@ public class SuperSystem {
     }
 
     public Command moveToL4() {
-    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, 
-    //     V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL4Position, WristConstants.kWristL4Position, 
-    //     ExecutionOrder.ALL_TOGETHER, 10.0);
-
-    //     return superSystemCommand;
-    // }
-
-    // public Command moveTogroundIntake() {
-    //     SuperSystemCommand superSystemCommand = new SuperSystemCommand(pivot, elevator, wrist, V1ElevatorConstants.kElevatorPivotGroundIntake, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake, ExecutionOrder.ELV_WRT_PVT, 10);
-    //     return superSystemCommand;
     return Commands.sequence(
         Commands.runOnce(() -> isStarted = false),
         execute(ExecutionOrder.WRT_PVT_ELV,10.0,
