@@ -164,6 +164,14 @@ public class SuperSystem {
         );
     }
 
+    public Command moveToL2L3() {
+        return Commands.none();
+    }
+
+    public Command moveToL3L4() {
+        return Commands.none();
+    }
+
     public Command moveToL1() {
         return Commands.sequence(
             Commands.runOnce(() -> isStarted = false),
