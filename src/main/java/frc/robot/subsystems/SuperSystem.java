@@ -163,7 +163,12 @@ public class SuperSystem {
             V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake,
             () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()),
             
-            wrist.setPositionCommand(WristConstants.kStationPosition)
+            wrist.setPositionCommand(WristConstants.kStationPosition),
+            intakeCoral(),
+            Commands.race(
+                Commands.waitSeconds(5),
+                stopRoller()
+            )
         );
     }
 
