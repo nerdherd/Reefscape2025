@@ -41,7 +41,7 @@ public class SuperSystem {
         elevatorAtPosition = () -> elevator.atPosition();
         wristAtPosition = () -> wrist.atPosition();
 
-        initialize();
+        initialize(); // todo need to move to each mode's init in container 
     }
 
     public Command zeroEncoders() {
@@ -195,14 +195,14 @@ public class SuperSystem {
         pivot.setTargetPosition(0);
         elevator.setPosition(0);
         wrist.setPosition(0);
-        claw.setJawPosition(ClawConstants.kClosedPosition);
+        claw.setClawPosition(ClawConstants.kClosedPosition);
         claw.setVelocityCommand(0.0);
         isStarted = false;
     }
 
     public void updateDependencies() { 
-        double curPivotAngle = pivot.getPositionRev();
-        // pivot.setTargetPosition(elevator.getPosition()); 
+        double curPivotAngle = pivot.getPosition();
+        pivot.setElevatorLength(elevator.getPosition()); 
         elevator.setPivotAngle(curPivotAngle);
         wrist.setPivotAngle(curPivotAngle);
     }
@@ -216,7 +216,8 @@ public class SuperSystem {
                 isStarted = true;
                 startTime = Timer.getFPGATimestamp();
             }
-    
+            
+            // TODO move this functionality to each subsystem
             updateDependencies(); 
     
             switch (exeOrder) {

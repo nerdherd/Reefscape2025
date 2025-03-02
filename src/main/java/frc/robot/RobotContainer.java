@@ -273,8 +273,12 @@ public class RobotContainer {
 
 
   public void configureBindings_test() {
+    //////////////////////////
+    /// DO NOT REMOVE IT
     operatorController.controllerLeft()
     .onTrue(superSystem.zeroEncoders());
+    ////////////////////////
+    
     operatorController.controllerRight()
     .onTrue(superSystem.stop());    
 
