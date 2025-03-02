@@ -477,6 +477,8 @@ public final class Constants {
       L2(ExecutionOrder.WRT_PVT_ELV, 0.23, 0.0, -0.28, -0.4),
       L3(ExecutionOrder.WRT_PVT_ELV, 0.23, 1.36, -0.28, -0.4),
       L4(ExecutionOrder.WRT_PVT_ELV, 0.23, 3.15, -0.318, -0.4),
+      L2L3(ExecutionOrder.WRT_PVT_ELV, 0.23, 0.5, -0.318, -0.4),
+      L3L4(ExecutionOrder.WRT_PVT_ELV, 0.23, 1.5, -0.318, -0.4),
       ;
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
       public ExecutionOrder executionOrder;

@@ -174,6 +174,33 @@ public class RobotContainer {
 
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 
+    double PIVOT_SPEED = 10;// Degrees per second
+    elevatorPivot.setDefaultCommand(Commands.run(() -> {
+      double leftY = -operatorController.getLeftY(); // Left Y (inverted for up = positive)
+      if (Math.abs(leftY) > 0.05) {
+          double currentAngle = elevatorPivot.getPositionRev();
+          elevatorPivot.setTargetPosition(currentAngle + (leftY * PIVOT_SPEED * 0.02)); // 20ms loop
+      }
+  }, elevatorPivot));
+
+  double Elevator_SPEED = 0.3;// Meters per second
+    elevator.setDefaultCommand(Commands.run(() -> {
+      double leftX = -operatorController.getLeftX(); // Left Y (inverted for up = positive)
+      if (Math.abs(leftX) > 0.05) {
+          double currentAngle = elevator.getPosition();
+          elevator.setPosition(currentAngle + (leftX * Elevator_SPEED * 0.02)); // 20ms loop
+      }
+  }, elevator));  
+
+  double Wrist_SPEED = 20;// Degree  per second
+    intakeWrist.setDefaultCommand(Commands.run(() -> {
+      double rightY = -operatorController.getRightY(); // getRightY (inverted for up = positive)
+      if (Math.abs(rightY) > 0.05) {
+          double currentRot = intakeWrist.getPosition();
+          intakeWrist.setPosition(currentRot + (rightY * Wrist_SPEED * 0.02)); // 20ms loop
+      }
+  }, intakeWrist));
+
 }
 
   public void initDefaultCommands_test() {}
@@ -183,6 +210,31 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
+
+    operatorController.dpadUp()
+    .and(operatorController.dpadRight().negate())
+    .onTrue(superSystem.moveTo(NamedPositions.L4));
+
+    operatorController.dpadRight()
+    .and(operatorController.dpadUp().negate())
+    .onTrue(superSystem.moveTo(NamedPositions.L3));
+
+    operatorController.dpadLeft()
+    .and(operatorController.dpadDown().negate())
+    .onTrue(superSystem.moveTo(NamedPositions.L2));
+
+    operatorController.dpadDown()
+    .and(operatorController.dpadLeft().negate())
+    .onTrue(superSystem.moveTo(NamedPositions.L1));
+
+    operatorController.dpadRight()
+    .and(operatorController.dpadUp())
+    .onTrue(superSystem.moveTo(NamedPositions.L3L4));
+
+    operatorController.dpadLeft()
+    .and(operatorController.dpadDown())
+    .onTrue(superSystem.moveTo(NamedPositions.L2L3));
+
 
     operatorController.controllerLeft()
       .onTrue(superSystem.moveTo(NamedPositions.Cage));
@@ -203,151 +255,22 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(NamedPositions.Stow));
 
       operatorController.triggerLeft()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation += 0.001;
-      intakeV2.setJawPosition(desiredRotation);
-    }))
-    .onFalse(intakeV2.stopJawCommand());
+    .whileTrue(intakeV2.intakeCoral())
+    .onFalse(intakeV2.stopJawCommand()); // TODO
 
     operatorController.triggerRight()
-    .whileTrue(Commands.run(() -> {
-      desiredRotation -= 0.001;
-      intakeV2.setJawPosition(desiredRotation);
-    }))
-    .onFalse(intakeV2.stopJawCommand());
+    .whileTrue(intakeV2.outtakeCoral())
+    .onFalse(intakeV2.stopJawCommand());// TODO
 
-    //TODO for roller operatorController.bumperLeftRight();
-    //TODO for roller operatorController.bumperLeftRight();
+    operatorController.bumperLeft()
+    .whileTrue(intakeV2.intakeAlgae())
+    .onFalse(intakeV2.stopJawCommand()); // TODO
 
-
+    operatorController.bumperRight()
+    .whileTrue(intakeV2.outtakeAlgae())
+    .onFalse(intakeV2.stopJawCommand());// TODO
   }
 
-  boolean keylock_crossup = false;
-  boolean keylock_crossleft = false;
-
-  boolean keylock_crossupleft = false;
-
-  boolean keylock_crossdown = false;
-  boolean keylock_crossright = false;
-
-  boolean keylock_crossdownright = false;
-
-
-  public void operatorController_teleop() {
-    OldDriverFilter2 xFilter = new OldDriverFilter2(
-                0.05,//ControllerConstants.kDeadband,
-                0.05,//kMinimumMotorOutput,
-                5,//kTeleDriveMaxSpeedMetersPerSecond,
-                0.11765,//kDriveAlpha,
-                5,//kTeleMaxAcceleration,
-                -5);//kTeleMaxDeceleration);
-    
-    OldDriverFilter2 yFilter = new OldDriverFilter2(
-                0.05,//ControllerConstants.kDeadband,
-                0.05,//kMinimumMotorOutput,
-                5,//kTeleDriveMaxSpeedMetersPerSecond,
-                0.11765,//kDriveAlpha,
-                5,//kTeleMaxAcceleration,
-                -5);//kTeleMaxDeceleration);
-
-    // TODO pivot ctrl operatorController.getLeftX();
-    // TODO wrist ctrl operatorController.getLeftY();
-    // TODO elevator ctrl operatorController.getLeftX();
-    // TODO intake ctrl operatorController.getLeftY();
-    double pivotPosition = yFilter.calculate(operatorController.getLeftY());
-    double elevatorPosition = xFilter.calculate(operatorController.getLeftX());
-
-    SmartDashboard.putNumber("Operator L-Y", pivotPosition);
-    SmartDashboard.putNumber("Operator L-X", elevatorPosition);
-
-
-    boolean upPressed = operatorController.getDpadUp();
-    boolean leftPressed = operatorController.getDpadLeft();
-
-    if( leftPressed && upPressed)
-    {
-      if (!keylock_crossupleft)
-      {
-        keylock_crossupleft = true;
-        Commands.run(()->superSystem.moveTo(NamedPositions.L1)); // TODO: change to mid high
-      }      
-    }
-    else
-    {
-      keylock_crossupleft = false;
-
-      if (upPressed)
-      {
-          if (!keylock_crossup)
-          {
-              keylock_crossup = true;
-              Commands.run(()->superSystem.moveTo(NamedPositions.L4));
-          }
-      }
-      else
-      {
-          keylock_crossup = false;
-      }
-
-      if (leftPressed)
-      {
-          if (!keylock_crossleft)
-          {
-              keylock_crossleft = true;
-              Commands.run(()->superSystem.moveTo(NamedPositions.L2));
-          }
-      }
-      else
-      {
-          keylock_crossleft = false;
-      }
-    }
-
-
-    boolean downPressed = operatorController.getDpadDown();
-    boolean rightPressed = operatorController.getDpadRight();
-
-    if( rightPressed && downPressed)
-    {
-      if (!keylock_crossdownright)
-      {
-        keylock_crossdownright = true;
-        Commands.run(()->superSystem.moveTo(NamedPositions.L4)); // TODO: change to mid low
-      }      
-    }
-    else
-    {
-      keylock_crossdownright = false;
-
-      if (downPressed)
-      {
-          if (!keylock_crossdown)
-          {
-              keylock_crossdown = true;
-              Commands.run(()->superSystem.moveTo(NamedPositions.L1));
-          }
-      }
-      else
-      {
-          keylock_crossdown = false;
-      }
-
-      if (rightPressed)
-      {
-          if (!keylock_crossright)
-          {
-              keylock_crossright = true;
-              Commands.run(()->superSystem.moveTo(NamedPositions.L3));
-          }
-      }
-      else
-      {
-          keylock_crossright = false;
-      }
-    }
-
-
-  }
 
   public void configureBindings_test() {
     operatorController.controllerLeft()
