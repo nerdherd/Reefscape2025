@@ -119,10 +119,8 @@ public class SuperSystem {
     public Command semiStow() {
         return Commands.sequence(
             execute(ExecutionOrder.WRT_ELV_PVT, 10.0, 
-            V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition,
-            () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()),
-            
-            wrist.setPositionCommand(WristConstants.kStowPosition)
+            V1ElevatorConstants.kElevatorPivotSemiStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition,
+            () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition())
         );
     }
 
@@ -151,6 +149,17 @@ public class SuperSystem {
     //         Commands.run(() -> superSystemCommand.execute())
     //     );
         return Commands.none();
+    }
+
+    public Command moveTogroundIntake() {
+        return Commands.sequence(
+            Commands.runOnce(() -> isStarted = false),
+            execute(ExecutionOrder.PVT_ELV_WRT, 10.0, 
+            V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake,
+            () -> pivot.atPosition(), () -> elevator.atPosition(), () -> wrist.atPosition()),
+            
+            wrist.setPositionCommand(WristConstants.kStationPosition)
+        );
     }
 
     public Command moveToStation() {
