@@ -36,7 +36,9 @@ import frc.robot.Constants.WristConstants;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
-// import frc.robot.commands.autos.AutoDriving;
+import frc.robot.commands.autos.Generic2Piece;
+import frc.robot.commands.autos.Generic3Piece;
+import frc.robot.commands.autos.Generic4Piece;
 import frc.robot.commands.autos.Bottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
@@ -66,6 +68,10 @@ public class RobotContainer {
   public IntakeWrist intakeWrist;
   public SuperSystem superSystem;
 
+  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+  public Generic2Piece bottom2Piece;
+  public Generic3Piece bottom3Piece;
+  public Generic4Piece bottom4Piece;
   public Bottom2Piece bottom2Piece;
 
 
@@ -123,7 +129,9 @@ public class RobotContainer {
 
 /*  TODO: Fix Bottom2Piece to take in IntakeV2
     try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, intake, elevator, "Bottom2Piece");
+        bottom2Piece = new Generic2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+        bottom3Piece = new Generic3Piece(swerveDrive, intakeRoller, elevator, "Bottom3Piece");
+        bottom4Piece = new Generic4Piece(swerveDrive, intakeRoller, elevator, "Bottom4Piece");
     } catch (IOException e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
     } catch (ParseException e) {
@@ -147,7 +155,50 @@ public class RobotContainer {
   public static boolean IsRedSide() {
     return isRedSide;
   }
+  public Command getAutonomousCommand() {
+    Command currentAuto = autoChooser.getSelected();
+    
+    swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);//AUTONOMOUS);
+    return currentAuto;
+  }
 
+  public void initShuffleboard() {
+    imu.initShuffleboard(loggingLevel);
+    swerveDrive.initShuffleboard(loggingLevel);
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    if (USE_ELEV) { 
+      intakeRoller.initShuffleboard(loggingLevel); 
+      elevator.initShuffleboard(loggingLevel);
+      wrist.initShuffleboard(loggingLevel);
+      elevatorPivot.initShuffleboard(loggingLevel);
+    }
+  }
+  
+  private void initAutoChoosers() {
+    try { // fix for vendordeps not importing
+    // PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
+  	// List<String> paths = AutoBuilder.getAllAutoNames();
+    
+    ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
+    autosTab.add("Selected Auto", autoChooser);
+
+    autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
+    autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
+    autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
+
+    autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
+    autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    // if (paths.contains("S4R3")) {
+      // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
+      // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
+    // }
+    } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
+  }
+
+  /**
+   * Teleop commands configuration 
+   * used in teleop mode.
+   */
   public void initDefaultCommands_teleop() {
     swerveJoystickCommand = 
     new SwerveJoystickCommand(

@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.008,
-        "y": 2.736
+        "x": 5.148598451967592,
+        "y": 2.5962764033564802
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.639241803278688,
-        "y": 2.388678278688524
+        "x": 4.570014331227013,
+        "y": 2.2998962045211275
       },
       "isLocked": false,
       "linkedName": "R6"
     },
     {
       "anchor": {
-        "x": 1.582,
-        "y": 0.78
+        "x": 1.4496979890046284,
+        "y": 0.9218135127314804
       },
       "prevControl": {
-        "x": 2.0978483606557377,
-        "y": 1.0201782786885238
+        "x": 1.9241335003477844,
+        "y": 1.1421273331534494
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -126.0
+    "rotation": 54.03957555992522
   },
   "reversed": false,
   "folder": "Bottom Half Paths",

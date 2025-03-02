@@ -76,15 +76,18 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private boolean visionEnabled = false;
 
     public enum DRIVE_MODE {
-        FIELD_ORIENTED,
-        ROBOT_ORIENTED,
-        AUTONOMOUS
+        FIELD_ORIENTED, // always use it
+        ROBOT_ORIENTED, // most likely it's for testing
+        // AUTONOMOUS not used
     }
 
     /**
      * Construct a new {@link SwerveDrivetrain}
      */
     public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
+        
+        LimelightHelpers.setPipelineIndex("limelight-duaalex", 0);
+        
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,
@@ -200,6 +203,79 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             // Disabled Vision
         }
 
+    }
+
+    //******************************  Vision ******************************/
+
+//todo review and testing on v1 before use auto
+    private void visionupdateOdometry_FROMISME(String limelightName) {
+        boolean doRejectUpdate = false;
+
+        LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName); //TODO: test if we need to account for alliance
+        double xyStds = 0.5; //Tune 
+        double degStds = 999999; //
+
+        boolean receivedValidData = LimelightHelpers.getTV(limelightName);
+        PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName); //MegatTag1
+        
+        if(estimate == null) {
+            return;
+        }
+        Pose2d botPose1 = estimate.pose;
+        
+        if(!receivedValidData)
+            doRejectUpdate = true;
+        // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
+        //     doRejectUpdate = true;
+        else if(megaTag2.tagCount == 1 && megaTag2.rawFiducials.length == 1)
+        {
+            if(megaTag2.rawFiducials[0].ambiguity > .7)
+            {
+                doRejectUpdate = true;
+            }
+            if(megaTag2.rawFiducials[0].distToCamera > 3)
+            {
+                doRejectUpdate = true;
+            }
+
+
+
+
+
+
+
+
+
+    
+            SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
+            
+            // 1 target with large area and close to estimated pose
+            if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
+                xyStds = 1.0;
+                degStds = 12;
+            }
+            // 1 target farther away and estimated pose is close
+            else if (megaTag2.avgTagArea > 0.1 && megaTag2.rawFiducials[0].distToCamera < 0.3) {
+                xyStds = 2.0;
+                degStds = 30;
+            }
+        }
+        else if (megaTag2.tagCount >= 2) {
+            xyStds = 0.5;
+            degStds = 6;
+        }
+
+        if(!doRejectUpdate)
+        {
+            poseEstimator.setVisionMeasurementStdDevs(
+              VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
+
+            //poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+            poseEstimator.addVisionMeasurement(
+                megaTag2.pose,
+                megaTag2.timestampSeconds);
+        }
     }
 
     //******************************  Vision ******************************/
