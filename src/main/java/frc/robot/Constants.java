@@ -292,7 +292,7 @@ public final class Constants {
     public static final double kElevatorL3Position = 1.36;      // TODO change later
     public static final double kElevatorL4Position = 2;      // TODO change later
     public static final double kElevatorSpeed = 1.0;           // TODO change later
-    public static final double kElevatorGroundIntake = 0.59;           // TODO change later
+    public static final double kElevatorGroundIntake = 0.562;           // TODO change later
 
 
     public static final double kPElevatorMotor = 4.0; // 3.0 as of 3/1/25
@@ -372,10 +372,9 @@ public final class Constants {
     public static final double kGElevatorPivot = 0; 
 
     public static final double kElevatorPivotStowPosition = 0.01; 
+    public static final double kElevatorPivotSemiStowPosition = 0.11; 
     public static final double kElevatorPivotStationPosition = 0.15; // .0833 //TODO change later
     public static final double kElevatorPivotPositionVertical = 0.23;//0.1 // 0.25
-
-
 
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
@@ -455,7 +454,7 @@ public final class Constants {
     public static final double kWristL2Position = -0.28;
     public static final double kWristL1Position = -0.21;
     public static final double kWristL4Position = 0.708;
-    public static final double kWristGroundIntake = -0.78;
+    public static final double kWristGroundIntake = -0.808;
 
 
     public static final double kMaxPosition = 0.14; //156
