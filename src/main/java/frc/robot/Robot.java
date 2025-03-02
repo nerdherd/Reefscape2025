@@ -50,10 +50,25 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.setBreak(true);
+
+    m_robotContainer.elevatorPivot.setEnabled(false);
+    m_robotContainer.elevator.setEnabled(false);
+    m_robotContainer.intakeWrist.setEnabled(false);
+
+
   }
   
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
+    // m_robotContainer.elevator.setTargetPosition(m_robotContainer.elevator.getPosition());
+    // m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
+
+    m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
+    m_robotContainer.elevator.setTargetPosition(0);
+    m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
+
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -102,6 +117,8 @@ public class Robot extends TimedRobot {
     // m_robotContainer.superSystem.initialize();
     m_robotContainer.swerveDrive.refreshModulePID();
     m_robotContainer.configureBindings_test();
+
+    m_robotContainer.refreshSupersystem();
   }
 
   /** This function is called periodically during test mode. */

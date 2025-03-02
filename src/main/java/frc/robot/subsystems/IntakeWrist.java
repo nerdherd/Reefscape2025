@@ -159,7 +159,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         this.enabled = e;
     }
     
-    public void setPosition(double position) {
+    public void setTargetPosition(double position) {
         //TODO NerdyMath.clamp(
         desiredPosition = position;
         motionMagicRequest.Position = desiredPosition;
@@ -204,7 +204,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public Command setPositionCommand(double position) {
         return Commands.sequence(
-            Commands.runOnce(() -> setPosition(position))
+            Commands.runOnce(() -> setTargetPosition(position))
         );
     }
 

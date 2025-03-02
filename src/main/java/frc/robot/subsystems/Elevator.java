@@ -25,15 +25,15 @@ public class Elevator extends SubsystemBase implements Reportable {
     private final TalonFX elevatorMotor2;
 
     // private final PIDController elevatorPID;
-    private double desiredPosition;
+    private double desiredPosition = 0.0;
     private boolean enabled = false;
     private TalonFXConfigurator motorConfigurator;
     private TalonFXConfigurator motorConfigurator2;
     private MotionMagicVoltage motionMagicVoltage;
     private final Follower followRequest;
     private final NeutralOut brakeRequest;
-    private double ff; 
-    private double pivotAngle = 0.25; // TODO: Change this to 0 when supersystem tuned
+    private double ff = 0.0; 
+    private double pivotAngle = 0.0; // TODO: Change this to 0 when supersystem tuned
     
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
@@ -118,7 +118,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         this.enabled = enabled;
     }
     
-    public void setPosition(double position) {
+    public void setTargetPosition(double position) {
         //TODO NerdyMath.clamp(
         desiredPosition = position;
         motionMagicVoltage.Position = desiredPosition;
@@ -129,9 +129,9 @@ public class Elevator extends SubsystemBase implements Reportable {
     }
 
     public void zeroEncoder() {
-        elevatorMotor.setPosition(0);
-        elevatorMotor2.setPosition(0);
-        desiredPosition = 0;
+        elevatorMotor.setPosition(0.0);
+        elevatorMotor2.setPosition(0.0);
+        desiredPosition = 0.0;
     }
 
     // ****************************** GET METHODS ***************************** //
@@ -153,7 +153,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     }
 
     public Command setPositionCommand(double position) {
-        return Commands.runOnce(() -> setPosition(position));
+        return Commands.runOnce(() -> setTargetPosition(position));
     }
 
     private Command stopCommand() {

@@ -384,7 +384,7 @@ public final class Constants {
     public static final double kElevatorPivotOffSet = 0;
 
     public static final double kEPivotCruiseVelocity = 0.4;//0.25 // 0.5
-    public static final double kElevatorPivotCruiseAcceleration = 0.5;
+    public static final double kElevatorPivotCruiseAcceleration = 0.6; // 0.5
     // public static final double kElevatorPivotJerk = 200.0; // TODO
     public static final double kElevatorPivotGroundIntake = -0.001;
   }

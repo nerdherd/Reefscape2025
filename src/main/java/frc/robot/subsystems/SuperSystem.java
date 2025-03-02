@@ -194,9 +194,9 @@ public class SuperSystem {
         wrist.setEnabled(true);
         elevator.setEnabled(true);
         claw.setEnabled(true);
-        pivot.setTargetPosition(0);
-        elevator.setPosition(0);
-        wrist.setPosition(0);
+        pivot.setTargetPosition(0.0);
+        elevator.setTargetPosition(0.0);
+        wrist.setTargetPosition(0.0);
         claw.setClawPosition(ClawConstants.kClosedPosition);
         claw.setVelocityCommand(0.0);
         isStarted = false;
@@ -225,24 +225,24 @@ public class SuperSystem {
             switch (exeOrder) {
                 case ALL_TOGETHER:
                     pivot.setTargetPosition(pivotAngle);
-                    elevator.setPosition(elevatorPosition);
-                    wrist.setPosition(wristAngle);
+                    elevator.setTargetPosition(elevatorPosition);
+                    wrist.setTargetPosition(wristAngle);
                     break;
     
                 case ELV_PVT_WRT:
-                    elevator.setPosition(elevatorPosition);
+                    elevator.setTargetPosition(elevatorPosition);
                     if(elevatorAtPosition.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         if(pivotAtPosition.getAsBoolean()) {
-                            wrist.setPosition(wristAngle);
+                            wrist.setTargetPosition(wristAngle);
                         }
                     }
                     break;
     
                 case ELV_WRT_PVT:
-                    elevator.setPosition(elevatorPosition);
+                    elevator.setTargetPosition(elevatorPosition);
                     if(elevatorAtPosition.getAsBoolean()) {
-                        wrist.setPosition(wristAngle);
+                        wrist.setTargetPosition(wristAngle);
                         if(wristAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                         }
@@ -252,9 +252,9 @@ public class SuperSystem {
                 case PVT_WRT_ELV:
                     pivot.setTargetPosition(pivotAngle);
                     if(pivotAtPosition.getAsBoolean()) {
-                        wrist.setPosition(wristAngle);
+                        wrist.setTargetPosition(wristAngle);
                         if(wristAtPosition.getAsBoolean()) {
-                            elevator.setPosition(elevatorPosition);
+                            elevator.setTargetPosition(elevatorPosition);
                         }
                     }
                     break;
@@ -262,17 +262,17 @@ public class SuperSystem {
                 case PVT_ELV_WRT:
                     pivot.setTargetPosition(pivotAngle);
                     if(pivotAtPosition.getAsBoolean()) {
-                        elevator.setPosition(elevatorPosition);
+                        elevator.setTargetPosition(elevatorPosition);
                         if(elevatorAtPosition.getAsBoolean()) {
-                            wrist.setPosition(wristAngle);
+                            wrist.setTargetPosition(wristAngle);
                         }
                     }
                     break;
     
                 case WRT_ELV_PVT:
-                    wrist.setPosition(wristAngle);
+                    wrist.setTargetPosition(wristAngle);
                     if(wristAtPosition.getAsBoolean()) {
-                        elevator.setPosition(elevatorPosition);
+                        elevator.setTargetPosition(elevatorPosition);
                         if(elevatorAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                         }
@@ -280,11 +280,11 @@ public class SuperSystem {
                     break;
     
                 case WRT_PVT_ELV:
-                    wrist.setPosition(wristAngle);
+                    wrist.setTargetPosition(wristAngle);
                     if(wristAtPosition.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         if(pivotAtPosition.getAsBoolean()) {
-                            elevator.setPosition(elevatorPosition);
+                            elevator.setTargetPosition(elevatorPosition);
                         }
                     }
                     break;

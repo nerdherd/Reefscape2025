@@ -188,7 +188,7 @@ public class RobotContainer {
       double leftX = -operatorController.getLeftX(); // Left Y (inverted for up = positive)
       if (Math.abs(leftX) > 0.05) {
           double currentAngle = elevator.getPosition();
-          elevator.setPosition(currentAngle + (leftX * Elevator_SPEED * 0.02)); // 20ms loop
+          elevator.setTargetPosition(currentAngle + (leftX * Elevator_SPEED * 0.02)); // 20ms loop
       }
   }, elevator));  
 
@@ -197,7 +197,7 @@ public class RobotContainer {
       double rightY = -operatorController.getRightY(); // getRightY (inverted for up = positive)
       if (Math.abs(rightY) > 0.05) {
           double currentRot = intakeWrist.getPosition();
-          intakeWrist.setPosition(currentRot + (rightY * Wrist_SPEED * 0.02)); // 20ms loop
+          intakeWrist.setTargetPosition(currentRot + (rightY * Wrist_SPEED * 0.02)); // 20ms loop
       }
   }, intakeWrist));
 
@@ -359,5 +359,21 @@ public class RobotContainer {
     swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
     return currentAuto;
   }
+
+
+  public void refreshSupersystem() {
+    // TODO add for Wrist and possibly pivot
+    elevator.setPivotAngle(0);
+
+
+    elevatorPivot.setTargetPosition(0);
+    elevator.setTargetPosition(0);
+    intakeWrist.setTargetPosition(0);
+
+    elevatorPivot.setEnabled(true);
+    elevator.setEnabled(true);
+    intakeWrist.setEnabled(true);
+  }
+
   
 }
