@@ -74,7 +74,7 @@ public class SuperSystem {
 
     public Command intakeCoral() {
         return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition),
+            claw.setClawPositionCommand(ClawConstants.kCoralOpenPosition),
             claw.setVelocityCommand(RollerConstants.kIntakePower),
             Commands.waitSeconds(2), //taking coral
             claw.setClawPositionCommand(ClawConstants.kCoralHoldPosition),
@@ -95,7 +95,7 @@ public class SuperSystem {
 
     public Command intakeAlgae() {
         return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition),
+            claw.setClawPositionCommand(ClawConstants.kAlgaeOpenPosition),
             claw.setVelocityCommand(RollerConstants.kIntakePower),
             Commands.waitSeconds(2), // taking algae
             claw.setClawPositionCommand(ClawConstants.kAlgaeHoldPosition),
