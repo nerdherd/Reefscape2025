@@ -38,6 +38,7 @@ import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.Bottom2Piece;
+import frc.robot.commands.autos.PathOnlyBottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -66,7 +67,8 @@ public class RobotContainer {
   public IntakeWrist intakeWrist;
   public SuperSystem superSystem;
 
-  public Bottom2Piece bottom2Piece;
+  private Bottom2Piece bottom2Piece;
+  private PathOnlyBottom2Piece pathOnlyBottom2Piece;
 
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
@@ -121,15 +123,6 @@ public class RobotContainer {
     // elevatorPivot.setEnabledCommand(USE_PIVOT);
     // intakeV2.setEnabledCommand(USE_INTAKE);
 
-/*  TODO: Fix Bottom2Piece to take in IntakeV2
-    try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, intake, elevator, "Bottom2Piece");
-    } catch (IOException e) {
-      DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
-    } catch (ParseException e) {
-      DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
-    }
-*/
     initShuffleboard();
     initAutoChoosers();
 
@@ -329,6 +322,15 @@ public class RobotContainer {
   }
   
   private void initAutoChoosers() {
+
+    try { // ide displayed error fix
+      bottom2Piece = new Bottom2Piece(swerveDrive, intakeV2, elevator, "Bottom2Piece");
+      pathOnlyBottom2Piece = new PathOnlyBottom2Piece(swerveDrive, "PathOnlyBottom2Piece");
+    } catch (Exception e) {
+      DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
+      return;
+    } 
+
     try { // fix for vendordeps not importing
     PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
 
@@ -340,6 +342,7 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    autoChooser.addOption("Path Only Bottom 2 Piece", pathOnlyBottom2Piece);
     // if (paths.contains("S4R3")) {
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
@@ -368,7 +371,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     Command currentAuto = autoChooser.getSelected();
     
-    swerveDrive.setDriveMode(DRIVE_MODE.AUTONOMOUS);
+    swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
     return currentAuto;
   }
 
