@@ -63,10 +63,12 @@ public class Robot extends TimedRobot {
     // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
     // m_robotContainer.elevator.setTargetPosition(m_robotContainer.elevator.getPosition());
     // m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
-
-    m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
-    m_robotContainer.elevator.setTargetPosition(0);
-    m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
+    m_robotContainer.elevator.stopMotion();
+    m_robotContainer.elevatorPivot.stopMotion();
+    m_robotContainer.intakeWrist.stopMotion();
+    // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
+    //m_robotContainer.elevator.setTargetPosition(0);
+    //m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
 
   }
 
@@ -102,6 +104,8 @@ public class Robot extends TimedRobot {
     }
     m_robotContainer.configureBindings_teleop();
     m_robotContainer.initDefaultCommands_teleop();
+
+    m_robotContainer.refreshSupersystem();
   }
 
   /** This function is called periodically during operator control. */
