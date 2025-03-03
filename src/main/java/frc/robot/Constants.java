@@ -362,7 +362,7 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 50.0; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 60.0; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 1V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
@@ -374,7 +374,7 @@ public final class Constants {
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
     public static final double kElevatorPivotStationPosition = 0.15; // .0833 //TODO change later
-    public static final double kElevatorPivotPositionVertical = 0.23;//0.1 // 0.25
+    public static final double kElevatorPivotPositionVertical = 0.24;//0.1 // 0.25
 
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
@@ -466,19 +466,19 @@ public final class Constants {
 
   public static final class SuperSystemConstants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
-      Stow(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
-      SemiStow(ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.4, -0.4),
-      GroundIntake(ExecutionOrder.PVT_WRT_ELV, 0.01, 0.562, -0.808, -0.4),
-      Station(ExecutionOrder.WRT_PVT_ELV, 0.15, 0.75, -0.89, -0.4),
-      Processor(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
-      Net(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
-      Cage(ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
-      L1(ExecutionOrder.WRT_PVT_ELV, 0.23, 0.0, -0.21, -0.4),
-      L2(ExecutionOrder.WRT_PVT_ELV, 0.23, 0.0, -0.28, -0.4),
-      L3(ExecutionOrder.WRT_PVT_ELV, 0.23, 1.36, -0.28, -0.4),
-      L4(ExecutionOrder.WRT_PVT_ELV, 0.23, 3.15, -0.318, -0.4),
-      L2L3(ExecutionOrder.WRT_PVT_ELV, 0.23, 0.5, -0.318, -0.4),
-      L3L4(ExecutionOrder.WRT_PVT_ELV, 0.23, 1.5, -0.318, -0.4),
+      Stow(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      SemiStow(     ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.4, -0.4),
+      GroundIntake( ExecutionOrder.PVT_WRT_ELV, 0.01, 0.562, -0.808, -0.4),
+      Station(      ExecutionOrder.WRT_PVT_ELV, 0.15, 0.75, -0.89, -0.4),
+      Processor(    ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      Net(          ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      Cage(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0.05, -0.1, -0.4),
+      L1(           ExecutionOrder.WRT_PVT_ELV, 0.23, 0.0, -0.21, -0.4),
+      L2(           ExecutionOrder.WRT_PVT_ELV, 0.23, 0.0, -0.28, -0.4),
+      L3(           ExecutionOrder.WRT_PVT_ELV, 0.23, 1.36, -0.28, -0.4),
+      L4(           ExecutionOrder.WRT_PVT_ELV, 0.23, 3.15, -0.318, -0.4),
+      L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.23, 0.5, -0.318, -0.4),
+      L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.23, 1.5, -0.318, -0.4),
       ;
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
       public ExecutionOrder executionOrder;
