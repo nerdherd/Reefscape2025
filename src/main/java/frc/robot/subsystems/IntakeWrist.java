@@ -64,7 +64,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         configurePID(motorConfigs);
         
-        motor.setNeutralMode(NeutralModeValue.Brake);
+        motor.setNeutralMode(NeutralModeValue.Coast);
         zeroEncoder();
     }
 

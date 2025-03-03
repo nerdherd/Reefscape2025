@@ -128,7 +128,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfiguration.CurrentLimits.StatorCurrentLimitEnable = false;
         pivotConfiguration.Audio.AllowMusicDurDisable = true;
-        pivotConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        pivotConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         StatusCode statusCode = pivotConfigurator.apply(pivotConfiguration);
         if (!statusCode.isOK()){
@@ -150,7 +150,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimitEnable = false;
         pivotConfigurationRight.Audio.AllowMusicDurDisable = true;
-        pivotConfigurationRight.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        pivotConfigurationRight.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
         StatusCode RightstatusCode = pivotConfiguratorRight.apply(pivotConfigurationRight);
         if (!RightstatusCode.isOK()){
