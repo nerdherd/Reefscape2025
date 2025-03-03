@@ -162,13 +162,13 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
 
     public Command stopRollerCommand() { //TODO
         return Commands.sequence(
-            Commands.runOnce(() -> rollerMotor.setControl(brakeRequest))
+            Commands.runOnce(() -> rollerMotor.setVoltage(0))
         );
     }
 
      // ****************************** NAMED COMMANDS ****************************** //
      
-    public Command intakeAlgae() {
+    /*public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             Commands.parallel(
@@ -214,7 +214,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
             setClawPositionCommand(ClawConstants.kStowPosition),
             setVelocityCommand(0)  
         );
-    }
+    }*/
 
     @Override
     public void reportToSmartDashboard(LOG_LEVEL priority) {       
