@@ -154,24 +154,9 @@ public class SuperSystem {
     }
 
     public Command moveToProcessor() { //TODO
+        // note: we may not need this one, because the intake action could cover it.
         return moveTo(NamedPositions.Processor);
-    }    
-
-    public Command moveTogroundIntake() {
-        return Commands.sequence(
-            preExecute(),
-            //wrist.setPositionCommand(WristConstants.), //TODO pre-position
-            execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
-            V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorGroundIntake, WristConstants.kIntermediatePosition),
-            
-            wrist.setPositionCommand(WristConstants.kWristGroundIntake),
-            intakeCoral(),
-            Commands.race(
-                Commands.waitSeconds(5),
-                stopRoller()
-            )
-        );
-    }
+    } 
 
     public Command moveToStation() {
         return Commands.sequence(
@@ -191,17 +176,50 @@ public class SuperSystem {
 
     public Command moveToGroundIntake()
     {
-        return Commands.none(); //todo
+        return Commands.sequence(
+            preExecute(),
+            //wrist.setPositionCommand(WristConstants.), //TODO pre-position
+            execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotGroundIntake, ElevatorConstants.kElevatorGroundIntake, WristConstants.kWristGroundIntake),
+            
+            wrist.setPositionCommand(WristConstants.kWristGroundIntake)/* ,
+            //todo
+            if()
+            intakeCoral(),
+            else
+            intakeAlage(),
+            )*/
+        );
     }
 
     public Command moveToL3L4()
     {
-        return Commands.none(); //todo
+        return Commands.sequence(
+            preExecute(),
+            //wrist.setPositionCommand(WristConstants.), //TODO pre-position
+            execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL3L4Position, WristConstants.kL234AlagePosition),
+            
+            wrist.setPositionCommand(WristConstants.kL234AlagePosition)/* ,
+            //todo
+            intakeAlage(),
+            )*/
+        );
     }
 
     public Command moveToL2L3()
     {
-        return Commands.none();//todo
+        return Commands.sequence(
+            preExecute(),
+            //wrist.setPositionCommand(WristConstants.), //TODO pre-position
+            execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2L3Position, WristConstants.kL234AlagePosition),
+            
+            wrist.setPositionCommand(WristConstants.kL234AlagePosition)/* ,
+            //todo            
+            intakeAlage(),
+            )*/
+        );
     }
 
     public Command moveToL1() {

@@ -316,7 +316,7 @@ public class RobotContainer {
     // .onTrue(superSystem.closeClaw());
 
     driverController.buttonDown()
-    .onTrue(superSystem.moveTogroundIntake());
+    .onTrue(superSystem.moveToGroundIntake());
     driverController.buttonUp()
     .onTrue(superSystem.moveToSemiStow());
   }
