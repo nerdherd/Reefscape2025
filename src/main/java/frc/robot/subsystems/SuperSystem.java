@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ClawConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.V1ElevatorConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
@@ -72,19 +73,45 @@ public class SuperSystem {
     }
 
     public Command intakeCoral() {
-        return claw.intakeCoral();
+        return Commands.sequence(
+            claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition),
+            claw.setVelocityCommand(RollerConstants.kIntakePower),
+            Commands.waitSeconds(2), //taking coral
+            claw.setClawPositionCommand(ClawConstants.kCoralHoldPosition),
+            Commands.waitSeconds(0.1),
+            claw.setVelocityCommand(-0.01) // holding coral
+        );
     }
 
     public Command outtakeCoral() {
-        return claw.outtakeCoral();
+        return Commands.sequence(
+            claw.setVelocityCommand(RollerConstants.kOuttakePower),
+            Commands.waitSeconds(0.5),
+            claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition),
+            Commands.waitSeconds(0.5),
+            claw.setVelocityCommand(0)
+        );
     }
 
     public Command intakeAlgae() {
-        return claw.intakeAlgae();
+        return Commands.sequence(
+            claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition),
+            claw.setVelocityCommand(RollerConstants.kIntakePower),
+            Commands.waitSeconds(2), // taking algae
+            claw.setClawPositionCommand(ClawConstants.kAlgaeHoldPosition),
+            Commands.waitSeconds(0.1),
+            claw.setVelocityCommand(-0.01) // holding algae
+        );
     }
 
     public Command outtakeAlgae() {
-        return claw.outtakeAlgae();
+        return Commands.sequence(
+            claw.setVelocityCommand(RollerConstants.kOuttakePower),
+            Commands.waitSeconds(0.5),
+            claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition),
+            Commands.waitSeconds(0.5),
+            claw.setVelocityCommand(0)
+        );
     }
 
     public Command moveTo(NamedPositions position) {
@@ -116,15 +143,15 @@ public class SuperSystem {
     }
 
     public Command moveToCage() { //TODO
-        return Commands.none();
+        return moveTo(NamedPositions.Cage);
     }
 
     public Command moveToNet() { //TODO
-        return Commands.none();
+        return moveTo(NamedPositions.Net);
     }
 
-    public Command moveToProcs() { //TODO
-        return Commands.none();
+    public Command moveToProcessor() { //TODO
+        return moveTo(NamedPositions.Processor);
     }    
 
     public Command moveTogroundIntake() {
@@ -155,6 +182,21 @@ public class SuperSystem {
                 stopRoller()
             )
         );
+    }
+
+    public Command moveToGroundIntake()
+    {
+        return Commands.none(); //todo
+    }
+
+    public Command moveToL3L4()
+    {
+        return Commands.none(); //todo
+    }
+
+    public Command moveToL2L3()
+    {
+        return Commands.none();//todo
     }
 
     public Command moveToL1() {
@@ -188,7 +230,7 @@ public class SuperSystem {
     );
     }
 
-    public Command moveToL4() {
+    public Command moveToL4() { // todo: need to measure the height before to run
     return Commands.sequence(
         preExecute(),
         execute(ExecutionOrder.WRT_PVT_ELV,10.0,

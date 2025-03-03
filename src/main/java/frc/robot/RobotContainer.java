@@ -183,92 +183,102 @@ public class RobotContainer {
       }
   }, elevatorPivot));
 
-  double Elevator_SPEED = 0.3;// Meters per second
-    elevator.setDefaultCommand(Commands.run(() -> {
-      double leftX = -operatorController.getLeftX(); // Left Y (inverted for up = positive)
-      if (Math.abs(leftX) > 0.05) {
-          double currentAngle = elevator.getPosition();
-          elevator.setTargetPosition(currentAngle + (leftX * Elevator_SPEED * 0.02)); // 20ms loop
-      }
-  }, elevator));  
-
   double Wrist_SPEED = 20;// Degree  per second
     intakeWrist.setDefaultCommand(Commands.run(() -> {
-      double rightY = -operatorController.getRightY(); // getRightY (inverted for up = positive)
-      if (Math.abs(rightY) > 0.05) {
+      double leftX = -operatorController.getLeftX(); // leftX (inverted for up = positive)
+      if (Math.abs(leftX) > 0.05) {
           double currentRot = intakeWrist.getPosition();
-          intakeWrist.setTargetPosition(currentRot + (rightY * Wrist_SPEED * 0.02)); // 20ms loop
+          intakeWrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
       }
   }, intakeWrist));
+
+  double Elevator_SPEED = 0.3;// Meters per second
+    elevator.setDefaultCommand(Commands.run(() -> {
+      double rightY = -operatorController.getRightY(); // rightY Y (inverted for up = positive)
+      if (Math.abs(rightY) > 0.05) {
+          double currentAngle = elevator.getPosition();
+          elevator.setTargetPosition(currentAngle + (rightY * Elevator_SPEED * 0.02)); // 20ms loop
+      }
+  }, elevator));  
 
 }
 
   public void initDefaultCommands_test() {}
 
   public void configureBindings_teleop() {
+    ///////////////////////
     // Driver bindings
+    //////////////////////
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
+    driverController.controllerRight()
+    .onTrue(superSystem.moveToStow()); // todo remove it
+
+    driverController.dpadUp()
+    .onTrue(superSystem.moveToL4());
+
+    driverController.dpadRight()
+    .onTrue(superSystem.moveToL3());
+
+    driverController.dpadLeft()
+    .onTrue(superSystem.moveToL2());
+
+    driverController.dpadDown()
+    .onTrue(superSystem.moveToL1());
+
+    driverController.triggerLeft()
+    .onTrue(superSystem.outtakeCoral());
+    //.onFalse(intakeV2.stopRollerCommand());// TODO
+
+    driverController.bumperLeft()
+    .onTrue(superSystem.outtakeAlgae());
+    //.onFalse(intakeV2.stopRollerCommand());// TODO
+
+    //////////////////////
+    // operator bindings
+    //////////////////////
+
     operatorController.dpadUp()
-    .and(operatorController.dpadRight().negate())
-    .onTrue(superSystem.moveTo(NamedPositions.L4));
+      .onTrue(superSystem.moveToNet());
 
     operatorController.dpadRight()
-    .and(operatorController.dpadUp().negate())
-    .onTrue(superSystem.moveTo(NamedPositions.L3));
+    .onTrue(superSystem.moveToL3L4());
 
     operatorController.dpadLeft()
-    .and(operatorController.dpadDown().negate())
-    .onTrue(superSystem.moveTo(NamedPositions.L2));
+    .onTrue(superSystem.moveToL2L3());
 
     operatorController.dpadDown()
-    .and(operatorController.dpadLeft().negate())
-    .onTrue(superSystem.moveTo(NamedPositions.L1));
+    .onTrue(superSystem.moveToProcessor());
 
-    operatorController.dpadRight()
-    .and(operatorController.dpadUp())
-    .onTrue(superSystem.moveTo(NamedPositions.L3L4));
-
-    operatorController.dpadLeft()
-    .and(operatorController.dpadDown())
-    .onTrue(superSystem.moveTo(NamedPositions.L2L3));
-
-
-    operatorController.controllerLeft()
-      .onTrue(superSystem.moveTo(NamedPositions.Cage));
-
-      operatorController.controllerRight()
-      .onTrue(superSystem.moveTo(NamedPositions.Net));
+    operatorController.controllerRight()
+      .onTrue(superSystem.moveToCage()); 
     
       operatorController.buttonUp()
-      .whileTrue(superSystem.moveTo(NamedPositions.Station));
+      .whileTrue(superSystem.moveToStation());
       
-      operatorController.buttonLeft()
-      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
-  
       operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(NamedPositions.Processor));
+      .onTrue(superSystem.moveToSemiStow());
 
       operatorController.buttonDown()
-      .onTrue(superSystem.moveTo(NamedPositions.Stow));
+      .onTrue(superSystem.moveToStow());
 
-      operatorController.triggerLeft()
-    .whileTrue(intakeV2.intakeCoral())
-    .onFalse(intakeV2.stopClawCommand()); // TODO
+      operatorController.buttonLeft()
+      .onTrue(superSystem.moveToGroundIntake());
 
-    operatorController.triggerRight()
-    .whileTrue(intakeV2.outtakeCoral())
-    .onFalse(intakeV2.stopClawCommand());// TODO
 
-    operatorController.bumperLeft()
-    .whileTrue(intakeV2.intakeAlgae())
-    .onFalse(intakeV2.stopClawCommand()); // TODO
+      ////////
+      /// Many things need to be done!!!
+      operatorController.triggerRight()
+      .onTrue(superSystem.intakeCoral());
+      // .onFalse(intakeV2.stopClawCommand()); // TODO
 
+    // todo: use a trigger to do all motors' position and intake algae actions
+    //(intake from reef, and from ground)
     operatorController.bumperRight()
-    .whileTrue(intakeV2.outtakeAlgae())
-    .onFalse(intakeV2.stopClawCommand());// TODO
+    .onTrue(superSystem.intakeAlgae());
+    // .onFalse(intakeV2.stopClawCommand()); // TODO
   }
 
 
@@ -295,20 +305,22 @@ public class RobotContainer {
     .onTrue(superSystem.moveToStation());
     operatorController.buttonDown()
     .onTrue(superSystem.moveToStow());
-    
-    operatorController.bumperLeft()
-    .onTrue(superSystem.intakeCoral());
-    operatorController.triggerLeft()
-    .onTrue(superSystem.outtakeCoral());
-    operatorController.bumperRight()
-    .onTrue(superSystem.intakeAlgae());
-    operatorController.triggerRight()
-    .onTrue(superSystem.outtakeAlgae());
-
-    operatorController.buttonLeft()
-    .onTrue(superSystem.stopRoller());
     operatorController.buttonRight()
-    .onTrue(superSystem.closeClaw());
+    .onTrue(superSystem.moveToSemiStow());
+    
+    // operatorController.bumperLeft()
+    // .onTrue(superSystem.intakeCoral());
+    // operatorController.triggerLeft()
+    // .onTrue(superSystem.outtakeCoral());
+    // operatorController.bumperRight()
+    // .onTrue(superSystem.intakeAlgae());
+    // operatorController.triggerRight()
+    // .onTrue(superSystem.outtakeAlgae());
+
+    // operatorController.buttonLeft()
+    // .onTrue(superSystem.stopRoller());
+    // operatorController.buttonRight()
+    // .onTrue(superSystem.closeClaw());
 
     driverController.buttonDown()
     .onTrue(superSystem.moveTogroundIntake());
