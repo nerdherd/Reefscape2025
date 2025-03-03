@@ -175,12 +175,12 @@ public class SuperSystem {
             execute(ExecutionOrder.WRT_PVT_ELV, 10.0, 
             V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition),
             
-            wrist.setPositionCommand(WristConstants.kStationPosition),
+            wrist.setPositionCommand(WristConstants.kStationPosition)/* ,
             intakeCoral(),
             Commands.race(
                 Commands.waitSeconds(5),
                 stopRoller()
-            )
+            )*/
         );
     }
 
