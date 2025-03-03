@@ -89,6 +89,7 @@ public class SuperSystem {
 
     public Command moveTo(NamedPositions position) {
         return Commands.sequence(
+            preExecute(),
             execute(position.executionOrder, 10.0, 
             position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
             
@@ -98,6 +99,7 @@ public class SuperSystem {
 
     public Command moveToStow() {
         return Commands.sequence(
+            preExecute(),
             execute(ExecutionOrder.WRT_ELV_PVT, 10.0, 
             V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition),
             
@@ -107,6 +109,7 @@ public class SuperSystem {
 
     public Command moveToSemiStow() {
         return Commands.sequence(
+            preExecute(),
             execute(ExecutionOrder.WRT_ELV_PVT, 10.0, 
             V1ElevatorConstants.kElevatorPivotSemiStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition)
         );
@@ -126,6 +129,7 @@ public class SuperSystem {
 
     public Command moveTogroundIntake() {
         return Commands.sequence(
+            preExecute(),
             execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
             V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorGroundIntake, WristConstants.kIntermediatePosition),
             
@@ -140,6 +144,7 @@ public class SuperSystem {
 
     public Command moveToStation() {
         return Commands.sequence(
+            preExecute(),
             execute(ExecutionOrder.WRT_PVT_ELV, 10.0, 
             V1ElevatorConstants.kElevatorPivotStationPosition, ElevatorConstants.kElevatorStationPosition, WristConstants.kIntermediatePosition),
             
@@ -154,6 +159,7 @@ public class SuperSystem {
 
     public Command moveToL1() {
         return Commands.sequence(
+            preExecute(),
             execute(ExecutionOrder.WRT_PVT_ELV,10.0,
             V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL1Position,WristConstants.kIntermediatePosition),
 
@@ -164,6 +170,7 @@ public class SuperSystem {
 
     public Command moveToL2() {
         return Commands.sequence(
+            preExecute(),
             execute(ExecutionOrder.WRT_PVT_ELV, 10.0, 
             V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2Position, WristConstants.kIntermediatePosition),
             
@@ -173,6 +180,7 @@ public class SuperSystem {
 
     public Command moveToL3() {
     return Commands.sequence(
+        preExecute(),
         execute(ExecutionOrder.WRT_PVT_ELV,10.0,
         V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL3Position,WristConstants.kIntermediatePosition),
 
@@ -182,6 +190,7 @@ public class SuperSystem {
 
     public Command moveToL4() {
     return Commands.sequence(
+        preExecute(),
         execute(ExecutionOrder.WRT_PVT_ELV,10.0,
         V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL4Position,WristConstants.kIntermediatePosition),
 
@@ -207,6 +216,18 @@ public class SuperSystem {
         pivot.setElevatorLength(elevator.getPosition()); 
         elevator.setPivotAngle(curPivotAngle);
         wrist.setPivotAngle(curPivotAngle);
+    }
+
+    public Command preExecute()
+    {
+        return Commands.runOnce(()-> {
+            pivot.stopMotion();
+            elevator.stopMotion();
+            wrist.stopMotion();
+            pivot.setTargetPosition(pivot.getPosition());
+            elevator.setTargetPosition(elevator.getPosition());
+            wrist.setTargetPosition(wrist.getPosition());
+        }, pivot, elevator, wrist);
     }
 
     public Command execute(

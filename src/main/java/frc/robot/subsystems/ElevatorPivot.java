@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -127,6 +128,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfiguration.CurrentLimits.StatorCurrentLimitEnable = false;
         pivotConfiguration.Audio.AllowMusicDurDisable = true;
+        pivotConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         StatusCode statusCode = pivotConfigurator.apply(pivotConfiguration);
         if (!statusCode.isOK()){
@@ -148,6 +150,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimitEnable = false;
         pivotConfigurationRight.Audio.AllowMusicDurDisable = true;
+        pivotConfigurationRight.MotorOutput.NeutralMode = NeutralModeValue.Brake;
 
         StatusCode RightstatusCode = pivotConfiguratorRight.apply(pivotConfigurationRight);
         if (!RightstatusCode.isOK()){
@@ -178,6 +181,11 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void stopMotion() {
+        pivotMotor.setControl(brakeRequest);
+        pivotMotorRight.setControl(brakeRequest);
     }
 
     public void setTargetPosition(double position) {

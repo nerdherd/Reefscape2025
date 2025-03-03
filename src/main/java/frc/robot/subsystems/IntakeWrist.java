@@ -27,9 +27,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private final TalonFXConfigurator motorConfigurator;
     private Pigeon2 pigeon;
 
-
-
-
     private final MotionMagicVoltage motionMagicRequest; // Was 0 during initialization
     private final NeutralOut brakeRequest = new NeutralOut();
 
@@ -46,9 +43,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motorConfigurator = motor.getConfigurator();
         
         // TODO: Took out immediate stow to work on Wrist tuning
-        
-
-        
 
         if(V1) {
             // pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
@@ -157,6 +151,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public void setEnabled(boolean e) {
         this.enabled = e;
+    }
+
+    public void stopMotion() {
+        motor.setControl(brakeRequest);
     }
     
     public void setTargetPosition(double position) {

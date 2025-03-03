@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -31,7 +32,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     private TalonFXConfigurator motorConfigurator2;
     private MotionMagicVoltage motionMagicVoltage;
     private final Follower followRequest;
-    private final NeutralOut brakeRequest;
+    private final NeutralOut brakeRequest = new NeutralOut();;
     private double ff = 0.0; 
     private double pivotAngle = 0.0; // TODO: Change this to 0 when supersystem tuned
     
@@ -39,7 +40,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
         motionMagicVoltage = new MotionMagicVoltage(0);
-        brakeRequest = new NeutralOut();
+        
         elevatorMotor.setPosition(0.0);
 
         motorConfigurator = elevatorMotor.getConfigurator();
@@ -62,6 +63,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false; // TODO: change
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 45;
         motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+        motorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         motorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ElevatorConstants.kElevatorCruiseVelocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
@@ -85,6 +87,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs2.CurrentLimits.SupplyCurrentLimitEnable = false; // TODO: change
         motorConfigs2.CurrentLimits.SupplyCurrentLowerLimit = 45;
         motorConfigs2.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+        motorConfigs2.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         motorConfigs2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         motorConfigs2.MotionMagic.MotionMagicCruiseVelocity =  ElevatorConstants.kElevatorCruiseVelocity;
         motorConfigs2.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
@@ -116,6 +119,11 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void stopMotion() {
+        elevatorMotor.setControl(brakeRequest);
+        elevatorMotor2.setControl(brakeRequest);
     }
     
     public void setTargetPosition(double position) {
