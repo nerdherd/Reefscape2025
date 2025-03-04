@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9702527632345281,
-        "y": 2.505135543961699
+        "x": 2.749597378970118,
+        "y": 1.7410919615867981
       },
       "isLocked": false,
       "linkedName": "R7"
@@ -20,8 +20,8 @@
         "y": 0.78
       },
       "prevControl": {
-        "x": 2.524009667583131,
-        "y": 1.6147138863963333
+        "x": 2.4564278815779765,
+        "y": 1.5335706926756014
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -126.0
+    "rotation": -125.96938417079974
   },
   "reversed": false,
   "folder": "Bottom Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 59.99999999999999
+    "rotation": -119.40586920384376
   },
   "useDefaultConstraints": true
 }
