@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveDriveConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyLine;
@@ -86,7 +87,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      */
     public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
         
-        LimelightHelpers.setPipelineIndex("limelight-duaalex", 0);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightHighLeftName, 0);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightHighLeftName, 0);
         
         frontLeft = new SwerveModule(
             kFLDriveID,
@@ -195,8 +197,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             // visionupdateOdometry("limelight-awesome",robotRotation);
             // visionupdateOdometry("limelight-zzzzach",robotRotation);
 
-            visionupdateOdometry("limelight-duaalex");
-       
+            visionupdateOdometry(VisionConstants.kLimelightLowLeftName);
+            visionupdateOdometry(VisionConstants.kLimelightLowRightName);      
 
     }
 
