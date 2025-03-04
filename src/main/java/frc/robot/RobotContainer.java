@@ -138,7 +138,7 @@ public class RobotContainer {
   }
 
   public static boolean IsRedSide() {
-    
+
     return isRedSide;
   }
 
@@ -234,7 +234,7 @@ public class RobotContainer {
     //.onFalse(intakeV2.stopRollerCommand());// TODO
 
     //////////////////////
-    // operator bindings
+    // Operator bindings
     //////////////////////
 
     operatorController.dpadUp()
@@ -403,7 +403,6 @@ public class RobotContainer {
   public void refreshSupersystem() {
     // TODO add for Wrist and possibly pivot
     elevator.setPivotAngle(0);
-
 
     elevatorPivot.setTargetPosition(0);
     elevator.setTargetPosition(0);

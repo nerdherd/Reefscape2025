@@ -122,11 +122,10 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
     private void setVelocity(double velocity) {
         // desiredVelocity = velocity;
         // velocityRequest.Velocity = velocity;
-        if(velocity == 0.0) {
-            voltage = 0.0;
-            return;
-        }
-        voltage = velocity < 0.0 ? -2.0 : 2.0;
+        if (velocity == 0.0) voltage = 0.0;
+        else if (velocity < 0.0) voltage = -2.0;
+        else voltage = 2.0;
+        // voltage = velocity == 0.0 ? 0.0 : (velocity < 0.0 ? -2.0 : 2.0);
     }
 
     public void setClawPosition(double position){

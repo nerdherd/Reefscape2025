@@ -57,6 +57,7 @@ public class SuperSystem {
         //(after auto/teleop mode, During disable mode, motor disabled and applying brake)
     }
 
+    // subsystems
     public Command zeroEncoders() {
         return Commands.runOnce(()-> {
             pivot.zeroEncoder();
@@ -85,6 +86,7 @@ public class SuperSystem {
         );
     }
 
+    // coral
     public Command intakeCoral() {
         return Commands.sequence(
             claw.setClawPositionCommand(
@@ -111,6 +113,7 @@ public class SuperSystem {
         );
     }
 
+    // algae
     public Command intakeAlgae() {
         return Commands.sequence(
             claw.setClawPositionCommand(ClawConstants.kAlgaeOpenPosition),
@@ -133,18 +136,17 @@ public class SuperSystem {
         );
     }
 
+    // movement
     public Command moveTo(NamedPositions position) {
-        currentPosition = position;
-        if(position.intermediateWristPosition == position.finalWristPosition) {
+        // currentPosition = position;
+        if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
                 execute(position.executionOrder, 10.0, 
                 position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
                               
             );
-        }
-
-        return Commands.sequence(
+        else return Commands.sequence(
             preExecute(),
             execute(position.executionOrder, 10.0, 
             position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
@@ -173,6 +175,7 @@ public class SuperSystem {
         );
     }
 
+    // game elements
     public Command moveToCage() { //TODO
         return moveTo(NamedPositions.Cage);
     }
@@ -213,8 +216,7 @@ public class SuperSystem {
         );
     }
 
-    public Command moveToL3L4()
-    {
+    public Command moveToL3L4() {
         return Commands.sequence(
             preExecute(),
             //wrist.setPositionCommand(WristConstants.), //TODO pre-position
@@ -293,6 +295,7 @@ public class SuperSystem {
         wrist.setEnabled(true);
         elevator.setEnabled(true);
         claw.setEnabled(true);
+        
         pivot.setTargetPosition(0.0);
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(0.0);
@@ -303,7 +306,7 @@ public class SuperSystem {
 
     public void updateDependencies() { 
         double curPivotAngle = pivot.getPosition();
-        pivot.setElevatorLength(elevator.getPosition()); 
+        // pivot.setElevatorLength(elevator.getPosition()); // TODO fake
         elevator.setPivotAngle(curPivotAngle);
         wrist.setPivotAngle(curPivotAngle);
     }
@@ -320,12 +323,11 @@ public class SuperSystem {
         }, pivot, elevator, wrist);
     }
 
-    public Command execute(
-        ExecutionOrder exeOrder, double timeout, 
-        double pivotAngle, double elevatorPosition, double wristAngle
-    ) {
+    public Command execute(ExecutionOrder exeOrder, double timeout, 
+                           double pivotAngle, double elevatorPosition, double wristAngle)
+    {
         return Commands.runEnd(() -> {
-            if(!isStarted) {
+            if (!isStarted) {
                 isStarted = true;
                 startTime = Timer.getFPGATimestamp();
                 wristSet = false;
@@ -333,9 +335,10 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            elevatorWithinRange = elevator.atPosition();
-            if(pivotAngle == V1ElevatorConstants.kElevatorPivotStowPosition) {
+            if (pivotAngle == V1ElevatorConstants.kElevatorPivotStowPosition) {
                 elevatorWithinRange = elevator.atPositionWide();
+            } else {
+                elevatorWithinRange = elevator.atPosition();
             }
             
             // TODO move this functionality to each subsystem
@@ -354,10 +357,10 @@ public class SuperSystem {
                 case ELV_PVT_WRT:
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if(elevatorAtPosition.getAsBoolean()) {
+                    if (elevatorAtPosition.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if(pivotAtPosition.getAsBoolean()) {
+                        if (pivotAtPosition.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -367,10 +370,10 @@ public class SuperSystem {
                 case ELV_WRT_PVT:
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if(elevatorAtPosition.getAsBoolean()) {
+                    if (elevatorAtPosition.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if(wristAtPosition.getAsBoolean()) {
+                        if (wristAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -380,10 +383,10 @@ public class SuperSystem {
                 case PVT_WRT_ELV:
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if(pivotAtPosition.getAsBoolean()) {
+                    if (pivotAtPosition.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if(wristAtPosition.getAsBoolean()) {
+                        if (wristAtPosition.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -393,10 +396,10 @@ public class SuperSystem {
                 case PVT_ELV_WRT:
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if(pivotAtPosition.getAsBoolean()) {
+                    if (pivotAtPosition.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if(elevatorAtPosition.getAsBoolean()) {
+                        if (elevatorAtPosition.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -406,10 +409,10 @@ public class SuperSystem {
                 case WRT_ELV_PVT:
                     wrist.setTargetPosition(wristAngle);
                     wristSet = true;
-                    if(wristAtPosition.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if(elevatorAtPosition.getAsBoolean()) {
+                        if (elevatorAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -419,10 +422,10 @@ public class SuperSystem {
                 case WRT_PVT_ELV:
                     wrist.setTargetPosition(wristAngle);
                     wristSet = true;
-                    if(wristAtPosition.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if(pivotAtPosition.getAsBoolean()) {
+                        if (pivotAtPosition.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -440,9 +443,13 @@ public class SuperSystem {
             elevatorSet = false;
         }
         ).until(
-            () -> ((pivot.atPosition() && pivotSet && elevatorWithinRange && elevatorSet && wrist.atPosition() && wristSet) || (Timer.getFPGATimestamp() - startTime >= timeout))
-        )
-        ;
+            () -> (
+                (pivot.atPosition() && pivotSet
+                && elevatorWithinRange && elevatorSet
+                && wrist.atPosition() && wristSet)
+                || (Timer.getFPGATimestamp() - startTime >= timeout)
+            )
+        );
     }
 
 }

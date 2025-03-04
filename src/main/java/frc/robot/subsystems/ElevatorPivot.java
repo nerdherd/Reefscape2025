@@ -207,6 +207,12 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         desiredPosition - 0.01,
         desiredPosition + 0.01);
     }
+    
+    public boolean atPositionWide() {
+        return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
+        desiredPosition - 0.02,
+        desiredPosition + 0.02);
+    }
 
     // private void setPositionDegrees(double positionDegrees) {
     //     double newPos = NerdyMath.clamp(
@@ -240,6 +246,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         /// ????
         return pivotMotor.getPosition().getValueAsDouble(); 
     }
+
+    
 
     public double getPositionDegrees() {
         return getPosition() * 360;
