@@ -292,11 +292,11 @@ public class RobotContainer {
     .onTrue(superSystem.stop());    
 
     operatorController.dpadDown()
-    .onTrue(superSystem.moveToL1());
+    .onTrue(superSystem.moveTo(NamedPositions.L1));
     operatorController.dpadLeft()
-    .onTrue(superSystem.moveToL2());
+    .onTrue(superSystem.moveTo(NamedPositions.L2));
     operatorController.dpadUp()
-    .onTrue(superSystem.moveToL3());
+    .onTrue(superSystem.moveTo(NamedPositions.L3));
     // operatorController.dpadRight()
     // .onTrue(superSystem.moveToL4());
 
@@ -314,13 +314,13 @@ public class RobotContainer {
     .onFalse(superSystem.closeClaw());
 
     operatorController.buttonUp()
-    .onTrue(superSystem.moveToStation());
+    .onTrue(superSystem.moveTo(NamedPositions.Station));
     operatorController.buttonRight()
-    .onTrue(superSystem.moveToGroundIntake());
+    .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
     operatorController.buttonDown()
-    .onTrue(superSystem.moveToStow());
+    .onTrue(superSystem.moveTo(NamedPositions.Stow));
     operatorController.buttonLeft()
-    .onTrue(superSystem.moveToSemiStow());
+    .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     
     // operatorController.bumperLeft()
     // .onTrue(superSystem.intakeCoral());
@@ -338,7 +338,7 @@ public class RobotContainer {
     // .onTrue(superSystem.closeClaw());
 
     driverController.buttonDown()
-    .onTrue(superSystem.moveToGroundIntake());
+    .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
   //   operatorController.triggerRight()
   //   .onTrue(superSystem.moveToSemiStow());
    }
