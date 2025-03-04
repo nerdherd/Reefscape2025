@@ -296,21 +296,31 @@ public class RobotContainer {
     operatorController.dpadLeft()
     .onTrue(superSystem.moveToL2());
     operatorController.dpadUp()
-    
     .onTrue(superSystem.moveToL3());
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveToGroundIntake());
-    operatorController.triggerRight().onTrue(superSystem.intakeCoral());
-    operatorController.triggerLeft().onTrue(superSystem.outtakeCoral());
-    operatorController.bumperRight().onTrue(superSystem.stopRoller());
-    operatorController.bumperLeft().onTrue(superSystem.intakeStation());
+    // operatorController.dpadRight()
+    // .onTrue(superSystem.moveToL4());
+
+    operatorController.triggerRight()
+    .onTrue(superSystem.intakeCoral())
+    .onFalse(superSystem.holdCoral());
+    operatorController.triggerLeft()
+    .onTrue(superSystem.outtakeCoral())
+    .onFalse(superSystem.closeClaw());
+    operatorController.bumperRight()
+    .onTrue(superSystem.intakeAlgae())
+    .onFalse(superSystem.holdAlgae());
+    operatorController.bumperLeft()
+    .onTrue(superSystem.outtakeAlgae())
+    .onFalse(superSystem.closeClaw());
 
     operatorController.buttonUp()
     .onTrue(superSystem.moveToStation());
+    operatorController.buttonRight()
+    .onTrue(superSystem.moveToGroundIntake());
     operatorController.buttonDown()
     .onTrue(superSystem.moveToStow());
-    // operatorController.buttonRight()
-    // .onTrue(superSystem.moveToSemiStow());
+    operatorController.buttonLeft()
+    .onTrue(superSystem.moveToSemiStow());
     
     // operatorController.bumperLeft()
     // .onTrue(superSystem.intakeCoral());

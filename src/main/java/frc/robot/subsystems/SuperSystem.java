@@ -16,6 +16,9 @@ public class SuperSystem {
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
     public IntakeV2 claw;
+    
+    public NamedPositions currentPosition = NamedPositions.Stow;
+    
     boolean elevatorWithinRange;
 
     private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition;
@@ -70,16 +73,26 @@ public class SuperSystem {
     }
 
     public Command closeClaw() {
-        return claw.setClawPositionCommand(ClawConstants.kClosedPosition);
+        return Commands.sequence(
+            claw.setClawPositionCommand(ClawConstants.kClosedPosition),
+            claw.setVelocityCommand(0)
+        );
     }
 
     public Command intakeCoral() {
         return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kCoralOpenPosition),
-            claw.setVelocityCommand(RollerConstants.kIntakePower),
-            Commands.waitSeconds(2), //taking coral
-            claw.setClawPositionCommand(ClawConstants.kCoralHoldPosition),
-            Commands.waitSeconds(0.1),
+            claw.setClawPositionCommand(
+                currentPosition == NamedPositions.GroundIntake ? ClawConstants.kCoralOpenPosition : ClawConstants.kStationPosition
+            ),
+            claw.setVelocityCommand(RollerConstants.kIntakePower)
+        );
+    }
+
+    public Command holdCoral() {
+        return Commands.sequence(
+            claw.setClawPositionCommand(
+                currentPosition == NamedPositions.GroundIntake ? ClawConstants.kCoralHoldPosition : ClawConstants.kStationHoldPosition
+            ),
             claw.setVelocityCommand(-0.01) // holding coral
         );
     }
@@ -88,20 +101,21 @@ public class SuperSystem {
         return Commands.sequence(
             claw.setVelocityCommand(RollerConstants.kOuttakePower),
             Commands.waitSeconds(0.5),
-            claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition),
-            Commands.waitSeconds(0.5),
-            claw.setVelocityCommand(0)
+            claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition)
         );
     }
 
     public Command intakeAlgae() {
         return Commands.sequence(
             claw.setClawPositionCommand(ClawConstants.kAlgaeOpenPosition),
-            claw.setVelocityCommand(RollerConstants.kIntakePower),
-            Commands.waitSeconds(2), // taking algae
+            claw.setVelocityCommand(RollerConstants.kIntakePower)
+        );
+    }
+
+    public Command holdAlgae() {
+        return Commands.sequence(
             claw.setClawPositionCommand(ClawConstants.kAlgaeHoldPosition),
-            Commands.waitSeconds(0.1),
-            claw.setVelocityCommand(-0.01) // holding algae
+            claw.setVelocityCommand(-0.01)
         );
     }
 
@@ -109,27 +123,22 @@ public class SuperSystem {
         return Commands.sequence(
             claw.setVelocityCommand(RollerConstants.kOuttakePower),
             Commands.waitSeconds(0.5),
-            claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition),
-            Commands.waitSeconds(0.5),
-            claw.setVelocityCommand(0)
-        );
-    }
-
-    public Command intakeStation() {
-        return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kStationPosition),
-            claw.setVelocityCommand(RollerConstants.kIntakePower),
-            Commands.waitSeconds(2), // taking coral
-            claw.setClawPositionCommand(ClawConstants.kStationHoldPosition),
-            Commands.waitSeconds(0.1),
-            claw.setVelocityCommand(-0.01) // holding coral
+            claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition)
         );
     }
 
     public Command moveTo(NamedPositions position) {
+        currentPosition = position;
+        if(position.intermediateWristPosition == position.finalWristPosition) {
+            return Commands.sequence(
+                preExecute(),
+                execute(position.executionOrder, 10.0, 
+                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)                
+            );
+        }
+
         return Commands.sequence(
             preExecute(),
-            //wrist.setPositionCommand(WristConstants.), //TODO pre-position
             execute(position.executionOrder, 10.0, 
             position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
             
