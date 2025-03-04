@@ -21,6 +21,30 @@
           "data": {
             "pathName": "C4R7"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R7C4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C4R7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R7C4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C4R7"
+          }
         }
       ]
     }
