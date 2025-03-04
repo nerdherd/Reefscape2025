@@ -114,6 +114,17 @@ public class SuperSystem {
         );
     }
 
+    public Command intakeStation() {
+        return Commands.sequence(
+            claw.setClawPositionCommand(ClawConstants.kStationPosition),
+            claw.setVelocityCommand(RollerConstants.kIntakePower),
+            Commands.waitSeconds(2), // taking coral
+            claw.setClawPositionCommand(ClawConstants.kStationHoldPosition),
+            Commands.waitSeconds(0.1),
+            claw.setVelocityCommand(-0.01) // holding coral
+        );
+    }
+
     public Command moveTo(NamedPositions position) {
         return Commands.sequence(
             preExecute(),

@@ -296,8 +296,7 @@ public class RobotContainer {
     operatorController.triggerRight().onTrue(superSystem.intakeCoral());
     operatorController.triggerLeft().onTrue(superSystem.outtakeCoral());
     operatorController.bumperRight().onTrue(superSystem.stopRoller());
-
-
+    operatorController.bumperLeft().onTrue(superSystem.intakeStation());
 
     operatorController.buttonUp()
     .onTrue(superSystem.moveToStation());

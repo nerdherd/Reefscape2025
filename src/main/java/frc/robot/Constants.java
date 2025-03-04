@@ -286,7 +286,7 @@ public final class Constants {
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
     public static final double kElevatorStowPosition    =  0.05; //0.5   // TODO change later
-    public static final double kElevatorStationPosition = 0.75;//-2 // TODO change later
+    public static final double kElevatorStationPosition = 0;//-2 // TODO change later
     public static final double kElevatorL1Position =   0;      // TODO change later
     public static final double kElevatorL2Position =  0.1;      // TODO change later
     public static final double kElevatorL2L3Position =  0.5;      // TODO change later
@@ -377,7 +377,7 @@ public final class Constants {
 
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
-    public static final double kElevatorPivotStationPosition = 0.15; // .0833 //TODO change later
+    public static final double kElevatorPivotStationPosition = 0.1;//0.15 // .0833 //TODO change later
     public static final double kElevatorPivotPositionVertical = 0.24;//0.1 // 0.25
 
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
@@ -435,6 +435,10 @@ public final class Constants {
     public static final double kCoralOpenPosition = -0.008789; 
     public static final double kStowPosition = 0; 
     public static final double kClosedPosition = -0.0488;
+    public static final double kStationPosition = 0.08;
+    public static final double kStationHoldPosition = -0.04;
+
+
     
  }
 
@@ -454,7 +458,7 @@ public final class Constants {
 
     public static final double kStowPosition = -0.1;//-0.15//0.092//0.0
     public static final double kIntermediatePosition = -0.123; //-0.06//-0.4
-    public static final double kStationPosition = -0.89;//-0.3//0.54
+    public static final double kStationPosition = -0.6043;//-0.89//-0.3//0.54
     public static final double kL23Position = -0.3; // was -0.6
     public static final double kL14Position = -0.8;
     public static final double kL234AlagePosition = -0.8;
