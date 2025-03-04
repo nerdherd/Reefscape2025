@@ -291,6 +291,7 @@ public final class Constants {
   public static final class ElevatorConstants {
 
     // ************************************** ELEVATOR CONSTANTS *************************************** //
+    
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
     public static final double kElevatorStowPosition    =  0.05; //0.5   // TODO change later
@@ -352,7 +353,9 @@ public final class Constants {
  }
 
  public static final class V1ElevatorConstants {
+
     // ************************************** ELEVATOR CONSTANTS *************************************** //
+
     public static final int kElevatorMotorID = 0;            // TODO change later 
     public static final int kElevatorMotorRightID = 0;            // TODO change later 
     public static final double kElevatorStowPosition    = 0; // TODO change later
@@ -370,6 +373,7 @@ public final class Constants {
     public static final double kVElevatorMotor = 0;
 
     // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
+
     public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
@@ -446,8 +450,6 @@ public final class Constants {
     public static final double kStationPosition = 0.08;
     public static final double kStationHoldPosition = -0.04;
 
-
-    
  }
 
   public static final class WristConstants{
@@ -483,6 +485,26 @@ public final class Constants {
 
     public static final double kSpeed = 0.5;
     public static final int kPigeonID = 2;
+  }
+
+  public static final class ClimbConstants { // TODO change
+
+    public static final int kMotorID = 0;
+
+    public static final double kPMotor = 0;
+    public static final double kIMotor = 0;
+    public static final double kDMotor = 0;
+    public static final double kVMotor = 0;
+    public static final double kSMotor = 0;
+    public static final double kGMotor = 0;
+
+    public static final double kCruiseVelocity = 0;
+    public static final double kAcceleration = 0;
+    public static final double kJerk = 0;
+
+    public static final double kOpenPosition = 0;
+    public static final double kClosedPosition = 0;
+
   }
 
   public static final class SuperSystemConstants {
