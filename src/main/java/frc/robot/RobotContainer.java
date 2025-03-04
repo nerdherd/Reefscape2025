@@ -329,7 +329,7 @@ public class RobotContainer {
 
     try { // ide displayed error fix
       bottom2Piece = new Bottom2Piece(swerveDrive, intakeV2, elevator, "Bottom2Piece");
-      pathOnlyBottom2Piece = new PathOnlyBottom2Piece(swerveDrive, "PathOnlyBottom2Piece");
+      // pathOnlyBottom2Piece = new PathOnlyBottom2Piece(swerveDrive, "PathOnlyBottom2Piece");
     } catch (Exception e) {
       DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
       return;
@@ -343,11 +343,12 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
 
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Bottom 2 Piece", bottom2Piece);
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    autoChooser.addOption("Path Only Bottom 2 Piece", pathOnlyBottom2Piece);
-    // if (paths.contains("S4R3")) {
+    // autoChooser.addOption("Path Only Bottom 2 Piece", pathOnlyBottom2Piece);
+    autoChooser.addOption("test", AutoBuilder.buildAuto("Taxi") );
+    autoChooser.addOption("twopieceauto", AutoBuilder.buildAuto("Bottom2Piece"));
+    // if (paths.contains("S4R3")) {, 
       // autoChooser.addOption("PreloadTaxi", AutoBuilder.buildAuto("PreloadTaxi"));
       // autoChooser.addOption("PreloadTaxi2", new PreloadTaxi(swerveDrive, List.of(S4R3)));
     // }
