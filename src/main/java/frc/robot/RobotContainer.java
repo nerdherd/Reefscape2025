@@ -257,6 +257,7 @@ public class RobotContainer {
       operatorController.buttonDown()
       .onTrue(superSystem.moveToStow());
 
+      
       operatorController.buttonLeft()
       .onTrue(superSystem.moveToGroundIntake());
 
@@ -280,6 +281,8 @@ public class RobotContainer {
     /// DO NOT REMOVE IT
     operatorController.controllerLeft()
     .onTrue(superSystem.zeroEncoders());
+
+    
     ////////////////////////
     
     operatorController.controllerRight()
@@ -290,6 +293,7 @@ public class RobotContainer {
     operatorController.dpadLeft()
     .onTrue(superSystem.moveToL2());
     operatorController.dpadUp()
+    
     .onTrue(superSystem.moveToL3());
     operatorController.dpadRight()
     .onTrue(superSystem.moveToGroundIntake());
@@ -302,8 +306,8 @@ public class RobotContainer {
     .onTrue(superSystem.moveToStation());
     operatorController.buttonDown()
     .onTrue(superSystem.moveToStow());
-    operatorController.buttonRight()
-    .onTrue(superSystem.moveToSemiStow());
+    // operatorController.buttonRight()
+    // .onTrue(superSystem.moveToSemiStow());
     
     // operatorController.bumperLeft()
     // .onTrue(superSystem.intakeCoral());
@@ -315,15 +319,16 @@ public class RobotContainer {
     // .onTrue(superSystem.outtakeAlgae());
 
     // operatorController.buttonLeft()
+    
     // .onTrue(superSystem.stopRoller());
     // operatorController.buttonRight()
     // .onTrue(superSystem.closeClaw());
 
     driverController.buttonDown()
     .onTrue(superSystem.moveToGroundIntake());
-    driverController.buttonUp()
-    .onTrue(superSystem.moveToSemiStow());
-  }
+  //   operatorController.triggerRight()
+  //   .onTrue(superSystem.moveToSemiStow());
+   }
   
   private void initAutoChoosers() {
 

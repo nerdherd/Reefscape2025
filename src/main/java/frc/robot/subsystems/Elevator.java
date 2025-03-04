@@ -154,6 +154,12 @@ public class Elevator extends SubsystemBase implements Reportable {
         desiredPosition + 0.125);
     }
 
+    public boolean atPositionWide() {
+        return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
+        desiredPosition - 0.25,
+        desiredPosition + 0.25);
+    }
+
     // ****************************** COMMAND METHODS ***************************** //
 
     public Command setEnabledCommand(boolean enabled) {

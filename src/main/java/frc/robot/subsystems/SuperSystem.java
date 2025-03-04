@@ -16,6 +16,7 @@ public class SuperSystem {
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
     public IntakeV2 claw;
+    boolean elevatorWithinRange;
 
     private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition;
 
@@ -141,9 +142,7 @@ public class SuperSystem {
             preExecute(),
             //wrist.setPositionCommand(WristConstants.), //TODO pre-position
             execute(ExecutionOrder.WRT_ELV_PVT, 10.0, 
-            V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition),
-            
-            wrist.setPositionCommand(WristConstants.kStowPosition)
+            V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition)
         );
     }
 
@@ -317,6 +316,11 @@ public class SuperSystem {
                 isStarted = true;
                 startTime = Timer.getFPGATimestamp();
             }
+
+            elevatorWithinRange = elevator.atPosition();
+            if(pivotAngle == V1ElevatorConstants.kElevatorPivotStowPosition) {
+                elevatorWithinRange = elevator.atPositionWide();
+            }
             
             // TODO move this functionality to each subsystem
             updateDependencies(); 
@@ -396,7 +400,7 @@ public class SuperSystem {
             isStarted = false;
         }
         ).until(
-            () -> ((pivot.atPosition() && elevator.atPosition() && wrist.atPosition()) || (Timer.getFPGATimestamp() - startTime >= timeout))
+            () -> ((pivot.atPosition() && elevatorWithinRange && wrist.atPosition()) || (Timer.getFPGATimestamp() - startTime >= timeout))
         )
         ;
     }
