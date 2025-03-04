@@ -289,7 +289,9 @@ public final class Constants {
     public static final double kElevatorStationPosition = 0.75;//-2 // TODO change later
     public static final double kElevatorL1Position =   0;      // TODO change later
     public static final double kElevatorL2Position =  0.1;      // TODO change later
+    public static final double kElevatorL2L3Position =  0.5;      // TODO change later
     public static final double kElevatorL3Position = 1.36;      // TODO change later
+    public static final double kElevatorL3L4Position = 1.36;      // TODO change later
     public static final double kElevatorL4Position = 3.15;      // TODO change later
     public static final double kElevatorSpeed = 1.0;           // TODO change later
     public static final double kElevatorGroundIntake = 0.562;           // TODO change later
@@ -349,7 +351,9 @@ public final class Constants {
     public static final double kElevatorStationPosition = 0 ; // TODO change later
     public static final double kElevatorL1Position =   0;     // TODO change later
     public static final double kElevatorL2Position =  0;     // TODO change later
+    public static final double kElevatorL2L3Position =  0;     // TODO change later
     public static final double kElevatorL3Position = 0;     // TODO change later
+    public static final double kElevatorL3L4Position = 0;     // TODO change later
     public static final double kElevatorL4Position = 0;     // TODO change later
     public static final double kElevatorSpeed = 1.0;          // TODO change later
     public static final double kPElevatorMotor = 0.1;
@@ -426,7 +430,9 @@ public final class Constants {
     public static final double kAlgaeHoldPosition = 0.169; 
     public static final double kCoralHoldPosition = -0.01;//-0.004
     public static final double kAlgaeReleasePosition = 0.169; 
-    public static final double kCoralReleasePosition = 0.023438;//-0.008789; 
+    public static final double kCoralReleasePosition = 0.023438;//-0.008789;  
+    public static final double kAlgaeOpenPosition = 0.169; 
+    public static final double kCoralOpenPosition = -0.008789; 
     public static final double kStowPosition = 0; 
     public static final double kClosedPosition = -0.0488;
     
@@ -451,6 +457,7 @@ public final class Constants {
     public static final double kStationPosition = -0.89;//-0.3//0.54
     public static final double kL23Position = -0.3; // was -0.6
     public static final double kL14Position = -0.8;
+    public static final double kL234AlagePosition = -0.8;
     public static final double kWristStowPosition = 0.0;
     public static final double kWristL3Position = -0.28;
     public static final double kWristL2Position = -0.28;

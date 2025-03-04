@@ -74,7 +74,7 @@ public class SuperSystem {
 
     public Command intakeCoral() {
         return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition),
+            claw.setClawPositionCommand(ClawConstants.kCoralOpenPosition),
             claw.setVelocityCommand(RollerConstants.kIntakePower),
             Commands.waitSeconds(2), //taking coral
             claw.setClawPositionCommand(ClawConstants.kCoralHoldPosition),
@@ -95,7 +95,7 @@ public class SuperSystem {
 
     public Command intakeAlgae() {
         return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition),
+            claw.setClawPositionCommand(ClawConstants.kAlgaeOpenPosition),
             claw.setVelocityCommand(RollerConstants.kIntakePower),
             Commands.waitSeconds(2), // taking algae
             claw.setClawPositionCommand(ClawConstants.kAlgaeHoldPosition),
@@ -154,6 +154,7 @@ public class SuperSystem {
     }
 
     public Command moveToProcessor() { //TODO
+        // note: we may not need this one, because the intake action could cover it.
         return moveTo(NamedPositions.Processor);
     }    
 
@@ -191,12 +192,32 @@ public class SuperSystem {
 
     public Command moveToL3L4()
     {
-        return Commands.none(); //todo
+        return Commands.sequence(
+            preExecute(),
+            //wrist.setPositionCommand(WristConstants.), //TODO pre-position
+            execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL3L4Position, WristConstants.kL234AlagePosition),
+            
+            wrist.setPositionCommand(WristConstants.kL234AlagePosition)/* ,
+            //todo
+            intakeAlage(),
+            )*/
+        );
     }
 
     public Command moveToL2L3()
     {
-        return Commands.none();//todo
+        return Commands.sequence(
+            preExecute(),
+            //wrist.setPositionCommand(WristConstants.), //TODO pre-position
+            execute(ExecutionOrder.PVT_WRT_ELV, 10.0, 
+            V1ElevatorConstants.kElevatorPivotPositionVertical, ElevatorConstants.kElevatorL2L3Position, WristConstants.kL234AlagePosition),
+            
+            wrist.setPositionCommand(WristConstants.kL234AlagePosition)/* ,
+            //todo            
+            intakeAlage(),
+            )*/
+        );
     }
 
     public Command moveToL1() {
