@@ -424,11 +424,11 @@ public final class Constants {
     public static final double kJerk = kAcceleration * 10; //Rotations per second cubed
 
     public static final double kAlgaeHoldPosition = 0.169; 
-    public static final double kCoralHoldPosition = -0.004; 
+    public static final double kCoralHoldPosition = -0.01;//-0.004
     public static final double kAlgaeReleasePosition = 0.169; 
-    public static final double kCoralReleasePosition = -0.008789; 
+    public static final double kCoralReleasePosition = 0.023438;//-0.008789; 
     public static final double kStowPosition = 0; 
-    public static final double kClosedPosition = -0.068359;
+    public static final double kClosedPosition = -0.0488;
     
  }
 
@@ -447,7 +447,7 @@ public final class Constants {
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
 
     public static final double kStowPosition = -0.1;//-0.15//0.092//0.0
-    public static final double kIntermediatePosition = -0.4;
+    public static final double kIntermediatePosition = -0.123; //-0.06//-0.4
     public static final double kStationPosition = -0.89;//-0.3//0.54
     public static final double kL23Position = -0.3; // was -0.6
     public static final double kL14Position = -0.8;

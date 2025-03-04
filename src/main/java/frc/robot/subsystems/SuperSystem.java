@@ -157,7 +157,7 @@ public class SuperSystem {
         return moveTo(NamedPositions.Processor);
     }    
 
-    public Command moveTogroundIntake() {
+    public Command moveToGroundIntake() {
         return Commands.sequence(
             preExecute(),
             //wrist.setPositionCommand(WristConstants.), //TODO pre-position
@@ -187,11 +187,6 @@ public class SuperSystem {
                 stopRoller()
             )*/
         );
-    }
-
-    public Command moveToGroundIntake()
-    {
-        return Commands.none(); //todo
     }
 
     public Command moveToL3L4()

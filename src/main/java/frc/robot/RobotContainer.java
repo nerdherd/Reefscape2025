@@ -292,7 +292,12 @@ public class RobotContainer {
     operatorController.dpadUp()
     .onTrue(superSystem.moveToL3());
     operatorController.dpadRight()
-    .onTrue(superSystem.moveToL4());
+    .onTrue(superSystem.moveToGroundIntake());
+    operatorController.triggerRight().onTrue(superSystem.intakeCoral());
+    operatorController.triggerLeft().onTrue(superSystem.outtakeCoral());
+    operatorController.bumperRight().onTrue(superSystem.stopRoller());
+
+
 
     operatorController.buttonUp()
     .onTrue(superSystem.moveToStation());
@@ -316,7 +321,7 @@ public class RobotContainer {
     // .onTrue(superSystem.closeClaw());
 
     driverController.buttonDown()
-    .onTrue(superSystem.moveTogroundIntake());
+    .onTrue(superSystem.moveToGroundIntake());
     driverController.buttonUp()
     .onTrue(superSystem.moveToSemiStow());
   }
