@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WristConstants;
@@ -66,6 +67,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         
         motor.setNeutralMode(NeutralModeValue.Coast);
         zeroEncoder();
+        CommandScheduler.getInstance().registerSubsystem(this);
     }
 
     //****************************** SETUP METHODS ******************************//
