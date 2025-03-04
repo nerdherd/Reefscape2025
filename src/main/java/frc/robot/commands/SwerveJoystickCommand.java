@@ -31,6 +31,8 @@ public class SwerveJoystickCommand extends Command {
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
     private final Supplier<Boolean> fieldOrientedFunction;
     private final Supplier<Boolean> towSupplier, precisionSupplier;
+    private final Supplier<Boolean> moveLeft, moveRight;
+    private final Supplier<Integer> zoneId;
     private final Supplier<Double> desiredAngle;
     private final Supplier<Boolean> turnToAngleSupplier;
     private final PIDController turnToAngleController;
@@ -59,7 +61,9 @@ public class SwerveJoystickCommand extends Command {
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, 
             Supplier<Double> turningSpdFunction,
             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> towSupplier, 
+            Supplier<Boolean> moveLeftSupplier, Supplier<Boolean> moveRightSupplier,
             Supplier<Boolean> precisionSupplier,
+            Supplier<Integer> insideZoneId,
             Supplier<Boolean> turnToAngleSupplier,
             Supplier<Double> desiredAngleSupplier
         ) {
@@ -70,9 +74,14 @@ public class SwerveJoystickCommand extends Command {
         this.fieldOrientedFunction = fieldOrientedFunction;
         this.towSupplier = towSupplier;
         this.precisionSupplier = precisionSupplier;
+
+        this.zoneId = insideZoneId;
         
         this.turnToAngleSupplier = turnToAngleSupplier;
         this.desiredAngle = desiredAngleSupplier;
+
+        this.moveLeft = moveLeftSupplier;
+        this.moveRight = moveRightSupplier;
 
         this.xFilter = new OldDriverFilter2(
             ControllerConstants.kDeadband, 
@@ -125,6 +134,21 @@ public class SwerveJoystickCommand extends Command {
         if (towSupplier.get()) {
             swerveDrive.setModuleStates(SwerveDriveConstants.towModuleStates);
             return;
+        }
+
+        
+        if(zoneId.get() != 0)
+        {
+            if(moveLeft.get())
+            {
+                swerveDrive.setAutoPathRun( zoneId.get(), -1);
+                return;
+            }
+            else if(moveRight.get())
+            {
+                swerveDrive.setAutoPathRun( zoneId.get(), 1);
+                return;
+            }
         }
 
         // get speeds

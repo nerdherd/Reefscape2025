@@ -144,7 +144,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         RobotConfig robotConfig = null;
         try {
              robotConfig = RobotConfig.fromGUISettings();
-
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -406,6 +405,21 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         backRight.run();
     }
 
+    double maxVelocityMps = 4;
+    double maxAccelerationMpsSq = 4;
+    public void setAutoPathRun(int zoneId, int poseId)
+    {
+        Pose2d destPoseInBlue = new Pose2d(); // base on (poseid and zoneid and apriltag id)
+        PathConstraints pathcons = new PathConstraints(
+            maxVelocityMps, maxAccelerationMpsSq, 
+            Units.degreesToRadians(180), Units.degreesToRadians(360)
+        );
+        if(RobotContainer.IsRedSide())
+            AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons).schedule();
+        else
+            AutoBuilder.pathfindToPose(destPoseInBlue, pathcons).schedule();;
+    }
+
     //****************************** GETTERS ******************************/
 
     public Gyro getImu() {
@@ -522,6 +536,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private ChassisSpeeds getChassisSpeeds() {
         return SwerveDriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
+    }
+
+    public int getCurrentZoneByPose()
+    {
+        // todo read pose and apriltag to find out which zone
+        return 0; // 0 is default. 1 is in reef zone, 2 is in station zone1, 3 is in station zone2, 4 is in proc zone
     }
 
     public void drive(double xSpeed, double ySpeed, double turnSpeed) {
