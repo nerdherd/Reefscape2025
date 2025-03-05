@@ -5,7 +5,6 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -25,18 +24,15 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
     private final TalonFXConfigurator rollerConfigurator;
     private final TalonFXConfigurator clawConfigurator;
 
-    // private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
-
     private final MotionMagicVoltage motionMagicRequestClaw = new MotionMagicVoltage(0);
     private final NeutralOut brakeRequest = new NeutralOut();
 
     private double desiredPositionClaw;
-    private double desiredVelocity;
+    private double desiredVoltage = 0.0;
     private boolean enabled = false;
     private double pivotAngle = 0;
     private double wristAngle = 0.0; //need to find
 
-    private double voltage = 0.0;
     double ff = 0;
 
     public IntakeV2() {
@@ -106,8 +102,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
             rollerMotor.setControl(brakeRequest);
             clawMotor.setControl(brakeRequest);
         } else {
-            // rollerMotor.setControl(velocityRequest);
-            rollerMotor.setVoltage(voltage);
+            rollerMotor.setVoltage(desiredVoltage);
             clawMotor.setControl(motionMagicRequestClaw.withFeedForward(ff));
         }
     }
@@ -118,14 +113,13 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         this.enabled = enabled;
     }
 
-    // TODO use voltage directly??
-    private void setVelocity(double velocity) {
+    private void setVoltage(double volt) {
         // desiredVelocity = velocity;
         // velocityRequest.Velocity = velocity;
         // if (velocity == 0.0) voltage = 0.0;
         // else if (velocity < 0.0) voltage = -2.0;
         // else voltage = 2.0;
-        voltage = velocity;
+        desiredVoltage = volt;
         // voltage = velocity == 0.0 ? 0.0 : (velocity < 0.0 ? -2.0 : 2.0);
     }
 
@@ -148,8 +142,8 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
         return Commands.runOnce(() -> setClawPosition(position));
     }
 
-    public Command setVelocityCommand(double velocity) {
-        return Commands.runOnce(() -> setVelocity(velocity));
+    public Command setVoltageCommand(double volt) {
+        return Commands.runOnce(() -> setVoltage(volt));
     }
 
     public Command setEnabledCommand(boolean enable) {
@@ -223,7 +217,7 @@ public class IntakeV2 extends SubsystemBase implements Reportable{
 
         SmartDashboard.putNumber("Roller Voltage", rollerMotor.getMotorVoltage().getValueAsDouble());
         SmartDashboard.putNumber("Roller Current Rotations", rollerMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Roller Desired Velocity", desiredVelocity);
+        SmartDashboard.putNumber("Roller Desired Velocity", desiredVoltage);
         SmartDashboard.putNumber("Roller Current Velocity", rollerMotor.getVelocity().getValueAsDouble());
         
         SmartDashboard.putNumber("Claw Wrist Voltage", clawMotor.getMotorVoltage().getValueAsDouble());

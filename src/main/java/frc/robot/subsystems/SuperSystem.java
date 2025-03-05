@@ -80,13 +80,13 @@ public class SuperSystem {
     }
 
     public Command stopRoller() {
-        return claw.setVelocityCommand(0.0);
+        return claw.setVoltageCommand(0.0);
     }
 
     public Command closeClaw() {
         return Commands.sequence(
             claw.setClawPositionCommand(ClawConstants.kClosedPosition),
-            claw.setVelocityCommand(0)
+            claw.setVoltageCommand(0)
         );
     }
 
@@ -108,7 +108,7 @@ public class SuperSystem {
             claw.setClawPositionCommand(
                 currentPosition == NamedPositions.GroundIntake ? ClawConstants.kCoralOpenPosition : ClawConstants.kStationPosition
             ),
-            claw.setVelocityCommand(RollerConstants.kIntakePower)
+            claw.setVoltageCommand(RollerConstants.kIntakePower)
         );
     }
 
@@ -117,13 +117,13 @@ public class SuperSystem {
             claw.setClawPositionCommand(
                 ClawConstants.kCoralHoldPosition
             ),
-            claw.setVelocityCommand(-2) // holding coral
+            claw.setVoltageCommand(-2) // holding coral
         );
     }
 
     public Command outtakeCoral() {
         return Commands.sequence(
-            claw.setVelocityCommand(RollerConstants.kOuttakePower),
+            claw.setVoltageCommand(RollerConstants.kOuttakePower),
             Commands.waitSeconds(0.5),
             claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition)
         );
@@ -133,20 +133,20 @@ public class SuperSystem {
     public Command intakeAlgae() {
         return Commands.sequence(
             claw.setClawPositionCommand(ClawConstants.kAlgaeOpenPosition),
-            claw.setVelocityCommand(-4.25)
+            claw.setVoltageCommand(-4.25)
         );
     }
 
     public Command holdAlgae() {
         return Commands.sequence(
             claw.setClawPositionCommand(ClawConstants.kAlgaeHoldPosition),
-            claw.setVelocityCommand(-2)
+            claw.setVoltageCommand(-2)
         );
     }
 
     public Command outtakeAlgae() {
         return Commands.sequence(
-            claw.setVelocityCommand(4.25),
+            claw.setVoltageCommand(4.25),
             Commands.waitSeconds(0.5),
             claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition)
         );
@@ -316,7 +316,7 @@ public class SuperSystem {
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(0.0);
         claw.setClawPosition(ClawConstants.kClosedPosition);
-        claw.setVelocityCommand(0.0);
+        claw.setVoltageCommand(0.0);
         isStarted = false;
     }
 
