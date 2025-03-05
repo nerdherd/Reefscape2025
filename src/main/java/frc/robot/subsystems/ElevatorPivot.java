@@ -162,6 +162,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
+        // why do we change it? -Duan
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
         ff =  ElevatorConstants.kElevatorPivotStowedFF * Math.cos(2 * Math.PI * getPosition());
 
