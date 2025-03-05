@@ -148,6 +148,11 @@ public class SwerveJoystickCommand extends Command {
             // Check moveRight states
             checkButtonStates(moveRight.get(), wasRightPressed, 1);
             wasRightPressed = moveRight.get(); // Update previous state
+
+            if(moveLeft.get() || moveRight.get())
+            {
+                return; // just move it by autopath
+            }
         }
 
         // get speeds
