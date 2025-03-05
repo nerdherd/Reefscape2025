@@ -46,6 +46,9 @@ public class SwerveJoystickCommand extends Command {
         NONE
     }
 
+    private boolean wasLeftPressed = false; 
+    private boolean wasRightPressed = false;
+
     /**
      * Construct a new SwerveJoystickCommand
      * 
@@ -136,19 +139,15 @@ public class SwerveJoystickCommand extends Command {
             return;
         }
 
-        
         if(zoneId.get() != 0)
         {
-            if(moveLeft.get())
-            {
-                swerveDrive.setAutoPathRun( zoneId.get(), -1);
-                return;
-            }
-            else if(moveRight.get())
-            {
-                swerveDrive.setAutoPathRun( zoneId.get(), 1);
-                return;
-            }
+            // Check moveLeft states
+            checkButtonStates(moveLeft.get(), wasLeftPressed, -1);
+            wasLeftPressed = moveLeft.get(); // Update previous state
+
+            // Check moveRight states
+            checkButtonStates(moveRight.get(), wasRightPressed, 1);
+            wasRightPressed = moveRight.get(); // Update previous state
         }
 
         // get speeds
@@ -219,11 +218,24 @@ public class SwerveJoystickCommand extends Command {
         
         // Calculate swerve module states
         swerveDrive.setModuleStates(moduleStates);
-
-        
     }
 
-    
+    private void checkButtonStates(boolean isPressed, boolean wasPressed, int direction) {
+        // Pressed: Transition from not pressed to pressed
+        if (isPressed && !wasPressed) {
+            swerveDrive.setAutoPathRun( zoneId.get(), direction);
+        }
+
+        // Held: Button is currently pressed
+        if (isPressed) {
+            // do nothing for now
+        }
+
+        // Released: Transition from pressed to not pressed
+        if (!isPressed && wasPressed) {
+            swerveDrive.stopAutoPath();
+        }
+    }
     
 
     public double getTargetAngle() {

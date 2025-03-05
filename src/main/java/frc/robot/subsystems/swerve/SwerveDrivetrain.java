@@ -407,6 +407,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     double maxVelocityMps = 4;
     double maxAccelerationMpsSq = 4;
+    private Command pathfindingCommand; // Store the command reference
     public void setAutoPathRun(int zoneId, int poseId)
     {
         Pose2d destPoseInBlue = new Pose2d(); // base on (poseid and zoneid and apriltag id)
@@ -415,9 +416,17 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             Units.degreesToRadians(180), Units.degreesToRadians(360)
         );
         if(RobotContainer.IsRedSide())
-            AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons).schedule();
+            pathfindingCommand = AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons);
         else
-            AutoBuilder.pathfindToPose(destPoseInBlue, pathcons).schedule();;
+            pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);;
+        
+        pathfindingCommand.schedule();
+    }
+
+    public void stopAutoPath() {
+        if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
+            pathfindingCommand.cancel();
+        }
     }
 
     //****************************** GETTERS ******************************/
