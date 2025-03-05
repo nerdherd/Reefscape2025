@@ -37,8 +37,12 @@ import static frc.robot.Constants.SwerveDriveConstants.*;
 import static frc.robot.Constants.PathPlannerConstants.kPPRotationPIDConstants;
 import static frc.robot.Constants.PathPlannerConstants.kPPTranslationPIDConstants;
 
-
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.lang.model.util.ElementScanner14;
 
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -403,6 +407,42 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         frontRight.run();
         backLeft.run();
         backRight.run();
+    }
+
+    private Map<Integer, ArrayList<Pose2d>> myMap = new HashMap<>();
+
+    private Pose2d calcuTargetPoseByReq(int zoneId, int poseId)
+    {
+        if(myMap.isEmpty()) // todo move it to constructor
+        {
+            // Create ArrayLists to put in the map
+            ArrayList<Pose2d> list1 = new ArrayList<>();
+            list1.add(new Pose2d(1.1,1.2,new Rotation2d(90))); // must be left
+            list1.add(new Pose2d(2.1,2.2,new Rotation2d(90))); // must be right
+            myMap.put(16, list1);
+
+            ArrayList<Pose2d> list2 = new ArrayList<>();
+            list2.add(new Pose2d(1.1,1.2,new Rotation2d(190)));
+            list2.add(new Pose2d(2.1,2.2,new Rotation2d(190)));
+            myMap.put(17, list2);
+        }
+        Pose2d targetPose = poseEstimator.getEstimatedPosition();
+        if(zoneId == 1) // own reef
+        {
+            if(poseId == -1)
+            {
+                return myMap.get(17).get(0); // the left side of one apriltag on reef
+            }
+            else if(poseId == 1)
+            {
+                return myMap.get(17).get(1);// the right side of one apriltag on reef
+            }
+            else 
+            {
+
+            }
+        }
+        return targetPose;
     }
 
     double maxVelocityMps = 4;
