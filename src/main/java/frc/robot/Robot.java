@@ -120,6 +120,7 @@ public class Robot extends TimedRobot {
 
     // m_robotContainer.superSystem.initialize();
     m_robotContainer.swerveDrive.refreshModulePID();
+    m_robotContainer.initDefaultCommands_test();
     m_robotContainer.configureBindings_test();
 
     m_robotContainer.refreshSupersystem();

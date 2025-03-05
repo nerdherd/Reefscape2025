@@ -171,36 +171,38 @@ public class RobotContainer {
 
     swerveDrive.setDefaultCommand(swerveJoystickCommand);
 
-    double PIVOT_SPEED = 10;// Degrees per second
-    elevatorPivot.setDefaultCommand(Commands.run(() -> {
-      double leftY = -operatorController.getLeftY(); // Left Y (inverted for up = positive)
-      if (Math.abs(leftY) > 0.05) {
-          double currentAngle = elevatorPivot.getPosition();
-          elevatorPivot.setTargetPosition(currentAngle + (leftY * PIVOT_SPEED * 0.02)); // 20ms loop
-      }
-  }, elevatorPivot));
+  //   double PIVOT_SPEED = 10;// Degrees per second
+  //   elevatorPivot.setDefaultCommand(Commands.run(() -> {
+  //     double leftY = -operatorController.getLeftY(); // Left Y (inverted for up = positive)
+  //     if (Math.abs(leftY) > 0.05) {
+  //         double currentAngle = elevatorPivot.getPosition();
+  //         elevatorPivot.setTargetPosition(currentAngle + (leftY * PIVOT_SPEED * 0.02)); // 20ms loop
+  //     }
+  // }, elevatorPivot));
 
-  double Wrist_SPEED = 20;// Degree  per second
-    intakeWrist.setDefaultCommand(Commands.run(() -> {
-      double leftX = -operatorController.getLeftX(); // leftX (inverted for up = positive)
-      if (Math.abs(leftX) > 0.05) {
-          double currentRot = intakeWrist.getPosition();
-          intakeWrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
-      }
-  }, intakeWrist));
+  // double Wrist_SPEED = 20;// Degree  per second
+  //   intakeWrist.setDefaultCommand(Commands.run(() -> {
+  //     double leftX = -operatorController.getLeftX(); // leftX (inverted for up = positive)
+  //     if (Math.abs(leftX) > 0.05) {
+  //         double currentRot = intakeWrist.getPosition();
+  //         intakeWrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
+  //     }
+  // }, intakeWrist));
 
-  double Elevator_SPEED = 0.3;// Meters per second
-    elevator.setDefaultCommand(Commands.run(() -> {
-      double rightY = -operatorController.getRightY(); // rightY Y (inverted for up = positive)
-      if (Math.abs(rightY) > 0.05) {
-          double currentAngle = elevator.getPosition();
-          elevator.setTargetPosition(currentAngle + (rightY * Elevator_SPEED * 0.02)); // 20ms loop
-      }
-  }, elevator));  
+  // double Elevator_SPEED = 0.3;// Meters per second
+  //   elevator.setDefaultCommand(Commands.run(() -> {
+  //     double rightY = -operatorController.getRightY(); // rightY Y (inverted for up = positive)
+  //     if (Math.abs(rightY) > 0.05) {
+  //         double currentAngle = elevator.getPosition();
+  //         elevator.setTargetPosition(currentAngle + (rightY * Elevator_SPEED * 0.02)); // 20ms loop
+  //     }
+  // }, elevator));  
 
 }
 
-  public void initDefaultCommands_test() {}
+  public void initDefaultCommands_test() {
+    initDefaultCommands_teleop();
+  }
 
   public void configureBindings_teleop() {
     ///////////////////////
@@ -236,12 +238,25 @@ public class RobotContainer {
     //////////////////////
     // Operator bindings
     //////////////////////
+    /// 
+    // operatorController.joystickLeft()
+    // .on(wrist.incrementOffset)
+    operatorController.dpadRight()
+      .whileTrue(
+        Commands.runOnce(() -> {
+         // if(operatorController.getLeftY() < -0.05){
+            superSystem.moveClawDown();
+        //  } else if(operatorController.getLeftY() > 0.05){
+          //  superSystem.moveClawUp();
+        //  }
+        })
+      );
 
     operatorController.dpadUp()
       .onTrue(superSystem.moveToNet());
 
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveToL3L4());
+    // operatorController.dpadRight()
+    // .onTrue(superSystem.moveToL3L4());
 
     operatorController.dpadLeft()
     .onTrue(superSystem.moveToL2L3());
@@ -281,16 +296,24 @@ public class RobotContainer {
 
 
   public void configureBindings_test() {
+    driverController.buttonDown()
+    .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+
     //////////////////////////
     /// DO NOT REMOVE IT
     operatorController.controllerLeft()
     .onTrue(superSystem.zeroEncoders());
-
-    
     ////////////////////////
     
     operatorController.controllerRight()
-    .onTrue(superSystem.stop());    
+    .onTrue(superSystem.moveTo(NamedPositions.Processor));    
+
+    operatorController.dpadRight()
+    .whileTrue(
+      Commands.runOnce(() -> {
+          superSystem.moveClawDown();
+      })
+    );
 
     operatorController.dpadDown()
     .onTrue(superSystem.moveTo(NamedPositions.L1));
@@ -300,6 +323,7 @@ public class RobotContainer {
     .onTrue(superSystem.moveTo(NamedPositions.L3));
     // operatorController.dpadRight()
     // .onTrue(superSystem.moveToL4());
+    
 
     operatorController.triggerRight()
     .onTrue(superSystem.intakeCoral())
@@ -333,15 +357,12 @@ public class RobotContainer {
     // .onTrue(superSystem.outtakeAlgae());
 
     // operatorController.buttonLeft()
-    
     // .onTrue(superSystem.stopRoller());
     // operatorController.buttonRight()
     // .onTrue(superSystem.closeClaw());
 
-    driverController.buttonDown()
-    .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
-  //   operatorController.triggerRight()
-  //   .onTrue(superSystem.moveToSemiStow());
+    // operatorController.triggerRight()
+    // .onTrue(superSystem.moveToSemiStow());
    }
   
   private void initAutoChoosers() {

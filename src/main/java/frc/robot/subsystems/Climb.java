@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
-import frc.robot.util.NerdyMath;;
+import frc.robot.util.NerdyMath;
 
 public class Climb extends SubsystemBase implements Reportable{
     private final TalonFX motor;
@@ -208,5 +208,5 @@ public class Climb extends SubsystemBase implements Reportable{
                 break;
         }
     }
-    
+
 }

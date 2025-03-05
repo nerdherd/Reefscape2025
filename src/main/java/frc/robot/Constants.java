@@ -439,16 +439,17 @@ public final class Constants {
     public static final double kAcceleration = kCruiseVelocity * 2; //Rotations per second squared
     public static final double kJerk = kAcceleration * 10; //Rotations per second cubed
 
-    public static final double kAlgaeHoldPosition = 0.169; 
-    public static final double kCoralHoldPosition = -0.01;//-0.004
+
+    public static final double kAlgaeHoldPosition = 0.28; 
+    public static final double kCoralHoldPosition = 0.075;//-0.004
     public static final double kAlgaeReleasePosition = 0.169; 
-    public static final double kCoralReleasePosition = 0.023438;//-0.008789;  
-    public static final double kAlgaeOpenPosition = 0.169; 
-    public static final double kCoralOpenPosition = -0.008789; 
+    public static final double kCoralReleasePosition = 0.096562;//-0.008789;  
+    public static final double kAlgaeOpenPosition = 0.24; 
+    public static final double kCoralOpenPosition = 0.105; 
     public static final double kStowPosition = 0; 
-    public static final double kClosedPosition = -0.0488;
+    public static final double kClosedPosition = 0.05;
     public static final double kStationPosition = 0.08;
-    public static final double kStationHoldPosition = -0.04;
+    //public static final double kStationHoldPosition = 0.09;
 
  }
 
@@ -509,19 +510,21 @@ public final class Constants {
 
   public static final class SuperSystemConstants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
-      Stow(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0, -0.1, -0.4),
+      Stow(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0, -0.275, -0.4),
       SemiStow(     ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.4, -0.4),
       GroundIntake( ExecutionOrder.PVT_WRT_ELV, 0.01, 0.562, -0.808, -0.4),
       Station(      ExecutionOrder.WRT_PVT_ELV, 0.1, 0.0, -0.6043, -0.4),
-      Processor(    ExecutionOrder.WRT_ELV_PVT, 0.04, 0.05, -0.1, -0.4),
+      Processor(    ExecutionOrder.WRT_ELV_PVT, 0.01, 0.428, -0.72, -0.4),
       Net(          ExecutionOrder.WRT_ELV_PVT, 0.24, 0.05, -0.1, -0.4),
       Cage(         ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.1, -0.4),
-      L1(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.0, -0.21, -0.123),
-      L2(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.1, -0.28, -0.123),
-      L3(           ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.28, -0.123),
-      L4(           ExecutionOrder.WRT_PVT_ELV, 0.24, 3.15, -0.318, -0.123),
-      L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.4),
-      L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.4),
+      L1(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.0, -0.21, -0.3),
+      L2(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.1, -0.28, -0.3),
+      L3(           ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.28, -0.3),
+      L4(           ExecutionOrder.WRT_PVT_ELV, 0.24, 3.15, -0.318, -0.3),
+      L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3),
+      L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
+      AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update
+      AlgaeL3(      ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.307, -0.3) // TODO update
       ;
       // todo: we might need pre position for wrist
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees

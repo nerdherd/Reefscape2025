@@ -37,6 +37,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private boolean V1 = true;
     private double ff = 0;
     private double pivotAngle = 0;
+    private double manualOffset = 0;
 
     public IntakeWrist(boolean V1) {
         this.V1 = V1;
@@ -162,7 +163,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     public void setTargetPosition(double position) {
         //TODO NerdyMath.clamp(
         desiredPosition = position;
-        motionMagicRequest.Position = desiredPosition;
+        motionMagicRequest.Position = desiredPosition + manualOffset;
     }
 
     // public void setPositionDegrees(double positionDegrees) {
@@ -198,8 +199,12 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public boolean atPositionWide() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-                                desiredPosition - 0.05,
-                                desiredPosition + 0.05);
+                                desiredPosition - 0.1,
+                                desiredPosition + 0.1);
+    }
+
+    public void incrementOffset(double increment) {
+        manualOffset += increment;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -283,6 +288,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 tab.addString("Control Mode", motor.getControlMode()::toString);
+                tab.addNumber("Wrist Offset",() -> manualOffset);
             case MEDIUM:
                 tab.addDouble("MM Position", () -> motionMagicRequest.Position);
                 tab.addDouble("Desired Position", () -> desiredPosition);
@@ -293,6 +299,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 tab.addBoolean("At position", () -> atPosition());
+                
                 break;
         }
     }
