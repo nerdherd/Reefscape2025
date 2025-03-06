@@ -19,7 +19,7 @@ public class SuperSystem {
     public Elevator elevator;
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
-    public IntakeV2 claw;
+    public IntakeRoller intakeRoller;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
     
@@ -41,11 +41,11 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeV2 claw) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
-        this.claw = claw;
+        this.intakeRoller = intakeRoller;
 
         pivotAtPosition = () -> pivot.atPosition();
         pivotAtPositionWide = () -> pivot.atPositionWide();
@@ -67,7 +67,6 @@ public class SuperSystem {
             pivot.zeroEncoder();
             elevator.zeroEncoder();
             wrist.zeroEncoder();
-            claw.zeroEncoder();
         });
     }
 
@@ -80,76 +79,27 @@ public class SuperSystem {
     }
 
     public Command stopRoller() {
-        return claw.setVoltageCommand(0.0);
-    }
-
-    public Command closeClaw() {
-        return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kClosedPosition),
-            claw.setVoltageCommand(0)
-        );
-    }
-
-    public Command moveClawUp() {
-        return Commands.runOnce(
-            () -> wrist.incrementOffset(0.001)
-        );
-    }
-
-    public Command moveClawDown() {
-        return Commands.runOnce(
-            () -> wrist.incrementOffset(-0.001)
-        );
+        return intakeRoller.setVoltageCommand(0.0);
     }
 
     // coral
-    public Command intakeCoral() {
-        return Commands.sequence(
-            claw.setClawPositionCommand(
-                currentPosition == NamedPositions.GroundIntake ? ClawConstants.kCoralOpenPosition : ClawConstants.kStationPosition
-            ),
-            claw.setVoltageCommand(RollerConstants.kIntakePower)
-        );
+    public Command intake() {
+        return intakeRoller.setVoltageCommand(RollerConstants.kIntakePower);
     }
 
-    public Command holdCoral() {
-        return Commands.sequence(
-            claw.setClawPositionCommand(
-                ClawConstants.kCoralHoldPosition
-            ),
-            claw.setVoltageCommand(-2) // holding coral
-        );
+    public Command holdPiece() {
+        return intakeRoller.setVoltageCommand(-0.5); // holding coral
     }
 
-    public Command outtakeCoral() {
-        return Commands.sequence(
-            claw.setVoltageCommand(RollerConstants.kOuttakePower),
-            Commands.waitSeconds(0.5),
-            claw.setClawPositionCommand(ClawConstants.kCoralReleasePosition)
-        );
+    public Command outtake() {
+        if (currentPosition == NamedPositions.L1) {
+            return intakeRoller.setVoltageCommandLeft(RollerConstants.kOuttakePower); // Might need to make new constant for this
+        }
+        return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
     }
 
-    // algae
-    public Command intakeAlgae() {
-        return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kAlgaeOpenPosition),
-            claw.setVoltageCommand(-4.25)
-        );
-    }
-
-    public Command holdAlgae() {
-        return Commands.sequence(
-            claw.setClawPositionCommand(ClawConstants.kAlgaeHoldPosition),
-            claw.setVoltageCommand(-2)
-        );
-    }
-
-    public Command outtakeAlgae() {
-        return Commands.sequence(
-            claw.setVoltageCommand(4.25),
-            Commands.waitSeconds(0.5),
-            claw.setClawPositionCommand(ClawConstants.kAlgaeReleasePosition)
-        );
+    public Command shootAlgae() {
+        return intakeRoller.setVoltageCommand(4.25);
     }
 
     // movement
@@ -178,7 +128,6 @@ public class SuperSystem {
             execute(ExecutionOrder.WRT_ELV_PVT, 10.0, 
             V1ElevatorConstants.kElevatorPivotStowPosition, ElevatorConstants.kElevatorStowPosition, WristConstants.kIntermediatePosition),
             wrist.setPositionCommand(WristConstants.kStowPosition)
-
         );
     }
 
@@ -310,13 +259,12 @@ public class SuperSystem {
         pivot.setEnabled(true);
         wrist.setEnabled(true);
         elevator.setEnabled(true);
-        claw.setEnabled(true);
+        intakeRoller.setEnabled(true);
         
         pivot.setTargetPosition(0.0);
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(0.0);
-        claw.setClawPosition(ClawConstants.kClosedPosition);
-        claw.setVoltageCommand(0.0);
+        intakeRoller.setVoltageCommand(0.0);
         isStarted = false;
     }
 

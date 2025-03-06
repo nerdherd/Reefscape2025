@@ -24,9 +24,9 @@ public class Bottom2Piece extends SequentialCommandGroup {
     private static List<PathPlannerPath> pathGroup;
     private static Pose2d startingPose;
 
-    public Bottom2Piece(SwerveDrivetrain swerve, IntakeV2 intake, Elevator elevator, String autoPath) 
+    public Bottom2Piece(SwerveDrivetrain swerve, IntakeV2 intakeV2, Elevator elevator, String autoPath) 
     throws IOException, ParseException {
-        this.intake = intake;
+        this.intake = intakeV2;
         this.elevator = elevator;
 
         this.pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);

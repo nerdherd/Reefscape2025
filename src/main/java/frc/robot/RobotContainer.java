@@ -46,7 +46,6 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.IntakeV2;
 import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.ElevatorPivot;
@@ -60,8 +59,7 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
-  public IntakeV2 intakeV2;
-  // public IntakeRoller intakeRoller;
+  public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
   public IntakeWrist intakeWrist;
@@ -110,18 +108,12 @@ public class RobotContainer {
     }
 
     if (USE_SUBSYSTEMS) {
-      // intake = new IntakeV2();
       intakeWrist = new IntakeWrist(V1);
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
-      intakeV2 = new IntakeV2();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeV2);
+      intakeRoller = new IntakeRoller();
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller);
     }
-
-    // intakeWrist.setEnabledCommand(USE_WRIST);
-    // elevator.setEnabledCommand(USE_ELEV);
-    // elevatorPivot.setEnabledCommand(USE_PIVOT);
-    // intakeV2.setEnabledCommand(USE_INTAKE);
 
     initShuffleboard();
     initAutoChoosers();
@@ -228,30 +220,11 @@ public class RobotContainer {
     .onTrue(superSystem.moveToL1());
 
     driverController.triggerLeft()
-    .onTrue(superSystem.outtakeCoral());
-    //.onFalse(intakeV2.stopRollerCommand());// TODO
-
-    driverController.bumperLeft()
-    .onTrue(superSystem.outtakeAlgae());
-    //.onFalse(intakeV2.stopRollerCommand());// TODO
+    .onTrue(superSystem.outtake());
 
     //////////////////////
     // Operator bindings
     //////////////////////
-    /// 
-    // operatorController.joystickLeft()
-    // .on(wrist.incrementOffset)
-    operatorController.dpadRight()
-      .whileTrue(
-        Commands.runOnce(() -> {
-         // if(operatorController.getLeftY() < -0.05){
-            superSystem.moveClawDown();
-        //  } else if(operatorController.getLeftY() > 0.05){
-          //  superSystem.moveClawUp();
-        //  }
-        })
-      );
-
     operatorController.dpadUp()
       .onTrue(superSystem.moveToNet());
 
@@ -284,14 +257,12 @@ public class RobotContainer {
       ////////
       /// Many things need to be done!!!
       operatorController.triggerRight()
-      .onTrue(superSystem.intakeCoral());
-      // .onFalse(intakeV2.stopClawCommand()); // TODO
+      .onTrue(superSystem.intake());
 
     // todo: use a trigger to do all motors' position and intake algae actions
     //(intake from reef, and from ground)
     operatorController.bumperRight()
-    .onTrue(superSystem.intakeAlgae());
-    // .onFalse(intakeV2.stopClawCommand()); // TODO
+    .onTrue(superSystem.intake());
   }
 
 
@@ -308,13 +279,6 @@ public class RobotContainer {
     operatorController.controllerRight()
     .onTrue(superSystem.moveTo(NamedPositions.Processor));    
 
-    operatorController.dpadRight()
-    .whileTrue(
-      Commands.runOnce(() -> {
-          superSystem.moveClawDown();
-      })
-    );
-
     operatorController.dpadDown()
     .onTrue(superSystem.moveTo(NamedPositions.L1));
     operatorController.dpadLeft()
@@ -326,54 +290,33 @@ public class RobotContainer {
     
 
     operatorController.triggerRight()
-    .onTrue(superSystem.intakeCoral())
-    .onFalse(superSystem.holdCoral());
+      .onTrue(superSystem.intake())
+      .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-    .onTrue(superSystem.outtakeCoral())
-    .onFalse(superSystem.closeClaw());
-    operatorController.bumperRight()
-    .onTrue(superSystem.intakeAlgae())
-    .onFalse(superSystem.holdAlgae());
-    operatorController.bumperLeft()
-    .onTrue(superSystem.outtakeAlgae())
-    .onFalse(superSystem.closeClaw());
+      .onTrue(superSystem.outtake());
 
     operatorController.buttonUp()
-    .onTrue(superSystem.moveTo(NamedPositions.Station));
+      .onTrue(superSystem.moveTo(NamedPositions.Station));
     operatorController.buttonRight()
-    .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
     operatorController.buttonDown()
-    .onTrue(superSystem.moveTo(NamedPositions.Stow));
+      .onTrue(superSystem.moveTo(NamedPositions.Stow));
     operatorController.buttonLeft()
-    .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     
-    // operatorController.bumperLeft()
-    // .onTrue(superSystem.intakeCoral());
-    // operatorController.triggerLeft()
-    // .onTrue(superSystem.outtakeCoral());
-    // operatorController.bumperRight()
-    // .onTrue(superSystem.intakeAlgae());
-    // operatorController.triggerRight()
-    // .onTrue(superSystem.outtakeAlgae());
-
-    // operatorController.buttonLeft()
-    // .onTrue(superSystem.stopRoller());
-    // operatorController.buttonRight()
-    // .onTrue(superSystem.closeClaw());
-
     // operatorController.triggerRight()
     // .onTrue(superSystem.moveToSemiStow());
    }
   
   private void initAutoChoosers() {
 
-    try { // ide displayed error fix
-      bottom2Piece = new Bottom2Piece(swerveDrive, intakeV2, elevator, "Bottom2Piece");
+    // try { // ide displayed error fix
+      // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
       // pathOnlyBottom2Piece = new PathOnlyBottom2Piece(swerveDrive, "PathOnlyBottom2Piece");
-    } catch (Exception e) {
-      DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
-      return;
-    } 
+    // } catch (Exception e) {
+    //   DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
+    //   return;
+    // } 
 
     try { // fix for vendordeps not importing
     PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
@@ -400,11 +343,10 @@ public class RobotContainer {
     // swerveDrive.initShuffleboard(loggingLevel);
     // swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_SUBSYSTEMS) { 
-      // intakeRoller.initShuffleboard(loggingLevel); 
+      intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
-      intakeV2.initShuffleboard(loggingLevel);
     }
   }
   

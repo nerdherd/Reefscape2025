@@ -31,6 +31,9 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private boolean enabled = false;
     private boolean velocityControl = true;
 
+    private double desiredVoltageLeft = 0;
+    private double desiredVoltageRight = 0;
+
     public IntakeRoller() {
         rollerMotor = new TalonFX(RollerConstants.kMotorID);
         rollerMotorRight = new TalonFX(62);
@@ -111,16 +114,15 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
             rollerMotorRight.setControl(brakeRequest);
         }
         else {
-            rollerMotor.setControl(velocityRequest);  
-            rollerMotorRight.setControl(velocityRequestRight);
-     
+            rollerMotor.setVoltage(desiredVoltageLeft);  
+            rollerMotorRight.setVoltage(desiredVoltageRight);
         } 
 
     }
  
     // ****************************** STATE METHODS ***************************** //
 
-    private void setEnabled(boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
@@ -130,6 +132,11 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     private double getTargetVelocity() {
         return velocityRequest.Velocity;
+    }
+
+    private void setVoltage(double volt) {
+        desiredVoltageLeft = volt;
+        desiredVoltageRight = -volt;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -153,6 +160,18 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
+    public Command setVoltageCommand(double volt) {
+        return Commands.runOnce(() -> setVoltage(volt));
+    }
+
+    public Command setVoltageCommandLeft(double volt) {
+        return Commands.runOnce(() -> setVoltage(volt));
+    }
+
+    public Command setVoltageCommandRight(double volt) {
+        return Commands.runOnce(() -> setVoltage(volt));
+    }
+
     private Command stopCommand() {
         return Commands.sequence(
             setVelocityCommand(0),
@@ -161,7 +180,6 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
 
     // ****************************** NAMED COMMANDS ****************************** //
-
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
