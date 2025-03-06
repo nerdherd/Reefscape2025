@@ -6,7 +6,6 @@ import java.util.List;
 import org.json.simple.parser.ParseException;
 
 import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.IntakeV2;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import pabeles.concurrency.IntRangeTask;
@@ -19,12 +18,12 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class Bottom2Piece extends SequentialCommandGroup {
-    private static IntakeV2 intake;
+    private static IntakeRoller intake;
     private static Elevator elevator;
     private static List<PathPlannerPath> pathGroup;
     private static Pose2d startingPose;
 
-    public Bottom2Piece(SwerveDrivetrain swerve, IntakeV2 intakeV2, Elevator elevator, String autoPath) 
+    public Bottom2Piece(SwerveDrivetrain swerve, IntakeRoller intakeV2, Elevator elevator, String autoPath) 
     throws IOException, ParseException {
         this.intake = intakeV2;
         this.elevator = elevator;
@@ -43,37 +42,37 @@ public class Bottom2Piece extends SequentialCommandGroup {
     public Command runAuto() {
         return Commands.sequence(
             AutoBuilder.followPath(pathGroup.get(0)),
-            elevator.moveToReefL4(),
+            // elevator.moveToReefL4(),
             //intake.outtake(),
             Commands.waitSeconds(1.5),
             //intake.stop(),
 
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(1))
             ),
-            elevator.moveToStation(),
+            // elevator.moveToStation(),
             //intake.intakeCoral(),
             Commands.waitSeconds(2.5),
             //intake.stop(),
 
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            elevator.moveToReefL3(),
+            // elevator.moveToReefL3(),
             //intake.outtake(),
-            Commands.waitSeconds(1.5),
+            Commands.waitSeconds(1.5)
             //intake.stop(),
 
-            elevator.stow()
+            // elevator.stow()
         );
     }
 
     public Command stopAuto() {
         return Commands.sequence(
             //intake.stop(),
-            elevator.stow()
+            // elevator.stow()
         );
     }
 }

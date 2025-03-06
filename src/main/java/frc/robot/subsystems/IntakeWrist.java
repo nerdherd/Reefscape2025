@@ -218,7 +218,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         );
     }
 
-    private Command stopCommand() {
+    public Command stopCommand() {
         return Commands.sequence(
             setEnabledCommand(false),
             Commands.runOnce(() -> motor.setControl(brakeRequest))
@@ -227,38 +227,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public Command setPivotAngleCommand(double pivotAngle) {
         return Commands.runOnce(() -> setPivotAngle(pivotAngle));
-    }
-
-    // ****************************** NAMED COMMANDS ****************************** //
-
-    // public StatusCode setControl(VoltageOut request)
-    // {
-    //     return motor.setControlPrivate(request);
-    // }
-
-    public TalonFX getMotor()
-    {
-        return motor;
-    }
-
-    public Command moveToStow() {
-        return setPositionCommand(WristConstants.kStowPosition);
-    }
-
-    public Command moveToStation() {
-        return setPositionCommand(WristConstants.kStationPosition);
-    }
-
-    public Command moveToReefL14() {
-        return setPositionCommand(WristConstants.kL14Position);
-    }
-
-    public Command moveToReefL23() {
-        return setPositionCommand(WristConstants.kL23Position);
-    }
-
-    public Command stop() {
-        return stopCommand();
     }
 
     // ****************************** LOGGING METHODS ****************************** //

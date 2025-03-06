@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.V1ElevatorConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.util.NerdyMath;
 
 public class ElevatorPivot extends SubsystemBase implements Reportable{
@@ -38,7 +38,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest;  
     private final NeutralOut brakeRequest = new NeutralOut();
 
-    private final Follower followRequest = new Follower(V1ElevatorConstants.kLeftPivotMotorID, true);
+    private final Follower followRequest = new Follower(PivotConstants.kLeftPivotMotorID, true);
     // public final VoltageOut voltageRequest = new VoltageOut(0);
 
     private double ff;
@@ -50,10 +50,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         desiredPosition = 0.0;
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
 
-        pivotMotor = new TalonFX(V1ElevatorConstants.kLeftPivotMotorID);
+        pivotMotor = new TalonFX(PivotConstants.kLeftPivotMotorID);
         pivotConfigurator = pivotMotor.getConfigurator();
 
-        pivotMotorRight = new TalonFX(V1ElevatorConstants.kRightPivotMotorID);
+        pivotMotorRight = new TalonFX(PivotConstants.kRightPivotMotorID);
         // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
 
         pivotConfiguratorRight = pivotMotorRight.getConfigurator();
@@ -71,17 +71,17 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         
         pivotConfigurator.refresh(pivotConfiguration);
 
-        pivotConfiguration.Slot0.kP = V1ElevatorConstants.kPElevatorPivot; 
-        pivotConfiguration.Slot0.kI = V1ElevatorConstants.kIElevatorPivot;
-        pivotConfiguration.Slot0.kD = V1ElevatorConstants.kDElevatorPivot;
-        pivotConfiguration.Slot0.kV = V1ElevatorConstants.kVElevatorPivot;
-        pivotConfiguration.Slot0.kS = V1ElevatorConstants.kSElevatorPivot;
-        pivotConfiguration.Slot0.kA = V1ElevatorConstants.kAElevatorPivot;
-        pivotConfiguration.Slot0.kG = V1ElevatorConstants.kGElevatorPivot;
+        pivotConfiguration.Slot0.kP = PivotConstants.kPElevatorPivot; 
+        pivotConfiguration.Slot0.kI = PivotConstants.kIElevatorPivot;
+        pivotConfiguration.Slot0.kD = PivotConstants.kDElevatorPivot;
+        pivotConfiguration.Slot0.kV = PivotConstants.kVElevatorPivot;
+        pivotConfiguration.Slot0.kS = PivotConstants.kSElevatorPivot;
+        pivotConfiguration.Slot0.kA = PivotConstants.kAElevatorPivot;
+        pivotConfiguration.Slot0.kG = PivotConstants.kGElevatorPivot;
         
-        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = V1ElevatorConstants.kEPivotCruiseVelocity;
-        pivotConfiguration.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorPivotCruiseAcceleration;
-        pivotConfiguration.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorPivotJerk;
+        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = PivotConstants.kEPivotCruiseVelocity;
+        pivotConfiguration.MotionMagic.MotionMagicAcceleration = PivotConstants.kElevatorPivotCruiseAcceleration;
+        pivotConfiguration.MotionMagic.MotionMagicJerk = PivotConstants.kElevatorPivotJerk;
         pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0;
         pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0;
         
@@ -89,16 +89,16 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
         pivotConfiguratorRight.refresh(pivotConfigurationRight);
 
-        pivotConfigurationRight.Slot0.kP = V1ElevatorConstants.kPElevatorPivot; 
-        pivotConfigurationRight.Slot0.kI = V1ElevatorConstants.kIElevatorPivot;
-        pivotConfigurationRight.Slot0.kD = V1ElevatorConstants.kDElevatorPivot;
-        pivotConfigurationRight.Slot0.kV = V1ElevatorConstants.kVElevatorPivot;
-        pivotConfigurationRight.Slot0.kS = V1ElevatorConstants.kSElevatorPivot;
-        pivotConfigurationRight.Slot0.kA = V1ElevatorConstants.kAElevatorPivot;
-        pivotConfigurationRight.Slot0.kG = V1ElevatorConstants.kGElevatorPivot;
+        pivotConfigurationRight.Slot0.kP = PivotConstants.kPElevatorPivot; 
+        pivotConfigurationRight.Slot0.kI = PivotConstants.kIElevatorPivot;
+        pivotConfigurationRight.Slot0.kD = PivotConstants.kDElevatorPivot;
+        pivotConfigurationRight.Slot0.kV = PivotConstants.kVElevatorPivot;
+        pivotConfigurationRight.Slot0.kS = PivotConstants.kSElevatorPivot;
+        pivotConfigurationRight.Slot0.kA = PivotConstants.kAElevatorPivot;
+        pivotConfigurationRight.Slot0.kG = PivotConstants.kGElevatorPivot;
         
-        pivotConfigurationRight.MotionMagic.MotionMagicCruiseVelocity = V1ElevatorConstants.kEPivotCruiseVelocity;
-        pivotConfigurationRight.MotionMagic.MotionMagicAcceleration = V1ElevatorConstants.kElevatorPivotCruiseAcceleration;
+        pivotConfigurationRight.MotionMagic.MotionMagicCruiseVelocity = PivotConstants.kEPivotCruiseVelocity;
+        pivotConfigurationRight.MotionMagic.MotionMagicAcceleration = PivotConstants.kElevatorPivotCruiseAcceleration;
         // pivotConfigurationRight.MotionMagic.MotionMagicJerk = V1ElevatorConstants.kElevatorPivotJerk; // TODO
         pivotConfigurationRight.MotionMagic.MotionMagicExpo_kV = 0;
         pivotConfigurationRight.MotionMagic.MotionMagicExpo_kA = 0;
@@ -121,7 +121,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // pivotConfiguration.Feedback.FeedbackRemoteSensorID = FeedbackSensorSourceValue.RotorSensor;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
         // pivotConfiguration.Feedback.RotorToSensorRatio = ; // 0.1
-        pivotConfiguration.Feedback.SensorToMechanismRatio = V1ElevatorConstants.kElevatorPivotGearRatio; 
+        pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kElevatorPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
@@ -143,7 +143,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         // pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
         pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; //TODO change orientation later
         // pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
-        pivotConfigurationRight.Feedback.SensorToMechanismRatio = V1ElevatorConstants.kElevatorPivotGearRatio; 
+        pivotConfigurationRight.Feedback.SensorToMechanismRatio = PivotConstants.kElevatorPivotGearRatio; 
         pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; 
         pivotConfigurationRight.Voltage.PeakForwardVoltage = 11.5;
         pivotConfigurationRight.Voltage.PeakReverseVoltage = -11.5;
@@ -164,7 +164,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     public void periodic() {
         // why do we change it? -Duan
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
-        ff =  ElevatorConstants.kElevatorPivotStowedFF * Math.cos(2 * Math.PI * getPosition());
+        ff =  PivotConstants.kFElevatorPivot * Math.cos(2 * Math.PI * getPosition());
 
         if (enabled) {
             pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 

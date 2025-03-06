@@ -289,22 +289,9 @@ public final class Constants {
   }
 
   public static final class ElevatorConstants {
-
     // ************************************** ELEVATOR CONSTANTS *************************************** //
-    
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
-    public static final double kElevatorStowPosition    =  0.05; //0.5   // TODO change later
-    public static final double kElevatorStationPosition = 0;//-2 // TODO change later
-    public static final double kElevatorL1Position =   0;      // TODO change later
-    public static final double kElevatorL2Position =  0.1;      // TODO change later
-    public static final double kElevatorL2L3Position =  0.5;      // TODO change later
-    public static final double kElevatorL3Position = 1.36;      // TODO change later
-    public static final double kElevatorL3L4Position = 1.36;      // TODO change later
-    public static final double kElevatorL4Position = 3.15;      // TODO change later
-    public static final double kElevatorSpeed = 1.0;           // TODO change later
-    public static final double kElevatorGroundIntake = 0.562;           // TODO change later
-
 
     public static final double kPElevatorMotor = 4.0; // 3.0 as of 3/1/25
     public static final double kIElevatorMotor = 0;
@@ -316,64 +303,9 @@ public final class Constants {
     public static final double kElevatorCruiseVelocity = 20; //16.333 //30
     public static final double kElevatorCruiseAcceleration = 40.000;
     public static final double kElevatorJerk = 400.0;
-
-    // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-    public static final int kLeftPivotMotorID = 17; 
-    public static final int kPivotPigeonID = 2; // TODO change later
-    
-    public static final double kPElevatorPivot = 40; //1.2
-    public static final double kIElevatorPivot = 0;
-    public static final double kDElevatorPivot = 0;
-    public static final double kVElevatorPivot = 0; //0.4
-    public static final double kSElevatorPivot = 0; //0.34
-    public static final double kAElevatorPivot = 0.0; //0.01
-    public static final double kGElevatorPivot = 0; //0.08
-
-    public static final double kElevatorPivotStowPosition = -1.6; // Was -26 //TODO change later -22
-    public static final double kElevatorPivotStationPosition = 0.15;
-    public static final double kElevatorPivotStartPosition = 0; //TODO change later
-    public static final double kElevatorPivotPickUpPosition = -40; //TODO change later   -60
-
-    public static final double kElevatorPivotMin = -56.3; // TODO change later    -61.3
-    public static final double kElevatorPivotMax = -25.4; // TODO change later   -20.4
-
-    public static final double kElevatorPivotGearRatio = 27.0; // TODO change later
-    public static final double kElevatorPivotDeadBand = 0;
-    public static final double kElevatorPivotOffSet = 0;
-
-    public static final double kEPivotCruiseVelocity = 80.0; //16.333
-    public static final double kElevatorPivotCruiseAcceleration = 500.000;
-    public static final double kElevatorPivotJerk = 900.0;
-
-    public static final double kElevatorPivotStowedFF = 0.5;
-    public static final double kElevatorPivotExtendedFF = 0.54117686;
-    public static final double kElevatorPivotDiffFF = kElevatorPivotExtendedFF-kElevatorPivotStowedFF;
-    public static final double kElevatorPivotExtendedFFPosition = 0.231934;
-    
  }
 
- public static final class V1ElevatorConstants {
-
-    // ************************************** ELEVATOR CONSTANTS *************************************** //
-
-    public static final int kElevatorMotorID = 0;            // TODO change later 
-    public static final int kElevatorMotorRightID = 0;            // TODO change later 
-    public static final double kElevatorStowPosition    = 0; // TODO change later
-    public static final double kElevatorStationPosition = 0 ; // TODO change later
-    public static final double kElevatorL1Position =   0;     // TODO change later
-    public static final double kElevatorL2Position =  0;     // TODO change later
-    public static final double kElevatorL2L3Position =  0;     // TODO change later
-    public static final double kElevatorL3Position = 0;     // TODO change later
-    public static final double kElevatorL3L4Position = 0;     // TODO change later
-    public static final double kElevatorL4Position = 0;     // TODO change later
-    public static final double kElevatorSpeed = 1.0;          // TODO change later
-    public static final double kPElevatorMotor = 0.1;
-    public static final double kIElevatorMotor = 0;
-    public static final double kDElevatorMotor = 0;
-    public static final double kVElevatorMotor = 0;
-
-    // ********************************* ELEVATOR PIVOT CONSTANTS ********************************** //
-
+ public static final class PivotConstants {
     public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
@@ -385,7 +317,9 @@ public final class Constants {
     public static final double kVElevatorPivot = 0; 
     public static final double kSElevatorPivot = 0; 
     public static final double kAElevatorPivot = 0.0; 
-    public static final double kGElevatorPivot = 0; 
+    public static final double kGElevatorPivot = 0;
+
+    public static final double kFElevatorPivot = 0.5; 
 
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
@@ -400,8 +334,8 @@ public final class Constants {
     public static final double kElevatorPivotOffSet = 0;
 
     public static final double kEPivotCruiseVelocity = 0.4;//0.25 // 0.5
-    public static final double kElevatorPivotCruiseAcceleration = 0.6; // 0.5
-    // public static final double kElevatorPivotJerk = 200.0; // TODO
+    public static final double kElevatorPivotCruiseAcceleration = 500; // 0.5
+    public static final double kElevatorPivotJerk = 900.0; 
     public static final double kElevatorPivotGroundIntake = -0.001;
   }
 
@@ -422,37 +356,6 @@ public final class Constants {
     public static final double kOuttakePower = 5;
 
   }
-
-  public static final class ClawConstants {
-
-    public static final int kMotorID = 61;
-
-    public static final double kPMotor = 40;//60 //MAX 4000
-    // 3 degrees error / 360 degrees * kP = 0.4V
-    public static final double kIMotor = 0;
-    public static final double kDMotor = 0;
-    public static final double kVMotor = 0;
-    public static final double kSMotor = 0; //Static Friction
-    public static final double kGMotor = 0; //Gravity
-
-    public static final double kCruiseVelocity = 50; // TODO change later
-    public static final double kAcceleration = kCruiseVelocity * 2; //Rotations per second squared
-    public static final double kJerk = kAcceleration * 10; //Rotations per second cubed
-
-
-    public static final double kAlgaeHoldPosition = 0.28; 
-    public static final double kCoralHoldPosition = 0.075;//-0.004
-    public static final double kAlgaeReleasePosition = 0.169; 
-    public static final double kCoralReleasePosition = 0.096562;//-0.008789;  
-    public static final double kAlgaeOpenPosition = 0.24; 
-    public static final double kCoralOpenPosition = 0.105; 
-    public static final double kStowPosition = 0; 
-    public static final double kClosedPosition = 0.05;
-    public static final double kStationPosition = 0.08;
-    //public static final double kStationHoldPosition = 0.09;
-
- }
-
   public static final class WristConstants{
     public static final int kMotorID = 54;
   
@@ -466,20 +369,6 @@ public final class Constants {
     public static final double kCruiseVelocity = 2;
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
-
-    public static final double kStowPosition = -0.1;//-0.15//0.092//0.0
-    public static final double kIntermediatePosition = -0.123; //-0.06//-0.4
-    public static final double kStationPosition = -0.6043;//-0.89//-0.3//0.54
-    public static final double kL23Position = -0.3; // was -0.6
-    public static final double kL14Position = -0.8;
-    public static final double kL234AlagePosition = -0.8;
-    public static final double kWristStowPosition = 0.0;
-    public static final double kWristL3Position = -0.28;
-    public static final double kWristL2Position = -0.28;
-    public static final double kWristL1Position = -0.21;
-    public static final double kWristL4Position = -0.318;
-    public static final double kWristGroundIntake = -0.808;
-
 
     public static final double kMaxPosition = 0.14; //156
     public static final double kMinPosition = 0;
@@ -521,7 +410,7 @@ public final class Constants {
       L2(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.1, -0.28, -0.3),
       L3(           ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.28, -0.3),
       L4(           ExecutionOrder.WRT_PVT_ELV, 0.24, 3.15, -0.318, -0.3),
-      L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3),
+      L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3), 
       L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
       AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update
       AlgaeL3(      ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.307, -0.3) // TODO update

@@ -30,7 +30,7 @@ import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.commands.StationCommand;
 import frc.robot.commands.StowCommand;
-import frc.robot.Constants.V1ElevatorConstants;
+import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 // import frc.robot.commands.autos.PreloadTaxi;
@@ -49,6 +49,7 @@ import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.ElevatorPivot;
+import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 
 import frc.robot.util.Controller;
 import frc.robot.util.filters.OldDriverFilter2;
@@ -205,19 +206,19 @@ public class RobotContainer {
     );
 
     driverController.controllerRight()
-    .onTrue(superSystem.moveToStow()); // todo remove it
+    .onTrue(superSystem.moveTo(NamedPositions.Stow)); // todo remove it
 
     driverController.dpadUp()
-    .onTrue(superSystem.moveToL4());
+    .onTrue(superSystem.moveTo(NamedPositions.L4));
 
     driverController.dpadRight()
-    .onTrue(superSystem.moveToL3());
+    .onTrue(superSystem.moveTo(NamedPositions.L3));
 
     driverController.dpadLeft()
-    .onTrue(superSystem.moveToL2());
+    .onTrue(superSystem.moveTo(NamedPositions.L2));
 
     driverController.dpadDown()
-    .onTrue(superSystem.moveToL1());
+    .onTrue(superSystem.moveTo(NamedPositions.L1));
 
     driverController.triggerLeft()
     .onTrue(superSystem.outtake());
@@ -232,7 +233,7 @@ public class RobotContainer {
     // .onTrue(superSystem.moveToL3L4());
 
     operatorController.dpadLeft()
-    .onTrue(superSystem.moveToL2L3());
+    .onTrue(superSystem.moveTo(NamedPositions.L2L3));
 
     operatorController.dpadDown()
     .onTrue(superSystem.moveToProcessor());
@@ -241,17 +242,17 @@ public class RobotContainer {
       .onTrue(superSystem.moveToCage()); 
     
       operatorController.buttonUp()
-      .whileTrue(superSystem.moveToStation());
+      .whileTrue(superSystem.moveTo(NamedPositions.Station));
       
       operatorController.buttonRight()
-      .onTrue(superSystem.moveToSemiStow());
+      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
 
       operatorController.buttonDown()
-      .onTrue(superSystem.moveToStow());
+      .onTrue(superSystem.moveTo(NamedPositions.Stow));
 
       
       operatorController.buttonLeft()
-      .onTrue(superSystem.moveToGroundIntake());
+      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
 
 
       ////////

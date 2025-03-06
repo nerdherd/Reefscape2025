@@ -175,7 +175,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setTargetPosition(position));
     }
 
-    private Command stopCommand() {
+    public Command stopCommand() {
         return Commands.sequence(
             setEnabledCommand(false)
         );
@@ -183,36 +183,6 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public Command setPivotAngleCommand(double pivotAngle) {
         return Commands.runOnce(() -> setPivotAngle(pivotAngle));
-    }
-
-    // ****************************** NAMED COMMANDS ****************************** //
-
-    public Command stow() {
-        return setPositionCommand(ElevatorConstants.kElevatorStowPosition);
-    }
-
-    public Command moveToStation() {
-        return setPositionCommand(ElevatorConstants.kElevatorStationPosition);
-    }
-
-    public Command moveToReefL1() {
-        return setPositionCommand(ElevatorConstants.kElevatorL1Position);
-    }
-
-    public Command moveToReefL2() {
-        return setPositionCommand(ElevatorConstants.kElevatorL2Position);
-    }
-
-    public Command moveToReefL3() {
-        return setPositionCommand(ElevatorConstants.kElevatorL3Position);
-    }
-
-    public Command moveToReefL4() {
-        return setPositionCommand(ElevatorConstants.kElevatorL4Position);
-    }
-
-    public Command stop() {
-        return stopCommand();
     }
 
     // ****************************** LOGGING METHODS ****************************** //
