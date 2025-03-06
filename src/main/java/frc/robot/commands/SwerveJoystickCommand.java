@@ -139,6 +139,16 @@ public class SwerveJoystickCommand extends Command {
             return;
         }
 
+        // get speeds
+        double turningSpeed;
+        double xSpeed = xSpdFunction.get();
+        double ySpeed = -ySpdFunction.get();
+
+        double filteredTurningSpeed;
+        double filteredXSpeed = xFilter.calculate(xSpeed);
+        double filteredYSpeed = yFilter.calculate(ySpeed);
+
+        // let's not pass the driver's speed into the autopath...
         if(zoneId.get() != 0)
         {
             // Check moveLeft states
@@ -151,18 +161,9 @@ public class SwerveJoystickCommand extends Command {
 
             if(moveLeft.get() || moveRight.get())
             {
-                return; // just move it by autopath
+                return; // jump to autopath
             }
         }
-
-        // get speeds
-        double turningSpeed;
-        double xSpeed = xSpdFunction.get();
-        double ySpeed = -ySpdFunction.get();
-
-        double filteredTurningSpeed;
-        double filteredXSpeed = xFilter.calculate(xSpeed);
-        double filteredYSpeed = yFilter.calculate(ySpeed);
 
         if (turnToAngleSupplier.get()) {
             double tempAngle = desiredAngle.get();

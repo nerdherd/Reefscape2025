@@ -409,48 +409,109 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         backRight.run();
     }
 
+    
+            
+    private int getMostClosedApriltagIdInZone(int zoneId) {
+        return 17; // todo add cameras' reading 
+    }
+
     private Map<Integer, ArrayList<Pose2d>> myMap = new HashMap<>();
 
     private Pose2d calcuTargetPoseByReq(int zoneId, int poseId)
     {
         if(myMap.isEmpty()) // todo move it to constructor
         {
-            // Create ArrayLists to put in the map
-            ArrayList<Pose2d> list1 = new ArrayList<>();
-            list1.add(new Pose2d(1.1,1.2,new Rotation2d(90))); // must be left
-            list1.add(new Pose2d(2.1,2.2,new Rotation2d(90))); // must be right
-            myMap.put(16, list1);
+            ArrayList<Pose2d> list17 = new ArrayList<>();
+            list17.add(new Pose2d(3.204,2.591,new Rotation2d(-120))); // must be left
+            list17.add(new Pose2d(3.878,2.187,new Rotation2d(-120))); // must be right
+            myMap.put(17, list17);
 
-            ArrayList<Pose2d> list2 = new ArrayList<>();
-            list2.add(new Pose2d(1.1,1.2,new Rotation2d(190)));
-            list2.add(new Pose2d(2.1,2.2,new Rotation2d(190)));
-            myMap.put(17, list2);
+            ArrayList<Pose2d> list18 = new ArrayList<>();
+            list18.add(new Pose2d(2.646,4.391,new Rotation2d(180))); // must be left
+            list18.add(new Pose2d(2.646,3.707,new Rotation2d(180))); // must be right
+            myMap.put(18, list18);
+
+            ArrayList<Pose2d> list19 = new ArrayList<>();
+            list19.add(new Pose2d(3.897,5.805,new Rotation2d(120))); // must be left
+            list19.add(new Pose2d(3.262,5.555,new Rotation2d(120))); // must be right
+            myMap.put(19, list19);
+
+            ArrayList<Pose2d> list20 = new ArrayList<>();
+            list20.add(new Pose2d(5.831,5.401,new Rotation2d(60)));
+            list20.add(new Pose2d(5.109,5.776,new Rotation2d(60)));
+            myMap.put(20, list20);
+
+            ArrayList<Pose2d> list21 = new ArrayList<>();
+            list21.add(new Pose2d(6.321,3.535,new Rotation2d(0)));
+            list21.add(new Pose2d(6.321,4.343,new Rotation2d(0)));
+            myMap.put(21, list21);
+
+            ArrayList<Pose2d> list22 = new ArrayList<>();
+            list22.add(new Pose2d(5.008,2.2,new Rotation2d(154.638)));
+            list22.add(new Pose2d(5.85,2.649,new Rotation2d(154.638)));
+            myMap.put(22, list22);
+
+            ArrayList<Pose2d> list6 = new ArrayList<>();
+            list6.add(new Pose2d(13.672,2.187,new Rotation2d(-60))); // must be left
+            list6.add(new Pose2d(14.307,2.591,new Rotation2d(-60))); // must be right
+            myMap.put(6, list6);
+
+            ArrayList<Pose2d> list7 = new ArrayList<>();
+            list7.add(new Pose2d(14.914,3.602,new Rotation2d(0))); // must be left
+            list7.add(new Pose2d(14.914,4.333,new Rotation2d(0))); // must be right
+            myMap.put(7, list7);
+
+            ArrayList<Pose2d> list8 = new ArrayList<>();
+            list8.add(new Pose2d(14.375,5.411,new Rotation2d(60))); // must be left
+            list8.add(new Pose2d(13.672,5.5776,new Rotation2d(60))); // must be right
+            myMap.put(8, list8);
+
+            ArrayList<Pose2d> list9 = new ArrayList<>();
+            list9.add(new Pose2d(12.460,5.805,new Rotation2d(120)));
+            list9.add(new Pose2d(11.835,5.487,new Rotation2d(120)));
+            myMap.put(9, list9);
+
+            ArrayList<Pose2d> list10 = new ArrayList<>();
+            list10.add(new Pose2d(11.219,4.400,new Rotation2d(180)));
+            list10.add(new Pose2d(11.219,3.717,new Rotation2d(180)));
+            myMap.put(10, list10);
+
+            ArrayList<Pose2d> list11 = new ArrayList<>();
+            list11.add(new Pose2d(11.748,2.639,new Rotation2d(-120)));
+            list11.add(new Pose2d(12.383,2.264,new Rotation2d(-120)));
+            myMap.put(11, list11);
         }
+
         Pose2d targetPose = poseEstimator.getEstimatedPosition();
         if(zoneId == 1) // own reef
         {
-            if(poseId == -1)
+            // obtain the closed apriltag id from two low-back cameras.
+            int targetApriltagId = getMostClosedApriltagIdInZone(zoneId); 
+            if(myMap.containsKey(targetApriltagId))
             {
-                return myMap.get(17).get(0); // the left side of one apriltag on reef
-            }
-            else if(poseId == 1)
-            {
-                return myMap.get(17).get(1);// the right side of one apriltag on reef
-            }
-            else 
-            {
+                if(poseId == -1)
+                {
+                    return myMap.get(targetApriltagId).get(0); // the left side of one apriltag on reef
+                }
+                else if(poseId == 1)
+                {
+                    return myMap.get(targetApriltagId).get(1);// the right side of one apriltag on reef
+                }
+                else 
+                {
 
+                }
             }
         }
         return targetPose;
     }
-
-    double maxVelocityMps = 4;
+            
+                double maxVelocityMps = 4;
     double maxAccelerationMpsSq = 4;
     private Command pathfindingCommand; // Store the command reference
     public void setAutoPathRun(int zoneId, int poseId)
     {
-        Pose2d destPoseInBlue = new Pose2d(); // base on (poseid and zoneid and apriltag id)
+        Pose2d destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId); // base on (poseid and zoneid and apriltag id)
         PathConstraints pathcons = new PathConstraints(
             maxVelocityMps, maxAccelerationMpsSq, 
             Units.degreesToRadians(180), Units.degreesToRadians(360)
@@ -589,8 +650,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public int getCurrentZoneByPose()
     {
-        // todo read pose and apriltag to find out which zone
-        return 0; // 0 is default. 1 is in reef zone, 2 is in station zone1, 3 is in station zone2, 4 is in proc zone
+        Pose2d cPose2d = poseEstimator.getEstimatedPosition();
+        double xp = cPose2d.getX();
+        double yp = cPose2d.getY();
+
+        //1 is in reef zone, 2 is in station zone1, 3 is in station zone2, 4 is in proc zone
+        if(RobotContainer.IsRedSide())
+        {
+            // todo
+        }
+        else
+        {
+            if( xp > 1.1 && xp < 6.8 && yp > 1.5 && yp < 7.5) // a box area around reef
+            {
+                return 1;
+            }
+        }
+        return 0; // 0 is default for disable. 
     }
 
     public void drive(double xSpeed, double ySpeed, double turnSpeed) {
