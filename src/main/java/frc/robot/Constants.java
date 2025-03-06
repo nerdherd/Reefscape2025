@@ -304,6 +304,7 @@ public final class Constants {
     public static final double kElevatorCruiseAcceleration = 40.000;
     public static final double kElevatorJerk = 400.0;
  }
+ 
 
  public static final class PivotConstants {
     public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
@@ -396,6 +397,7 @@ public final class Constants {
     public static final double kClosedPosition = 0;
 
   }
+  
 
   public static final class SuperSystemConstants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
@@ -429,5 +431,10 @@ public final class Constants {
         this(eo, pp, ep, fwp, fwp);
       }
     }
+  }
+
+  public static final class BannerSensorConstants {
+    public static final int blackPort = 8;
+    public static final int whitePort = 9;
   }
 }

@@ -19,6 +19,7 @@ public class SuperSystem {
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
     public IntakeRoller intakeRoller;
+    public BannerSensor bannerSensor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
     
@@ -40,11 +41,12 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor bannerSensor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
+        this.bannerSensor = bannerSensor;
 
         pivotAtPosition = () -> pivot.atPosition();
         pivotAtPositionWide = () -> pivot.atPositionWide();
@@ -52,6 +54,8 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
+        
+        
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
         tab.addBoolean("isStarted", () -> isStarted);
@@ -81,9 +85,19 @@ public class SuperSystem {
         return intakeRoller.setVoltageCommand(0.0);
     }
 
-    // coral
+
     public Command intake() {
         return intakeRoller.setVoltageCommand(RollerConstants.kIntakePower);
+    }
+
+    public Command intakeUntilSensed() {
+        return Commands.sequence(
+            intake(), 
+            Commands.race(Commands.waitUntil(
+                bannerSensor::pieceDetected),
+                Commands.waitSeconds(5)),
+            holdPiece()
+        );
     }
 
     public Command holdPiece() {
