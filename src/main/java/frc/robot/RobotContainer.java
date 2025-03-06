@@ -32,6 +32,7 @@ import frc.robot.commands.StationCommand;
 import frc.robot.commands.StowCommand;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
+import frc.robot.Constants.BannerSensorConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
@@ -44,11 +45,13 @@ import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
+import frc.robot.subsystems.BannerSensor;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.ElevatorPivot;
+import frc.robot.subsystems.BannerSensor;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 
 import frc.robot.util.Controller;
@@ -64,7 +67,9 @@ public class RobotContainer {
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
   public IntakeWrist intakeWrist;
+  public BannerSensor bannerSensor;
   public SuperSystem superSystem;
+
 
   private Bottom2Piece bottom2Piece;
   private PathOnlyBottom2Piece pathOnlyBottom2Piece;
@@ -113,7 +118,8 @@ public class RobotContainer {
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
       intakeRoller = new IntakeRoller();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller);
+      bannerSensor = new BannerSensor();
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor);
     }
 
     initShuffleboard();
