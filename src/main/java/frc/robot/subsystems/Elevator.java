@@ -113,7 +113,7 @@ public class Elevator extends SubsystemBase implements Reportable {
             return;
         }
         elevatorMotor2.setControl(followRequest);
-        ff = (ElevatorConstants.kGElevatorMotor + ElevatorConstants.kSElevatorMotor) * Math.sin(pivotAngle * 2 * Math.PI);
+        ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
         elevatorMotor.setControl(motionMagicVoltage.withFeedForward(ff));
     }
 
