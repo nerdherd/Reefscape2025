@@ -8,11 +8,13 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -138,7 +140,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
 
         //Vision
-        layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);  
+        layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);      
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -707,6 +709,42 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             AutoBuilder.pathfindToPose(destPoseInBlue, pathcons),
             RobotContainer::IsRedSide  
         );
+    }
+
+    //Equation used found by Zachary Martinez
+    //https://www.desmos.com/calculator/q70q2ekunm
+
+    public Command moveLeftOf(int tagID) {
+        AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
+        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
+        Double theta_0 = tagRotationInverse.getRadians();
+        Double moveBy = 1.0; //TODO: Change Later
+        // D_x = R_x + M cos (theta_0)
+        // D_y = R_y + M sin (theta_0)
+        Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
+        return driveToRelativePose(00, 00, transformer);
+    }
+
+    public Command moveRightOf(int tagID) {
+        Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
+        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
+        Double theta_0 = tagRotationInverse.getRadians();
+        Double moveBy = -1.0; //TODO: Change Later
+        // D_x = R_x + M cos (theta_0)
+        // D_y = R_y + M sin (theta_0)
+        Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
+        return driveToRelativePose(00, 00, transformer);
+    }
+
+    public Command driveToRelativePose(double maxVelocityMps, double maxAccelerationMpsSq, Transform2d translation) {
+        Pose2d targetPose = getPose().plus(translation);
+        return driveToPose(targetPose, maxVelocityMps, maxAccelerationMpsSq);
+    }
+
+     public int getReefTagID(String limelightName) {
+        long id = NetworkTableInstance.getDefault().getTable(limelightName).getEntry("tid").getInteger(-1);
+        return (int) id;
     }
     
     public void setChassisSpeeds(ChassisSpeeds speeds) {
