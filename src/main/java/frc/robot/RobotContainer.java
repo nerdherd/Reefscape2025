@@ -40,6 +40,7 @@ import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.Bottom2Piece;
 import frc.robot.commands.autos.PathOnlyBottom2Piece;
+import frc.robot.commands.autos.TwoPiece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -331,8 +332,8 @@ public class RobotContainer {
   	List<String> paths = AutoBuilder.getAllAutoNames();
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
-
     autosTab.add("Selected Auto", autoChooser);
+    autoChooser.addOption("2PieceTest", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     // autoChooser.addOption("Path Only Bottom 2 Piece", pathOnlyBottom2Piece);

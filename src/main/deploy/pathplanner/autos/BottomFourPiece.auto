@@ -1,0 +1,49 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S6R6"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R6C4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C4R7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R7C4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C4R8"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R8C4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Bottom Half Autos",
+  "choreoAuto": false
+}
