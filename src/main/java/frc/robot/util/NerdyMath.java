@@ -121,4 +121,10 @@ public class NerdyMath {
         if (pose.getY() < 0 || pose.getY() > 8.5) return false;
         return true;
     }
+
+    public static boolean isPoseInsideCircleZone(double x0, double y0, double squaredR, double xn, double yn) {
+        double a = (xn - x0);
+        double b = (yn - y0);
+        return (a*a + b*b) < squaredR;
+    }
 }
