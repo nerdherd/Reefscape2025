@@ -16,15 +16,15 @@ import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
-public class TwoPiece extends SequentialCommandGroup {
-    public TwoPiece(SwerveDrivetrain swerve, String autoname, SuperSystem superSystem) throws IOException, ParseException {
+public class ThreePiece extends SequentialCommandGroup {
+    public ThreePiece(SwerveDrivetrain swerve, String autoname, SuperSystem superSystem) throws IOException, ParseException {
         
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
 
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
 
         addCommands(
-            // Commands.runOnce(swerve.getImu()::zeroAll), //Check if needed
+            // Commands.runOnce(swerve.getImu()::zeroAll), Check if needed
             Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
             Commands.runOnce(()->swerve.resetOdometryWithAlliance(startingPose)),
             
@@ -62,8 +62,32 @@ public class TwoPiece extends SequentialCommandGroup {
                 ),
                 Commands.sequence(
                     superSystem.outtake(),
-                    Commands.waitSeconds(0.2),
-                    superSystem.stopRoller()
+                    Commands.waitSeconds(0.2)
+                ),
+
+                Commands.parallel(
+                    superSystem.moveTo(NamedPositions.SemiStow),
+                    AutoBuilder.followPath(pathGroup.get(3)),
+                    Commands.sequence(
+                        Commands.waitSeconds(1),
+                        superSystem.moveToAuto(NamedPositions.Station)
+                    )
+                ),
+                Commands.sequence(
+                    superSystem.intakeUntilSensed(),
+                    superSystem.holdPiece()
+                ),
+                Commands.parallel(
+                    superSystem.moveTo(NamedPositions.SemiStow),
+                    AutoBuilder.followPath(pathGroup.get(4)),
+                    Commands.sequence(
+                        Commands.waitSeconds(1),
+                        superSystem.moveToAuto(NamedPositions.L2)
+                    )
+                ),
+                Commands.sequence(
+                    superSystem.outtake(),
+                    Commands.waitSeconds(0.2)
                 )
 
             )

@@ -65,6 +65,7 @@ public class SuperSystem {
     }
 
     // subsystems
+
     public Command zeroEncoders() {
         return Commands.runOnce(()-> {
             pivot.zeroEncoder();
@@ -100,6 +101,16 @@ public class SuperSystem {
         );
     }
 
+    public Command intakeUntilSensed(double timeout) {
+        return Commands.sequence(
+            intake(), 
+            Commands.race(Commands.waitUntil(
+                bannerSensor::pieceDetected),
+                Commands.waitSeconds(timeout)),
+            holdPiece()
+        );
+    }
+
     public Command holdPiece() {
         return intakeRoller.setVoltageCommand(-0.5); // holding coral
     }
@@ -128,6 +139,24 @@ public class SuperSystem {
         else return Commands.sequence(
             preExecute(),
             execute(position.executionOrder, 10.0, 
+            position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
+            wrist.setPositionCommand(position.finalWristPosition)
+            
+        );
+    }
+
+    public Command moveToAuto(NamedPositions position) {
+        // currentPosition = position;
+        if (position.intermediateWristPosition == position.finalWristPosition)
+            return Commands.sequence(
+                preExecute(),
+                execute(position.executionOrder, 5.0, 
+                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
+                              
+            );
+        else return Commands.sequence(
+            preExecute(),
+            execute(position.executionOrder, 5.0, 
             position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
             wrist.setPositionCommand(position.finalWristPosition)
             
