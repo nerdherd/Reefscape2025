@@ -13,19 +13,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "R4C4"
+            "pathName": "R4C1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C4R7"
+            "pathName": "C1R3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R3C1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C1R2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "OLD AUTOS",
+  "folder": "Middle Autos",
   "choreoAuto": false
 }

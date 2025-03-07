@@ -9,23 +9,11 @@
           "data": {
             "pathName": "S4R4"
           }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R4C4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C4R7"
-          }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "OLD AUTOS",
+  "folder": null,
   "choreoAuto": false
 }

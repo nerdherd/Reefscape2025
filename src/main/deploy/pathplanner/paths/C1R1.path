@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 3.6228547937729783,
-        "y": 2.8885548311121316
+        "x": 5.108668428308823,
+        "y": 5.272132424747242
       },
       "prevControl": {
-        "x": 3.5051604520100357,
-        "y": 3.109117842328853
+        "x": 4.99097408654588,
+        "y": 5.492695435963964
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R1"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 59.0748174435639
   },
   "reversed": false,
   "folder": "Top Half Paths",
