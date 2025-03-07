@@ -360,13 +360,14 @@ public final class Constants {
   public static final class WristConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor =  4.147 * 6; // 4.147  max
+    public static final double kPMotor =  3; 
+    // kP * err_rotations = Max_Volt_Needed (A little higher than kG)
+    //      err = 0.28 (10/360 degrees)
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
-    public static final double kVMotor = 0; //0.12;
-    public static final double kSMotor = 0; //0.015; //Static Friction
-    public static final double kGMotor = 0.6; //1.928; //0.015; //Gravity
-    // kGMotor = -2.310 + (0.002420 * theta)
+    public static final double kVMotor = 0;
+    public static final double kSMotor = 0; //Static Friction
+    public static final double kGMotor = 0.6; //Gravity
     public static final double kCruiseVelocity = 2;
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
