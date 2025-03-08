@@ -5,6 +5,7 @@
 package frc.robot;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
@@ -35,7 +36,6 @@ import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
-import frc.robot.commands.autos.Bottom2Piece;
 import frc.robot.commands.autos.PathOnlyBottom2Piece;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.Constants.ROBOT_ID;
@@ -76,15 +76,14 @@ public class RobotContainer {
   public SuperSystem superSystem;
 
 
-  private Bottom2Piece bottom2Piece;
   private PathOnlyBottom2Piece pathOnlyBottom2Piece;
-
-
+  
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
   
-  
-  public Generic2Piece genericBottom2Piece;
+  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+  // private Bottom2Piece bottom2Piece;
+  public Generic2Piece bottom2Piece;
   public Generic3Piece bottom3Piece;
   public Generic4Piece bottom4Piece;
   public isMeBottom2Piece isMeBottom2Piece;
@@ -331,7 +330,7 @@ public class RobotContainer {
     autoChooser.addOption("2PieceTest", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     autoChooser.addOption("twopieceauto", AutoBuilder.buildAuto("Bottom2Piece"));
 
-    autoChooser.setDefaultOption("Generic Bottom 2 Piece", genericBottom2Piece);
+    autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
     autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
     autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
 

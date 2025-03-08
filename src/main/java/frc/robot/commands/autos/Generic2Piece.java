@@ -42,7 +42,7 @@ public class Generic2Piece extends SequentialCommandGroup {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-            elevator.moveToReefL2(),
+            // elevator.moveToReefL2(),
             // Commands.runOnce(() -> {
             //     switch (pos2) {
             //     case "L1": elevator.moveToReefL1();
@@ -57,20 +57,20 @@ public class Generic2Piece extends SequentialCommandGroup {
 
             // Drive to Coral Station and intake coral 2
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(1))
             ),
-            elevator.moveToStation(),
-            intakeRoller.intake(),
+            // elevator.moveToStation(),
+            // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
             intakeRoller.stop(),
 
             // Drive to Reef and place coral 2
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            elevator.moveToReefL2(),
+            // elevator.moveToReefL2(),
             // Commands.runOnce(() -> {
             //     switch (pos2) {
             //     case "L1": elevator.moveToReefL1();
@@ -89,8 +89,8 @@ public class Generic2Piece extends SequentialCommandGroup {
 
     public Command stopAuto() {
         return Commands.sequence(
-            intakeRoller.stop(),
-            elevator.stow()
+            intakeRoller.stop()//,
+            // elevator.stow()
         );
     }
 }

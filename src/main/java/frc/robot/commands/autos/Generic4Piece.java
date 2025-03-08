@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.simple.parser.ParseException;
 
 import frc.robot.subsystems.IntakeRoller;
+import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -41,7 +42,8 @@ public class Generic4Piece extends SequentialCommandGroup {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-            elevator.moveToReefL2(),
+            // supersystem.moveto(NamedPositions.L4)
+            // elevator.moveToReefL2(),
             // Commands.runOnce(() -> {
             //     switch (pos1) {
             //     case "L1": elevator.moveToReefL1(); break;
@@ -56,20 +58,20 @@ public class Generic4Piece extends SequentialCommandGroup {
 
             // Drive to Coral Station and intake coral 2%
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(1))
             ),
-            elevator.moveToStation(),
-            intakeRoller.intake(),
+            // elevator.moveToStation(),
+            // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
             intakeRoller.stop(),
 
             // Drive to Reef and place coral 2
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            elevator.moveToReefL2(),
+            // elevator.moveToReefL2(),
             // Commands.runOnce(() -> {
             //     switch (pos2) {
             //     case "L1": elevator.moveToReefL1(); break;
@@ -84,20 +86,20 @@ public class Generic4Piece extends SequentialCommandGroup {
             
             // Drive to Coral Station and intake coral 3
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(3))
             ),
-            elevator.moveToStation(),
-            intakeRoller.intake(),
+            // elevator.moveToStation(),
+            // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
             intakeRoller.stop(),
 
             // Drive to Reef and place coral 3
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(4))
             ),
-            elevator.moveToReefL2(),
+            // elevator.moveToReefL2(),
             // Commands.runOnce(() -> {
             //     switch (pos3) {
             //     case "L1": elevator.moveToReefL1(); break;
@@ -112,20 +114,20 @@ public class Generic4Piece extends SequentialCommandGroup {
             
             // Drive to Coral Station and intake coral 4
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(5))
             ),
-            elevator.moveToStation(),
-            intakeRoller.intake(),
+            // elevator.moveToStation(),
+            // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
             intakeRoller.stop(),
 
             // Drive to Reef and place coral 4
             Commands.parallel(
-                elevator.stow(),
+                // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(6))
             ),
-            elevator.moveToReefL2(),
+            // elevator.moveToReefL2(),
             // Commands.runOnce(() -> {
             //     switch (pos4) {
             //     case "L1": elevator.moveToReefL1(); break;
@@ -142,8 +144,8 @@ public class Generic4Piece extends SequentialCommandGroup {
 
     public Command stopAuto() {
         return Commands.sequence(
-            intakeRoller.stop(),
-            elevator.stow()
+            intakeRoller.stop()//,
+            // elevator.stow()
         );
     }
 }
