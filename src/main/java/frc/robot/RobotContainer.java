@@ -227,6 +227,7 @@ public class RobotContainer {
     driverController.dpadDown()
     .onTrue(superSystem.moveTo(NamedPositions.L1));
 
+
     driverController.triggerLeft()
     .onTrue(superSystem.outtake());
 
@@ -275,17 +276,17 @@ public class RobotContainer {
 
 
   public void configureBindings_test() {
-    driverController.buttonDown()
-    .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+    // driverController.buttonDown()
+    // .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
 
-    //////////////////////////
-    /// DO NOT REMOVE IT
-    operatorController.controllerLeft()
-    .onTrue(superSystem.zeroEncoders());
-    ////////////////////////
+    // //////////////////////////
+    // /// DO NOT REMOVE IT
+    // operatorController.controllerLeft()
+    // .onTrue(superSystem.zeroEncoders());
+    // ////////////////////////
     
-    operatorController.controllerRight()
-    .onTrue(superSystem.moveTo(NamedPositions.Processor));    
+    // operatorController.controllerRight()
+    // .onTrue(superSystem.moveTo(NamedPositions.Processor));    
 
     operatorController.dpadDown()
     .onTrue(superSystem.moveTo(NamedPositions.L1));
@@ -293,15 +294,16 @@ public class RobotContainer {
     .onTrue(superSystem.moveTo(NamedPositions.L2));
     operatorController.dpadUp()
     .onTrue(superSystem.moveTo(NamedPositions.L3));
-    // operatorController.dpadRight()
-    // .onTrue(superSystem.moveToL4());
+    operatorController.dpadRight()
+    .onTrue(superSystem.moveTo(NamedPositions.L4));
     
 
     operatorController.triggerRight()
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-      .onTrue(superSystem.outtake());
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
 
     operatorController.buttonUp()
       .onTrue(superSystem.moveTo(NamedPositions.Station));
@@ -311,6 +313,7 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(NamedPositions.Stow));
     operatorController.buttonLeft()
       .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+
     
     // operatorController.triggerRight()
     // .onTrue(superSystem.moveToSemiStow());

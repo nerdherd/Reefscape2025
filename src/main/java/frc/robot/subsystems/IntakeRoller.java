@@ -35,8 +35,8 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private double desiredVoltageRight = 0;
 
     public IntakeRoller() {
-        rollerMotor = new TalonFX(RollerConstants.kMotorID);
-        rollerMotorRight = new TalonFX(62);
+        rollerMotor = new TalonFX(RollerConstants.kLeftMotorID);
+        rollerMotorRight = new TalonFX(RollerConstants.kRightMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
         rollerConfiguratorRight = rollerMotorRight.getConfigurator();
         velocityRequestRight.EnableFOC = true;
