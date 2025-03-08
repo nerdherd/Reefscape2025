@@ -35,8 +35,13 @@ import frc.robot.subsystems.SuperSystem.ExecutionOrder;
  // COMMENT ROBOT IDS INSTEAD OF DELETING
 
 public final class Constants {
+  public enum ROBOT_ID{
+    ISME,
+    V1,
+    V2,
+  }
 
-  public final static int ROBOT_NAME = 1;// 1= is me; 2 = demo
+  public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
 
   public static class ControllerConstants {
 

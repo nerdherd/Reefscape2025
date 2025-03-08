@@ -7,19 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "isMe S5R6"
+            "pathName": "S5R6"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "isMe R6C4"
+            "pathName": "R6C4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "isMe C4R7"
+            "pathName": "C4R7"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R7C4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C4R8"
           }
         }
       ]
