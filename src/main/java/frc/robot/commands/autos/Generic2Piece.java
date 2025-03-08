@@ -21,7 +21,7 @@ public class Generic2Piece extends SequentialCommandGroup {
     private Pose2d startingPose;
     public SuperSystem superSystem;
 
-    public Generic2Piece(SwerveDrivetrain swerve, SuperSystem superSystem, String autoPath, int pos1, int pos2) 
+    public Generic2Piece(SwerveDrivetrain swerve, SuperSystem superSystem, String autoPath) 
     throws IOException, ParseException {
         this.superSystem = superSystem;
 
@@ -31,21 +31,22 @@ public class Generic2Piece extends SequentialCommandGroup {
         addCommands(
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            runAuto(pos1, pos2)
+            runAuto("L2", "L2")
         );
     }
 
 
-    public Command runAuto(int pos1, int pos2) {
+    public Command runAuto(String pos1, String pos2) {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
+            superSystem.moveTo(NamedPositions.L2),
             Commands.runOnce(() -> {
                 switch (pos1) {
-                case 1: superSystem.moveTo(NamedPositions.L1);
-                case 2: superSystem.moveTo(NamedPositions.L2);
-                case 3: superSystem.moveTo(NamedPositions.L3);
-                case 4: superSystem.moveTo(NamedPositions.L4);
+                case "L1": superSystem.moveTo(NamedPositions.L1);
+                case "L2": superSystem.moveTo(NamedPositions.L2);
+                case "L3": superSystem.moveTo(NamedPositions.L3);
+                case "L4": superSystem.moveTo(NamedPositions.L4);
                 }
             }),
             superSystem.outtake(),
@@ -69,10 +70,10 @@ public class Generic2Piece extends SequentialCommandGroup {
             ),
             Commands.runOnce(() -> {
                 switch (pos2) {
-                case 1: superSystem.moveTo(NamedPositions.L1);
-                case 2: superSystem.moveTo(NamedPositions.L2);
-                case 3: superSystem.moveTo(NamedPositions.L3);
-                case 4: superSystem.moveTo(NamedPositions.L4);
+                case "L1": superSystem.moveTo(NamedPositions.L1);
+                case "L2": superSystem.moveTo(NamedPositions.L2);
+                case "L3": superSystem.moveTo(NamedPositions.L3);
+                case "L4": superSystem.moveTo(NamedPositions.L4);
                 }
             }),
             superSystem.intakeRoller.outtake(),
