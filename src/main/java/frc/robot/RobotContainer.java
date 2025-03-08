@@ -129,9 +129,9 @@ public class RobotContainer {
       bannerSensor = new BannerSensor();
       superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor);
       try { // ide displayed error fix
-        bottom2Piece = new Generic2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
-        bottom3Piece = new Generic3Piece(swerveDrive, intakeRoller, elevator, "Bottom3Piece");
-        bottom4Piece = new Generic4Piece(swerveDrive, intakeRoller, elevator, "Bottom4Piece");
+        bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece");
+        bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece");
+        bottom4Piece = new Generic4Piece(swerveDrive, superSystem, "Bottom4Piece");
       } catch (IOException e) {
         DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
       } catch (ParseException e) {

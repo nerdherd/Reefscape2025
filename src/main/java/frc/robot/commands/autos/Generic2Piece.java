@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
-import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.Elevator;
+import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -17,15 +17,13 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class Generic2Piece extends SequentialCommandGroup {
-    private IntakeRoller intakeRoller;
-    private Elevator elevator;
     private List<PathPlannerPath> pathGroup;
     private Pose2d startingPose;
+    public SuperSystem superSystem;
 
-    public Generic2Piece(SwerveDrivetrain swerve, IntakeRoller intakeRoller, Elevator elevator, String autoPath) 
+    public Generic2Piece(SwerveDrivetrain swerve, SuperSystem superSystem, String autoPath) 
     throws IOException, ParseException {
-        this.intakeRoller = intakeRoller;
-        this.elevator = elevator;
+        this.superSystem = superSystem;
 
         this.pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);
         this.startingPose = pathGroup.get(0).getStartingDifferentialPose();
@@ -42,18 +40,18 @@ public class Generic2Piece extends SequentialCommandGroup {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-            // elevator.moveToReefL2(),
-            // Commands.runOnce(() -> {
-            //     switch (pos2) {
-            //     case "L1": elevator.moveToReefL1();
-            //     case "L2": elevator.moveToReefL2();
-            //     case "L3": elevator.moveToReefL3();
-            //     case "L4": elevator.moveToReefL4();
-            //     }
-            // }),
-            intakeRoller.outtake(),
+            superSystem.moveTo(NamedPositions.L2),
+            Commands.runOnce(() -> {
+                switch (pos1) {
+                case "L1": superSystem.moveTo(NamedPositions.L1);
+                case "L2": superSystem.moveTo(NamedPositions.L2);
+                case "L3": superSystem.moveTo(NamedPositions.L3);
+                case "L4": superSystem.moveTo(NamedPositions.L4);
+                }
+            }),
+            superSystem.outtake(),
             Commands.waitSeconds(1.5),
-            intakeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Coral Station and intake coral 2
             Commands.parallel(
@@ -63,23 +61,22 @@ public class Generic2Piece extends SequentialCommandGroup {
             // elevator.moveToStation(),
             // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            intakeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Reef and place coral 2
             Commands.parallel(
                 // elevator.stow(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
-            // elevator.moveToReefL2(),
-            // Commands.runOnce(() -> {
-            //     switch (pos2) {
-            //     case "L1": elevator.moveToReefL1();
-            //     case "L2": elevator.moveToReefL2();
-            //     case "L3": elevator.moveToReefL3();
-            //     case "L4": elevator.moveToReefL4();
-            //     }
-            // }),
-            intakeRoller.outtake(),
+            Commands.runOnce(() -> {
+                switch (pos2) {
+                case "L1": superSystem.moveTo(NamedPositions.L1);
+                case "L2": superSystem.moveTo(NamedPositions.L2);
+                case "L3": superSystem.moveTo(NamedPositions.L3);
+                case "L4": superSystem.moveTo(NamedPositions.L4);
+                }
+            }),
+            superSystem.intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
 
             // Stop
@@ -89,7 +86,7 @@ public class Generic2Piece extends SequentialCommandGroup {
 
     public Command stopAuto() {
         return Commands.sequence(
-            intakeRoller.stop()//,
+            superSystem.intakeRoller.stop()//,
             // elevator.stow()
         );
     }
