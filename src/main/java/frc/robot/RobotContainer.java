@@ -37,6 +37,7 @@ import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.PathOnlyBottom2Piece;
+import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.Constants.ROBOT_ID;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -336,6 +337,7 @@ public class RobotContainer {
 
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
 
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }

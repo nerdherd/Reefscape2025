@@ -410,7 +410,7 @@ public final class Constants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
       Stow(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0, -0.15, -0.4),
       SemiStow(     ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.164, -0.4),
-      GroundIntake( ExecutionOrder.PVT_WRT_ELV, 0.004883, 0.626, -0.76, -0.4),
+      GroundIntake( ExecutionOrder.PVT_ELV_WRT, 0.025, 0.626, -0.76, -0.4),
       Station(      ExecutionOrder.WRT_PVT_ELV, 0.18, 1.12, -0.87, -0.4),
       Processor(    ExecutionOrder.WRT_ELV_PVT, 0.01, 0.428, -0.72, -0.4),
       Net(          ExecutionOrder.WRT_ELV_PVT, 0.24, 0.05, -0.1, -0.4),
