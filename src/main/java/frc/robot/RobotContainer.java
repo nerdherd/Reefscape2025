@@ -39,6 +39,7 @@ import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.PathOnlyBottom2Piece;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.TwoPiece;
+import frc.robot.commands.autos.TwoPiecePath;
 import frc.robot.Constants.ROBOT_ID;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.Generic2Piece;
@@ -341,6 +342,8 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.addOption("2PieceTest", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
+    autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "BottomTwoPiece", superSystem));
+
     autoChooser.addOption("twopieceauto", AutoBuilder.buildAuto("Bottom2Piece"));
 
     autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
@@ -350,6 +353,7 @@ public class RobotContainer {
     autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+  
 
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
