@@ -244,6 +244,9 @@ public class RobotContainer {
     driverController.buttonRight().onTrue(
       superSystem.repositionCoralRight()
     );
+    driverController.triggerLeft()
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
     
   
 
@@ -263,9 +266,7 @@ public class RobotContainer {
     operatorController.triggerRight()
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
+    
 
     operatorController.buttonUp()
       .onTrue(superSystem.moveTo(NamedPositions.Station));
