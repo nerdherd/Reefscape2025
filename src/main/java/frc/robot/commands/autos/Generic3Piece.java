@@ -21,7 +21,7 @@ public class Generic3Piece extends SequentialCommandGroup {
     private Pose2d startingPose;
     private SuperSystem superSystem;
 
-    public Generic3Piece(SwerveDrivetrain swerve, SuperSystem superSystem, String autoPath) 
+    public Generic3Piece(SwerveDrivetrain swerve, SuperSystem superSystem, String autoPath, int pos1, int pos2, int pos3) 
     throws IOException, ParseException {
     
         this.superSystem = superSystem;
@@ -32,25 +32,25 @@ public class Generic3Piece extends SequentialCommandGroup {
         addCommands(
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            runAuto("L3", "L3", "L3")
+            runAuto(pos1, pos2, pos3)
         );
     }
 
-    public Command runAuto(String pos1, String pos2, String pos3) {
+    public Command runAuto(int pos1, int pos2, int pos3) {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-       Commands.runOnce(() -> {
+            Commands.runOnce(() -> {
                 switch (pos1) {
-                case "L1": superSystem.moveTo(NamedPositions.L1);
-                case "L2": superSystem.moveTo(NamedPositions.L2);
-                case "L3": superSystem.moveTo(NamedPositions.L3);
-                case "L4": superSystem.moveTo(NamedPositions.L4);
+                case 1: superSystem.moveTo(NamedPositions.L1);
+                case 2: superSystem.moveTo(NamedPositions.L2);
+                case 3: superSystem.moveTo(NamedPositions.L3);
+                case 4: superSystem.moveTo(NamedPositions.L4);
                 }
             }),
             superSystem.outtake(),
             Commands.waitSeconds(1.5),
-            superSystem.intakeRoller.stop(),
+            superSystem.stopRoller(),
 
             // Drive to Coral Station and intake coral 2
             Commands.parallel(
@@ -60,7 +60,7 @@ public class Generic3Piece extends SequentialCommandGroup {
             // elevator.moveToStation(),
             // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            superSystem.intakeRoller.stop(),
+            superSystem.stopRoller(),
 
             // Drive to Reef and place coral 2
             Commands.parallel(
@@ -70,15 +70,15 @@ public class Generic3Piece extends SequentialCommandGroup {
             superSystem.moveTo(NamedPositions.L2),
             Commands.runOnce(() -> {
                 switch (pos2) {
-                case "L1": superSystem.moveTo(NamedPositions.L1); break;
-                case "L2": superSystem.moveTo(NamedPositions.L2); break;
-                case "L3": superSystem.moveTo(NamedPositions.L3); break;
-                case "L4": superSystem.moveTo(NamedPositions.L4); break;
+                case 1: superSystem.moveTo(NamedPositions.L1); break;
+                case 2: superSystem.moveTo(NamedPositions.L2); break;
+                case 3: superSystem.moveTo(NamedPositions.L3); break;
+                case 4: superSystem.moveTo(NamedPositions.L4); break;
                 }
             }),
             superSystem.outtake(),
             Commands.waitSeconds(1.5),
-            superSystem.intakeRoller.stop(),
+            superSystem.stopRoller(),
             
             // Drive to Coral Station and intake coral 3
             Commands.parallel(
@@ -88,7 +88,7 @@ public class Generic3Piece extends SequentialCommandGroup {
             // elevator.moveToStation(),
             // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            superSystem.intakeRoller.stop(),
+            superSystem.stopRoller(),
 
             // Drive to Reef and place coral 3
             Commands.parallel(
@@ -98,13 +98,13 @@ public class Generic3Piece extends SequentialCommandGroup {
             superSystem.moveTo(NamedPositions.L2),
             Commands.runOnce(() -> {
                 switch (pos3) {
-                case "L1": superSystem.moveTo(NamedPositions.L1); break;
-                case "L2": superSystem.moveTo(NamedPositions.L2); break;
-                case "L3": superSystem.moveTo(NamedPositions.L3); break;
-                case "L4": superSystem.moveTo(NamedPositions.L4); break;
+                case 1: superSystem.moveTo(NamedPositions.L1); break;
+                case 2: superSystem.moveTo(NamedPositions.L2); break;
+                case 3: superSystem.moveTo(NamedPositions.L3); break;
+                case 4: superSystem.moveTo(NamedPositions.L4); break;
                 }
             }),
-            superSystem.intakeRoller.outtake(),
+            superSystem.outtake(),
             Commands.waitSeconds(1.5),
             stopAuto()
         );
@@ -112,7 +112,7 @@ public class Generic3Piece extends SequentialCommandGroup {
 
     public Command stopAuto() {
         return Commands.sequence(
-            superSystem.intakeRoller.stop()//,
+            superSystem.stopRoller()//,
             // elevator.stow()
         );
     }

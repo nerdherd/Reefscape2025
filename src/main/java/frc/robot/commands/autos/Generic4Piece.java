@@ -21,7 +21,7 @@ public class Generic4Piece extends SequentialCommandGroup {
     private List<PathPlannerPath> pathGroup;
     private Pose2d startingPose;
 
-    public Generic4Piece(SwerveDrivetrain swerve, SuperSystem superSystem, String autoPath) 
+    public Generic4Piece(SwerveDrivetrain swerve, SuperSystem superSystem, String autoPath, int pos1, int pos2, int pos3, int pos4) 
     throws IOException, ParseException {
         this.superSystem = superSystem;
 
@@ -31,20 +31,20 @@ public class Generic4Piece extends SequentialCommandGroup {
         addCommands(
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            runAuto("L3", "L3", "L3", "L3")
+            runAuto(pos1, pos2, pos3, pos4)
         );
     }
 
-    public Command runAuto(String pos1, String pos2, String pos3, String pos4) {
+    public Command runAuto(int pos1, int pos2, int pos3, int pos4) {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
             Commands.runOnce(() -> {
                 switch (pos1) {
-                case "L1": superSystem.moveTo(NamedPositions.L1); break;
-                case "L2": superSystem.moveTo(NamedPositions.L2); break;
-                case "L3": superSystem.moveTo(NamedPositions.L3); break;
-                case "L4": superSystem.moveTo(NamedPositions.L4); break;
+                case 1: superSystem.moveTo(NamedPositions.L1); break;
+                case 2: superSystem.moveTo(NamedPositions.L2); break;
+                case 3: superSystem.moveTo(NamedPositions.L3); break;
+                case 4: superSystem.moveTo(NamedPositions.L4); break;
                 }
             }),
             superSystem.outtake(),
@@ -69,10 +69,10 @@ public class Generic4Piece extends SequentialCommandGroup {
             AutoBuilder.followPath(pathGroup.get(0)),
             Commands.runOnce(() -> {
                 switch (pos2) {
-                case "L1": superSystem.moveTo(NamedPositions.L1); break;
-                case "L2": superSystem.moveTo(NamedPositions.L2); break;
-                case "L3": superSystem.moveTo(NamedPositions.L3); break;
-                case "L4": superSystem.moveTo(NamedPositions.L4); break;
+                case 1: superSystem.moveTo(NamedPositions.L1); break;
+                case 2: superSystem.moveTo(NamedPositions.L2); break;
+                case 3: superSystem.moveTo(NamedPositions.L3); break;
+                case 4: superSystem.moveTo(NamedPositions.L4); break;
                 }
             }),
             superSystem.outtake(),
@@ -97,10 +97,10 @@ public class Generic4Piece extends SequentialCommandGroup {
             AutoBuilder.followPath(pathGroup.get(0)),
             Commands.runOnce(() -> {
                 switch (pos3) {
-                case "L1": superSystem.moveTo(NamedPositions.L1); break;
-                case "L2": superSystem.moveTo(NamedPositions.L2); break;
-                case "L3": superSystem.moveTo(NamedPositions.L3); break;
-                case "L4": superSystem.moveTo(NamedPositions.L4); break;
+                case 1: superSystem.moveTo(NamedPositions.L1); break;
+                case 2: superSystem.moveTo(NamedPositions.L2); break;
+                case 3: superSystem.moveTo(NamedPositions.L3); break;
+                case 4: superSystem.moveTo(NamedPositions.L4); break;
                 }
             }),
             superSystem.outtake(),
@@ -124,11 +124,11 @@ public class Generic4Piece extends SequentialCommandGroup {
             ),
             AutoBuilder.followPath(pathGroup.get(0)),
             Commands.runOnce(() -> {
-                switch (pos1) {
-                case "L1": superSystem.moveTo(NamedPositions.L1); break;
-                case "L2": superSystem.moveTo(NamedPositions.L2); break;
-                case "L3": superSystem.moveTo(NamedPositions.L3); break;
-                case "L4": superSystem.moveTo(NamedPositions.L4); break;
+                switch (pos4) {
+                case 1: superSystem.moveTo(NamedPositions.L1); break;
+                case 2: superSystem.moveTo(NamedPositions.L2); break;
+                case 3: superSystem.moveTo(NamedPositions.L3); break;
+                case 4: superSystem.moveTo(NamedPositions.L4); break;
                 }
             }),
             superSystem.outtake(),
