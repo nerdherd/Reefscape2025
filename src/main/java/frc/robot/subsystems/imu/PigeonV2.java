@@ -125,6 +125,11 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
             Math.toRadians(getHeading())
         );
     }
+
+    public double getRate()
+    {
+        return -1*pigeon.getAngularVelocityZWorld().getValueAsDouble();
+    }
     
     public void reportToSmartDashboard(LOG_LEVEL level) {
         switch (level) {
