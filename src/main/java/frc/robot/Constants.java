@@ -232,14 +232,14 @@ public final class Constants {
 
   public static final class VisionConstants {
 
-    public static final String kLimelightLowLeftName = "limelight-fl";
-    public static final String kLimelightLowLeftIP = "10.6.87.15:5802";
-    public static final String kLimelightLowRightName = "limelight-fr";
-    public static final String kLimelightLowRightIP = "10.6.87.17:5802";
-    public static final String kLimelightHighLeftName = "limelight-bl";
-    public static final String kLimelightHighLeftIP = "10.6.87.5:5802";
-    public static final String kLimelightHighRightName = "limelight-br";
-    public static final String kLimelightHighRightIP = "10.6.87.7:5802";
+    public static final String kLimelightFrontLeftName = "limelight-fl";
+    public static final String kLimelightFrontLeftIP = "10.6.87.15:5802";
+    public static final String kLimelightFrontRightName = "limelight-fr";
+    public static final String kLimelightFrontRightIP = "10.6.87.17:5802";
+    public static final String kLimelightBackLeftName = "limelight-bl";
+    public static final String kLimelightBackLeftIP = "10.6.87.5:5802";
+    public static final String kLimelightBackRightName = "limelight-br";
+    public static final String kLimelightBackRightIP = "10.6.87.7:5802";
 
     public static final double kFrontCameraHeightMeters = 0; // TODO change for new bot limelights
     public static final double kNoteHeightMeters = 0;

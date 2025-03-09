@@ -94,8 +94,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      */
     public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
         
-        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightHighLeftName, 0);
-        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightHighLeftName, 0);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 0);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 0);
         
         frontLeft = new SwerveModule(
             kFLDriveID,
