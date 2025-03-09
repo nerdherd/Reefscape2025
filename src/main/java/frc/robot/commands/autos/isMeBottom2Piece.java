@@ -8,7 +8,6 @@ import org.json.simple.parser.ParseException;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
-import pabeles.concurrency.IntRangeTask;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,16 +16,16 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
-public class Bottom2Piece extends SequentialCommandGroup {
-    private static IntakeRoller intake;
-    private static Elevator elevator;
-    private static List<PathPlannerPath> pathGroup;
-    private static Pose2d startingPose;
+public class isMeBottom2Piece extends SequentialCommandGroup {
+    // private IntakeRoller intakeRoller;
+    // private Elevator elevator;
+    private List<PathPlannerPath> pathGroup;
+    private Pose2d startingPose;
 
-    public Bottom2Piece(SwerveDrivetrain swerve, IntakeRoller intakeV2, Elevator elevator, String autoPath) 
+    public isMeBottom2Piece(SwerveDrivetrain swerve, IntakeRoller intakeRoller, Elevator elevator, String autoPath) 
     throws IOException, ParseException {
-        this.intake = intakeV2;
-        this.elevator = elevator;
+        // this.intakeRoller = intakeRoller;
+        // this.elevator = elevator;
 
         this.pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoPath);
         this.startingPose = pathGroup.get(0).getStartingDifferentialPose();
@@ -34,7 +33,7 @@ public class Bottom2Piece extends SequentialCommandGroup {
         addCommands(
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(swerve.getImu()::zeroAll),
+            // Commands.runOnce(swerve.getImu()::zeroAll)
             runAuto()
         );
     }
@@ -42,28 +41,31 @@ public class Bottom2Piece extends SequentialCommandGroup {
     public Command runAuto() {
         return Commands.sequence(
             AutoBuilder.followPath(pathGroup.get(0)),
-            // elevator.moveToReefL4(),
-            //intake.outtake(),
+            // elevator.moveToReefL3(),
+            // intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
-            //intake.stop(),
+            // intakeRoller.stop(),
 
             Commands.parallel(
                 // elevator.stow(),
+                Commands.none(),
                 AutoBuilder.followPath(pathGroup.get(1))
             ),
             // elevator.moveToStation(),
-            //intake.intakeCoral(),
+            // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            //intake.stop(),
+            // intakeRoller.stop(),
 
             Commands.parallel(
                 // elevator.stow(),
+                Commands.none(),
                 AutoBuilder.followPath(pathGroup.get(2))
             ),
             // elevator.moveToReefL3(),
-            //intake.outtake(),
+            // intakeRoller.outtake(),
             Commands.waitSeconds(1.5)
-            //intake.stop(),
+            // ,
+            // intakeRoller.stop(),
 
             // elevator.stow()
         );
@@ -71,7 +73,8 @@ public class Bottom2Piece extends SequentialCommandGroup {
 
     public Command stopAuto() {
         return Commands.sequence(
-            //intake.stop(),
+            Commands.none()
+            // intakeRoller.stop(),
             // elevator.stow()
         );
     }

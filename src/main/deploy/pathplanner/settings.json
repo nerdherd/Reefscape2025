@@ -5,16 +5,15 @@
   "pathFolders": [
     "Bottom Half Paths",
     "Middle Paths",
-    "claire square",
-    "Top Half Paths"
+    "isMe paths",
+    "Top Half Paths",
+    "claire square"
   ],
   "autoFolders": [
-    "Alex",
     "Bottom Half Autos",
     "Middle Autos",
-    "Anthony's Autos",
-    "Top Half Autos",
-    "claire square"
+    "OLD AUTOS",
+    "Top Half Autos"
   ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,

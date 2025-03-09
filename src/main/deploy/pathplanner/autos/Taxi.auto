@@ -14,6 +14,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "Alex",
+  "folder": null,
   "choreoAuto": false
 }

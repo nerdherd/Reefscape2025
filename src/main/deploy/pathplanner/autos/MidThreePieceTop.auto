@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "S4R4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R4C1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C1R3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R3C1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C1R2"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Middle Autos",
+  "choreoAuto": false
+}

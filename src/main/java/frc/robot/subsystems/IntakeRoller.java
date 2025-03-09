@@ -35,8 +35,8 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private double desiredVoltageRight = 0;
 
     public IntakeRoller() {
-        rollerMotor = new TalonFX(RollerConstants.kMotorID);
-        rollerMotorRight = new TalonFX(62);
+        rollerMotor = new TalonFX(RollerConstants.kLeftMotorID);
+        rollerMotorRight = new TalonFX(RollerConstants.kRightMotorID);
         rollerConfigurator = rollerMotor.getConfigurator();
         rollerConfiguratorRight = rollerMotorRight.getConfigurator();
         velocityRequestRight.EnableFOC = true;
@@ -95,6 +95,11 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         motorConfigs.Slot0.kI = RollerConstants.kIMotor;
         motorConfigs.Slot0.kD = RollerConstants.kDMotor;
         motorConfigs.Slot0.kV = RollerConstants.kVMotor;
+
+        motorConfigs.CurrentLimits.SupplyCurrentLimit = 20; //arbitrarayay 
+        motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        motorConfigs.CurrentLimits.StatorCurrentLimit = 50; //arbitrarayay 
+        motorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
  
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())

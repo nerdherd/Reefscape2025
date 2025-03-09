@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.229385056142696,
-        "y": 3.9658440625544693
+        "x": 7.229385032620017,
+        "y": 3.9658443040185607
       },
       "isLocked": false,
       "linkedName": "S4"
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -0.5963416522672176
   },
   "reversed": false,
   "folder": "Middle Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.19592529430541136
   },
   "useDefaultConstraints": true
 }

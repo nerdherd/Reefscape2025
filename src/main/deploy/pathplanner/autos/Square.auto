@@ -32,6 +32,6 @@
     }
   },
   "resetOdom": true,
-  "folder": "claire square",
+  "folder": null,
   "choreoAuto": false
 }

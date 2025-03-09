@@ -146,7 +146,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
-        ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.5437 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
+        ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.54 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
         motor.setControl(motionMagicRequest.withFeedForward(ff));
     }
 
@@ -199,8 +199,8 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public boolean atPositionWide() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-                                desiredPosition - 0.1,
-                                desiredPosition + 0.1);
+                                desiredPosition - 0.15,
+                                desiredPosition + 0.15);
     }
 
     public void incrementOffset(double increment) {

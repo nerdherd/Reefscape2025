@@ -35,8 +35,13 @@ import frc.robot.subsystems.SuperSystem.ExecutionOrder;
  // COMMENT ROBOT IDS INSTEAD OF DELETING
 
 public final class Constants {
+  public enum ROBOT_ID{
+    ISME,
+    V1,
+    V2,
+  }
 
-  public final static int ROBOT_NAME = 1;// 1= is me; 2 = demo
+  public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
 
   public static class ControllerConstants {
 
@@ -300,8 +305,8 @@ public final class Constants {
     public static final double kGElevatorMotor = 0.33;
     public static final double kSElevatorMotor = 0.11;
 
-    public static final double kElevatorCruiseVelocity = 20; //16.333 //30
-    public static final double kElevatorCruiseAcceleration = 40.000;
+    public static final double kElevatorCruiseVelocity = 30; //16.333 //20
+    public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
     public static final double kElevatorJerk = 400.0;
  }
  
@@ -334,15 +339,16 @@ public final class Constants {
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 0.4;//0.25 // 0.5
-    public static final double kElevatorPivotCruiseAcceleration = 500; // 0.5
+    public static final double kEPivotCruiseVelocity = 0.5;//0.25 // 0.4S
+    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 10; // 0.5
     public static final double kElevatorPivotJerk = 900.0; 
     public static final double kElevatorPivotGroundIntake = -0.001;
   }
 
   public static final class RollerConstants {
 
-    public static final int kMotorID = 62;  
+    public static final int kLeftMotorID = 61; 
+    public static final int kRightMotorID = 62; 
     public static final double kPMotor = 0.05;
     public static final double kIMotor = 0;
     public static final double kDMotor = 0;
@@ -353,14 +359,14 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kIntakePower  = -5;
-    public static final double kOuttakePower = 5;
+    public static final double kIntakePower  = -3.5;
+    public static final double kOuttakePower = 1;
 
   }
   public static final class WristConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor =  3; 
+    public static final double kPMotor =  40; 
     // kP * err_rotations = Max_Volt_Needed (A little higher than kG)
     //      err = 0.28 (10/360 degrees)
     public static final double kItMotor = 0;
@@ -402,17 +408,17 @@ public final class Constants {
 
   public static final class SuperSystemConstants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
-      Stow(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0, -0.275, -0.4),
-      SemiStow(     ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.4, -0.4),
-      GroundIntake( ExecutionOrder.PVT_WRT_ELV, 0.01, 0.562, -0.808, -0.4),
-      Station(      ExecutionOrder.WRT_PVT_ELV, 0.1, 0.0, -0.6043, -0.4),
+      Stow(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0, -0.15, -0.4),
+      SemiStow(     ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.164, -0.4),
+      GroundIntake( ExecutionOrder.PVT_ELV_WRT, 0.022, 0.626, -0.76, -0.4),
+      Station(      ExecutionOrder.WRT_PVT_ELV, 0.18, 1.12, -0.85, -0.4),
       Processor(    ExecutionOrder.WRT_ELV_PVT, 0.01, 0.428, -0.72, -0.4),
       Net(          ExecutionOrder.WRT_ELV_PVT, 0.24, 0.05, -0.1, -0.4),
       Cage(         ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.1, -0.4),
       L1(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.0, -0.21, -0.3),
-      L2(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.1, -0.28, -0.3),
-      L3(           ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.28, -0.3),
-      L4(           ExecutionOrder.WRT_PVT_ELV, 0.24, 3.15, -0.318, -0.3),
+      L2(           ExecutionOrder.WRT_PVT_ELV, 0.25, 0, -0.18, -0.3),
+      L3(           ExecutionOrder.WRT_PVT_ELV, 0.25, 1.14, -0.24, -0.3),
+      L4(           ExecutionOrder.WRT_PVT_ELV, 0.245, 3.05, -0.26, -0.3),
       L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3), 
       L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
       AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update

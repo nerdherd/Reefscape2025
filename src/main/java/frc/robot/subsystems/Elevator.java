@@ -216,6 +216,9 @@ public class Elevator extends SubsystemBase implements Reportable {
                 tab.addNumber("Elevator Current Position", () -> elevatorMotor.getPosition().getValueAsDouble());
                 tab.addBoolean("Elevator Enabled", () -> enabled);
                 tab.addBoolean("At position", () -> atPosition());
+                tab.addNumber("Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
+                tab.addNumber("Applied Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());    
+
                 break;
         }
     }
