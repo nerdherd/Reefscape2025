@@ -151,16 +151,16 @@ public class SwerveJoystickCommand extends Command {
         if(zoneId.get() != 0)
         {
             // Check moveLeft states
-            checkButtonStates(moveLeft.get(), wasLeftPressed, -1);
+            checkButtonStates(moveLeft.get(), wasLeftPressed, -1); // autopaths called in here
             wasLeftPressed = moveLeft.get(); // Update previous state
 
             // Check moveRight states
-            checkButtonStates(moveRight.get(), wasRightPressed, 1);
+            checkButtonStates(moveRight.get(), wasRightPressed, 1); // autopaths called in here
             wasRightPressed = moveRight.get(); // Update previous state
 
             if(moveLeft.get() || moveRight.get())
             {
-                return; // jump to autopath
+                return; // jump to autopath 
             }
         }
 

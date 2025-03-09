@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
+import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
@@ -668,7 +669,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 return 1;
             }
         }
-        return 0; // 0 is default for disable. 
+        return 0; // 0 is default for disable.  
     }
 
     public void drive(double xSpeed, double ySpeed, double turnSpeed) {
@@ -719,22 +720,25 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
         Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
         Double theta_0 = tagRotationInverse.getRadians();
-        Double moveBy = 1.0; //TODO: Change Later
+        Double moveBy = 0.5; //TODO: Change Later
         // D_x = R_x + M cos (theta_0)
         // D_y = R_y + M sin (theta_0)
         Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
-        return driveToRelativePose(00, 00, transformer);
+        // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
+        return driveToRelativePose(1,1, transformer); //only for testing
     }
 
     public Command moveRightOf(int tagID) {
         Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
         Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
         Double theta_0 = tagRotationInverse.getRadians();
-        Double moveBy = -1.0; //TODO: Change Later
+        Double moveBy = -0.5; //TODO: Change Later
         // D_x = R_x + M cos (theta_0)
         // D_y = R_y + M sin (theta_0)
         Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
-        return driveToRelativePose(00, 00, transformer);
+        // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
+        return driveToRelativePose(1,1, transformer); //only for testing
+
     }
 
     public Command driveToRelativePose(double maxVelocityMps, double maxAccelerationMpsSq, Transform2d translation) {

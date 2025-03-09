@@ -318,6 +318,8 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         tab.addNumber("Actual Position", ()-> pivotMotor.getPosition().getValueAsDouble());
         tab.addNumber("feedForward", ()-> ff);
         tab.addBoolean("At position", () -> atPosition());
+        tab.addNumber("Supply Current", () -> pivotMotor.getSupplyCurrent().getValueAsDouble());
+        tab.addNumber("Applied Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
     }
     
 }
