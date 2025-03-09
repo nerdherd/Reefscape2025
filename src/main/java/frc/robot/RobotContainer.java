@@ -230,9 +230,22 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
+    
+    driverController.dpadUp().onTrue(
+      superSystem.moveTo(NamedPositions.AlgaeL2)
+    );
+    driverController.dpadRight().onTrue(
+      superSystem.moveTo(NamedPositions.AlgaeL3)
+    );
 
-    driverController.controllerRight()
-    .onTrue(superSystem.moveTo(NamedPositions.Stow)); // todo remove it
+    driverController.buttonLeft().onTrue(
+      superSystem.repositionCoralLeft()
+    );
+    driverController.buttonRight().onTrue(
+      superSystem.repositionCoralRight()
+    );
+    
+  
 
     //////////////////////
     // Operator bindings
@@ -262,8 +275,6 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(NamedPositions.Stow));
     operatorController.buttonLeft()
       .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
-
-    
   }
 
 

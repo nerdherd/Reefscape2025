@@ -91,6 +91,22 @@ public class SuperSystem {
         return intakeRoller.setVoltageCommand(RollerConstants.kIntakePower);
     }
 
+    public Command repositionCoralLeft() {
+        return Commands.sequence(
+            intakeRoller.setVoltageCommandLeft(1),
+            intakeRoller.setVoltageCommandRight(2.0)
+
+        );
+    }
+
+    public Command repositionCoralRight() {
+        return Commands.sequence(
+            intakeRoller.setVoltageCommandLeft(-2.0),
+            intakeRoller.setVoltageCommandRight(-1)
+
+        );
+    }
+
     public Command intakeUntilSensed() {
         return Commands.sequence(
             intake(), 
@@ -112,7 +128,7 @@ public class SuperSystem {
     }
 
     public Command holdPiece() {
-        return intakeRoller.setVoltageCommand(-0.5); // holding coral
+        return intakeRoller.setVoltageCommand(-1); // holding coral
     }
 
     public Command outtake() {
@@ -125,6 +141,8 @@ public class SuperSystem {
     public Command shootAlgae() {
         return intakeRoller.setVoltageCommand(4.25);
     }
+
+
 
     // movement
     public Command moveTo(NamedPositions position) {

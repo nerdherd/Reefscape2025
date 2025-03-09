@@ -359,14 +359,14 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kIntakePower  = -2.5;
-    public static final double kOuttakePower = 2.5;
+    public static final double kIntakePower  = -3.5;
+    public static final double kOuttakePower = 1;
 
   }
   public static final class WristConstants{
     public static final int kMotorID = 54;
   
-    public static final double kPMotor =  35; 
+    public static final double kPMotor =  40; 
     // kP * err_rotations = Max_Volt_Needed (A little higher than kG)
     //      err = 0.28 (10/360 degrees)
     public static final double kItMotor = 0;
@@ -410,8 +410,8 @@ public final class Constants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
       Stow(         ExecutionOrder.WRT_ELV_PVT, 0.01, 0, -0.15, -0.4),
       SemiStow(     ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.164, -0.4),
-      GroundIntake( ExecutionOrder.PVT_ELV_WRT, 0.025, 0.626, -0.76, -0.4),
-      Station(      ExecutionOrder.WRT_PVT_ELV, 0.18, 1.12, -0.87, -0.4),
+      GroundIntake( ExecutionOrder.PVT_ELV_WRT, 0.022, 0.626, -0.76, -0.4),
+      Station(      ExecutionOrder.WRT_PVT_ELV, 0.18, 1.12, -0.85, -0.4),
       Processor(    ExecutionOrder.WRT_ELV_PVT, 0.01, 0.428, -0.72, -0.4),
       Net(          ExecutionOrder.WRT_ELV_PVT, 0.24, 0.05, -0.1, -0.4),
       Cage(         ExecutionOrder.WRT_ELV_PVT, 0.11, 0.05, -0.1, -0.4),

@@ -202,8 +202,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             // visionupdateOdometry("limelight-awesome",robotRotation);
             // visionupdateOdometry("limelight-zzzzach",robotRotation);
 
-            visionupdateOdometry(VisionConstants.kLimelightLowLeftName);
-            visionupdateOdometry(VisionConstants.kLimelightLowRightName);      
+            visionupdateOdometry("kaden");
+            visionupdateOdometry("hi");      
 
     }
 

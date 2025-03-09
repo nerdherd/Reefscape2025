@@ -95,6 +95,11 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         motorConfigs.Slot0.kI = RollerConstants.kIMotor;
         motorConfigs.Slot0.kD = RollerConstants.kDMotor;
         motorConfigs.Slot0.kV = RollerConstants.kVMotor;
+
+        motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+        motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        motorConfigs.CurrentLimits.StatorCurrentLimit = 100;
+        motorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
  
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
