@@ -711,7 +711,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //https://www.desmos.com/calculator/q70q2ekunm
 
     public Command moveLeftOf(int tagID) {
-        AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
         Rotation2d tagRotation = tagPose.getRotation();
         Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
