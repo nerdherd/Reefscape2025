@@ -33,6 +33,7 @@ import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
 import frc.robot.vision.LimelightHelpers;
+import frc.robot.vision.VisionSys;
 import frc.robot.vision.LimelightHelpers.PoseEstimate;
 import frc.robot.subsystems.Reportable;
 
@@ -81,7 +82,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private NerdyLine angleToleranceSpline = new NerdyLine(angles, toleranceScales);
     
     private Field2d field;
-    private boolean visionEnabled = false;
+    private VisionSys vision = new VisionSys();
 
     public enum DRIVE_MODE {
         FIELD_ORIENTED, // always use it
