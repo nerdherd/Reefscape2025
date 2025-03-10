@@ -80,7 +80,7 @@ public class Robot extends TimedRobot {
     // m_robotContainer.imu.zeroHeading();
     // m_robotContainer.initShuffleboard();
     // init auto chooser();
-
+    m_robotContainer.refreshSupersystem();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)

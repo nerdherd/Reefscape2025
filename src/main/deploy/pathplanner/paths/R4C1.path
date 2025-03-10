@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.993852459016393,
-        "y": 3.833196721311475
+        "x": 5.95,
+        "y": 3.866
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.376226769678158,
-        "y": 6.567199765888679
+        "x": 7.3323743106617645,
+        "y": 6.600003044577204
       },
       "isLocked": false,
       "linkedName": "R4"
@@ -48,7 +48,7 @@
   "folder": "Middle Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -0.5963416522672176
+    "rotation": -0.03353081081027692
   },
   "useDefaultConstraints": true
 }

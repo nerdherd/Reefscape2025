@@ -64,7 +64,7 @@
   "folder": "Middle Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.19592529430541136
+    "rotation": -1.2216183152598403
   },
   "useDefaultConstraints": true
 }
