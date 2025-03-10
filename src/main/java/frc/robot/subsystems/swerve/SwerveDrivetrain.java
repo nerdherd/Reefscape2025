@@ -74,13 +74,19 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
-    private double[] distances = new double[] {0, 1, 1.72, 2, 3, 3.5, 4, 5};
-    private double[] tolerances = new double[] {12, 11, 10, 9, 5, 4, 2, 2};
-    private NerdyLine toleranceSpline = new NerdyLine(distances, tolerances);
-    private double[] angles          = new double[] {0, 10, 30, 45, 90};
-    private double[] toleranceScales = new double[] {1, 0.95, 0.75, 0.4, 0};
-    private NerdyLine angleToleranceSpline = new NerdyLine(angles, toleranceScales);
-    
+    ArrayList<Pose2d> list17 = new ArrayList<>();
+    ArrayList<Pose2d> list18 = new ArrayList<>();
+    ArrayList<Pose2d> list19 = new ArrayList<>();
+    ArrayList<Pose2d> list20 = new ArrayList<>();
+    ArrayList<Pose2d> list21 = new ArrayList<>();
+    ArrayList<Pose2d> list22 = new ArrayList<>();
+    ArrayList<Pose2d> list6 = new ArrayList<>();
+    ArrayList<Pose2d> list7 = new ArrayList<>();
+    ArrayList<Pose2d> list8 = new ArrayList<>();
+    ArrayList<Pose2d> list9 = new ArrayList<>();
+    ArrayList<Pose2d> list10 = new ArrayList<>();
+    ArrayList<Pose2d> list11 = new ArrayList<>();
+
     private Field2d field;
     private VisionSys vision = new VisionSys();
 
@@ -148,12 +154,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
-
+        initReefSidePoses();
+        
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         //ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
         RobotConfig robotConfig = null;
         try {
-             robotConfig = RobotConfig.fromGUISettings();
+                robotConfig = RobotConfig.fromGUISettings();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -180,6 +187,56 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             },
             this
         );
+    }
+
+    private void initReefSidePoses() {
+        list17.add(SwerveDriveConstants.MapPoses.tag17Left);
+        list17.add(SwerveDriveConstants.MapPoses.tag17Right);
+        myMap.put(17, list17);
+
+        list18.add(SwerveDriveConstants.MapPoses.tag18Left);
+        list18.add(SwerveDriveConstants.MapPoses.tag18Right);
+        myMap.put(18, list18);
+
+        list19.add(SwerveDriveConstants.MapPoses.tag19Left);
+        list19.add(SwerveDriveConstants.MapPoses.tag19Right);
+        myMap.put(19, list19);
+
+        list20.add(SwerveDriveConstants.MapPoses.tag20Left);
+        list20.add(SwerveDriveConstants.MapPoses.tag20Right);
+        myMap.put(20, list20);
+
+        list21.add(SwerveDriveConstants.MapPoses.tag21Left);
+        list21.add(SwerveDriveConstants.MapPoses.tag21Right);
+        myMap.put(21, list21);
+
+        list22.add(SwerveDriveConstants.MapPoses.tag22Left);
+        list22.add(SwerveDriveConstants.MapPoses.tag22Right);
+        myMap.put(22, list22);
+
+        list6.add(SwerveDriveConstants.MapPoses.tag6Left);
+        list6.add(SwerveDriveConstants.MapPoses.tag6Right);
+        myMap.put(6, list6);
+
+        list7.add(SwerveDriveConstants.MapPoses.tag7Left);
+        list7.add(SwerveDriveConstants.MapPoses.tag7Right);
+        myMap.put(7, list7);
+
+        list8.add(SwerveDriveConstants.MapPoses.tag8Left);
+        list8.add(SwerveDriveConstants.MapPoses.tag8Right);
+        myMap.put(8, list8);
+
+        list9.add(SwerveDriveConstants.MapPoses.tag9Left);
+        list9.add(SwerveDriveConstants.MapPoses.tag9Right);
+        myMap.put(9, list9);
+
+        list10.add(SwerveDriveConstants.MapPoses.tag10Left);
+        list10.add(SwerveDriveConstants.MapPoses.tag10Right);
+        myMap.put(10, list10);
+
+        list11.add(SwerveDriveConstants.MapPoses.tag11Left);
+        list11.add(SwerveDriveConstants.MapPoses.tag11Right);
+        myMap.put(11, list11);
     }
 
     boolean initPoseByVisionDone = false;
@@ -427,69 +484,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private Pose2d calcuTargetPoseByReq(int zoneId, int poseId)
     {
-        if(myMap.isEmpty()) // todo move it to constructor
-        {
-            ArrayList<Pose2d> list17 = new ArrayList<>();
-            list17.add(new Pose2d(3.204,2.591,new Rotation2d(-120*3.1416/180.0))); // must be left
-            list17.add(new Pose2d(3.878,2.187,new Rotation2d(-120*3.1416/180.0))); // must be right
-            myMap.put(17, list17);
-
-            ArrayList<Pose2d> list18 = new ArrayList<>();
-            list18.add(new Pose2d(2.646,4.391,new Rotation2d(180*3.1416/180.0))); // must be left
-            list18.add(new Pose2d(2.646,3.707,new Rotation2d(180*3.1416/180.0))); // must be right
-            myMap.put(18, list18);
-
-            ArrayList<Pose2d> list19 = new ArrayList<>();
-            list19.add(new Pose2d(3.897,5.805,new Rotation2d(2.094))); // must be left
-            list19.add(new Pose2d(3.262,5.555,new Rotation2d(2.094))); // must be right
-            myMap.put(19, list19);
-
-            ArrayList<Pose2d> list20 = new ArrayList<>();
-            list20.add(new Pose2d(5.831,5.401,new Rotation2d(60*3.1416/180.0)));
-            list20.add(new Pose2d(5.109,5.776,new Rotation2d(60*3.1416/180.0)));
-            myMap.put(20, list20);
-
-            ArrayList<Pose2d> list21 = new ArrayList<>();
-            list21.add(new Pose2d(6.321,3.535,new Rotation2d(0)));
-            list21.add(new Pose2d(6.321,4.343,new Rotation2d(0)));
-            myMap.put(21, list21);
-
-            ArrayList<Pose2d> list22 = new ArrayList<>();
-            list22.add(new Pose2d(5.008,2.2,new Rotation2d(154.638*3.1416/180.0)));
-            list22.add(new Pose2d(5.85,2.649,new Rotation2d(154.638*3.1416/180.0)));
-            myMap.put(22, list22);
-
-            ArrayList<Pose2d> list6 = new ArrayList<>();
-            list6.add(new Pose2d(13.672,2.187,new Rotation2d(-60*3.1416/180.0))); // must be left
-            list6.add(new Pose2d(14.307,2.591,new Rotation2d(-60*3.1416/180.0))); // must be right
-            myMap.put(6, list6);
-
-            ArrayList<Pose2d> list7 = new ArrayList<>();
-            list7.add(new Pose2d(14.914,3.602,new Rotation2d(0))); // must be left
-            list7.add(new Pose2d(14.914,4.333,new Rotation2d(0))); // must be right
-            myMap.put(7, list7);
-
-            ArrayList<Pose2d> list8 = new ArrayList<>();
-            list8.add(new Pose2d(14.375,5.411,new Rotation2d(60*3.1416/180.0))); // must be left
-            list8.add(new Pose2d(13.672,5.5776,new Rotation2d(60*3.1416/180.0))); // must be right
-            myMap.put(8, list8);
-
-            ArrayList<Pose2d> list9 = new ArrayList<>();
-            list9.add(new Pose2d(12.460,5.805,new Rotation2d(120*3.1416/180.0)));
-            list9.add(new Pose2d(11.835,5.487,new Rotation2d(120*3.1416/180.0)));
-            myMap.put(9, list9);
-
-            ArrayList<Pose2d> list10 = new ArrayList<>();
-            list10.add(new Pose2d(11.219,4.400,new Rotation2d(180*3.1416/180.0)));
-            list10.add(new Pose2d(11.219,3.717,new Rotation2d(180*3.1416/180.0)));
-            myMap.put(10, list10);
-
-            ArrayList<Pose2d> list11 = new ArrayList<>();
-            list11.add(new Pose2d(11.748,2.639,new Rotation2d(-120*3.1416/180.0)));
-            list11.add(new Pose2d(12.383,2.264,new Rotation2d(-120*3.1416/180.0)));
-            myMap.put(11, list11);
-        }
-
         Pose2d targetPose = poseEstimator.getEstimatedPosition();
         if(zoneId == 1) // own reef
         {
@@ -505,22 +499,22 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 {
                     return myMap.get(targetApriltagId).get(1);// the right side of one apriltag on reef
                 }
-                else 
+                else if(poseId == 0) 
                 {
-
+                    // return myMap.get(targetApriltagId).get(2); // Middle of apriltag 
                 }
             }
         }
         // todo other zone
         else if (zoneId == 2)
         {
-            // left station
+            // Top station
         }else if (zoneId == 3)
         {
-            // right station
+            // Bot station
         }else if (zoneId == 4)
         {
-            // proc
+            // processor
         }
         
         return targetPose;
@@ -536,6 +530,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             maxVelocityMps, maxAccelerationMpsSq, 
             Units.degreesToRadians(360), Units.degreesToRadians(720)
         );
+
         if(RobotContainer.IsRedSide())
             pathfindingCommand = AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons);
         else
@@ -588,21 +583,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         return lastDistance;
     }
-    public double getSpeakerTurnToAngleTolerance ()
-    {
-        double distance = getDistanceFromTag(true, RobotContainer.IsRedSide() ? 4 : 7);
-        if(distance > 5) {
-            return 0;
-        }
-        if(distance > 4) {
-            return 1;
-        }
-        double tolerance = toleranceSpline.getOutput(distance);
-        if(tolerance < 0) {
-            return 0;
-        }
-        return tolerance;
-    }
 
     public double getTurnToSpecificTagAngle(int tagID)
     {
@@ -617,19 +597,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             return angle; //TODO: test if works since this is a bit different than original code
         }
         return (180 + angle) % 360;
-    }
-
-    public double getTurnToAngleToleranceScale(double targetAngle)
-    {
-        double angleToSpeaker = 10000;
-        targetAngle = NerdyMath.posMod(targetAngle, 360);
-        if (targetAngle > 180) {
-            angleToSpeaker = Math.abs(360 - targetAngle);
-        }
-        else if (targetAngle < 180) {
-            angleToSpeaker = targetAngle;
-        }
-        return angleToleranceSpline.getOutput(angleToSpeaker);
     }
 
     public boolean turnToAngleMode = true;
@@ -677,20 +644,25 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         //1 is in reef zone, 2 is in left station, 3 is in right station, 4 is in proc zone
         if(RobotContainer.IsRedSide())
         {
-            if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp))
-            {
+            if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
                 return 1;
             }
-            // todo zone 2,3,4
+            // TODO: 2,3,4
         }
         else
         {
-            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 9, xp, yp))
-            //if( xp > 1.1 && xp < 6.8 && yp > 1.5 && yp < 7.5) // a box area around reef
-            {
+            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 9, xp, yp)) {
                 return 1;
             }
-            // todo zone 2,3,4
+            else if(NerdyMath.isPoseInsideCircleZone(1, 7.5, 4, xp, yp)) {
+                return 2;
+            }
+            else if(NerdyMath.isPoseInsideCircleZone(1, 0.5, 9, xp, yp)) {
+                return 3;
+            }
+            else if(NerdyMath.isPoseInsideCircleZone(6.35, 0, 2.12, xp, yp)) {
+                return 4;
+            }
         }
         return 0; // 0 is default for disable.  
     }
@@ -740,13 +712,14 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public Command moveLeftOf(int tagID) {
         AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-        Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
+        Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
+        Rotation2d tagRotation = tagPose.getRotation();
         Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
         Double theta_0 = tagRotationInverse.getRadians();
         Double moveBy = 0.5; //TODO: Change Later
         // D_x = R_x + M cos (theta_0)
         // D_y = R_y + M sin (theta_0)
-        Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
+        Transform2d transformer = new Transform2d((tagPose.getX() + moveBy * Math.cos(theta_0)), (tagPose.getY() + moveBy * Math.sin(theta_0)), tagRotation);
         // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
         return driveToRelativePose(1,1, transformer); //only for testing
     }
@@ -762,6 +735,25 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
         return driveToRelativePose(1,1, transformer); //only for testing
 
+    }
+
+    /**
+     * Calculate position to move to based on apriltag and reef side
+     * @param tagID ID of tag to move to
+     * @param side -1 for Left 0 for Middle 1 for Right
+     * @return Pose2d of position to drive to
+     */
+    public Pose2d calcReefSidePose(int tagID, int side) {
+        AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
+        Rotation2d tagRotation = tagPose.getRotation();
+        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
+        Double theta_0 = tagRotationInverse.getRadians();
+        Double lateralOffset = 0.17 * -side; // Side-Side offset TODO: Change Later
+        Double verticalOffset = 0.7; // Offset from reef Invert?
+        // D_x = R_x + M cos (theta_0)
+        // D_y = R_y + M sin (theta_0)
+        return new Pose2d((tagPose.getX() + lateralOffset * Math.cos(theta_0) + verticalOffset * Math.cos(theta_0 + 1.57)), (tagPose.getY() + lateralOffset * Math.sin(theta_0) + verticalOffset * Math.cos(theta_0 + 1.57)), tagRotation); // 1.57 = 3.14/2
     }
 
     public Command driveToRelativePose(double maxVelocityMps, double maxAccelerationMpsSq, Transform2d translation) {

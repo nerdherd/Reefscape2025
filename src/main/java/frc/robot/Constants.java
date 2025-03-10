@@ -205,6 +205,36 @@ public final class Constants {
       }
     }
 
+    public static final class MapPoses {
+      // Blue Side
+      public static final Pose2d tag17Left = new Pose2d(3.204, 2.591, new Rotation2d(Math.toRadians(-120))); 
+      public static final Pose2d tag17Right = new Pose2d(3.878, 2.187, new Rotation2d(Math.toRadians(-120))); 
+      public static final Pose2d tag18Left = new Pose2d(2.646, 4.391, new Rotation2d(Math.toRadians(180))); 
+      public static final Pose2d tag18Right = new Pose2d(2.646, 3.707, new Rotation2d(Math.toRadians(180))); 
+      public static final Pose2d tag19Left = new Pose2d(3.897, 5.805, new Rotation2d(Math.toRadians(120))); 
+      public static final Pose2d tag19Right = new Pose2d(3.262, 5.555, new Rotation2d(Math.toRadians(120))); 
+      public static final Pose2d tag20Left = new Pose2d(5.831, 5.401, new Rotation2d(Math.toRadians(60)));
+      public static final Pose2d tag20Right = new Pose2d(5.109, 5.776, new Rotation2d(Math.toRadians(60)));
+      public static final Pose2d tag21Left = new Pose2d(6.321, 3.535, new Rotation2d(Math.toRadians(0)));
+      public static final Pose2d tag21Right = new Pose2d(6.321, 4.343, new Rotation2d(Math.toRadians(0)));
+      public static final Pose2d tag22Left = new Pose2d(5.008, 2.2, new Rotation2d(Math.toRadians(-60)));
+      public static final Pose2d tag22Right = new Pose2d(5.85, 2.649, new Rotation2d(Math.toRadians(-60)));
+
+      // Red Side
+      public static final Pose2d tag6Left = new Pose2d(13.672, 2.187, new Rotation2d(Math.toRadians(-60)));   
+      public static final Pose2d tag6Right = new Pose2d(14.307, 2.591, new Rotation2d(Math.toRadians(-60))); 
+      public static final Pose2d tag7Left = new Pose2d(14.914, 3.602, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag7Right = new Pose2d(14.914, 4.333, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag8Left = new Pose2d(14.375, 5.411, new Rotation2d(Math.toRadians(60))); 
+      public static final Pose2d tag8Right = new Pose2d(13.672, 5.5776, new Rotation2d(Math.toRadians(60))); 
+      public static final Pose2d tag9Left = new Pose2d(12.460, 5.805, new Rotation2d(Math.toRadians(120)));
+      public static final Pose2d tag9Right = new Pose2d(11.835, 5.487, new Rotation2d(Math.toRadians(120)));
+      public static final Pose2d tag10Left = new  Pose2d(11.219, 4.400, new Rotation2d(Math.toRadians(180)));
+      public static final Pose2d tag10Right = new Pose2d(11.219, 3.717, new Rotation2d(Math.toRadians(180)));
+      public static final Pose2d tag11Left = new Pose2d(11.748, 2.639, new Rotation2d(Math.toRadians(-120)));
+      public static final Pose2d tag11Right = new Pose2d(12.383, 2.264, new Rotation2d(Math.toRadians(-120)));
+    }
+
   }
 
   public static final class PathPlannerConstants {

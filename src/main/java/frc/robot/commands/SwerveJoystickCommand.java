@@ -149,7 +149,15 @@ public class SwerveJoystickCommand extends Command {
 
         // let's not pass the driver's speed into the autopath...
         if(zoneId.get() != 0)
-        {
+        { 
+            // If both buttons held
+            if(moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed) {
+                checkButtonStates((moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed), 0);
+                wasLeftPressed = moveLeft.get();
+                wasRightPressed = moveRight.get();
+                return;
+            }
+
             // Check moveLeft states
             checkButtonStates(moveLeft.get(), wasLeftPressed, -1); // autopaths called in here
             wasLeftPressed = moveLeft.get(); // Update previous state
@@ -228,7 +236,7 @@ public class SwerveJoystickCommand extends Command {
     private void checkButtonStates(boolean isPressed, boolean wasPressed, int direction) {
         // Pressed: Transition from not pressed to pressed
         if (isPressed && !wasPressed) {
-            swerveDrive.setAutoPathRun( zoneId.get(), direction);
+            swerveDrive.setAutoPathRun(zoneId.get(), direction);
         }
 
         // Held: Button is currently pressed
@@ -238,6 +246,18 @@ public class SwerveJoystickCommand extends Command {
 
         // Released: Transition from pressed to not pressed
         if (!isPressed && wasPressed) {
+            swerveDrive.stopAutoPath();
+        }
+    }
+
+    private void checkButtonStates(boolean bothHeld, int direction) {
+        // Held
+        if (bothHeld) {
+            swerveDrive.setAutoPathRun(zoneId.get(), direction);
+        }
+
+        // Released
+        if (!bothHeld) {
             swerveDrive.stopAutoPath();
         }
     }
