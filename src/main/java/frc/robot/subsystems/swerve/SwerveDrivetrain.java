@@ -201,7 +201,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
             SmartDashboard.putNumber("Robot Rotation", robotRotation);
     
-            // visionupdateOdometry("bl", robotRotation); // TODO Do we need to pass in robotRotation?
+            visionupdateOdometry(VisionConstants.kLimelightBackLeftName); // TODO Do we need to pass in robotRotation?
             visionupdateOdometry(VisionConstants.kLimelightBackRightName);
             visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
             visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
@@ -415,7 +415,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
             
     private int getMostClosedApriltagIdInZone(int zoneId) {
-        return 17; // todo add cameras' reading 
+        return 19; // todo add cameras' reading 
     }
 
     private Map<Integer, ArrayList<Pose2d>> myMap = new HashMap<>();
@@ -435,8 +435,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             myMap.put(18, list18);
 
             ArrayList<Pose2d> list19 = new ArrayList<>();
-            list19.add(new Pose2d(3.897,5.805,new Rotation2d(120))); // must be left
-            list19.add(new Pose2d(3.262,5.555,new Rotation2d(120))); // must be right
+            list19.add(new Pose2d(3.897,5.805,new Rotation2d(2))); // must be left
+            list19.add(new Pose2d(3.262,5.555,new Rotation2d(2))); // 120+p o90 // must be right
             myMap.put(19, list19);
 
             ArrayList<Pose2d> list20 = new ArrayList<>();
@@ -509,15 +509,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         return targetPose;
     }
             
-                double maxVelocityMps = 4;
-    double maxAccelerationMpsSq = 4;
+    double maxVelocityMps = 1;
+    double maxAccelerationMpsSq = 1;
     private Command pathfindingCommand; // Store the command reference
     public void setAutoPathRun(int zoneId, int poseId)
     {
         Pose2d destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId); // base on (poseid and zoneid and apriltag id)
         PathConstraints pathcons = new PathConstraints(
             maxVelocityMps, maxAccelerationMpsSq, 
-            Units.degreesToRadians(180), Units.degreesToRadians(360)
+            Units.degreesToRadians(360), Units.degreesToRadians(720)
         );
         if(RobotContainer.IsRedSide())
             pathfindingCommand = AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons);
