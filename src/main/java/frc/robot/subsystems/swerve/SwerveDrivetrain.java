@@ -94,8 +94,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      */
     public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
         
-        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 0);
-        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 0);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontRightName, 1);
         
         frontLeft = new SwerveModule(
             kFLDriveID,
@@ -195,16 +197,14 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         field.setRobotPose(poseEstimator.getEstimatedPosition());
             
-            // double robotRotation = estimatedPosition.getRotation().getDegrees();
+            double robotRotation = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
     
-            // SmartDashboard.putNumber("Robot Rotation", robotRotation);
+            SmartDashboard.putNumber("Robot Rotation", robotRotation);
     
-            // visionupdateOdometry("limelight-touch",robotRotation);
-            // visionupdateOdometry("limelight-awesome",robotRotation);
-            // visionupdateOdometry("limelight-zzzzach",robotRotation);
-
-            visionupdateOdometry("kaden");
-            visionupdateOdometry("hi");      
+            // visionupdateOdometry("bl", robotRotation); // TODO Do we need to pass in robotRotation?
+            visionupdateOdometry(VisionConstants.kLimelightBackRightName);
+            visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
+            visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
 
     }
 

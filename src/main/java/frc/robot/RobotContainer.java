@@ -335,25 +335,25 @@ public class RobotContainer {
     // } 
 
     try { // fix for vendordeps not importing
-    PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
+    // PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
 
   	List<String> paths = AutoBuilder.getAllAutoNames();
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
-    autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "BottomTwoPiece", superSystem));
+    // autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
+    // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
 
 
-    autoChooser.addOption("twopieceauto", AutoBuilder.buildAuto("Bottom2Piece"));
+    // autoChooser.addOption("twopieceauto", AutoBuilder.buildAuto("Bottom2Piece"));
 
-    autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
-    autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
-    autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
+    // autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
+    // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
+    // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
 
-    autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
-    autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
+    // autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
+    // autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
   

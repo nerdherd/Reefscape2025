@@ -27,6 +27,7 @@ public class TwoPiecePath extends SequentialCommandGroup {
             Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
             Commands.runOnce(()->swerve.resetOdometryWithAlliance(startingPose)),
             
+
             Commands.sequence(
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(0))

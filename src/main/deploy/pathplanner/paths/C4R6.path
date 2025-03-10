@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.148598451967592,
-        "y": 2.5962764033564802
+        "x": 5.008,
+        "y": 2.2
       },
       "prevControl": {
-        "x": 4.766373352255944,
-        "y": 2.4391427092177174
+        "x": 4.625774900288352,
+        "y": 2.0428663058612373
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": -60.07578977529488
   },
   "reversed": false,
   "folder": "Bottom Half Paths",
