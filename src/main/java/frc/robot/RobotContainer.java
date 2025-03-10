@@ -341,8 +341,12 @@ public class RobotContainer {
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
-    // autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
-    autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
+    if(paths.contains("Bottom2Piece")) {
+      autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
+    }
+    if(paths.contains("TopTwoPiece")) {
+      autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
+    }
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
 
 
