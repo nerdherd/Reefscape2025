@@ -202,18 +202,19 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
             SmartDashboard.putNumber("Robot Rotation", robotRotation);
     
-            visionupdateOdometry(VisionConstants.kLimelightBackLeftName); // TODO Do we need to pass in robotRotation?
+            visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
             visionupdateOdometry(VisionConstants.kLimelightBackRightName);
             visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
             visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
-
+        
+            //todo try MegaTag2
     }
 
     //******************************  Vision ******************************/
 	private void visionupdateOdometry(String limelightName) {
         boolean doRejectUpdate = false;
 
-        LimelightHelpers.PoseEstimate megaTag2 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName); //TODO: test if we need to account for alliance
+        LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName); //TODO: test if we need to account for alliance
         double xyStds = 0.5; //Tune 
         double degStds = 999999; //
 
@@ -229,13 +230,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             doRejectUpdate = true;
         // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
         //     doRejectUpdate = true;
-        else if(megaTag2.tagCount == 1 && megaTag2.rawFiducials.length == 1)
+        else if(megaTag1.tagCount == 1 && megaTag1.rawFiducials.length == 1)
         {
-            if(megaTag2.rawFiducials[0].ambiguity > .7)
+            if(megaTag1.rawFiducials[0].ambiguity > .7)
             {
                 doRejectUpdate = true;
             }
-            if(megaTag2.rawFiducials[0].distToCamera > 3)
+            if(megaTag1.rawFiducials[0].distToCamera > 3)
             {
                 doRejectUpdate = true;
             }
@@ -244,17 +245,17 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
             
             // 1 target with large area and close to estimated pose
-            if (megaTag2.avgTagArea > 0.8 && megaTag2.rawFiducials[0].distToCamera < 0.5) {
+            if (megaTag1.avgTagArea > 0.8 && megaTag1.rawFiducials[0].distToCamera < 0.5) {
                 xyStds = 1.0;
                 degStds = 12;
             }
             // 1 target farther away and estimated pose is close
-            else if (megaTag2.avgTagArea > 0.1 && megaTag2.rawFiducials[0].distToCamera < 0.3) {
+            else if (megaTag1.avgTagArea > 0.1 && megaTag1.rawFiducials[0].distToCamera < 0.3) {
                 xyStds = 2.0;
                 degStds = 30;
             }
         }
-        else if (megaTag2.tagCount >= 2) {
+        else if (megaTag1.tagCount >= 2) {
             xyStds = 0.5;
             degStds = 6;
         }
@@ -266,8 +267,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
             //poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
             poseEstimator.addVisionMeasurement(
-                megaTag2.pose,
-                megaTag2.timestampSeconds);
+                megaTag1.pose,
+                megaTag1.timestampSeconds);
         }
     }
 	
@@ -416,7 +417,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
             
     private int getMostClosedApriltagIdInZone(int zoneId) {
-        return 19; // todo add cameras' reading 
+        if(zoneId == 1)
+            return vision.getLargerApriltagByTa(VisionConstants.kLimelightBackLeftName, 
+                VisionConstants.kLimelightBackRightName);
+        return -1; 
     }
 
     private Map<Integer, ArrayList<Pose2d>> myMap = new HashMap<>();
@@ -507,6 +511,18 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 }
             }
         }
+        // todo other zone
+        else if (zoneId == 2)
+        {
+            // left station
+        }else if (zoneId == 3)
+        {
+            // right station
+        }else if (zoneId == 4)
+        {
+            // proc
+        }
+        
         return targetPose;
     }
             
