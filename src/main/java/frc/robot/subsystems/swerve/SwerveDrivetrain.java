@@ -425,23 +425,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if(myMap.isEmpty()) // todo move it to constructor
         {
             ArrayList<Pose2d> list17 = new ArrayList<>();
-            list17.add(new Pose2d(3.204,2.591,new Rotation2d(-120))); // must be left
-            list17.add(new Pose2d(3.878,2.187,new Rotation2d(-120))); // must be right
+            list17.add(new Pose2d(3.204,2.591,new Rotation2d(-120*3.1416/180.0))); // must be left
+            list17.add(new Pose2d(3.878,2.187,new Rotation2d(-120*3.1416/180.0))); // must be right
             myMap.put(17, list17);
 
             ArrayList<Pose2d> list18 = new ArrayList<>();
-            list18.add(new Pose2d(2.646,4.391,new Rotation2d(180))); // must be left
-            list18.add(new Pose2d(2.646,3.707,new Rotation2d(180))); // must be right
+            list18.add(new Pose2d(2.646,4.391,new Rotation2d(180*3.1416/180.0))); // must be left
+            list18.add(new Pose2d(2.646,3.707,new Rotation2d(180*3.1416/180.0))); // must be right
             myMap.put(18, list18);
 
             ArrayList<Pose2d> list19 = new ArrayList<>();
-            list19.add(new Pose2d(3.897,5.805,new Rotation2d(2))); // must be left
-            list19.add(new Pose2d(3.262,5.555,new Rotation2d(2))); // 120+p o90 // must be right
+            list19.add(new Pose2d(3.897,5.805,new Rotation2d(2.094))); // must be left
+            list19.add(new Pose2d(3.262,5.555,new Rotation2d(2.094))); // must be right
             myMap.put(19, list19);
 
             ArrayList<Pose2d> list20 = new ArrayList<>();
-            list20.add(new Pose2d(5.831,5.401,new Rotation2d(60)));
-            list20.add(new Pose2d(5.109,5.776,new Rotation2d(60)));
+            list20.add(new Pose2d(5.831,5.401,new Rotation2d(60*3.1416/180.0)));
+            list20.add(new Pose2d(5.109,5.776,new Rotation2d(60*3.1416/180.0)));
             myMap.put(20, list20);
 
             ArrayList<Pose2d> list21 = new ArrayList<>();
@@ -450,13 +450,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             myMap.put(21, list21);
 
             ArrayList<Pose2d> list22 = new ArrayList<>();
-            list22.add(new Pose2d(5.008,2.2,new Rotation2d(154.638)));
-            list22.add(new Pose2d(5.85,2.649,new Rotation2d(154.638)));
+            list22.add(new Pose2d(5.008,2.2,new Rotation2d(154.638*3.1416/180.0)));
+            list22.add(new Pose2d(5.85,2.649,new Rotation2d(154.638*3.1416/180.0)));
             myMap.put(22, list22);
 
             ArrayList<Pose2d> list6 = new ArrayList<>();
-            list6.add(new Pose2d(13.672,2.187,new Rotation2d(-60))); // must be left
-            list6.add(new Pose2d(14.307,2.591,new Rotation2d(-60))); // must be right
+            list6.add(new Pose2d(13.672,2.187,new Rotation2d(-60*3.1416/180.0))); // must be left
+            list6.add(new Pose2d(14.307,2.591,new Rotation2d(-60*3.1416/180.0))); // must be right
             myMap.put(6, list6);
 
             ArrayList<Pose2d> list7 = new ArrayList<>();
@@ -465,23 +465,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             myMap.put(7, list7);
 
             ArrayList<Pose2d> list8 = new ArrayList<>();
-            list8.add(new Pose2d(14.375,5.411,new Rotation2d(60))); // must be left
-            list8.add(new Pose2d(13.672,5.5776,new Rotation2d(60))); // must be right
+            list8.add(new Pose2d(14.375,5.411,new Rotation2d(60*3.1416/180.0))); // must be left
+            list8.add(new Pose2d(13.672,5.5776,new Rotation2d(60*3.1416/180.0))); // must be right
             myMap.put(8, list8);
 
             ArrayList<Pose2d> list9 = new ArrayList<>();
-            list9.add(new Pose2d(12.460,5.805,new Rotation2d(120)));
-            list9.add(new Pose2d(11.835,5.487,new Rotation2d(120)));
+            list9.add(new Pose2d(12.460,5.805,new Rotation2d(120*3.1416/180.0)));
+            list9.add(new Pose2d(11.835,5.487,new Rotation2d(120*3.1416/180.0)));
             myMap.put(9, list9);
 
             ArrayList<Pose2d> list10 = new ArrayList<>();
-            list10.add(new Pose2d(11.219,4.400,new Rotation2d(180)));
-            list10.add(new Pose2d(11.219,3.717,new Rotation2d(180)));
+            list10.add(new Pose2d(11.219,4.400,new Rotation2d(180*3.1416/180.0)));
+            list10.add(new Pose2d(11.219,3.717,new Rotation2d(180*3.1416/180.0)));
             myMap.put(10, list10);
 
             ArrayList<Pose2d> list11 = new ArrayList<>();
-            list11.add(new Pose2d(11.748,2.639,new Rotation2d(-120)));
-            list11.add(new Pose2d(12.383,2.264,new Rotation2d(-120)));
+            list11.add(new Pose2d(11.748,2.639,new Rotation2d(-120*3.1416/180.0)));
+            list11.add(new Pose2d(12.383,2.264,new Rotation2d(-120*3.1416/180.0)));
             myMap.put(11, list11);
         }
 
@@ -657,17 +657,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         double xp = cPose2d.getX();
         double yp = cPose2d.getY();
 
-        //1 is in reef zone, 2 is in station zone1, 3 is in station zone2, 4 is in proc zone
+        //1 is in reef zone, 2 is in left station, 3 is in right station, 4 is in proc zone
         if(RobotContainer.IsRedSide())
         {
-            // todo
-        }
-        else
-        {
-            if( xp > 1.1 && xp < 6.8 && yp > 1.5 && yp < 7.5) // a box area around reef
+            if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp))
             {
                 return 1;
             }
+            // todo zone 2,3,4
+        }
+        else
+        {
+            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 9, xp, yp))
+            //if( xp > 1.1 && xp < 6.8 && yp > 1.5 && yp < 7.5) // a box area around reef
+            {
+                return 1;
+            }
+            // todo zone 2,3,4
         }
         return 0; // 0 is default for disable.  
     }
