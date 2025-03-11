@@ -143,15 +143,27 @@ public class SuperSystem {
         return intakeRoller.setVoltageCommand(4.25);
     } 
     
-    public Command climbCommandUp() {
-        return Commands.sequence(
-            moveTo(NamedPositions.ClimbUp),
-            climbMotor.setVoltageCommand(0.5),
-            Commands.waitSeconds(2),
-            moveTo(NamedPositions.ClimbDown)
-        );
+    public Command climbOpen() {
+        return climbMotor.setVoltageCommand(0.5);
     }
 
+    public Command climbClose() {
+        return climbMotor.setVoltageCommand(-3.0);
+    }
+
+    public Command climbCommandUp() {
+        return Commands.sequence(
+            climbOpen(), 
+            supersystem.moveTo(NamedPositions.ClimbUp) 
+        );
+    }
+    
+    public Command climbCommandDown() {
+        return Commands.sequence(
+            climbClose(), 
+            supersystem.moveTo(NamedPositions.ClimbDown) 
+        );
+    }
 
     // movement
     public Command moveTo(NamedPositions position) {

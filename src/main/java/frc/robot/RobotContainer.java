@@ -60,6 +60,7 @@ import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.subsystems.BannerSensor;
+
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 
 import frc.robot.util.Controller;
@@ -78,6 +79,7 @@ public class RobotContainer {
   public BannerSensor bannerSensor;
   public SuperSystem superSystem;
   public ClimbMotor climbMotor;
+  
 
 
   private PathOnlyBottom2Piece pathOnlyBottom2Piece;
@@ -130,7 +132,8 @@ public class RobotContainer {
       elevatorPivot = new ElevatorPivot();
       intakeRoller = new IntakeRoller();
       bannerSensor = new BannerSensor();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor);
+      climbMotor = new ClimbMotor();
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -323,6 +326,9 @@ public class RobotContainer {
     
     driverController.buttonUp()
     .onTrue(superSystem.climbCommandUp());
+
+    driverController.buttonDown()
+    .onTrue(superSystem.climbCommandDown());
     
 
     // operatorController.triggerRight()
