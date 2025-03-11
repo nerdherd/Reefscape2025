@@ -126,9 +126,9 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
         pivotConfiguration.CurrentLimits.SupplyCurrentLimit = 40;
-        pivotConfiguration.CurrentLimits.SupplyCurrentLimitEnable = false;
+        pivotConfiguration.CurrentLimits.SupplyCurrentLimitEnable = true;
         pivotConfiguration.CurrentLimits.StatorCurrentLimit = 100;
-        pivotConfiguration.CurrentLimits.StatorCurrentLimitEnable = false;
+        pivotConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         pivotConfiguration.Audio.AllowMusicDurDisable = true;
         pivotConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
