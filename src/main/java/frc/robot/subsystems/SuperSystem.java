@@ -20,7 +20,7 @@ public class SuperSystem {
     public IntakeWrist wrist;
     public IntakeRoller intakeRoller;
     public BannerSensor bannerSensor;
-    public ClimbMotor climbMotor;
+    public Climb climbMotor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
     
@@ -42,12 +42,13 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor bannerSensor) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor bannerSensor, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
         this.bannerSensor = bannerSensor;
+        this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
         pivotAtPositionWide = () -> pivot.atPositionWide();
@@ -154,14 +155,14 @@ public class SuperSystem {
     public Command climbCommandUp() {
         return Commands.sequence(
             climbOpen(), 
-            supersystem.moveTo(NamedPositions.ClimbUp) 
+            moveTo(NamedPositions.ClimbUp) 
         );
     }
     
     public Command climbCommandDown() {
         return Commands.sequence(
             climbClose(), 
-            supersystem.moveTo(NamedPositions.ClimbDown) 
+            moveTo(NamedPositions.ClimbDown) 
         );
     }
 

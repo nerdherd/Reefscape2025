@@ -78,7 +78,7 @@ public class RobotContainer {
   public IntakeWrist intakeWrist;
   public BannerSensor bannerSensor;
   public SuperSystem superSystem;
-  public ClimbMotor climbMotor;
+  public Climb climbMotor;
   
 
 
@@ -132,7 +132,7 @@ public class RobotContainer {
       elevatorPivot = new ElevatorPivot();
       intakeRoller = new IntakeRoller();
       bannerSensor = new BannerSensor();
-      climbMotor = new ClimbMotor();
+      climbMotor = new Climb();
       superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
