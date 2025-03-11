@@ -53,6 +53,7 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.BannerSensor;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.IntakeWrist;
@@ -76,6 +77,7 @@ public class RobotContainer {
   public IntakeWrist intakeWrist;
   public BannerSensor bannerSensor;
   public SuperSystem superSystem;
+  public ClimbMotor climbMotor;
 
 
   private PathOnlyBottom2Piece pathOnlyBottom2Piece;
@@ -320,7 +322,8 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     
     driverController.buttonUp()
-    .onTrue(superSystem.moveTo(NamedPositions.ClimbDown));
+    .onTrue(superSystem.climbCommandUp());
+    
     driverController.buttonLeft()
     .onTrue(superSystem.moveTo(NamedPositions.ClimbUp));
     

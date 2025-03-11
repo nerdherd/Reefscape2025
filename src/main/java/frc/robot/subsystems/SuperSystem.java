@@ -20,6 +20,7 @@ public class SuperSystem {
     public IntakeWrist wrist;
     public IntakeRoller intakeRoller;
     public BannerSensor bannerSensor;
+    public ClimbMotor climbMotor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
     
@@ -140,8 +141,23 @@ public class SuperSystem {
 
     public Command shootAlgae() {
         return intakeRoller.setVoltageCommand(4.25);
+    } 
+    
+    public Command climbCommandUp() {
+        return Commands.sequence(
+            moveTo(NamedPositions.ClimbUp),
+            climbMotor.setVoltageCommand(0.5),
+            Commands.waitSeconds(2),
+            moveTo(NamedPositions.ClimbDown)
+        );
     }
 
+    public Command climbClose() {
+        return climbMotor.setVoltageCommand(-3.0);
+    }
+    public Command climbOpen() {
+        return climbMotor.setVoltageCommand(0.5);
+    }
 
 
     // movement
