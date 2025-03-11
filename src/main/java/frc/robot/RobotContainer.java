@@ -318,7 +318,11 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(NamedPositions.Stow));
     operatorController.buttonLeft()
       .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
-
+    
+    driverController.buttonUp()
+    .onTrue(superSystem.moveTo(NamedPositions.ClimbDown));
+    driverController.buttonLeft()
+    .onTrue(superSystem.moveTo(NamedPositions.ClimbUp));
     
     // operatorController.triggerRight()
     // .onTrue(superSystem.moveToSemiStow());
@@ -341,12 +345,12 @@ public class RobotContainer {
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
-    if(paths.contains("Bottom2Piece")) {
-      autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
-    }
-    if(paths.contains("TopTwoPiece")) {
-      autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
-    }
+    
+    // autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
+    
+   
+    // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
+    
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
 
 

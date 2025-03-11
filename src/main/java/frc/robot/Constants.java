@@ -335,7 +335,7 @@ public final class Constants {
     public static final double kGElevatorMotor = 0.33;
     public static final double kSElevatorMotor = 0.11;
 
-    public static final double kElevatorCruiseVelocity = 30; //16.333 //20
+    public static final double kElevatorCruiseVelocity = 50; //16.333 //20
     public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
     public static final double kElevatorJerk = 400.0;
  }
@@ -452,7 +452,9 @@ public final class Constants {
       L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3), 
       L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
       AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update
-      AlgaeL3(      ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.307, -0.3) // TODO update
+      AlgaeL3(      ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.307, -0.3), // TODO update
+      ClimbDown(     ExecutionOrder.WRT_ELV_PVT, -0.075, 0.05, -0.164, -0.4),
+      ClimbUp(     ExecutionOrder.WRT_ELV_PVT, 0.14, 0.05, -0.164, -0.4),
       ;
       // todo: we might need pre position for wrist
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
