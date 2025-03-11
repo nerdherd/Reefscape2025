@@ -152,13 +152,6 @@ public class SuperSystem {
         );
     }
 
-    public Command climbClose() {
-        return climbMotor.setVoltageCommand(-3.0);
-    }
-    public Command climbOpen() {
-        return climbMotor.setVoltageCommand(0.5);
-    }
-
 
     // movement
     public Command moveTo(NamedPositions position) {

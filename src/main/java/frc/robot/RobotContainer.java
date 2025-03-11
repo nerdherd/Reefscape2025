@@ -324,9 +324,7 @@ public class RobotContainer {
     driverController.buttonUp()
     .onTrue(superSystem.climbCommandUp());
     
-    driverController.buttonLeft()
-    .onTrue(superSystem.moveTo(NamedPositions.ClimbUp));
-    
+
     // operatorController.triggerRight()
     // .onTrue(superSystem.moveToSemiStow());
    }
