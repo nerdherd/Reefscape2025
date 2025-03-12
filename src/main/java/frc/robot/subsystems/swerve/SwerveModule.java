@@ -326,28 +326,30 @@ public class SwerveModule implements Reportable {
             case OFF:
                 break;
             case ALL:
-                tab.addNumber("Turn percent (motor controller)", () -> turnMotor.getDutyCycle().getValue());
-                tab.addNumber("Turn percent (current)", () -> this.currentTurnPercent);
+                tab.addNumber("Module " + moduleId + " Turn percent (motor controller)", () -> turnMotor.getDutyCycle().getValue());
+                tab.addNumber("Module " + moduleId + " Turn percent (current)", () -> this.currentTurnPercent);
             case MEDIUM:
-                tab.addNumber("Turn Motor Current", () -> turnMotor.getStatorCurrent().getValueAsDouble());
-                tab.addNumber("Drive Motor Voltage", () -> (driveMotor.getDutyCycle().getValue() * driveMotor.getSupplyVoltage().getValueAsDouble()));
-                tab.addNumber("Turn Motor Voltage", () -> turnMotor.getSupplyVoltage().getValueAsDouble());// ::getMotorOutputVoltage);
-                tab.addNumber("Drive percent (motor controller)", () -> driveMotor.getDutyCycle().getValue());
-                tab.addNumber("Drive percent (current)", () -> this.currentPercent);
+                tab.addNumber("Module " + moduleId + " Turn Motor Current", () -> turnMotor.getStatorCurrent().getValueAsDouble());
+                tab.addNumber("Module " + moduleId + " Drive Motor Voltage", () -> (driveMotor.getDutyCycle().getValue() * driveMotor.getSupplyVoltage().getValueAsDouble()));
+                tab.addNumber("Module " + moduleId + " Turn Motor Voltage", () -> turnMotor.getSupplyVoltage().getValueAsDouble());// ::getMotorOutputVoltage);
+                tab.addNumber("Module " + moduleId + " Drive percent (motor controller)", () -> driveMotor.getDutyCycle().getValue());
+                tab.addNumber("Module " + moduleId + " Drive percent (current)", () -> this.currentPercent);
                 
-                tab.addNumber("Drive ticks", this::getDrivePositionTicks);
-                tab.addNumber("Turn angle percent", () -> turnMotor.getDutyCycle().getValue());
-                tab.addNumber("Angle Difference", () -> desiredAngle - currentAngle);
+                tab.addNumber("Module " + moduleId + " Drive ticks", this::getDrivePositionTicks);
+                tab.addNumber("Module " + moduleId + " Turn angle percent", () -> turnMotor.getDutyCycle().getValue());
+                tab.addNumber("Module " + moduleId + " Angle Difference", () -> desiredAngle - currentAngle);
             case MINIMAL:
-                tab.addNumber("Turn angle", this::getTurningPositionDegrees);
-                tab.addNumber("Desired Angle", () -> desiredAngle);
-                tab.addNumber("Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValueAsDouble());
+                tab.addNumber("Module " + moduleId + " Turn angle", this::getTurningPositionDegrees);
+                tab.addNumber("Module " + moduleId + " Desired Angle", () -> desiredAngle);
+                tab.addNumber("Module " + moduleId + " Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValueAsDouble());
                 // tab.addNumber("Module Velocity", this::getDriveVelocity);
-                tab.addNumber("Module Velocity RPS", this::getDriveVelocityRPS);
-                tab.addNumber("Desired Velocity", () -> this.desiredVelocity);
-                tab.addBoolean("Velocity Control", () -> this.velocityControl);
+                tab.addNumber("Module " + moduleId + " Velocity RPS", this::getDriveVelocityRPS);
+                tab.addNumber("Module " + moduleId + " Desired Velocity", () -> this.desiredVelocity);
+                tab.addBoolean("Module " + moduleId + " Velocity Control", () -> this.velocityControl);
                 // tab.addString("Error Status", () -> driveMotor.getFaultField().getName());
-                tab.addNumber("Drive Stator Current", () -> driveMotor.getStatorCurrent().getValueAsDouble());
+                tab.addNumber("Module " + moduleId + " Drive Stator Current", () -> driveMotor.getStatorCurrent().getValueAsDouble());
+                tab.addNumber("Module " + moduleId + " Drive Temperature", () -> driveMotor.getDeviceTemp().getValueAsDouble());
+                tab.addNumber("Module " + moduleId + " Turn Temperature", () -> turnMotor.getDeviceTemp().getValueAsDouble());
                 break;
             }
             

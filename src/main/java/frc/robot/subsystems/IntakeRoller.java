@@ -237,18 +237,18 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         ShuffleboardTab tab = Shuffleboard.getTab("Algae Roller");
         switch (priority) {
             case ALL:
+                tab.addNumber("Intake Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());
+                tab.addBoolean("Intake Velocity Control", () -> this.velocityControl);
             case MEDIUM:
-                tab.addNumber("Position", () -> this.rollerMotor.getPosition().getValueAsDouble());
+                tab.addNumber("Intake Position", () -> this.rollerMotor.getPosition().getValueAsDouble());
+                tab.addNumber("Intake Feed Forward", () -> velocityRequest.FeedForward);
+                tab.addNumber("Intake Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
             case MINIMAL:
-                tab.addBoolean("Algae Shooter Enabled", () -> this.enabled);
-                tab.addBoolean("Algae Shooter Velocity Control", () -> this.velocityControl);
-                tab.addNumber("Velocity", () -> rollerMotor.getVelocity().getValueAsDouble());
-                tab.addNumber("NEW Velocity", () -> velocityRequest.Velocity);
-                tab.addNumber("Target Velocity", () -> this.getTargetVelocity());
-                tab.addNumber("Feed Forward", () -> velocityRequest.FeedForward);
-                tab.addNumber("Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
-                tab.addNumber("Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());
-                tab.addNumber("Applied Voltage", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addBoolean("Intake Enabled", () -> this.enabled);
+                tab.addNumber("Intake Desired Velocity", () -> velocityRequest.Velocity);
+                tab.addNumber("Intake Velocity", () -> rollerMotor.getVelocity().getValueAsDouble());
+                tab.addNumber("Intake Applied Voltage", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Intake Temperature", () -> this.rollerMotor.getDeviceTemp().getValueAsDouble());    
                 break;
             default:
                 break;

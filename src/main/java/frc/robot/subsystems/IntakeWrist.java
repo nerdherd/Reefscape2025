@@ -253,27 +253,28 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     }
     
     @Override
-    public void initShuffleboard(LOG_LEVEL level) { 
-        if (level == LOG_LEVEL.OFF || level == LOG_LEVEL.MINIMAL) {
+    public void initShuffleboard(LOG_LEVEL priority) { 
+        if (priority == LOG_LEVEL.OFF) {
             return;
         }
         ShuffleboardTab tab = Shuffleboard.getTab("Coral Wrist");
-        switch (level) {
+        switch (priority) {
             case OFF:
                 break;
             case ALL:
-                tab.addString("Control Mode", motor.getControlMode()::toString);
+                tab.addString("Wrist Control Mode", motor.getControlMode()::toString);
                 tab.addNumber("Wrist Offset",() -> manualOffset);
             case MEDIUM:
-                tab.addDouble("MM Position", () -> motionMagicRequest.Position);
-                tab.addDouble("Desired Position", () -> desiredPosition);
-            case MINIMAL:
-                tab.addBoolean("Enabled", () -> enabled);
-                tab.addNumber("Current Coral Wrist Angle", () -> motor.getPosition().getValueAsDouble());
-                // tab.addNumber("Coral Wrist pigeon angle", () -> pigeon.getRoll().getValueAsDouble());
-                tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
+                tab.addDouble("Wrist MM Position", () -> motionMagicRequest.Position);
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
-                tab.addBoolean("At position", () -> atPosition());
+                tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
+            case MINIMAL:
+                tab.addBoolean("Wrist Enabled", () -> enabled);
+                tab.addNumber("Wrist Desired Position", () -> desiredPosition);
+                tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());
+                tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
+                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
+                tab.addBoolean("Wrist At Position", () -> atPosition());
                 
                 break;
         }

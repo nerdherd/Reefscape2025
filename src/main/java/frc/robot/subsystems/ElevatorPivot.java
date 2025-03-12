@@ -313,19 +313,29 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
+        if (priority == LOG_LEVEL.OFF) {
+            return;
+        }
         ShuffleboardTab tab = Shuffleboard.getTab("Elevator Pivot");
-        tab.addNumber("Position Rev", () -> getPosition());
-        // tab.addNumber("Position Degrees", () -> getPositionDegrees());
-        tab.addNumber("Set Position Rev", () -> motionMagicRequest.Position);
-        tab.addNumber("Velocity", () -> pivotMotor.getVelocity().getValueAsDouble());
-        tab.addBoolean("Enabled", ()-> enabled);
-        tab.addNumber("Actual Voltage", ()-> pivotMotor.getMotorVoltage().getValueAsDouble());
-        tab.addNumber("Desired Position", ()-> desiredPosition);
-        tab.addNumber("Actual Position", ()-> pivotMotor.getPosition().getValueAsDouble());
-        tab.addNumber("feedForward", ()-> ff);
-        tab.addBoolean("At position", () -> atPosition());
-        tab.addNumber("Supply Current", () -> pivotMotor.getSupplyCurrent().getValueAsDouble());
-        tab.addNumber("Applied Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
+        switch (priority) {
+            case OFF:
+                break;
+            case ALL:
+                tab.addString("Pivot Control Mode", pivotMotor.getControlMode()::toString);
+            case MEDIUM:
+                tab.addNumber("Pivot MM Position", () -> motionMagicRequest.Position);
+                tab.addNumber("Pivot FF", () -> motionMagicRequest.FeedForward);
+                tab.addNumber("Pivot Supply Current", () -> pivotMotor.getSupplyCurrent().getValueAsDouble());
+            case MINIMAL:
+                tab.addBoolean("Pivot Enabled", () -> enabled);
+                tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
+                tab.addNumber("Pivot Current Position", () -> getPosition());
+                tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Pivot Temperature", () -> pivotMotor.getDeviceTemp().getValueAsDouble());
+                tab.addBoolean("Pivot At Position", () -> atPosition());
+                
+                break;
+            }
     }
     
 }

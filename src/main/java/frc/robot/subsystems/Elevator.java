@@ -31,7 +31,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     private boolean enabled = false;
     private TalonFXConfigurator motorConfigurator;
     private TalonFXConfigurator motorConfigurator2;
-    private MotionMagicVoltage motionMagicVoltage;
+    private MotionMagicVoltage motionMagicRequest;
     private final Follower followRequest;
     private final NeutralOut brakeRequest = new NeutralOut();;
     private double ff = 0.0; 
@@ -42,7 +42,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
-        motionMagicVoltage = new MotionMagicVoltage(0);
+        motionMagicRequest = new MotionMagicVoltage(0);
         
         elevatorMotor.setPosition(0.0);
 
@@ -52,7 +52,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         setMotorConfigs();
 
         followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
-        motionMagicVoltage.withSlot(0);
+        motionMagicRequest.withSlot(0);
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
     }
@@ -116,7 +116,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         }
         elevatorMotor2.setControl(followRequest);
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
-        elevatorMotor.setControl(motionMagicVoltage.withFeedForward(ff));
+        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
     }
 
     // ****************************** STATE METHODS ****************************** //
@@ -137,7 +137,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     public void setTargetPosition(double position) {
         //TODO NerdyMath.clamp(
         desiredPosition = position;
-        motionMagicVoltage.Position = desiredPosition;
+        motionMagicRequest.Position = desiredPosition;
     }
 
     public void setPivotAngle(double pivotAngle) {
@@ -209,24 +209,31 @@ public class Elevator extends SubsystemBase implements Reportable {
     }
 
     @Override
-    public void initShuffleboard(LOG_LEVEL level) {
-        ShuffleboardTab tab = Shuffleboard.getTab("Elevator");;
-        switch (level) {
+    public void initShuffleboard(LOG_LEVEL priority) {
+        if (priority == LOG_LEVEL.OFF) {
+            return;
+        }
+        ShuffleboardTab tab = Shuffleboard.getTab("Elevator");
+        switch (priority) {
             case OFF:
                 break;
             case ALL:
+                tab.addString("Elevator Control Mode", elevatorMotor.getControlMode()::toString);
             case MEDIUM:
+                tab.addNumber("Elevator MM Position", () -> motionMagicRequest.Position);
+                tab.addNumber("Elevator FF", () -> motionMagicRequest.FeedForward);
+                tab.addNumber("Elevator Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
             case MINIMAL:
-                tab.addNumber("Elevator Current Velocity", () -> elevatorMotor.getVelocity().getValueAsDouble());
-                tab.addNumber("Elevator Desired Position", () -> desiredPosition);
-                tab.addNumber("Elevator Current Position", () -> elevatorMotor.getPosition().getValueAsDouble());
                 tab.addBoolean("Elevator Enabled", () -> enabled);
-                tab.addBoolean("At position", () -> atPosition());
-                tab.addNumber("Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
-                tab.addNumber("Applied Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());    
-
+                tab.addNumber("Elevator Desired Position", ()-> desiredPosition);
+                tab.addNumber("Elevator Current Position", () -> getPosition());
+                tab.addNumber("Elevator Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Elevator Temperature 1", () -> elevatorMotor.getDeviceTemp().getValueAsDouble());
+                tab.addNumber("Elevator Temperature 2", () -> elevatorMotor2.getDeviceTemp().getValueAsDouble());
+                tab.addBoolean("Elevator At Position", () -> atPosition());
+                
                 break;
-        }
+            }        
     }
 
 }
