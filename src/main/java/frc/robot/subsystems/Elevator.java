@@ -91,7 +91,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs2.CurrentLimits.SupplyCurrentLimitEnable = false; // TODO: change
         motorConfigs2.CurrentLimits.SupplyCurrentLowerLimit = 45;
         motorConfigs2.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-        motorConfigs2.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        motorConfigs2.MotorOutput.NeutralMode = neutralMode;
         motorConfigs2.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         motorConfigs2.MotionMagic.MotionMagicCruiseVelocity =  ElevatorConstants.kElevatorCruiseVelocity;
         motorConfigs2.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
