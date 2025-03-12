@@ -207,8 +207,8 @@ public final class Constants {
 
     public static final class MapPoses {
       // Blue Side
-      public static final Pose2d tag17Left = new Pose2d(3.204, 2.591, new Rotation2d(Math.toRadians(-120))); 
-      public static final Pose2d tag17Right = new Pose2d(3.878, 2.187, new Rotation2d(Math.toRadians(-120))); 
+      public static final Pose2d tag17Left = new Pose2d(3.513, 2.959, new Rotation2d(Math.toRadians(-120))); 
+      public static final Pose2d tag17Right = new Pose2d(3.88, 2.745, new Rotation2d(Math.toRadians(-120))); 
       public static final Pose2d tag18Left = new Pose2d(2.646, 4.391, new Rotation2d(Math.toRadians(180))); 
       public static final Pose2d tag18Right = new Pose2d(2.646, 3.707, new Rotation2d(Math.toRadians(180))); 
       public static final Pose2d tag19Left = new Pose2d(3.897, 5.805, new Rotation2d(Math.toRadians(120))); 
@@ -217,8 +217,8 @@ public final class Constants {
       public static final Pose2d tag20Right = new Pose2d(5.109, 5.776, new Rotation2d(Math.toRadians(60)));
       public static final Pose2d tag21Left = new Pose2d(6.321, 3.535, new Rotation2d(Math.toRadians(0)));
       public static final Pose2d tag21Right = new Pose2d(6.321, 4.343, new Rotation2d(Math.toRadians(0)));
-      public static final Pose2d tag22Left = new Pose2d(5.008, 2.2, new Rotation2d(Math.toRadians(-60)));
-      public static final Pose2d tag22Right = new Pose2d(5.85, 2.649, new Rotation2d(Math.toRadians(-60)));
+      public static final Pose2d tag22Left = new Pose2d(4.55, 2.725, new Rotation2d(Math.toRadians(-60)));
+      public static final Pose2d tag22Right = new Pose2d(5.391, 2.921, new Rotation2d(Math.toRadians(-60)));
 
       // Red Side
       public static final Pose2d tag6Left = new Pose2d(13.672, 2.187, new Rotation2d(Math.toRadians(-60)));   
@@ -244,13 +244,13 @@ public final class Constants {
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
     public static final double kPPMaxAngularAcceleration = Math.PI * 2;
 
-    public static final double kPP_P = 5.0;
+    public static final double kPP_P = 6.0; //5
     public static final double kPP_I = 0.0;
     public static final double kPP_D = 0.0;
 
     public static final PIDConstants kPPTranslationPIDConstants = new PIDConstants(kPP_P, kPP_I, kPP_D);
 
-    public static final double kPP_ThetaP = 3.0;
+    public static final double kPP_ThetaP = 4.0; //3
     public static final double kPP_ThetaI = 0;
     public static final double kPP_ThetaD = 0.1;
 
@@ -448,7 +448,7 @@ public final class Constants {
       L1(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.0, -0.21, -0.3),
       L2(           ExecutionOrder.WRT_PVT_ELV, 0.25, 0, -0.18, -0.3),
       L3(           ExecutionOrder.WRT_PVT_ELV, 0.25, 1.14, -0.24, -0.3),
-      L4(           ExecutionOrder.WRT_PVT_ELV, 0.245, 3.05, -0.26, -0.3),
+      L4(           ExecutionOrder.WRT_PVT_ELV, 0.245, 3., -0.26, -0.3),
       L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3), 
       L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
       AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update

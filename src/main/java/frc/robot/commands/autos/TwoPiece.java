@@ -38,7 +38,7 @@ public class TwoPiece extends SequentialCommandGroup {
                 ),
                 Commands.sequence(
                     superSystem.outtake(),
-                    Commands.waitSeconds(0.2)
+                    Commands.waitSeconds(2.0)
                 ),
                 Commands.parallel(
                     superSystem.moveTo(NamedPositions.SemiStow),
@@ -49,7 +49,7 @@ public class TwoPiece extends SequentialCommandGroup {
                     )
                 ),
                 Commands.sequence(
-                    superSystem.intakeUntilSensed(),
+                    superSystem.intakeUntilSensed(2),
                     superSystem.holdPiece()
                 ),
                 Commands.parallel(
