@@ -250,7 +250,7 @@ public final class Constants {
 
     public static final PIDConstants kPPTranslationPIDConstants = new PIDConstants(kPP_P, kPP_I, kPP_D);
 
-    public static final double kPP_ThetaP = 4.0; //3
+    public static final double kPP_ThetaP = 3.0; //3
     public static final double kPP_ThetaI = 0;
     public static final double kPP_ThetaD = 0.1;
 
@@ -448,7 +448,7 @@ public final class Constants {
       L1(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0.0, -0.21, -0.3),
       L2(           ExecutionOrder.WRT_PVT_ELV, 0.25, 0, -0.18, -0.3),
       L3(           ExecutionOrder.WRT_PVT_ELV, 0.25, 1.14, -0.24, -0.3),
-      L4(           ExecutionOrder.WRT_PVT_ELV, 0.245, 3., -0.26, -0.3),
+      L4(           ExecutionOrder.WRT_PVT_ELV, 0.25, 3.18, -0.26, -0.3),
       L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3), 
       L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
       AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update

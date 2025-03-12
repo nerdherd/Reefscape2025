@@ -531,9 +531,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             Units.degreesToRadians(360), Units.degreesToRadians(720)
         );
 
-        if(RobotContainer.IsRedSide())
-            pathfindingCommand = AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons);
-        else
+        // if(RobotContainer.IsRedSide())
+        //     pathfindingCommand = AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons);
+        // else
             pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);;
         
         pathfindingCommand.schedule();

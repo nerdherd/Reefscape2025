@@ -21,20 +21,23 @@ public class PreloadTaxi extends SequentialCommandGroup{
 
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
         addCommands(
-            // Commands.runOnce(swerve.getImu()::zeroAll),
-            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+            Commands.runOnce(swerve.getImu()::zeroAll),
+            // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+            // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
             Commands.sequence(
-                Commands.parallel(
+                Commands.sequence(
                     superSystem.holdPiece(),
                     AutoBuilder.followPath(pathGroup.get(0)), 
-                    superSystem.moveToAuto(NamedPositions.L2)
+                    superSystem.moveToAuto(NamedPositions.L4)
                 ),
                 Commands.sequence(
                     Commands.waitSeconds(2),
                     superSystem.outtake(),
-                    Commands.waitSeconds(0.2),
-                    superSystem.stopRoller()
+                    Commands.waitSeconds(1),
+                    superSystem.stopRoller(),
+                    superSystem.moveTo(NamedPositions.L1),
+                    AutoBuilder.followPath(pathGroup.get(1)), 
+                    superSystem.moveTo(NamedPositions.Stow)
                 )
         )
         );
