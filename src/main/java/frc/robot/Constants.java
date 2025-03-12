@@ -337,7 +337,7 @@ public final class Constants {
 
     public static final double kElevatorCruiseVelocity = 100; //16.333 //20
     public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
-    public static final double kElevatorJerk = 400.0;
+    public static final double kElevatorJerk = kElevatorCruiseAcceleration * 10;
  }
  
 
