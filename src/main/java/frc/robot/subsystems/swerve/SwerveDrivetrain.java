@@ -657,7 +657,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             else if(NerdyMath.isPoseInsideCircleZone(1, 7.5, 4, xp, yp)) {
                 return 2;
             }
-            else if(NerdyMath.isPoseInsideCircleZone(1, 0.5, 9, xp, yp)) {
+            else if(NerdyMath.isPoseInsideCircleZone(1, 0.5, 4, xp, yp)) {
                 return 3;
             }
             else if(NerdyMath.isPoseInsideCircleZone(6.35, 0, 2.12, xp, yp)) {
@@ -743,7 +743,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      * @return Pose2d of position to drive to
      */
     public Pose2d calcReefSidePose(int tagID, int side) {
-        AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        
         Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
         Rotation2d tagRotation = tagPose.getRotation();
         Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
