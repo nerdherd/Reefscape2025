@@ -53,12 +53,14 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.BannerSensor;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.IntakeWrist;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.ElevatorPivot;
 import frc.robot.subsystems.BannerSensor;
+
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 
 import frc.robot.util.Controller;
@@ -76,6 +78,8 @@ public class RobotContainer {
   public IntakeWrist intakeWrist;
   public BannerSensor bannerSensor;
   public SuperSystem superSystem;
+  public Climb climbMotor;
+  
 
 
   private PathOnlyBottom2Piece pathOnlyBottom2Piece;
@@ -128,7 +132,8 @@ public class RobotContainer {
       elevatorPivot = new ElevatorPivot();
       intakeRoller = new IntakeRoller();
       bannerSensor = new BannerSensor();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor);
+      climbMotor = new Climb();
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -320,10 +325,12 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     
     driverController.buttonUp()
-    .onTrue(superSystem.moveTo(NamedPositions.ClimbDown));
-    driverController.buttonLeft()
-    .onTrue(superSystem.moveTo(NamedPositions.ClimbUp));
+    .onTrue(superSystem.climbCommandUp());
+
+    driverController.buttonDown()
+    .onTrue(superSystem.climbCommandDown());
     
+
     // operatorController.triggerRight()
     // .onTrue(superSystem.moveToSemiStow());
    }

@@ -30,6 +30,8 @@ public class Climb extends SubsystemBase implements Reportable{
 
     private double desiredPosition; // Should be ~90 or wherever initial position is
     private boolean enabled = false;
+    private double desiredVoltage = 0;
+
 
     public Climb() {
         motor = new TalonFX(ClimbConstants.kMotorID);
@@ -85,6 +87,9 @@ public class Climb extends SubsystemBase implements Reportable{
         if (!enabled) {
             motor.setControl(brakeRequest);
             return;
+        } 
+        else {
+            motor.setVoltage(desiredVoltage);  
         }
 
         SmartDashboard.putNumber("Climb Voltage", motor.getMotorVoltage().getValueAsDouble());
@@ -95,6 +100,9 @@ public class Climb extends SubsystemBase implements Reportable{
     }
 
     // ****************************** STATE METHODS ****************************** //
+    private void setVoltage(double volt) {
+        desiredVoltage = volt;
+    }
 
     public void setEnabled(boolean e) {
         this.enabled = e;
@@ -132,6 +140,10 @@ public class Climb extends SubsystemBase implements Reportable{
     }
 
     // ****************************** COMMAND METHODS ****************************** //
+
+    public Command setVoltageCommand(double volt) {
+        return Commands.runOnce(() -> setVoltage(volt));
+    }
     
     public Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> this.setEnabled(enabled));

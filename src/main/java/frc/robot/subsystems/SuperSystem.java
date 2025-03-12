@@ -20,6 +20,7 @@ public class SuperSystem {
     public IntakeWrist wrist;
     public IntakeRoller intakeRoller;
     public BannerSensor bannerSensor;
+    public Climb climbMotor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
     
@@ -41,12 +42,13 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor bannerSensor) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor bannerSensor, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
         this.bannerSensor = bannerSensor;
+        this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
         pivotAtPositionWide = () -> pivot.atPositionWide();
@@ -140,9 +142,29 @@ public class SuperSystem {
 
     public Command shootAlgae() {
         return intakeRoller.setVoltageCommand(4.25);
+    } 
+    
+    public Command climbOpen() {
+        return climbMotor.setVoltageCommand(0.5);
     }
 
+    public Command climbClose() {
+        return climbMotor.setVoltageCommand(-3.0);
+    }
 
+    public Command climbCommandUp() {
+        return Commands.sequence(
+            climbOpen(), 
+            moveTo(NamedPositions.ClimbUp) 
+        );
+    }
+    
+    public Command climbCommandDown() {
+        return Commands.sequence(
+            climbClose(), 
+            moveTo(NamedPositions.ClimbDown) 
+        );
+    }
 
     // movement
     public Command moveTo(NamedPositions position) {
