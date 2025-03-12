@@ -27,43 +27,52 @@ public class TwoPiece extends SequentialCommandGroup {
             // Commands.runOnce(()->swerve.resetOdometryWithAlliance(startingPose)),
             
             Commands.sequence(
-                Commands.parallel(
-                    // AutoBuilder.followPath(pathGroup.get(0)),
+                Commands.sequence(
+                    superSystem.holdPiece(),
+                    AutoBuilder.followPath(pathGroup.get(0)),
                     Commands.sequence(
-                        Commands.waitSeconds(0.4),
-                        superSystem.moveToAuto(NamedPositions.L2)
+                        superSystem.moveToAuto(NamedPositions.L4)
                     )
                 ),
                 Commands.sequence(
                     superSystem.outtake(),
-                    Commands.waitSeconds(2.0)
+                    Commands.waitSeconds(2.0),
+                    superSystem.stopRoller()
                 ),
-                Commands.parallel(
-                    superSystem.moveTo(NamedPositions.SemiStow),
-                    // AutoBuilder.followPath(pathGroup.get(1)),
+                Commands.sequence(
+                    superSystem.moveTo(NamedPositions.L5),
+                    Commands.parallel(
+                        superSystem.moveTo(NamedPositions.SemiStow),
+                        AutoBuilder.followPath(pathGroup.get(1))
+                    ),
                     Commands.sequence(
                         Commands.waitSeconds(1),
                         superSystem.moveToAuto(NamedPositions.Station)
                     )
                 ),
                 Commands.sequence(
-                    // superSystem.intakeUntilSensed(2),
+                    superSystem.intake(),
+                    Commands.waitSeconds(2),
                     superSystem.holdPiece()
                 ),
-                Commands.parallel(
+                Commands.sequence(
                     superSystem.moveTo(NamedPositions.SemiStow),
-                    // AutoBuilder.followPath(pathGroup.get(2)),
+                    AutoBuilder.followPath(pathGroup.get(2)),
                     Commands.sequence(
                         Commands.waitSeconds(1),
-                        superSystem.moveToAuto(NamedPositions.L2)
+                        superSystem.moveToAuto(NamedPositions.L4)
                     )
                 ),
                 Commands.sequence(
                     superSystem.outtake(),
-                    Commands.waitSeconds(0.2),
+                    Commands.waitSeconds(2),
                     superSystem.stopRoller()
-                )
+                ),
 
+                Commands.sequence(
+                    superSystem.moveTo(NamedPositions.L5),
+                    superSystem.moveTo(NamedPositions.SemiStow)
+                )
                 )
             );
     }

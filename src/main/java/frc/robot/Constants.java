@@ -239,8 +239,8 @@ public final class Constants {
 
   public static final class PathPlannerConstants {
 
-    public static final double kPPMaxVelocity = 1.0;
-    public static final double kPPMaxAcceleration = 1.0;
+    public static final double kPPMaxVelocity = 2.0;
+    public static final double kPPMaxAcceleration = 2.0;
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
     public static final double kPPMaxAngularAcceleration = Math.PI * 2;
 
@@ -335,7 +335,7 @@ public final class Constants {
     public static final double kGElevatorMotor = 0.33;
     public static final double kSElevatorMotor = 0.11;
 
-    public static final double kElevatorCruiseVelocity = 50; //16.333 //20
+    public static final double kElevatorCruiseVelocity = 100; //16.333 //20
     public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
     public static final double kElevatorJerk = 400.0;
  }
@@ -449,6 +449,7 @@ public final class Constants {
       L2(           ExecutionOrder.WRT_PVT_ELV, 0.25, 0, -0.18, -0.3),
       L3(           ExecutionOrder.WRT_PVT_ELV, 0.25, 1.14, -0.24, -0.3),
       L4(           ExecutionOrder.WRT_PVT_ELV, 0.25, 3.18, -0.26, -0.3),
+      L5(           ExecutionOrder.WRT_PVT_ELV, 0.24, 0, -0.57, -0.57),
       L2L3(         ExecutionOrder.WRT_PVT_ELV, 0.24, 0.5, -0.318, -0.3), 
       L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
       AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update

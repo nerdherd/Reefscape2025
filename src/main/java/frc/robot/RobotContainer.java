@@ -94,7 +94,7 @@ public class RobotContainer {
   public Generic4Piece bottom4Piece;
   public isMeBottom2Piece isMeBottom2Piece;
 
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.ALL;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   
   static boolean isRedSide = false;
   
@@ -353,7 +353,7 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
     
-    autoChooser.addOption("2PieceSubsystem", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
+    autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
     
    
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
