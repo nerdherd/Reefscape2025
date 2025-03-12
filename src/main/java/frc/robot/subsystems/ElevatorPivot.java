@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -37,6 +38,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
     private double desiredPosition; 
     private final MotionMagicVoltage motionMagicRequest;  
     private final NeutralOut brakeRequest = new NeutralOut();
+    private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
     private final Follower followRequest = new Follower(PivotConstants.kLeftPivotMotorID, true);
     // public final VoltageOut voltageRequest = new VoltageOut(0);
@@ -130,7 +132,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfiguration.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfiguration.CurrentLimits.StatorCurrentLimitEnable = true;
         pivotConfiguration.Audio.AllowMusicDurDisable = true;
-        pivotConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        pivotConfiguration.MotorOutput.NeutralMode = neutralMode;
 
         StatusCode statusCode = pivotConfigurator.apply(pivotConfiguration);
         if (!statusCode.isOK()){
@@ -152,7 +154,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimit = 100;
         pivotConfigurationRight.CurrentLimits.StatorCurrentLimitEnable = false;
         pivotConfigurationRight.Audio.AllowMusicDurDisable = true;
-        pivotConfigurationRight.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        pivotConfigurationRight.MotorOutput.NeutralMode = neutralMode;
 
         StatusCode RightstatusCode = pivotConfiguratorRight.apply(pivotConfigurationRight);
         if (!RightstatusCode.isOK()){
@@ -185,6 +187,10 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setNeutralMode(NeutralModeValue neutralMode) {
+        this.neutralMode = neutralMode;
     }
 
     public void stopMotion() {

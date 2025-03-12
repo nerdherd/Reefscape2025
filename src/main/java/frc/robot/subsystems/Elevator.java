@@ -37,6 +37,8 @@ public class Elevator extends SubsystemBase implements Reportable {
     private double ff = 0.0; 
     private double pivotAngle = 0.0; // TODO: Change this to 0 when supersystem tuned
     
+    private NeutralModeValue neutralMode = NeutralModeValue.Brake;
+
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
@@ -65,7 +67,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false; // TODO: change
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 45;
         motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-        motorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        motorConfigs.MotorOutput.NeutralMode = neutralMode;
         motorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ElevatorConstants.kElevatorCruiseVelocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
@@ -121,6 +123,10 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setNeutralMode(NeutralModeValue neutralMode) {
+        this.neutralMode = neutralMode;
     }
 
     public void stopMotion() {

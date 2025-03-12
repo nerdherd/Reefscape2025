@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.util.datalog.DataLog;
+import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -27,6 +32,9 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    DataLogManager.start("/media/sda1/logs");
+    DataLogManager.logNetworkTables(true);
+    m_robotContainer.swerveDrive.refreshModulePID();
   }
 
   /**
@@ -51,12 +59,12 @@ public class Robot extends TimedRobot {
   public void disabledInit() {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.setBreak(true);
-
+    
     m_robotContainer.elevatorPivot.setEnabled(false);
     m_robotContainer.elevator.setEnabled(false);
     m_robotContainer.intakeWrist.setEnabled(false);
-
-
+    m_robotContainer.intakeRoller.setEnabled(false);
+    m_robotContainer.climbMotor.setEnabled(false);
   }
   
   @Override
@@ -122,9 +130,12 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
 
     // m_robotContainer.superSystem.initialize();
-    m_robotContainer.swerveDrive.refreshModulePID();
     m_robotContainer.initDefaultCommands_test();
     m_robotContainer.configureBindings_test();
+    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Coast);
 
     m_robotContainer.refreshSupersystem();
   }

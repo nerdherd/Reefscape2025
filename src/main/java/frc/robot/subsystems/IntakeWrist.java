@@ -39,6 +39,8 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private double pivotAngle = 0;
     private double manualOffset = 0;
 
+    private NeutralModeValue neutralMode = NeutralModeValue.Brake;
+
     public IntakeWrist(boolean V1) {
         this.V1 = V1;
         motor = new TalonFX(WristConstants.kMotorID);
@@ -66,7 +68,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         configurePID(motorConfigs);
         
-        motor.setNeutralMode(NeutralModeValue.Coast);
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
     }
@@ -98,6 +99,8 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
             motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
         
+            motorConfigs.MotorOutput.NeutralMode = neutralMode;
+
             StatusCode response = motorConfigurator.apply(motorConfigs);
             if (!response.isOK()){
                 DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
@@ -158,6 +161,10 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     public void stopMotion() {
         motor.setControl(brakeRequest);
+    }
+    
+    public void setNeutralMode(NeutralModeValue neutralMode) {
+        this.neutralMode = neutralMode;
     }
     
     public void setTargetPosition(double position) {
