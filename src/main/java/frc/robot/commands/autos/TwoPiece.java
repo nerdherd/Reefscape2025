@@ -42,13 +42,11 @@ public class TwoPiece extends SequentialCommandGroup {
                 Commands.sequence(
                     superSystem.moveTo(NamedPositions.L5),
                     Commands.parallel(
-                        superSystem.moveTo(NamedPositions.SemiStow),
-                        AutoBuilder.followPath(pathGroup.get(1))
-                    ),
-                    Commands.sequence(
-                        Commands.waitSeconds(1),
+                        AutoBuilder.followPath(pathGroup.get(1)),
                         superSystem.moveToAuto(NamedPositions.Station)
+
                     )
+                    
                 ),
                 Commands.sequence(
                     superSystem.intake(),
@@ -56,8 +54,12 @@ public class TwoPiece extends SequentialCommandGroup {
                     superSystem.holdPiece()
                 ),
                 Commands.sequence(
-                    superSystem.moveTo(NamedPositions.SemiStow),
-                    AutoBuilder.followPath(pathGroup.get(2)),
+                    Commands.parallel(
+                        Commands.sequence(
+                            Commands.waitSeconds(0.3)
+                        ),
+                        AutoBuilder.followPath(pathGroup.get(2))
+                    ),
                     Commands.sequence(
                         Commands.waitSeconds(1),
                         superSystem.moveToAuto(NamedPositions.L4)
