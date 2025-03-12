@@ -29,37 +29,39 @@ public class TwoPiecePath extends SequentialCommandGroup {
             
 
             Commands.sequence(
-                Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(0))
+                AutoBuilder.followPath(pathGroup.get(0)),
+                Commands.waitSeconds(3)
                     // Commands.sequence(
                     //     Commands.waitSeconds(0.4),
                     //     superSystem.moveToAuto(NamedPositions.L2)
                     // )
-                ),
+                ,
                 // Commands.sequence(
                 //     superSystem.outtake(),
                 //     Commands.waitSeconds(0.2)
                 // ),
-                Commands.parallel(
+                
                     // superSystem.moveTo(NamedPositions.SemiStow),
-                    AutoBuilder.followPath(pathGroup.get(1))
+                    AutoBuilder.followPath(pathGroup.get(1)),
+                    Commands.waitSeconds(3),
                     // Commands.sequence(
                     //     Commands.waitSeconds(1),
                     //     superSystem.moveToAuto(NamedPositions.Station)
                     // )
-                ),
+                
                 // Commands.sequence(
                 //     superSystem.intakeUntilSensed(),
                 //     superSystem.holdPiece()
                 // ),
-                Commands.parallel(
+                
                     // superSystem.moveTo(NamedPositions.SemiStow),
-                    AutoBuilder.followPath(pathGroup.get(2))
+                    AutoBuilder.followPath(pathGroup.get(2)),
+                    Commands.waitSeconds(3)
                     // Commands.sequence(
                     //     Commands.waitSeconds(1),
                     //     superSystem.moveToAuto(NamedPositions.L2)
                     // )
-                )
+                
                 // Commands.sequence(
                 //     superSystem.outtake(),
                 //     Commands.waitSeconds(0.2),

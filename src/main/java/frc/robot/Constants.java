@@ -239,8 +239,8 @@ public final class Constants {
 
   public static final class PathPlannerConstants {
 
-    public static final double kPPMaxVelocity = 3.0;
-    public static final double kPPMaxAcceleration = 3.0;
+    public static final double kPPMaxVelocity = 1.0;
+    public static final double kPPMaxAcceleration = 1.0;
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
     public static final double kPPMaxAngularAcceleration = Math.PI * 2;
 
