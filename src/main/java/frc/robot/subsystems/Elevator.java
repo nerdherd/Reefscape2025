@@ -33,7 +33,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     private TalonFXConfigurator motorConfigurator2;
     private MotionMagicVoltage motionMagicRequest;
     private final Follower followRequest;
-    private final NeutralOut brakeRequest = new NeutralOut();;
+    private final NeutralOut neutralRequest = new NeutralOut();
     private double ff = 0.0; 
     private double pivotAngle = 0.0; // TODO: Change this to 0 when supersystem tuned
     
@@ -111,7 +111,7 @@ public class Elevator extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            elevatorMotor.setControl(brakeRequest);
+            elevatorMotor.setControl(neutralRequest);
             return;
         }
         elevatorMotor2.setControl(followRequest);
@@ -130,8 +130,8 @@ public class Elevator extends SubsystemBase implements Reportable {
     }
 
     public void stopMotion() {
-        elevatorMotor.setControl(brakeRequest);
-        elevatorMotor2.setControl(brakeRequest);
+        elevatorMotor.setControl(neutralRequest);
+        elevatorMotor2.setControl(neutralRequest);
     }
     
     public void setTargetPosition(double position) {

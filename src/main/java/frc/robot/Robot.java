@@ -154,6 +154,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+
+    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Coast);
+    
     m_robotContainer.elevator.stopMotion();
     m_robotContainer.elevatorPivot.stopMotion();
     m_robotContainer.intakeWrist.stopMotion();

@@ -196,31 +196,33 @@ public class RobotContainer {
 
       swerveDrive.setDefaultCommand(swerveJoystickCommand);
 
-      double PIVOT_SPEED = 10;// Degrees per second
+      double PIVOT_SPEED = 1;// Degrees per second
         elevatorPivot.setDefaultCommand(Commands.run(() -> {
-          double leftY = -operatorController.getLeftY(); // Left Y (inverted for up = positive)
-          if (Math.abs(leftY) > 0.05) {
+          double rightY = -operatorController.getRightY(); // Left Y (inverted for up = positive)
+          if (Math.abs(rightY) > 0.05) {
               double currentAngle = elevatorPivot.getPosition();
-              elevatorPivot.setTargetPosition(currentAngle + (leftY * PIVOT_SPEED * 0.02)); // 20ms loop
+              elevatorPivot.setTargetPosition(currentAngle + (rightY * PIVOT_SPEED * 0.02)); // 20ms loop
           }
       }, elevatorPivot));
 
-      double Wrist_SPEED = 20;// Degree  per second
+      double Wrist_SPEED = 2;// Degree  per second
         intakeWrist.setDefaultCommand(Commands.run(() -> {
-          double leftX = -operatorController.getLeftX(); // leftX (inverted for up = positive)
-          if (Math.abs(leftX) > 0.05) {
+          double leftX = operatorController.getLeftX(); // leftX (inverted for up = positive)
+          if (Math.abs(leftX) > 0.3) {
               double currentRot = intakeWrist.getPosition();
               intakeWrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
           }
       }, intakeWrist));
 
-      double Elevator_SPEED = 0.3;// Meters per second
+      double Elevator_SPEED = 3.0;// Meters per second // 0.3
+      double Elevator_OFFSET = 0.05;
       elevator.setDefaultCommand(Commands.run(() -> {
-        double rightY = -operatorController.getRightY(); // rightY Y (inverted for up = positive)
-        if (Math.abs(rightY) > 0.05) {
-            double currentAngle = elevator.getPosition();
-            elevator.setTargetPosition(currentAngle + (rightY * Elevator_SPEED * 0.02)); // 20ms loop
+        double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
+        if (Math.abs(leftY) > 0.05) {
+        double currentPos = elevator.getPosition();
+        elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
         }
+        SmartDashboard.putNumber("Operator Left Y", operatorController.getLeftY());
       }, elevator));  
 
   }
@@ -412,6 +414,7 @@ public class RobotContainer {
     elevatorPivot.setEnabled(true);
     elevator.setEnabled(true);
     intakeWrist.setEnabled(true);
+    intakeRoller.setEnabled(true);
   }
   
 

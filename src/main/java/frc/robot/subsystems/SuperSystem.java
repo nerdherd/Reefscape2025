@@ -135,9 +135,11 @@ public class SuperSystem {
 
     public Command outtake() {
         if (currentPosition == NamedPositions.L1) {
-            return intakeRoller.setVoltageCommandLeft(RollerConstants.kOuttakePower); // Might need to make new constant for this
+            return intakeRoller.setVoltageCommand(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
         }
+        else {
         return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
+        }
     }
 
     public Command shootAlgae() {
