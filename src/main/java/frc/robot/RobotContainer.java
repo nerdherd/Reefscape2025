@@ -10,6 +10,7 @@ import java.util.List;
 import org.json.simple.parser.ParseException;
 
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.math.MathUtil;
@@ -404,7 +405,6 @@ public class RobotContainer {
 
 
   public void refreshSupersystem() {
-    // TODO add for Wrist and possibly pivot
     elevator.setPivotAngle(0);
 
     elevatorPivot.setTargetPosition(0);
@@ -415,6 +415,25 @@ public class RobotContainer {
     elevator.setEnabled(true);
     intakeWrist.setEnabled(true);
     intakeRoller.setEnabled(true);
+  }
+
+  public void DisableAllMotors_Test()
+  {
+    // let all motor move freely 
+    elevator.setNeutralMode(NeutralModeValue.Coast);
+    elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
+    intakeWrist.setNeutralMode(NeutralModeValue.Coast);
+    climbMotor.setNeutralMode(NeutralModeValue.Coast);
+    
+    elevator.stopMotion();
+    elevatorPivot.stopMotion();
+    intakeWrist.stopMotion();
+
+    elevatorPivot.setEnabled(false);
+    elevator.setEnabled(false);
+    intakeWrist.setEnabled(false);
+    intakeRoller.setEnabled(false);
+    climbMotor.setEnabled(false);
   }
   
 

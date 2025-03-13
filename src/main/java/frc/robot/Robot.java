@@ -143,26 +143,13 @@ public class Robot extends TimedRobot {
     // m_robotContainer.superSystem.initialize();
     m_robotContainer.initDefaultCommands_test();
     m_robotContainer.configureBindings_test();
-    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Coast);
 
-    m_robotContainer.refreshSupersystem();
+    m_robotContainer.DisableAllMotors_Test();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-
-    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Coast);
-    
-    m_robotContainer.elevator.stopMotion();
-    m_robotContainer.elevatorPivot.stopMotion();
-    m_robotContainer.intakeWrist.stopMotion();
   }
 
   /** This function is called once when the robot is first started up. */
