@@ -213,7 +213,7 @@ public final class Constants {
       public static final Pose2d tag13Left = new Pose2d(1.522, 6.842, new Rotation2d(Math.toRadians(125))); // Top Station
       public static final Pose2d tag13Right = new Pose2d(1.522, 6.842, new Rotation2d(Math.toRadians(125))); // Top Station
       public static final Pose2d tag13Mid = new Pose2d(1.522, 6.842, new Rotation2d(Math.toRadians(125))); // Top Station
-      public static final Pose2d tag16Left = new Pose2d(6.0, 0.75, new Rotation2d(Math.toRadians(-90))); // Processor
+      public static final Pose2d tag16Mid = new Pose2d(6.0, 0.75, new Rotation2d(Math.toRadians(-90))); // Processor
 
       // Reef
       public static final Pose2d tag17Left = new Pose2d(3.513, 2.959, new Rotation2d(Math.toRadians(-120))); 
@@ -236,6 +236,7 @@ public final class Constants {
       public static final Pose2d tag2Left = new Pose2d(16.255, 6.800, new Rotation2d(Math.toRadians(55))); 
       public static final Pose2d tag2Right = new Pose2d(16.255, 6.800, new Rotation2d(Math.toRadians(55))); 
       public static final Pose2d tag2Mid = new Pose2d(16.255, 6.800, new Rotation2d(Math.toRadians(55))); 
+      
       public static final Pose2d tag3Mid = new Pose2d(11.560, 7.2, new Rotation2d(Math.toRadians(90))); 
 
       // Reef
