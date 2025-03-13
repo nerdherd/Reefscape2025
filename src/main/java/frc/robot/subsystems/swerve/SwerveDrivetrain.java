@@ -74,18 +74,24 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
-    ArrayList<Pose2d> list17 = new ArrayList<>();
-    ArrayList<Pose2d> list18 = new ArrayList<>();
-    ArrayList<Pose2d> list19 = new ArrayList<>();
-    ArrayList<Pose2d> list20 = new ArrayList<>();
-    ArrayList<Pose2d> list21 = new ArrayList<>();
-    ArrayList<Pose2d> list22 = new ArrayList<>();
+    ArrayList<Pose2d> list1 = new ArrayList<>();
+    ArrayList<Pose2d> list2 = new ArrayList<>();
+    ArrayList<Pose2d> list3 = new ArrayList<>();
     ArrayList<Pose2d> list6 = new ArrayList<>();
     ArrayList<Pose2d> list7 = new ArrayList<>();
     ArrayList<Pose2d> list8 = new ArrayList<>();
     ArrayList<Pose2d> list9 = new ArrayList<>();
     ArrayList<Pose2d> list10 = new ArrayList<>();
     ArrayList<Pose2d> list11 = new ArrayList<>();
+    ArrayList<Pose2d> list12 = new ArrayList<>();
+    ArrayList<Pose2d> list13 = new ArrayList<>();
+    ArrayList<Pose2d> list16 = new ArrayList<>();
+    ArrayList<Pose2d> list17 = new ArrayList<>();
+    ArrayList<Pose2d> list18 = new ArrayList<>();
+    ArrayList<Pose2d> list19 = new ArrayList<>();
+    ArrayList<Pose2d> list20 = new ArrayList<>();
+    ArrayList<Pose2d> list21 = new ArrayList<>();
+    ArrayList<Pose2d> list22 = new ArrayList<>();
 
     private Field2d field;
     private VisionSys vision = new VisionSys();
@@ -194,15 +200,37 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private void initCagePoses() {
         //myCageMap
-    } // todo
+    }
 
     private void initProcesPoses(){
-        //myProsMap
-    } // todo
+        list3.add(SwerveDriveConstants.MapPoses.tag3Mid);
+        myProsMap.put(3, list3);
+
+        list16.add(SwerveDriveConstants.MapPoses.tag16Mid);
+        myProsMap.put(16, list16);
+    } 
 
     private void initStationsPoses() {
-        //myStationMap
-    } // todo
+        list12.add(SwerveDriveConstants.MapPoses.tag12Left);
+        list12.add(SwerveDriveConstants.MapPoses.tag12Right);
+        list12.add(SwerveDriveConstants.MapPoses.tag12Mid);
+        myStationMap.put(12, list12);
+
+        list13.add(SwerveDriveConstants.MapPoses.tag13Left);
+        list13.add(SwerveDriveConstants.MapPoses.tag13Right);
+        list13.add(SwerveDriveConstants.MapPoses.tag13Mid);
+        myStationMap.put(13, list13);
+
+        list1.add(SwerveDriveConstants.MapPoses.tag1Left);
+        list1.add(SwerveDriveConstants.MapPoses.tag1Right);
+        list1.add(SwerveDriveConstants.MapPoses.tag1Mid);
+        myStationMap.put(1, list1);
+
+        list2.add(SwerveDriveConstants.MapPoses.tag2Left);
+        list2.add(SwerveDriveConstants.MapPoses.tag2Right);
+        list2.add(SwerveDriveConstants.MapPoses.tag2Mid);
+        myStationMap.put(2, list2);
+    } 
 
     private void initReefSidePoses() {
         list17.add(SwerveDriveConstants.MapPoses.tag17Left);
@@ -689,22 +717,38 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         //1 is in reef zone, 2 is in left station, 3 is in right station, 4 is in proc zone
         if(RobotContainer.IsRedSide())
         {
+            // Reef
             if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
                 return 1;
             }
-            // TODO: 2,3,4
+            // Station
+            else if(NerdyMath.isPoseInsideCircleZone(16.7, 0.66, 4, xp, yp) || NerdyMath.isPoseInsideCircleZone(16.7, 7.4, 4, xp, yp)) {
+                return 2;
+            }
+            // Cage
+            // else if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
+            //     return 3;
+            // }
+            // Processor
+            else if(NerdyMath.isPoseInsideCircleZone(11.56, 8.06, 2.12, xp, yp)) {
+                return 4;
+            }
         }
         else
         {
+            // Reef
             if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 9, xp, yp)) {
                 return 1;
             }
-            else if(NerdyMath.isPoseInsideCircleZone(1, 7.5, 4, xp, yp)) {
+            // Bot and Top Station
+            else if(NerdyMath.isPoseInsideCircleZone(1, 0.5, 4, xp, yp) || NerdyMath.isPoseInsideCircleZone(1, 7.5, 4, xp, yp)) {
                 return 2;
             }
-            else if(NerdyMath.isPoseInsideCircleZone(1, 0.5, 4, xp, yp)) {
-                return 3;
-            }
+            // Cage
+            // else if(NerdyMath.isPoseInsideCircleZone(1, 7.5, 4, xp, yp)) {
+            //     return 3;
+            // }
+            // Processor
             else if(NerdyMath.isPoseInsideCircleZone(6.35, 0, 2.12, xp, yp)) {
                 return 4;
             }
