@@ -185,6 +185,7 @@ public class SwerveJoystickCommand extends Command {
                 // turnToAngleController.setI(SwerveDriveConstants.kIThetaTeleop.get());
                 // turnToAngleController.setD(SwerveDriveConstants.kDThetaTeleop.get());
             }
+            // todo, since we use field ori control, better to turn to field 0,90, 180,270
             turningSpeed = turnToAngleController.calculate(swerveDrive.getImu().getHeading(), targetAngle);
             SmartDashboard.putNumber("Turning Speed Initial", turningSpeed);
             // turningSpeed += Math.signum(turningSpeed) * SwerveAutoConstants.kTurnToAngleFeedForwardDegreesPerSecond;
