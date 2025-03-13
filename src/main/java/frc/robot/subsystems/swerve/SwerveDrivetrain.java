@@ -155,6 +155,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
         initReefSidePoses();
+        initCagePoses();
+        initProcesPoses();
+        initStationsPoses();
         
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         //ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
@@ -189,54 +192,68 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
+    private void initCagePoses() {
+        //myCageMap
+    } // todo
+
+    private void initProcesPoses(){
+        //myProsMap
+    } // todo
+
+    private void initStationsPoses() {
+        //myStationMap
+    } // todo
+
     private void initReefSidePoses() {
         list17.add(SwerveDriveConstants.MapPoses.tag17Left);
         list17.add(SwerveDriveConstants.MapPoses.tag17Right);
-        myMap.put(17, list17);
+        // todo add pose for center of apriltag
+        myReefMap.put(17, list17);
 
         list18.add(SwerveDriveConstants.MapPoses.tag18Left);
         list18.add(SwerveDriveConstants.MapPoses.tag18Right);
-        myMap.put(18, list18);
+        // todo add pose for center of apriltag
+        myReefMap.put(18, list18);
 
         list19.add(SwerveDriveConstants.MapPoses.tag19Left);
         list19.add(SwerveDriveConstants.MapPoses.tag19Right);
-        myMap.put(19, list19);
+        myReefMap.put(19, list19);
 
         list20.add(SwerveDriveConstants.MapPoses.tag20Left);
         list20.add(SwerveDriveConstants.MapPoses.tag20Right);
-        myMap.put(20, list20);
+        myReefMap.put(20, list20);
 
         list21.add(SwerveDriveConstants.MapPoses.tag21Left);
         list21.add(SwerveDriveConstants.MapPoses.tag21Right);
-        myMap.put(21, list21);
+        myReefMap.put(21, list21);
 
         list22.add(SwerveDriveConstants.MapPoses.tag22Left);
         list22.add(SwerveDriveConstants.MapPoses.tag22Right);
-        myMap.put(22, list22);
+        myReefMap.put(22, list22);
 
         list6.add(SwerveDriveConstants.MapPoses.tag6Left);
         list6.add(SwerveDriveConstants.MapPoses.tag6Right);
-        myMap.put(6, list6);
+        myReefMap.put(6, list6);
 
         list7.add(SwerveDriveConstants.MapPoses.tag7Left);
         list7.add(SwerveDriveConstants.MapPoses.tag7Right);
-        myMap.put(7, list7);
+        myReefMap.put(7, list7);
 
         list8.add(SwerveDriveConstants.MapPoses.tag8Left);
         list8.add(SwerveDriveConstants.MapPoses.tag8Right);
-        myMap.put(8, list8);
+        myReefMap.put(8, list8);
 
         list9.add(SwerveDriveConstants.MapPoses.tag9Left);
         list9.add(SwerveDriveConstants.MapPoses.tag9Right);
-        myMap.put(9, list9);
+        myReefMap.put(9, list9);
 
         list10.add(SwerveDriveConstants.MapPoses.tag10Left);
         list10.add(SwerveDriveConstants.MapPoses.tag10Right);
-        myMap.put(10, list10);
+        myReefMap.put(10, list10);
 
         list11.add(SwerveDriveConstants.MapPoses.tag11Left);
         list11.add(SwerveDriveConstants.MapPoses.tag11Right);
-        myMap.put(11, list11);
+        myReefMap.put(11, list11);
     }
 
     boolean initPoseByVisionDone = false;
@@ -471,16 +488,22 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         backRight.run();
     }
 
-    
+    private int getFrontCameraApriltagID(int zoneId)
+    {
+        return -1;
+    }
             
-    private int getMostClosedApriltagIdInZone(int zoneId) {
+    private int getMostClosedApriltagIdInReefZone(int zoneId) {
         if(zoneId == 1)
             return vision.getLargerApriltagByTa(VisionConstants.kLimelightBackLeftName, 
                 VisionConstants.kLimelightBackRightName);
         return -1; 
     }
 
-    private Map<Integer, ArrayList<Pose2d>> myMap = new HashMap<>();
+    private Map<Integer, ArrayList<Pose2d>> myReefMap = new HashMap<>();
+    private Map<Integer, ArrayList<Pose2d>> myProsMap = new HashMap<>();
+    private Map<Integer, ArrayList<Pose2d>> myStationMap = new HashMap<>();
+    private Map<Integer, ArrayList<Pose2d>> myCageMap = new HashMap<>();
 
     private Pose2d calcuTargetPoseByReq(int zoneId, int poseId)
     {
@@ -488,16 +511,16 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if(zoneId == 1) // own reef
         {
             // obtain the closed apriltag id from two low-back cameras.
-            int targetApriltagId = getMostClosedApriltagIdInZone(zoneId); 
-            if(myMap.containsKey(targetApriltagId))
+            int targetApriltagId = getMostClosedApriltagIdInReefZone(zoneId); 
+            if(myReefMap.containsKey(targetApriltagId))
             {
                 if(poseId == -1)
                 {
-                    return myMap.get(targetApriltagId).get(0); // the left side of one apriltag on reef
+                    return myReefMap.get(targetApriltagId).get(0); // the left side of one apriltag on reef
                 }
                 else if(poseId == 1)
                 {
-                    return myMap.get(targetApriltagId).get(1);// the right side of one apriltag on reef
+                    return myReefMap.get(targetApriltagId).get(1);// the right side of one apriltag on reef
                 }
                 else if(poseId == 0) 
                 {
@@ -508,13 +531,35 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // todo other zone
         else if (zoneId == 2)
         {
-            // Top station
+            // stations
+            int aid = getFrontCameraApriltagID(zoneId);
+            if(myStationMap.containsKey(aid))
+            {
+                if(poseId == -1 )
+                {
+                    //todo
+                }
+                else if(poseId == 1)
+                {
+
+                }
+            }
+
         }else if (zoneId == 3)
         {
-            // Bot station
+            // cage: need to consider the pose is too close to reef!!
+            
         }else if (zoneId == 4)
         {
             // processor
+            int aid = getFrontCameraApriltagID(zoneId);
+            if(myProsMap.containsKey(aid))
+            {
+                if(poseId == -1 || poseId == 1)
+                {
+                    //todo
+                }
+            }
         }
         
         return targetPose;
