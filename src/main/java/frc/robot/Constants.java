@@ -236,7 +236,7 @@ public final class Constants {
       public static final Pose2d tag21Right = new Pose2d(6.321, 4.343, new Rotation2d(Math.toRadians(0)));
       public static final Pose2d tag21Mid = new Pose2d(5.97, 4.0, new Rotation2d(Math.toRadians(0)));
 
-      public static final Pose2d tag22Left = new Pose2d(4.55, 2.725, new Rotation2d(Math.toRadians(-60)));
+      public static final Pose2d tag22Left = new Pose2d(5.1, 2.725, new Rotation2d(Math.toRadians(-60)));
       public static final Pose2d tag22Right = new Pose2d(5.391, 2.921, new Rotation2d(Math.toRadians(-60)));
       public static final Pose2d tag22Mid = new Pose2d(5.26, 2.77, new Rotation2d(Math.toRadians(-60)));
       
