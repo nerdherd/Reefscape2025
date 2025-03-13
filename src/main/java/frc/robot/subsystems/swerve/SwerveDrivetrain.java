@@ -77,6 +77,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     ArrayList<Pose2d> list1 = new ArrayList<>();
     ArrayList<Pose2d> list2 = new ArrayList<>();
     ArrayList<Pose2d> list3 = new ArrayList<>();
+    ArrayList<Pose2d> list4 = new ArrayList<>();
     ArrayList<Pose2d> list6 = new ArrayList<>();
     ArrayList<Pose2d> list7 = new ArrayList<>();
     ArrayList<Pose2d> list8 = new ArrayList<>();
@@ -85,6 +86,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     ArrayList<Pose2d> list11 = new ArrayList<>();
     ArrayList<Pose2d> list12 = new ArrayList<>();
     ArrayList<Pose2d> list13 = new ArrayList<>();
+    ArrayList<Pose2d> list15 = new ArrayList<>();
     ArrayList<Pose2d> list16 = new ArrayList<>();
     ArrayList<Pose2d> list17 = new ArrayList<>();
     ArrayList<Pose2d> list18 = new ArrayList<>();
@@ -199,7 +201,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     private void initCagePoses() {
-        //myCageMap
+        list4.add(SwerveDriveConstants.MapPoses.tag4LeftBlueOnRed);
+        list4.add(SwerveDriveConstants.MapPoses.tag4RightBlueOnRed); // they are for blue side
+        list4.add(SwerveDriveConstants.MapPoses.tag4MidBlueOnRed);
+        myCageMap.put(4, list4);
+
+        list15.add(SwerveDriveConstants.MapPoses.tag15LeftRedOnBlue); // they are for red side
+        list15.add(SwerveDriveConstants.MapPoses.tag15RightRedOnBlue);
+        list15.add(SwerveDriveConstants.MapPoses.tag15MidRedOnBlue);
+        myCageMap.put(15, list15);
     }
 
     private void initProcesPoses(){
@@ -235,52 +245,62 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private void initReefSidePoses() {
         list17.add(SwerveDriveConstants.MapPoses.tag17Left);
         list17.add(SwerveDriveConstants.MapPoses.tag17Right);
-        // todo add pose for center of apriltag
+        list17.add(SwerveDriveConstants.MapPoses.tag17Mid);
         myReefMap.put(17, list17);
 
         list18.add(SwerveDriveConstants.MapPoses.tag18Left);
         list18.add(SwerveDriveConstants.MapPoses.tag18Right);
-        // todo add pose for center of apriltag
+        list18.add(SwerveDriveConstants.MapPoses.tag18Mid);
         myReefMap.put(18, list18);
 
         list19.add(SwerveDriveConstants.MapPoses.tag19Left);
         list19.add(SwerveDriveConstants.MapPoses.tag19Right);
+        list19.add(SwerveDriveConstants.MapPoses.tag19Mid);
         myReefMap.put(19, list19);
 
         list20.add(SwerveDriveConstants.MapPoses.tag20Left);
         list20.add(SwerveDriveConstants.MapPoses.tag20Right);
+        list20.add(SwerveDriveConstants.MapPoses.tag20Mid);
         myReefMap.put(20, list20);
 
         list21.add(SwerveDriveConstants.MapPoses.tag21Left);
         list21.add(SwerveDriveConstants.MapPoses.tag21Right);
+        list21.add(SwerveDriveConstants.MapPoses.tag21Mid);
         myReefMap.put(21, list21);
 
         list22.add(SwerveDriveConstants.MapPoses.tag22Left);
         list22.add(SwerveDriveConstants.MapPoses.tag22Right);
+        list22.add(SwerveDriveConstants.MapPoses.tag22Mid);
         myReefMap.put(22, list22);
 
         list6.add(SwerveDriveConstants.MapPoses.tag6Left);
         list6.add(SwerveDriveConstants.MapPoses.tag6Right);
+        list6.add(SwerveDriveConstants.MapPoses.tag6Mid);
         myReefMap.put(6, list6);
 
         list7.add(SwerveDriveConstants.MapPoses.tag7Left);
         list7.add(SwerveDriveConstants.MapPoses.tag7Right);
+        list7.add(SwerveDriveConstants.MapPoses.tag7Mid);
         myReefMap.put(7, list7);
 
         list8.add(SwerveDriveConstants.MapPoses.tag8Left);
         list8.add(SwerveDriveConstants.MapPoses.tag8Right);
+        list8.add(SwerveDriveConstants.MapPoses.tag8Mid);
         myReefMap.put(8, list8);
 
         list9.add(SwerveDriveConstants.MapPoses.tag9Left);
         list9.add(SwerveDriveConstants.MapPoses.tag9Right);
+        list9.add(SwerveDriveConstants.MapPoses.tag9Mid);
         myReefMap.put(9, list9);
 
         list10.add(SwerveDriveConstants.MapPoses.tag10Left);
         list10.add(SwerveDriveConstants.MapPoses.tag10Right);
+        list10.add(SwerveDriveConstants.MapPoses.tag10Mid);
         myReefMap.put(10, list10);
 
         list11.add(SwerveDriveConstants.MapPoses.tag11Left);
         list11.add(SwerveDriveConstants.MapPoses.tag11Right);
+        list11.add(SwerveDriveConstants.MapPoses.tag11Mid);
         myReefMap.put(11, list11);
     }
 
@@ -518,6 +538,11 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private int getFrontCameraApriltagID(int zoneId)
     {
+        if(zoneId == 2 || zoneId == 4)
+        {
+            //todo
+            //return vision.getLargerApriltagByTa(VisionConstants.??);
+        }
         return -1;
     }
             
@@ -565,11 +590,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             {
                 if(poseId == -1 )
                 {
-                    //todo
+                    return myStationMap.get(aid).get(0);
                 }
                 else if(poseId == 1)
                 {
-
+                    return myStationMap.get(aid).get(1);
+                }
+                else if(poseId == 0)
+                {
+                    return myStationMap.get(aid).get(2);
                 }
             }
 
@@ -577,6 +606,31 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         {
             // cage: need to consider the pose is too close to reef!!
             // only enable it druing last 25 seconds
+            // todo
+            int aid;
+            if(RobotContainer.IsRedSide())
+            {
+                aid = 15;
+            }
+            else
+            {
+                aid = 4;
+            }
+            if(myCageMap.containsKey(aid))
+            {
+                if(poseId == -1 )
+                {
+                    return myCageMap.get(aid).get(0); //  cage left
+                }
+                else if( poseId == 1)
+                {
+                    return myCageMap.get(aid).get(1); //  cage right
+                }
+                else if( poseId == 0)
+                {
+                    return myCageMap.get(aid).get(2); //  cage center
+                }
+            }
             
         }else if (zoneId == 4)
         {
@@ -586,7 +640,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             {
                 if(poseId == -1 || poseId == 1)
                 {
-                    //todo
+                    return myProsMap.get(aid).get(0);
                 }
             }
         }
@@ -728,6 +782,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             }
             // Cage
             // else if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
+            // cage: need to consider the pose is too close to reef!!
+            // only enable it druing last 25 seconds
+            // todo
             //     return 3;
             // }
             // Processor

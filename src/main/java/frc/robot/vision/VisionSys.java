@@ -109,5 +109,18 @@ In general, use mode 1 while your robot is waiting for the autonomous period to 
         // Both cameras have targets, return the ID of the larger one
         return (ta1 > ta2) ? id1 : id2;
     }
+
+    public int getLargerApriltagByTa(String camera1) // todo testing pls
+    {
+        double ta1 = LimelightHelpers.getTA(camera1);
+
+        // If only camera1 has a valid target
+        if (ta1 > 0.2 ) {
+            return (int) LimelightHelpers.getFiducialID(camera1);
+        }
+        else{
+            return -1;
+        }
+    }
     
 }

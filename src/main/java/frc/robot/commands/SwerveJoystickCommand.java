@@ -253,6 +253,7 @@ public class SwerveJoystickCommand extends Command {
     private void checkButtonStates(boolean bothHeld, int direction) {
         // Held
         if (bothHeld) {
+            swerveDrive.stopAutoPath(); // cancel the previous autopath
             swerveDrive.setAutoPathRun(zoneId.get(), direction);
         }
 
