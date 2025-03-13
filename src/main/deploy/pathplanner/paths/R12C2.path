@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.93,
-        "y": 5.27
+        "x": 3.8532334226551006,
+        "y": 5.373955068311273
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.337602459023233,
-        "y": 6.5603995901574566
+        "x": 2.2608358816783336,
+        "y": 6.66435465846873
       },
       "isLocked": false,
       "linkedName": "R12"
@@ -48,7 +48,7 @@
   "folder": "Top Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 119.262452750806
+    "rotation": 120.80597488896437
   },
   "useDefaultConstraints": true
 }
