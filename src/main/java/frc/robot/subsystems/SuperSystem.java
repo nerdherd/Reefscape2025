@@ -134,11 +134,11 @@ public class SuperSystem {
     }
 
     public Command outtake() {
-        if (currentPosition == NamedPositions.L1) {
-            return intakeRoller.setVoltageCommand(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
+        if (currentPosition == NamedPositions.L1) { // todo is it working??
+            return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
         }
         else {
-        return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
+            return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
         }
     }
 

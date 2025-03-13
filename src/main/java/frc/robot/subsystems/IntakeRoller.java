@@ -144,6 +144,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         desiredVoltageRight = -volt;
     }
 
+    private void setVoltageLeft(double volt) {
+        desiredVoltageLeft = volt;
+    }
+
     // ****************************** COMMAND METHODS ****************************** //
 
     private Command setEnabledCommand(boolean enabled) {
@@ -170,7 +174,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
 
     public Command setVoltageCommandLeft(double volt) {
-        return Commands.runOnce(() -> setVoltage(volt));
+        return Commands.runOnce(() -> setVoltageLeft(volt));
     }
 
     public Command setVoltageCommandRight(double volt) {
