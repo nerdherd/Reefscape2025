@@ -80,11 +80,16 @@ public class RobotContainer {
   public BannerSensor bannerSensor;
   public SuperSystem superSystem;
   public Climb climbMotor;
-    
+  
+
+
+  private PathOnlyBottom2Piece pathOnlyBottom2Piece;
+  
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+  // private Bottom2Piece bottom2Piece;
   public Generic2Piece bottom2Piece;
   public Generic3Piece bottom3Piece;
   public Generic4Piece bottom4Piece;
@@ -175,7 +180,7 @@ public class RobotContainer {
       () -> driverController.getBumperLeft(), //move left of 
       () -> driverController.getBumperRight(), // move right of
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
-      () -> swerveDrive.getCurrentZoneByPose(), //locate robotzone
+      () -> swerveDrive.getCurrentZoneByPose(),
       () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
         if (driverController.getButtonRight())
@@ -335,22 +340,36 @@ public class RobotContainer {
   
   private void initAutoChoosers() {
 
-    try {
+    // try { // ide displayed error fix
+      // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
+      // pathOnlyBottom2Piece = new PathOnlyBottom2Piece(swerveDrive, "PathOnlyBottom2Piece");
+    // } catch (Exception e) {
+    //   DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
+    //   return;
+    // } 
+
+    try { // fix for vendordeps not importing
+    // PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
 
   	List<String> paths = AutoBuilder.getAllAutoNames();
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
     
-    autoChooser.addOption("Top Two Piece", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
-    autoChooser.addOption("Bottom Two Piece", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
-    autoChooser.addOption("Preload Top", new PreloadTaxi(swerveDrive, "PreloadT", superSystem));
-    autoChooser.addOption("Preload Bottom", new PreloadTaxi(swerveDrive, "PreloadM", superSystem));
+    autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    
+   
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
-    // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));                                                                                                                                                                                                                                                                                                                                              
+    
+    // autoChooser.addOption("2PiecePathOnly", new TwoPie6++++9                cePath(swerveDrive, "TopTwoPiece", superSystem));
+
+
+    // autoChooser.addOption("twopie                                                                                                                                                                                                                                                                                                                                                   ceauto", AutoBuilder.buildAuto("Bottom2Piece"));
+
     // autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
     // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
     // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
+
     // autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
     // autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
@@ -361,9 +380,9 @@ public class RobotContainer {
   }
   
   public void initShuffleboard() {
-    imu.initShuffleboard(loggingLevel);
+    // imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    //swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    // swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);

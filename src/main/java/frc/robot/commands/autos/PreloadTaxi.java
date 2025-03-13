@@ -19,6 +19,7 @@ public class PreloadTaxi extends SequentialCommandGroup{
 
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
 
+        Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
             // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
@@ -30,11 +31,11 @@ public class PreloadTaxi extends SequentialCommandGroup{
                     superSystem.moveToAuto(NamedPositions.L4)
                 ),
                 Commands.sequence(
-                    Commands.waitSeconds(1),
+                    Commands.waitSeconds(2),
                     superSystem.outtake(),
                     Commands.waitSeconds(1),
                     superSystem.stopRoller(),
-                    superSystem.moveTo(NamedPositions.L5),
+                    superSystem.moveTo(NamedPositions.L1),
                     AutoBuilder.followPath(pathGroup.get(1)), 
                     superSystem.moveTo(NamedPositions.Stow)
                 )
