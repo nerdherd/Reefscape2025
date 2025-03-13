@@ -86,9 +86,13 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.refreshAlliance();
     m_robotContainer.imu.zeroAll();
-    // m_robotContainer.imu.zeroHeading();
-    // m_robotContainer.initShuffleboard();
-    // init auto chooser();
+    
+    // need them once it comes back from Test Mode
+    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
+
     m_robotContainer.refreshSupersystem();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
@@ -112,6 +116,13 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    
+    // need them once it comes back from Test Mode
+    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
+
     m_robotContainer.initDefaultCommands_teleop();
     m_robotContainer.configureBindings_teleop();
     m_robotContainer.initDefaultCommands_teleop();
