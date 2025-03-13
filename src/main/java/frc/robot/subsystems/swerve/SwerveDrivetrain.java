@@ -552,7 +552,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 }
                 else if(poseId == 0) 
                 {
-                    // return myMap.get(targetApriltagId).get(2); // Middle of apriltag 
+                    return myReefMap.get(targetApriltagId).get(2); // Middle of apriltag 
                 }
             }
         }
@@ -576,6 +576,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }else if (zoneId == 3)
         {
             // cage: need to consider the pose is too close to reef!!
+            // only enable it druing last 25 seconds
             
         }else if (zoneId == 4)
         {
@@ -599,15 +600,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void setAutoPathRun(int zoneId, int poseId)
     {
         Pose2d destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId); // base on (poseid and zoneid and apriltag id)
+        
+        if(destPoseInBlue == null) return;
+
         PathConstraints pathcons = new PathConstraints(
             maxVelocityMps, maxAccelerationMpsSq, 
             Units.degreesToRadians(360), Units.degreesToRadians(720)
         );
 
-        // if(RobotContainer.IsRedSide())
-        //     pathfindingCommand = AutoBuilder.pathfindToPose(FlippingUtil.flipFieldPose(destPoseInBlue), pathcons);
-        // else
-            pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);;
+        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);;
         
         pathfindingCommand.schedule();
     }
