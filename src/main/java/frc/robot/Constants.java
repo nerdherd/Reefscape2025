@@ -442,11 +442,9 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kIntakePower  = -3.5;
-    public static final double kOuttakePower = 1;
+    public static final double kIntakePower  = -2.4;
+    public static final double kOuttakePower = 1.0;
     public static final double kL1OuttakePower = 0.7;
-
-
   }
   public static final class WristConstants{
     public static final int kMotorID = 54;
@@ -503,7 +501,7 @@ public final class Constants {
       L1(                  ExecutionOrder.WRTELV_PVT, 0.25, 0, -0.18, -0.18),
       L2(                  ExecutionOrder.WRTELV_PVT, 0.25, 0.0, -0.21, -0.21),
       L3(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 1.14, -0.24, -0.24),
-      L4(                  ExecutionOrder.PVT_ELV_WRT, 0.26, 3.18, -0.26, -0.26),
+      L4(                  ExecutionOrder.PVT_ELV_WRT, 0.26, 3.18, -0.27, -0.27),
       L5(                  ExecutionOrder.WRTELV_PVT, 0.26, 1.12, -0.57, -0.57),
       AlgaeL2(             ExecutionOrder.PVT_ELV_WRT, 0.247, 0.5, -0.317, -0.317), // TODO update
       AlgaeL3(             ExecutionOrder.PVT_ELV_WRT, 0.24, 2, -0.307, -0.307), // TODO update

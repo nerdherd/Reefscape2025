@@ -116,16 +116,16 @@ public class SuperSystem {
 
     public Command repositionCoralLeft() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(1),
-            intakeRoller.setVoltageCommandRight(2.0)
+            intakeRoller.setVoltageCommandLeft(0.5),
+            intakeRoller.setVoltageCommandRight(1.0)
 
         );
     }
 
     public Command repositionCoralRight() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(-2.0),
-            intakeRoller.setVoltageCommandRight(-1)
+            intakeRoller.setVoltageCommandLeft(-1.0),
+            intakeRoller.setVoltageCommandRight(-0.5)
 
         );
     }
