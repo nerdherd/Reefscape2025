@@ -256,6 +256,22 @@ public class RobotContainer {
     driverController.triggerLeft()
       .onTrue(superSystem.outtake())
       .onFalse(superSystem.stopRoller());
+
+
+    // Climb sequence
+    driverController.dpadUp()
+    .onTrue(superSystem.climbCommandUp());
+
+    driverController.buttonUp()
+    .onTrue(superSystem.climbPrep())
+    .onFalse(superSystem.stopClimb());
+
+    driverController.buttonUp()
+    .onTrue(superSystem.climbClamp())
+    .onFalse(superSystem.stopClimb());
+
+    driverController.dpadDown()
+    .onTrue(superSystem.climbCommandDown());
     
   
 
