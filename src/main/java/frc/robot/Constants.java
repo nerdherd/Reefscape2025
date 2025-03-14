@@ -493,22 +493,22 @@ public final class Constants {
 
   public static final class SuperSystemConstants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
-      Stow(                ExecutionOrder.WRTELV_PVT, 0.01, 0, -0.01, -0.4),
-      SemiStow(            ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.164, -0.4),
+      Stow(                ExecutionOrder.WRTELV_PVT, 0.01, 0, -0.01, -0.01),
+      SemiStow(            ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.164, -0.164),
       GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.76, -0.76),
       Station(             ExecutionOrder.WRTELV_PVT, 0.18, 1.12, -0.85, -0.4),
       Processor(           ExecutionOrder.WRTELV_PVT, 0.047, 0.53, -0.79, -0.4),
-      Net(                 ExecutionOrder.WRTELV_PVT, 0.24, 0.05, -0.1, -0.4),
-      Cage(                ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.1, -0.4),
-      L1(                  ExecutionOrder.WRTELV_PVT, 0.25, 0, -0.18, -0.3),
-      L2(                  ExecutionOrder.WRTELV_PVT, 0.24, 0.0, -0.21, -0.3),
-      L3(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 1.14, -0.24, -0.3),
-      L4(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 3.18, -0.26, -0.3),
+      Net(                 ExecutionOrder.WRTELV_PVT, 0.24, 0.05, -0.1, -0.1),
+      Cage(                ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.1, -0.1),
+      L1(                  ExecutionOrder.WRTELV_PVT, 0.25, 0, -0.18, -0.18),
+      L2(                  ExecutionOrder.WRTELV_PVT, 0.24, 0.0, -0.21, -0.21),
+      L3(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 1.14, -0.24, -0.24),
+      L4(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 3.18, -0.26, -0.26),
       L5(                  ExecutionOrder.WRTELV_PVT, 0.24, 1.12, -0.57, -0.57),
-      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT, 0.247, 0.5, -0.317, -0.3), // TODO update
-      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT, 0.24, 2, -0.307, -0.3), // TODO update
-      ClimbDown(           ExecutionOrder.WRTELV_PVT, -0.075, 0.05, -0.164, -0.4),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT, 0.14, 0.05, -0.164, -0.4),
+      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT, 0.247, 0.5, -0.317, -0.317), // TODO update
+      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT, 0.24, 2, -0.307, -0.307), // TODO update
+      ClimbDown(           ExecutionOrder.WRTELV_PVT, -0.075, 0.05, -0.164, -0.164),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT, 0.14, 0.05, -0.164, -0.164),
       intermediateGround(  ExecutionOrder.PVT_ELV_WRT,0.1,0.2, -0.76,-0.76),
       ;
       // todo: we might need pre position for wrist

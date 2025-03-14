@@ -155,12 +155,12 @@ public class SuperSystem {
     }
 
     public Command outtake() {
-        if (currentPosition == NamedPositions.L1) { // TODO is it working??
-            return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
-        }
-        else {
+        // if (currentPosition == NamedPositions.L1) { // TODO is it working??
+        //     return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
+        // }
+        // else {
             return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
-        }
+        // }
     }
 
     public Command shootAlgae() {

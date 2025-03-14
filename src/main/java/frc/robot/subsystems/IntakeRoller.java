@@ -253,7 +253,8 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
                 tab.addNumber("Intake Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
                 tab.addBoolean("Intake Enabled", () -> this.enabled);
                 case MINIMAL:
-                tab.addNumber("Intake Applied Voltage", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Intake Applied Voltage Right", () -> this.rollerMotorRight.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Intake Applied Voltage Left", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Intake Temperature", () -> this.rollerMotor.getDeviceTemp().getValueAsDouble());    
                 break;
             default:

@@ -324,44 +324,44 @@ public class RobotContainer {
 
     // //////////////////////////
     // /// DO NOT REMOVE IT
-    // operatorController.controllerLeft()
-    // .onTrue(superSystem.zeroEncoders());
+    operatorController.controllerLeft()
+      .onTrue(superSystem.zeroEncoders());
     // ////////////////////////
     
     // operatorController.controllerRight()
     // .onTrue(superSystem.moveTo(NamedPositions.Processor));    
 
-    operatorController.dpadDown()
-    .onTrue(superSystem.moveTo(NamedPositions.L1));
-    operatorController.dpadLeft()
-    .onTrue(superSystem.moveTo(NamedPositions.L2));
-    operatorController.dpadUp()
-    .onTrue(superSystem.moveTo(NamedPositions.L3));
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveTo(NamedPositions.L4));
+    // operatorController.dpadDown()
+    // .onTrue(superSystem.moveTo(NamedPositions.L1));
+    // operatorController.dpadLeft()
+    // .onTrue(superSystem.moveTo(NamedPositions.L2));
+    // operatorController.dpadUp()
+    // .onTrue(superSystem.moveTo(NamedPositions.L3));
+    // operatorController.dpadRight()
+    // .onTrue(superSystem.moveTo(NamedPositions.L4));
     
 
-    operatorController.triggerRight()
-      .onTrue(superSystem.intake())
-      .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
+    // operatorController.triggerRight()
+    //   .onTrue(superSystem.intake())
+    //   .onFalse(superSystem.holdPiece());
+    // operatorController.triggerLeft()
+    //   .onTrue(superSystem.outtake())
+    //   .onFalse(superSystem.stopRoller());
 
-    operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(NamedPositions.Station));
-    operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
-    operatorController.buttonDown()
-      .onTrue(superSystem.moveTo(NamedPositions.Stow));
-    operatorController.buttonLeft()
-      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+    // operatorController.buttonUp()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Station));
+    // operatorController.buttonRight()
+    //   .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+    // operatorController.buttonDown()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
+    // operatorController.buttonLeft()
+    //   .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     
-    driverController.buttonUp()
-    .onTrue(superSystem.climbCommandUp());
+    // driverController.buttonUp()
+    // .onTrue(superSystem.climbCommandUp());
 
-    driverController.buttonDown()
-    .onTrue(superSystem.climbCommandDown());
+    // driverController.buttonDown()
+    // .onTrue(superSystem.climbCommandDown());
     
 
     // operatorController.triggerRight()
