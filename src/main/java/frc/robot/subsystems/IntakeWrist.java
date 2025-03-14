@@ -264,17 +264,17 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             case ALL:
                 tab.addString("Wrist Control Mode", motor.getControlMode()::toString);
                 tab.addNumber("Wrist Offset",() -> manualOffset);
-            case MEDIUM:
+                tab.addBoolean("Wrist At Position", () -> atPosition());
                 tab.addDouble("Wrist MM Position", () -> motionMagicRequest.Position);
+                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
+            case MEDIUM:
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
+                tab.addBoolean("Wrist Enabled", () -> enabled);
                 tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
             case MINIMAL:
-                tab.addBoolean("Wrist Enabled", () -> enabled);
                 tab.addNumber("Wrist Desired Position", () -> desiredPosition);
                 tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
-                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
-                tab.addBoolean("Wrist At Position", () -> atPosition());
                 
                 break;
         }

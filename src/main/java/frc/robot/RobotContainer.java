@@ -95,7 +95,7 @@ public class RobotContainer {
   public Generic4Piece bottom4Piece;
   public isMeBottom2Piece isMeBottom2Piece;
 
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MEDIUM;
   
   static boolean isRedSide = false;
   
@@ -382,7 +382,7 @@ public class RobotContainer {
   public void initShuffleboard() {
     // imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    // swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);

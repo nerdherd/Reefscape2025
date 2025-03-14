@@ -322,17 +322,17 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 tab.addString("Pivot Control Mode", pivotMotor.getControlMode()::toString);
-            case MEDIUM:
                 tab.addNumber("Pivot MM Position", () -> motionMagicRequest.Position);
+                tab.addBoolean("Pivot Enabled", () -> enabled);
+                tab.addBoolean("Pivot At Position", () -> atPosition());
+            case MEDIUM:
                 tab.addNumber("Pivot FF", () -> motionMagicRequest.FeedForward);
                 tab.addNumber("Pivot Supply Current", () -> pivotMotor.getSupplyCurrent().getValueAsDouble());
             case MINIMAL:
-                tab.addBoolean("Pivot Enabled", () -> enabled);
+                tab.addNumber("Pivot Temperature", () -> pivotMotor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
                 tab.addNumber("Pivot Current Position", () -> getPosition());
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
-                tab.addNumber("Pivot Temperature", () -> pivotMotor.getDeviceTemp().getValueAsDouble());
-                tab.addBoolean("Pivot At Position", () -> atPosition());
                 
                 break;
             }

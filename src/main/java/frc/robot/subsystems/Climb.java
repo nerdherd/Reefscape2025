@@ -216,6 +216,7 @@ public class Climb extends SubsystemBase implements Reportable{
             case MEDIUM:
                 tab.addDouble("MM Position", () -> motionMagicRequest.Position);
                 tab.addDouble("Desired Position", () -> desiredPosition);
+                tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
             case MINIMAL:
                 tab.addBoolean("Enabled", () -> enabled);
                 tab.addNumber("Current Climb Angle", () -> motor.getPosition().getValueAsDouble());
