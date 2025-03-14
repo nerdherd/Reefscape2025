@@ -33,7 +33,7 @@ public class SuperSystem {
     public StatusSignal<S2StateValue> floorSensor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
-    public NamedPositions lastPosition;
+    public NamedPositions lastPosition = NamedPositions.Stow;
     
     boolean elevatorWithinRange;
 
@@ -279,11 +279,13 @@ public class SuperSystem {
         wrist.setEnabled(true);
         elevator.setEnabled(true);
         intakeRoller.setEnabled(true);
+        climbMotor.setEnabled(true);
         
         pivot.setTargetPosition(0.0);
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(0.0);
         intakeRoller.setVoltageCommand(0.0);
+        climbMotor.setVoltageCommand(0.0);
         isStarted = false;
     }
 
@@ -456,6 +458,7 @@ public class SuperSystem {
                 break;
             case ALL:
                 tab.addString("Super System Current Position", () -> currentPosition.toString());
+                tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
             case MINIMAL:
                 break;

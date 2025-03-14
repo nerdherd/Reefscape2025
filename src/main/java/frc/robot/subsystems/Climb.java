@@ -30,9 +30,8 @@ public class Climb extends SubsystemBase implements Reportable{
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
     private double desiredPosition; // Should be ~90 or wherever initial position is
-    private boolean enabled = false;
+    private boolean enabled = true;
     private double desiredVoltage = 0;
-
 
     public Climb() {
         motor = new TalonFX(ClimbConstants.kMotorID);
@@ -57,7 +56,7 @@ public class Climb extends SubsystemBase implements Reportable{
 
         // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = 13.89; 
+        motorConfigs.Feedback.SensorToMechanismRatio = 1; 
         // motorConfigs.Feedback.RotorToSensorRatio;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -105,8 +104,8 @@ public class Climb extends SubsystemBase implements Reportable{
         desiredVoltage = volt;
     }
 
-    public void setEnabled(boolean e) {
-        this.enabled = e;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public void stopMotion() {
@@ -195,8 +194,8 @@ public class Climb extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 SmartDashboard.putNumber("Climb Position", motor.getPosition().getValueAsDouble());
-            case MEDIUM:
                 SmartDashboard.putNumber("Climb Current", motor.getStatorCurrent().getValueAsDouble());
+            case MEDIUM:
             case MINIMAL:
                 break;
         }
@@ -213,16 +212,16 @@ public class Climb extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 tab.addString("Control Mode", motor.getControlMode()::toString);
-            case MEDIUM:
+                tab.addNumber("Climb FF", () -> motionMagicRequest.FeedForward);
                 tab.addDouble("MM Position", () -> motionMagicRequest.Position);
                 tab.addDouble("Desired Position", () -> desiredPosition);
-                tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
-            case MINIMAL:
-                tab.addBoolean("Enabled", () -> enabled);
-                tab.addNumber("Current Climb Angle", () -> motor.getPosition().getValueAsDouble());
-                tab.addNumber("Climb Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
-                tab.addNumber("Climb FF", () -> motionMagicRequest.FeedForward);
                 tab.addBoolean("At position", () -> atPosition());
+                tab.addNumber("Current Climb Angle", () -> motor.getPosition().getValueAsDouble());
+            case MEDIUM:
+                tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
+                tab.addBoolean("Enabled", () -> enabled);
+            case MINIMAL:
+                tab.addNumber("Climb Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 break;
         }
     }

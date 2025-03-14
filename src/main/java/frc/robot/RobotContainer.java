@@ -262,21 +262,19 @@ public class RobotContainer {
       .onTrue(superSystem.outtake())
       .onFalse(superSystem.stopRoller());
 
-
     // Climb sequence
     driverController.buttonDown() // Prepare Position for Climb
       .onTrue(superSystem.climbCommandUp());
 
-    // driverController.buttonUp() // Prepare or Release Climb
-    // .onTrue(superSystem.climbPrep()) 
-    // .onFalse(superSystem.stopClimb());
-
     driverController.buttonLeft() // Soft Clamp
-    .onTrue(superSystem.climbSoftClamp())
-    .onFalse(superSystem.stopClimb());
-
-    driverController.buttonUp() // Hard Clamp
-    .onTrue(superSystem.climbHardClamp());
+      .onTrue(Commands.sequence(
+        climbMotor.setEnabledCommand(true),
+        superSystem.climbSoftClamp()
+        ))
+      .onFalse(superSystem.stopClimb());
+      
+      driverController.buttonUp() // Hard Clamp
+        .onTrue(superSystem.climbSoftClamp());
 
     driverController.buttonRight() // Execute Climb
     .onTrue(superSystem.climbCommandDown());
@@ -385,17 +383,17 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     
     autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    // autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomwT", superSystem));
    
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
     
-    // autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
+    autoChooser.setDefaultOption("Do Nothing", Commands.none());
     // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
     // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
 
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
-  
 
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
@@ -409,6 +407,7 @@ public class RobotContainer {
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
+      climbMotor.initShuffleboard(loggingLevel);
       superSystem.initShuffleboard(LOG_LEVEL.ALL);
     }
   }

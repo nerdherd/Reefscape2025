@@ -363,8 +363,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 doRejectUpdate = true;
             }
     
-            SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
-            SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
+            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
             
             // 1 target with large area and close to estimated pose
             if (megaTag1.avgTagArea > 0.8 && megaTag1.rawFiducials[0].distToCamera < 0.5) {
@@ -438,15 +438,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // SmartDashboard.putBoolean(limelightName+" Is Null", estimate == null);
         // SmartDashboard.putNumber(limelightName+" Megatag Count", megaTag2.tagCount);
 
-        SmartDashboard.putString(limelightName + "Info", log);
+        // SmartDashboard.putString(limelightName + "Info", log);
 
         if(!doRejectUpdate)
         {
             Pose2d botPose1 = estimate.pose;
 
-            SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
-            SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
-            SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
+            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
+            // SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
 ;
             if (megaTag2.tagCount >= 2) {
                 xyStds = 0.5;
