@@ -185,16 +185,17 @@ public class RobotContainer {
       () -> driverController.getBumperRight(), // move right of
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> swerveDrive.getCurrentZoneByPose(),
-      () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
+      () -> false,
+      // () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
-        if (driverController.getButtonRight())
-          if (!IsRedSide())
-            return 90.0; 
-          else return 270.0;
-        if (driverController.getButtonDown())
-           return 180.0;
-        if (driverController.getButtonUp())
-          return 0.0;
+        // if (driverController.getButtonRight())
+        //   if (!IsRedSide())
+        //     return 90.0; 
+        //   else return 270.0;
+        // if (driverController.getButtonDown())
+        //    return 180.0;
+        // if (driverController.getButtonUp())
+        //   return 0.0;
         return swerveDrive.getImu().getHeading();
       }
     );
