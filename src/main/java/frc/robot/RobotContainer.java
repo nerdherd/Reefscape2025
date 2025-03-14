@@ -294,6 +294,19 @@ public class RobotContainer {
     operatorController.dpadRight()
     .onTrue(superSystem.moveTo(NamedPositions.L4));
     
+    // Climb sequence to uncomment if it cannot fit on driver
+    // driverController.bumperLeft() // Prepare Position for Climb
+    //   .onTrue(superSystem.climbCommandUp());
+
+    // driverController.bumperRight() // Execute Climb
+    // .onTrue(superSystem.climbCommandDown());
+
+    // // driverController.() // Soft Clamp
+    // // .onTrue(superSystem.climbSoftClamp())
+    // // .onFalse(superSystem.stopClimb());
+
+    // driverController.controllerLeft() // Hard Clamp
+    // .onTrue(superSystem.climbHardClamp());
 
     operatorController.triggerRight()
       .onTrue(superSystem.intake())
@@ -304,7 +317,6 @@ public class RobotContainer {
     
     operatorController.controllerRight()
     .onTrue(superSystem.moveTo(NamedPositions.Processor));
-      
 
     operatorController.buttonUp()
       .onTrue(superSystem.moveTo(NamedPositions.Station));
