@@ -73,6 +73,7 @@ public class RobotContainer {
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
   
+
   public IntakeRoller intakeRoller;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
@@ -82,11 +83,10 @@ public class RobotContainer {
   public Climb climbMotor;
   
 
-
   private PathOnlyBottom2Piece pathOnlyBottom2Piece;
   
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
-  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort,false);
+  private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   // private Bottom2Piece bottom2Piece;

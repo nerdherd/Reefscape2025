@@ -385,7 +385,7 @@ public final class Constants {
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
-    public static final double kGElevatorMotor = 0.33;
+    public static final double kGElevatorMotor = 0.22;
     public static final double kSElevatorMotor = 0.11;
 
     public static final double kElevatorCruiseVelocity = 100; //16.333 //20
@@ -423,9 +423,9 @@ public final class Constants {
     public static final double kElevatorPivotOffSet = 0;
 
     public static final double kEPivotCruiseVelocity = 0.5;//0.25 // 0.4S
-    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 10; // 0.5
+    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 5; // 0.5
     public static final double kElevatorPivotJerk = 900.0; 
-    public static final double kElevatorPivotGroundIntake = -0.001;
+    
   }
 
   public static final class RollerConstants {

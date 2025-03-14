@@ -14,6 +14,7 @@ import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.subsystems.Reportable.LOG_LEVEL;
 public class SuperSystem {
     public Elevator elevator;
     public ElevatorPivot pivot;
@@ -67,6 +68,13 @@ public class SuperSystem {
     }
 
     // subsystems
+    public void reConfigureMotors() {
+        pivot.configureMotorV1();
+        elevator.setMotorConfigs();
+        wrist.configurePID(wrist.motorConfigs);
+        intakeRoller.configureMotor(intakeRoller.motorConfigs);
+
+    }
 
     public Command zeroEncoders() {
         return Commands.runOnce(()-> {
@@ -175,7 +183,7 @@ public class SuperSystem {
 
     // movement
     public Command moveTo(NamedPositions position) {
-        // currentPosition = position;
+        currentPosition = position;
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
@@ -383,6 +391,22 @@ public class SuperSystem {
                 || (Timer.getFPGATimestamp() - startTime >= timeout)
             )
         );
+    }
+
+    public void initShuffleboard(LOG_LEVEL priority){
+        if (priority == LOG_LEVEL.OFF) {
+            return;
+        }
+        ShuffleboardTab tab = Shuffleboard.getTab("Super System");
+        switch (priority) {
+            case OFF:
+                break;
+            case ALL:
+            tab.addString("Super System Current Position", () -> currentPosition.toString());
+            case MEDIUM:
+            case MINIMAL:
+                break;
+        }
     }
 
 }

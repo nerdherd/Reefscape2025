@@ -25,6 +25,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private final TalonFXConfigurator rollerConfiguratorRight;
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
     private final VelocityVoltage velocityRequestRight = new VelocityVoltage(0);
+    public TalonFXConfiguration motorConfigs;
 
     private final NeutralOut brakeRequest = new NeutralOut();
 
@@ -56,14 +57,14 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
         CommandScheduler.getInstance().registerSubsystem(this);
  
-        TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
+        motorConfigs = new TalonFXConfiguration();
         configureMotor(motorConfigs);
         configurePID(motorConfigs);
     }
 
     //****************************** SETUP METHODS ******************************//
  
-    private void configureMotor(TalonFXConfiguration motorConfigs) {
+    public void configureMotor(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         motorConfigs.Voltage.PeakForwardVoltage = 11.5;
@@ -146,6 +147,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     private void setVoltageLeft(double volt) {
         desiredVoltageLeft = volt;
+        desiredVoltageRight = 0;
     }
 
     // ****************************** COMMAND METHODS ****************************** //

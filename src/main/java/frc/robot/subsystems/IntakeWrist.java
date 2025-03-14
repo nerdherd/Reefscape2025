@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,6 +39,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private double ff = 0;
     private double pivotAngle = 0;
     private double manualOffset = 0;
+    public TalonFXConfiguration motorConfigs;
 
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
@@ -65,7 +67,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         motor.setControl(brakeRequest);
 
         // configure motor
-        TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
+         motorConfigs = new TalonFXConfiguration();
         configurePID(motorConfigs);
         
         zeroEncoder();
@@ -74,7 +76,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
 
     //****************************** SETUP METHODS ******************************//
 
-    private void configurePID(TalonFXConfiguration motorConfigs) {
+    public void configurePID(TalonFXConfiguration motorConfigs) {
         if (V1){
             motorConfigurator.refresh(motorConfigs);
 
