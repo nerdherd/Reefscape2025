@@ -121,7 +121,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         }
         else {
             rollerMotor.setVoltage(desiredVoltageLeft);  
-            rollerMotorRight.setVoltage(desiredVoltageRight);
+            rollerMotorRight.setVoltage(desiredVoltageRight * 1.15);
         } 
 
     }
