@@ -248,21 +248,21 @@ public final class Constants {
       public static final Pose2d tag22Mid = new Pose2d(5.222, 2.757, new Rotation2d(Math.toRadians(-60)));
      
       // Red Side
-      public static final Pose2d tag1Left = new Pose2d(15.776, 0.782, new Rotation2d(Math.toRadians(-55))); 
-      public static final Pose2d tag1Right = new Pose2d(16.771, 1.490, new Rotation2d(Math.toRadians(-55))); // Bot Station
-      public static final Pose2d tag1Mid = new Pose2d(16.255, 1.238, new Rotation2d(Math.toRadians(-55))); 
-  
+      public static final Pose2d tag1Left = new Pose2d(16.771, 1.490, new Rotation2d(Math.toRadians(-55))); // Bot Station
+      public static final Pose2d tag1Right = new Pose2d(15.776, 0.782, new Rotation2d(Math.toRadians(-55)));
+      public static final Pose2d tag1Mid = new Pose2d(16.255, 1.238, new Rotation2d(Math.toRadians(-55)));
+ 
       public static final Pose2d tag2Left = new Pose2d(15.632, 7.20, new Rotation2d(Math.toRadians(55))); // Top Station
-      public static final Pose2d tag2Right = new Pose2d(16.639, 6.50, new Rotation2d(Math.toRadians(55))); 
-      public static final Pose2d tag2Mid = new Pose2d(16.0, 6.860, new Rotation2d(Math.toRadians(55))); 
-      
+      public static final Pose2d tag2Right = new Pose2d(16.639, 6.50, new Rotation2d(Math.toRadians(55)));
+      public static final Pose2d tag2Mid = new Pose2d(16.0, 6.860, new Rotation2d(Math.toRadians(55)));
+     
       public static final Pose2d tag3Mid = new Pose2d(11.560, 7.2, new Rotation2d(Math.toRadians(90))); // Processor
-  
+ 
       // they are for red; but tag is on the blue field
       public static final Pose2d tag15RightRedOnBlue = new Pose2d(8.024, 2.996, new Rotation2d(Math.toRadians(180))); // cage top
       public static final Pose2d tag15MidRedOnBlue = new Pose2d(8.024, 1.944, new Rotation2d(Math.toRadians(180))); // cage mid
       public static final Pose2d tag15LeftRedOnBlue = new Pose2d(8.03, 0.802, new Rotation2d(Math.toRadians(180))); // cage btm
-  
+ 
       // Reef
       public static final Pose2d tag6Left = new Pose2d(13.649, 2.675, new Rotation2d(Math.toRadians(-60)));  
       public static final Pose2d tag6Right = new Pose2d(13.934, 2.840, new Rotation2d(Math.toRadians(-60)));  
@@ -490,30 +490,29 @@ public final class Constants {
   
 
   public static final class SuperSystemConstants {
-    public enum NamedPositions { // positions are all in human-readable, converted internally
-      Stow(                ExecutionOrder.WRTELV_PVT, 0.01, 0, -0.01, -0.01),
-      SemiStow(            ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.164, -0.164),
-      GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.76, -0.76),
-      Station(             ExecutionOrder.WRTELV_PVT, 0.18, 1.12, -0.85, -0.4),
-      Processor(           ExecutionOrder.WRTELV_PVT, 0.047, 0.53, -0.79, -0.4),
-      Net(                 ExecutionOrder.WRTELV_PVT, 0.24, 0.05, -0.1, -0.1),
-      Cage(                ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.1, -0.1),
-      L1(                  ExecutionOrder.WRTELV_PVT, 0.25, 0, -0.18, -0.18),
-      L2(                  ExecutionOrder.WRTELV_PVT, 0.25, 0.0, -0.21, -0.21),
-      L3(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 1.14, -0.24, -0.24),
-      L4(                  ExecutionOrder.PVT_ELV_WRT, 0.26, 3.18, -0.27, -0.27),
-      L5(                  ExecutionOrder.WRTELV_PVT, 0.26, 1.12, -0.57, -0.57),
-      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT, 0.247, 0.5, -0.317, -0.317), // TODO update
-      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT, 0.24, 2, -0.307, -0.307), // TODO update
-      ClimbDown(           ExecutionOrder.WRTELV_PVT, -0.075, 0.05, -0.164, -0.164),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT, 0.14, 0.05, -0.164, -0.164),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT,0.1,0.2, -0.76,-0.76),
+    public enum NamedPositions { 
+      Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010      ),
+      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164      ),
+      GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760      ),
+      Station(             ExecutionOrder.WRTELV_PVT  , 0.18,  1.12, -0.850, -0.4),
+      Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
+      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100      ),
+      Cage(                ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.100      ),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210      ),
+      L3(                  ExecutionOrder.PVT_ELV_WRT , 0.25,  1.14, -0.240      ),
+      L4(                  ExecutionOrder.PVT_ELV_WRT , 0.26,  3.18, -0.270      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.26,    -1.12, -0.570      ),
+      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT , 0.247, 0.5,  -0.317      ), 
+      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT , 0.24,  2,    -0.307      ), 
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.075, 0.05, -0.164      ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164      ),
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760      ),
       ;
-      // todo: we might need pre position for wrist
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
       public ExecutionOrder executionOrder;
       NamedPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
-        intermediateWristPosition = iwp; // TODO: add conversions
+        intermediateWristPosition = iwp;
         finalWristPosition = fwp;
         elevatorPosition = ep;
         pivotPosition = pp;
