@@ -39,6 +39,7 @@ import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.PathOnlyBottom2Piece;
 import frc.robot.commands.autos.PreloadTaxi;
+import frc.robot.commands.autos.PreloadTaxiAutoMove;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.autos.TwoPiecePath;
 import frc.robot.Constants.ROBOT_ID;
@@ -385,22 +386,15 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     
     autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
-    
    
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
     
-    // autoChooser.addOption("2PiecePathOnly", new TwoPie6++++9                cePath(swerveDrive, "TopTwoPiece", superSystem));
-
-
-    // autoChooser.addOption("twopie                                                                                                                                                                                                                                                                                                                                                   ceauto", AutoBuilder.buildAuto("Bottom2Piece"));
-
     // autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
     // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
     // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
 
-    // autoChooser.addOption("Square just drive", AutoBuilder.buildAuto("Square"));
-    // autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+    // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
   
 
