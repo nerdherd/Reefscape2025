@@ -538,10 +538,19 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private int getFrontCameraApriltagID(int zoneId)
     {
-        if(zoneId == 2 || zoneId == 4)
-        {
+        if(zoneId == 2 || zoneId == 4) {
             //todo
-            //return vision.getLargerApriltagByTa(VisionConstants.??);
+            // return vision.getLargerApriltagByTa(VisionConstants.??);
+        }
+        if(zoneId == 2)
+        {
+            if(poseEstimator.getEstimatedPosition().getY() > 4) {
+                return RobotContainer.IsRedSide() ? 2 : 13;
+            } else if (poseEstimator.getEstimatedPosition().getY() < 4) {
+                return RobotContainer.IsRedSide() ? 1 : 12;
+            }
+        } else if(zoneId == 4) {
+            return RobotContainer.IsRedSide() ? 3 : 16;
         }
         return -1;
     }
@@ -607,15 +616,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             // cage: need to consider the pose is too close to reef!!
             // only enable it druing last 25 seconds
             // todo
-            int aid;
-            if(RobotContainer.IsRedSide())
-            {
-                aid = 15;
-            }
-            else
-            {
-                aid = 4;
-            }
+            int aid = RobotContainer.IsRedSide() ? 15 : 4;;
+            
             if(myCageMap.containsKey(aid))
             {
                 if(poseId == -1 )
@@ -638,7 +640,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             int aid = getFrontCameraApriltagID(zoneId);
             if(myProsMap.containsKey(aid))
             {
-                if(poseId == -1 || poseId == 1)
+                if(poseId == -1 || poseId == 0 || poseId == 1)
                 {
                     return myProsMap.get(aid).get(0);
                 }
