@@ -57,7 +57,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         CommandScheduler.getInstance().registerSubsystem(this);
     }
     
-    private void setMotorConfigs() {
+    public void setMotorConfigs() {
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         motorConfigurator.refresh(motorConfigs);
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;

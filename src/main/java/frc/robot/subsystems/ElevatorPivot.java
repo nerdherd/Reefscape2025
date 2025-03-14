@@ -116,7 +116,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
         }
     }
 
-    private void configureMotorV1() {
+    public void configureMotorV1() {
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
