@@ -1,7 +1,14 @@
 package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
+import com.ctre.phoenix6.StatusSignal;
+import com.ctre.phoenix6.hardware.CANdi;
+import com.ctre.phoenix6.signals.S1StateValue;
+import com.ctre.phoenix6.signals.S2StateValue;
+
+import edu.wpi.first.hal.CANData;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -22,15 +29,15 @@ public class SuperSystem {
     public IntakeRoller intakeRoller;
     public Climb climbMotor;
 
-    public BannerSensor intakeSensor;
-    public BannerSensor floorSensor;
+    public StatusSignal<S1StateValue> intakeSensor;
+    public StatusSignal<S2StateValue> floorSensor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
     public NamedPositions lastPosition;
     
     boolean elevatorWithinRange;
 
-    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition,pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide;
+    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition,pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected, floorDetected;
 
     public enum ExecutionOrder {
         ALL_TOGETHER,
@@ -47,13 +54,13 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor intakeSensor, BannerSensor floorSensor, Climb climbMotor) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, CANdi candi, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
-        this.intakeSensor = intakeSensor;
-        this.floorSensor = floorSensor;
+        this.intakeSensor = candi.getS1State(true);
+        this.floorSensor = candi.getS2State(true);
         this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
@@ -62,7 +69,8 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
-        
+        intakeDetected = () -> (intakeSensor.getValue().value == 1);
+        floorDetected = () -> (floorSensor.getValue().value == 1);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -126,7 +134,7 @@ public class SuperSystem {
         return Commands.sequence(
             intake(), 
             Commands.race(Commands.waitUntil(
-                intakeSensor::sensorDetected),
+                intakeDetected),
                 Commands.waitSeconds(5)),
             holdPiece()
         );
@@ -136,7 +144,7 @@ public class SuperSystem {
         return Commands.sequence(
             intake(), 
             Commands.race(Commands.waitUntil(
-                intakeSensor::sensorDetected),
+                intakeDetected),
                 Commands.waitSeconds(timeout)),
             holdPiece()
         );
@@ -190,39 +198,42 @@ public class SuperSystem {
         );
     }
 
-    // movement
+    public Command updatePositions(NamedPositions position) {
+        return Commands.runOnce(() -> {
+            lastPosition = currentPosition;
+            currentPosition = position;
+        });
+    }
+
     public Command moveTo(NamedPositions position) {
-        lastPosition = currentPosition;
-        currentPosition = position;
-        if (position.equals(NamedPositions.GroundIntake))
-            return Commands.race(
-                Commands.sequence(
-                    preExecute(),
-                    execute(position.executionOrder, 10.0, 
-                    position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
-                ),
-                Commands.run(() -> floorSensor.sensorDetected())
+        return Commands.sequence(
+            updatePositions(position),
+            // Commands.waitSeconds(.001),
+            goTo(position)
+        );
+    }
+
+    // movement
+    private Command goTo(NamedPositions position) {
+        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake) {
+            return Commands.sequence(
+                preExecute(),
+                execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
+                NamedPositions.intermediateGround.pivotPosition, NamedPositions.intermediateGround.elevatorPosition, NamedPositions.intermediateGround.intermediateWristPosition),
+                wrist.setPositionCommand(NamedPositions.intermediateGround.finalWristPosition),
+                preExecute(),
+                execute(position.executionOrder, 10.0, 
+                position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
             );
-        else if (position.intermediateWristPosition == position.finalWristPosition)
+        }
+        if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
                 execute(position.executionOrder, 10.0, 
                 position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
                               
             );
-        else if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake) {
-            return Commands.sequence(
-            preExecute(),
-            execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
-            NamedPositions.intermediateGround.pivotPosition, NamedPositions.intermediateGround.elevatorPosition, NamedPositions.intermediateGround.intermediateWristPosition),
-            wrist.setPositionCommand(NamedPositions.intermediateGround.finalWristPosition),
-            preExecute(),
-            execute(position.executionOrder, 10.0, 
-            position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
-            wrist.setPositionCommand(position.finalWristPosition)
-        );
-        }
-        else return Commands.sequence(
+        return Commands.sequence(
             preExecute(),
             execute(position.executionOrder, 10.0, 
             position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
@@ -439,12 +450,12 @@ public class SuperSystem {
         if (priority == LOG_LEVEL.OFF) {
             return;
         }
-        ShuffleboardTab tab = Shuffleboard.getTab("Super System");
+        ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
         switch (priority) {
             case OFF:
                 break;
             case ALL:
-            tab.addString("Super System Current Position", () -> currentPosition.toString());
+                tab.addString("Super System Current Position", () -> currentPosition.toString());
             case MEDIUM:
             case MINIMAL:
                 break;

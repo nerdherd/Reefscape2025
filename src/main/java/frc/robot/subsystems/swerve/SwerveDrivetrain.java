@@ -781,7 +781,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 return 2;
             }
             // Cage
-            else if(7.567 < xp && xp < 9.998)  {
+            else if(7.4 < xp && xp < 10)  {
             // cage: need to consider the pose is too close to reef!!
             // only enable it druing last 25 seconds
             // todo
@@ -803,7 +803,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 return 2;
             }
             // cage
-            else if(7.567 < xp && xp < 9.998)  {
+            else if (7.4 < xp && xp < 10)  {
                 // cage: need to consider the pose is too close to reef!!
                 // only enable it druing last 25 seconds
                 // todo

@@ -122,6 +122,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Brake);
     m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Brake);
     m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.superSystem.reConfigureMotors();
 
     m_robotContainer.initDefaultCommands_teleop();
     m_robotContainer.configureBindings_teleop();
@@ -139,9 +140,12 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Coast);
     m_robotContainer.superSystem.reConfigureMotors();
     
-
     // m_robotContainer.superSystem.initialize();
     m_robotContainer.initDefaultCommands_test();
     m_robotContainer.configureBindings_test();

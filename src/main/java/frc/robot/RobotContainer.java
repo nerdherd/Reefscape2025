@@ -10,6 +10,7 @@ import java.util.List;
 import org.json.simple.parser.ParseException;
 
 import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -25,14 +26,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.FloorSensorConstants;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.commands.StationCommand;
 import frc.robot.commands.StowCommand;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
-import frc.robot.Constants.IntakeSensorConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
@@ -83,7 +82,7 @@ public class RobotContainer {
   public BannerSensor floorSensor;
   public SuperSystem superSystem;
   public Climb climbMotor;
-  
+  public CANdi candi;
 
   private PathOnlyBottom2Piece pathOnlyBottom2Piece;
   
@@ -134,10 +133,11 @@ public class RobotContainer {
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
       intakeRoller = new IntakeRoller();
-      intakeSensor = new BannerSensor("Intake Roller", IntakeSensorConstants.blackPort, IntakeSensorConstants.whitePort);
-      floorSensor = new BannerSensor("Intake Wrist", FloorSensorConstants.blackPort, FloorSensorConstants.whitePort);
+      candi = new CANdi(6);
+      // intakeSensor = new BannerSensor("Intake Roller", IntakeSensorConstants.blackPort, IntakeSensorConstants.whitePort);
+      // floorSensor = new BannerSensor("Intake Wrist", FloorSensorConstants.blackPort, FloorSensorConstants.whitePort);
       climbMotor = new Climb();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, intakeSensor, floorSensor, climbMotor);
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, candi, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -246,7 +246,7 @@ public class RobotContainer {
     driverController.dpadUp().onTrue(
       superSystem.moveTo(NamedPositions.AlgaeL2)
     );
-    driverController.dpadRight().onTrue(
+    driverController.dpadDown().onTrue(
       superSystem.moveTo(NamedPositions.AlgaeL3)
     );
 
@@ -297,7 +297,13 @@ public class RobotContainer {
     operatorController.triggerRight()
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
+    operatorController.triggerLeft()
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
     
+    operatorController.controllerRight()
+    .onTrue(superSystem.moveTo(NamedPositions.Processor));
+      
 
     operatorController.buttonUp()
       .onTrue(superSystem.moveTo(NamedPositions.Station));
@@ -410,6 +416,7 @@ public class RobotContainer {
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
+      superSystem.initShuffleboard(LOG_LEVEL.ALL);
     }
   }
   

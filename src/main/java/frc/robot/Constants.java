@@ -385,7 +385,7 @@ public final class Constants {
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
-    public static final double kGElevatorMotor = 0.22;
+    public static final double kGElevatorMotor = 0.2;
     public static final double kSElevatorMotor = 0.11;
 
     public static final double kElevatorCruiseVelocity = 100; //16.333 //20
@@ -423,8 +423,8 @@ public final class Constants {
     public static final double kElevatorPivotOffSet = 0;
 
     public static final double kEPivotCruiseVelocity = 0.5;//0.25 // 0.4S
-    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 5; // 0.5
-    public static final double kElevatorPivotJerk = 900.0; 
+    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 3; // 0.5
+    public static final double kElevatorPivotJerk = kElevatorPivotCruiseAcceleration * 10; 
     
   }
 
@@ -495,23 +495,23 @@ public final class Constants {
     public enum NamedPositions { // positions are all in human-readable, converted internally
       Stow(         ExecutionOrder.WRTELV_PVT, 0.01, 0, -0.01, -0.4),
       SemiStow(     ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.164, -0.4),
-      GroundIntake( ExecutionOrder.PVT_ELV_WRT, 0.022, 0.626, -0.76, -0.76),
+      GroundIntake( ExecutionOrder.WRTELV_PVT, 0.022, 0.623, -0.76, -0.76),
       Station(      ExecutionOrder.WRTELV_PVT, 0.18, 1.12, -0.85, -0.4),
-      Processor(    ExecutionOrder.WRTELV_PVT, 0.01, 0.428, -0.72, -0.4),
+      Processor(    ExecutionOrder.WRTELV_PVT, 0.047, 0.53, -0.79, -0.4),
       Net(          ExecutionOrder.WRTELV_PVT, 0.24, 0.05, -0.1, -0.4),
       Cage(         ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.1, -0.4),
-      L1(           ExecutionOrder.WRTELV_PVT, 0.24, 0.0, -0.21, -0.3),
-      L2(           ExecutionOrder.WRTELV_PVT, 0.25, 0, -0.18, -0.3),
-      L3(           ExecutionOrder.WRTELV_PVT, 0.25, 1.14, -0.24, -0.3),
-      L4(           ExecutionOrder.WRTELV_PVT, 0.25, 3.18, -0.26, -0.3),
+      L1(           ExecutionOrder.WRTELV_PVT, 0.25, 0, -0.18, -0.3),
+      L2(           ExecutionOrder.WRTELV_PVT, 0.24, 0.0, -0.21, -0.3),
+      L3(           ExecutionOrder.PVT_ELV_WRT, 0.25, 1.14, -0.24, -0.3),
+      L4(           ExecutionOrder.PVT_ELV_WRT, 0.25, 3.18, -0.26, -0.3),
       L5(           ExecutionOrder.WRTELV_PVT, 0.24, 1.12, -0.57, -0.57),
       L2L3(         ExecutionOrder.WRTELV_PVT, 0.24, 0.5, -0.318, -0.3), 
       L3L4(         ExecutionOrder.WRTELV_PVT, 0.24, 1.5, -0.318, -0.3),
-      AlgaeL2(      ExecutionOrder.WRTELV_PVT, 0.247, 0.05, -0.317, -0.3), // TODO update
-      AlgaeL3(      ExecutionOrder.WRTELV_PVT, 0.24, 1.36, -0.307, -0.3), // TODO update
+      AlgaeL2(      ExecutionOrder.PVT_ELV_WRT, 0.247, 0.5, -0.317, -0.3), // TODO update
+      AlgaeL3(      ExecutionOrder.PVT_ELV_WRT, 0.24, 1.36, -0.307, -0.3), // TODO update
       ClimbDown(    ExecutionOrder.WRTELV_PVT, -0.075, 0.05, -0.164, -0.4),
       ClimbUp(      ExecutionOrder.WRTELV_PVT, 0.14, 0.05, -0.164, -0.4),
-      intermediateGround(     ExecutionOrder.WRTELV_PVT,0.06 ,0.626, -0.76,-0.4),
+      intermediateGround(     ExecutionOrder.PVT_ELV_WRT,0.06 ,0.623, -0.76,-0.4),
       ;
       // todo: we might need pre position for wrist
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
@@ -528,15 +528,4 @@ public final class Constants {
       }
     }
   }
-
-  public static final class IntakeSensorConstants {
-    public static final int blackPort = 8;
-    public static final int whitePort = 9;
-  }
-
-  public static final class FloorSensorConstants {
-    public static final int blackPort = 0; // TODO update
-    public static final int whitePort = 0; // TODO update
-  }
-  
 }
