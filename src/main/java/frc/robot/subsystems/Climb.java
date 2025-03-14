@@ -56,7 +56,7 @@ public class Climb extends SubsystemBase implements Reportable{
 
         // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-        motorConfigs.Feedback.SensorToMechanismRatio = 1; 
+        motorConfigs.Feedback.SensorToMechanismRatio = 0.5; 
         // motorConfigs.Feedback.RotorToSensorRatio;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
@@ -150,7 +150,7 @@ public class Climb extends SubsystemBase implements Reportable{
     }
     
     public Command setEnabledCommand(boolean enabled) {
-        return Commands.runOnce(() -> this.setEnabled(enabled));
+        return Commands.runOnce(() -> setEnabled(enabled));
     }
 
     public Command setPositionCommand(double position) {
