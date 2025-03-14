@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 4.08780737704918,
-        "y": 5.853125
+        "x": 0.9949795081967214,
+        "y": 1.3517418032786883
       },
       "prevControl": {
-        "x": 3.08780737704918,
-        "y": 5.853125
+        "x": -0.005020491803278571,
+        "y": 1.3517418032786883
       },
       "nextControl": null,
       "isLocked": false,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -122.94921511659042
   },
   "reversed": false,
   "folder": "claire square",

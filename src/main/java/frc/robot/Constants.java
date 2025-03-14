@@ -207,8 +207,8 @@ public final class Constants {
 
     public static final class MapPoses {
       // Blue Side
-      public static final Pose2d tag12Left = new Pose2d(0.899, 1.394, new Rotation2d(Math.toRadians(-125))); // Bot Station
-      public static final Pose2d tag12Right = new Pose2d(1.295, 1.118, new Rotation2d(Math.toRadians(-125))); // Bot Station
+      public static final Pose2d tag12Left = new Pose2d(1.295, 1.118, new Rotation2d(Math.toRadians(-125))); // Bot Station
+      public static final Pose2d tag12Right = new Pose2d(0.899, 1.394, new Rotation2d(Math.toRadians(-125))); // Bot Station
       public static final Pose2d tag12Mid = new Pose2d(1.678, 0.83, new Rotation2d(Math.toRadians(-125))); // Bot Station
   
       public static final Pose2d tag13Left = new Pose2d(0.0887, 6.488, new Rotation2d(Math.toRadians(125))); // Top Station
@@ -248,8 +248,8 @@ public final class Constants {
       public static final Pose2d tag22Mid = new Pose2d(5.26, 2.77, new Rotation2d(Math.toRadians(-60)));
       
       // Red Side
-      public static final Pose2d tag1Left = new Pose2d(16.771, 1.490, new Rotation2d(Math.toRadians(-55))); // Bot Station
-      public static final Pose2d tag1Right = new Pose2d(15.776, 0.782, new Rotation2d(Math.toRadians(-55))); 
+      public static final Pose2d tag1Left = new Pose2d(15.776, 0.782, new Rotation2d(Math.toRadians(-55))); 
+      public static final Pose2d tag1Right = new Pose2d(16.771, 1.490, new Rotation2d(Math.toRadians(-55))); // Bot Station
       public static final Pose2d tag1Mid = new Pose2d(16.255, 1.238, new Rotation2d(Math.toRadians(-55))); 
   
       public static final Pose2d tag2Left = new Pose2d(15.632, 7.20, new Rotation2d(Math.toRadians(55))); // Top Station
