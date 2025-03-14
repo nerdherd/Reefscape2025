@@ -446,12 +446,6 @@ public class RobotContainer {
 
   public void DisableAllMotors_Test()
   {
-    // let all motor move freely 
-    elevator.setNeutralMode(NeutralModeValue.Coast);
-    elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
-    intakeWrist.setNeutralMode(NeutralModeValue.Coast);
-    climbMotor.setNeutralMode(NeutralModeValue.Coast);
-    
     elevator.stopMotion();
     elevatorPivot.stopMotion();
     intakeWrist.stopMotion();
@@ -461,6 +455,7 @@ public class RobotContainer {
     intakeWrist.setEnabled(false);
     intakeRoller.setEnabled(false);
     climbMotor.setEnabled(false);
+    swerveDrive.setBreak(true);
   }
   
 

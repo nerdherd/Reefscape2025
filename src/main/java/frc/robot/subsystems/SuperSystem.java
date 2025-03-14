@@ -32,8 +32,8 @@ public class SuperSystem {
     public StatusSignal<S1StateValue> intakeSensor;
     public StatusSignal<S2StateValue> floorSensor;
     
-    public NamedPositions currentPosition = NamedPositions.Stow;
-    public NamedPositions lastPosition = NamedPositions.Stow;
+    private NamedPositions currentPosition = NamedPositions.Stow;
+    private NamedPositions lastPosition = NamedPositions.Stow;
     
     boolean elevatorWithinRange;
 
@@ -200,7 +200,7 @@ public class SuperSystem {
 
     public Command updatePositions(NamedPositions position) {
         return Commands.runOnce(() -> {
-            lastPosition = currentPosition;
+            if(currentPosition != position) lastPosition = currentPosition;
             currentPosition = position;
         });
     }

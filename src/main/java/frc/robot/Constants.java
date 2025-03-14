@@ -491,23 +491,23 @@ public final class Constants {
 
   public static final class SuperSystemConstants {
     public enum NamedPositions { 
-      Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010      ),
-      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164      ),
-      GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760      ),
+      Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
+      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
+      GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ),
       Station(             ExecutionOrder.WRTELV_PVT  , 0.18,  1.12, -0.850, -0.4),
       Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
-      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100      ),
-      Cage(                ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.100      ),
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180      ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210      ),
-      L3(                  ExecutionOrder.PVT_ELV_WRT , 0.25,  1.14, -0.240      ),
-      L4(                  ExecutionOrder.PVT_ELV_WRT , 0.26,  3.18, -0.270      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.26,    -1.12, -0.570      ),
-      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT , 0.247, 0.5,  -0.317      ), 
-      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT , 0.24,  2,    -0.307      ), 
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.075, 0.05, -0.164      ),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760      ),
+      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ),
+      Cage(                ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.100, -0.100      ),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180, -0.180      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210, -0.210      ),
+      L3(                  ExecutionOrder.PVT_ELV_WRT , 0.25,  1.14, -0.240, -0.240      ),
+      L4(                  ExecutionOrder.PVT_ELV_WRT , 0.26,  3.18, -0.270, -0.270      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.26,    -1.12, -0.570, -0.570      ),
+      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT , 0.247, 0.5,  -0.317, -0.317      ), 
+      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT , 0.24,  2,    -0.307, -0.307      ), 
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.075, 0.05, -0.164, -0.164      ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      ),
       ;
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
       public ExecutionOrder executionOrder;
