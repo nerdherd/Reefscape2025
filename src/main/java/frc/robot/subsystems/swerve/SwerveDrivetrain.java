@@ -781,12 +781,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 return 2;
             }
             // Cage
-            // else if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
+            else if(7.567 < xp && xp < 9.998)  {
             // cage: need to consider the pose is too close to reef!!
             // only enable it druing last 25 seconds
             // todo
-            //     return 3;
-            // }
+                return 3;
+            }
             // Processor
             else if(NerdyMath.isPoseInsideCircleZone(11.56, 8.06, 2.12, xp, yp)) {
                 return 4;
@@ -802,11 +802,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             else if(NerdyMath.isPoseInsideCircleZone(1, 0.5, 4, xp, yp) || NerdyMath.isPoseInsideCircleZone(1, 7.5, 4, xp, yp)) {
                 return 2;
             }
-            // Cage
-            // else if(NerdyMath.isPoseInsideCircleZone(1, 7.5, 4, xp, yp)) {
-            //     return 3;
-            // }
-            // Processor
+            // cage
+            else if(7.567 < xp && xp < 9.998)  {
+                // cage: need to consider the pose is too close to reef!!
+                // only enable it druing last 25 seconds
+                // todo
+                    return 3;
+                }
             else if(NerdyMath.isPoseInsideCircleZone(6.35, 0, 2.12, xp, yp)) {
                 return 4;
             }
