@@ -509,8 +509,8 @@ public final class Constants {
       L3L4(         ExecutionOrder.WRT_PVT_ELV, 0.24, 1.5, -0.318, -0.3),
       AlgaeL2(      ExecutionOrder.WRT_PVT_ELV, 0.247, 0.05, -0.317, -0.3), // TODO update
       AlgaeL3(      ExecutionOrder.WRT_PVT_ELV, 0.24, 1.36, -0.307, -0.3), // TODO update
-      ClimbDown(     ExecutionOrder.WRT_ELV_PVT, -0.075, 0.05, -0.164, -0.4),
-      ClimbUp(     ExecutionOrder.WRT_ELV_PVT, 0.14, 0.05, -0.164, -0.4),
+      ClimbDown(    ExecutionOrder.WRT_ELV_PVT, -0.075, 0.05, -0.164, -0.4),
+      ClimbUp(      ExecutionOrder.WRT_ELV_PVT, 0.14, 0.05, -0.164, -0.4),
       ;
       // todo: we might need pre position for wrist
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
@@ -528,8 +528,14 @@ public final class Constants {
     }
   }
 
-  public static final class BannerSensorConstants {
+  public static final class IntakeSensorConstants {
     public static final int blackPort = 8;
     public static final int whitePort = 9;
   }
+
+  public static final class FloorSensorConstants {
+    public static final int blackPort = 0; // TODO update
+    public static final int whitePort = 0; // TODO update
+  }
+  
 }

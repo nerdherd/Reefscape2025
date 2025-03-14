@@ -25,13 +25,14 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.FloorSensorConstants;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.commands.StationCommand;
 import frc.robot.commands.StowCommand;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
-import frc.robot.Constants.BannerSensorConstants;
+import frc.robot.Constants.IntakeSensorConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 // import frc.robot.commands.autos.PreloadTaxi;
 // import frc.robot.commands.autSquare;
@@ -75,10 +76,11 @@ public class RobotContainer {
   
 
   public IntakeRoller intakeRoller;
+  public BannerSensor intakeSensor;
   public Elevator elevator;
   public ElevatorPivot elevatorPivot;
   public IntakeWrist intakeWrist;
-  public BannerSensor bannerSensor;
+  public BannerSensor floorSensor;
   public SuperSystem superSystem;
   public Climb climbMotor;
   
@@ -132,9 +134,10 @@ public class RobotContainer {
       elevator = new Elevator();
       elevatorPivot = new ElevatorPivot();
       intakeRoller = new IntakeRoller();
-      bannerSensor = new BannerSensor();
+      intakeSensor = new BannerSensor("Intake Roller", IntakeSensorConstants.blackPort, IntakeSensorConstants.whitePort);
+      floorSensor = new BannerSensor("Intake Wrist", FloorSensorConstants.blackPort, FloorSensorConstants.whitePort);
       climbMotor = new Climb();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, bannerSensor, climbMotor);
+      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, intakeSensor, floorSensor, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);

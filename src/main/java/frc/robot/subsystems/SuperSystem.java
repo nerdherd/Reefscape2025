@@ -20,8 +20,10 @@ public class SuperSystem {
     public ElevatorPivot pivot;
     public IntakeWrist wrist;
     public IntakeRoller intakeRoller;
-    public BannerSensor bannerSensor;
     public Climb climbMotor;
+
+    public BannerSensor intakeSensor;
+    public BannerSensor floorSensor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
     
@@ -43,12 +45,13 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor bannerSensor, Climb climbMotor) {
+    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, BannerSensor intakeSensor, BannerSensor floorSensor, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
-        this.bannerSensor = bannerSensor;
+        this.intakeSensor = intakeSensor;
+        this.floorSensor = floorSensor;
         this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
@@ -121,7 +124,7 @@ public class SuperSystem {
         return Commands.sequence(
             intake(), 
             Commands.race(Commands.waitUntil(
-                bannerSensor::pieceDetected),
+                intakeSensor::sensorDetected),
                 Commands.waitSeconds(5)),
             holdPiece()
         );
@@ -131,7 +134,7 @@ public class SuperSystem {
         return Commands.sequence(
             intake(), 
             Commands.race(Commands.waitUntil(
-                bannerSensor::pieceDetected),
+                intakeSensor::sensorDetected),
                 Commands.waitSeconds(timeout)),
             holdPiece()
         );
@@ -142,7 +145,7 @@ public class SuperSystem {
     }
 
     public Command outtake() {
-        if (currentPosition == NamedPositions.L1) { // todo is it working??
+        if (currentPosition == NamedPositions.L1) { // TODO is it working??
             return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
         }
         else {
@@ -188,7 +191,16 @@ public class SuperSystem {
     // movement
     public Command moveTo(NamedPositions position) {
         currentPosition = position;
-        if (position.intermediateWristPosition == position.finalWristPosition)
+        if (position.equals(NamedPositions.GroundIntake))
+            return Commands.race(
+                Commands.sequence(
+                    preExecute(),
+                    execute(position.executionOrder, 10.0, 
+                    position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
+                ),
+                Commands.run(() -> floorSensor.sensorDetected())
+            );
+        else if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
                 execute(position.executionOrder, 10.0, 

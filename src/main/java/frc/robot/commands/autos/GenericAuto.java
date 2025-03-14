@@ -7,7 +7,6 @@ import java.util.List;
 import org.json.simple.parser.ParseException;
 
 import frc.robot.subsystems.SuperSystem;
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;

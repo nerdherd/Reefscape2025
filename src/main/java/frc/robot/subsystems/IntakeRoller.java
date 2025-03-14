@@ -240,7 +240,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
  
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        ShuffleboardTab tab = Shuffleboard.getTab("Algae Roller");
+        ShuffleboardTab tab = Shuffleboard.getTab("Intake Roller");
         switch (priority) {
             case ALL:
                 tab.addNumber("Intake Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());

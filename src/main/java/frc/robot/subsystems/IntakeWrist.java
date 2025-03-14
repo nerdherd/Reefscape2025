@@ -259,7 +259,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         if (priority == LOG_LEVEL.OFF) {
             return;
         }
-        ShuffleboardTab tab = Shuffleboard.getTab("Coral Wrist");
+        ShuffleboardTab tab = Shuffleboard.getTab("Intake Wrist");
         switch (priority) {
             case OFF:
                 break;

@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import frc.robot.Constants.BannerSensorConstants;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -8,47 +7,45 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 
 public class BannerSensor implements Reportable {
-    private final int blackPort;
-    private final int whitePort;
     private final DigitalInput bannerSensorBlack;
     private final DigitalInput bannerSensorWhite;
 
-    private boolean pieceDetected;
+    private final String name;
+
+    private boolean detected;
     private boolean lastBlackValue;
     private boolean lastWhiteValue;
     private boolean illegalInput = false;
 
-    public BannerSensor() {
-        blackPort = BannerSensorConstants.blackPort;
-        whitePort = BannerSensorConstants.whitePort;
+    public BannerSensor(String name, int blackPort, int whitePort) {
+        this.name = name;
         bannerSensorBlack = new DigitalInput(blackPort);
         bannerSensorWhite = new DigitalInput(whitePort);
-
     }
 
-    public boolean pieceDetected() {
+    public boolean sensorDetected() {
         lastBlackValue = bannerSensorBlack.get();
         lastWhiteValue = bannerSensorWhite.get();
         if ((lastBlackValue && lastWhiteValue) || (!lastBlackValue && !lastWhiteValue)) {
             illegalInput = true;
-            pieceDetected = false;
+            detected = false;
         }
 
         if(!lastBlackValue && lastWhiteValue){
-            pieceDetected = true;
+            detected = true;
         }
         else if(lastBlackValue && !lastWhiteValue){
-            pieceDetected = false;
+            detected = false;
         }
         else{
             DriverStation.reportError("Fault in banner sensor, error code: ", true);
-            pieceDetected = false;
+            detected = false;
         }
-        return pieceDetected;
+        return detected;
     }
 
     public boolean pieceDetectedWithoutPolling() {
-        return pieceDetected;
+        return detected;
     }
 
     @Override
@@ -56,8 +53,8 @@ public class BannerSensor implements Reportable {
 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        ShuffleboardTab tab = Shuffleboard.getTab("Indexer");
-        tab.addBoolean("Note Detected", this::pieceDetected);
+        ShuffleboardTab tab = Shuffleboard.getTab(name);
+        tab.addBoolean("Detected", this::sensorDetected);
         tab.addBoolean("Banner Sensor Connected", () -> !illegalInput);
         tab.addBoolean("Last Black Value", () -> lastBlackValue);
         tab.addBoolean("Last White Value", () -> lastWhiteValue);
