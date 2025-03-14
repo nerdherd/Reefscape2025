@@ -243,10 +243,10 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.dpadUp().onTrue(
+    driverController.dpadDown().onTrue(
       superSystem.moveTo(NamedPositions.AlgaeL2)
     );
-    driverController.dpadDown().onTrue(
+    driverController.dpadUp().onTrue(
       superSystem.moveTo(NamedPositions.AlgaeL3)
     );
 
@@ -263,7 +263,7 @@ public class RobotContainer {
 
     // Climb sequence
     driverController.buttonDown() // Prepare Position for Climb
-    .onTrue(superSystem.climbCommandUp());
+      .onTrue(superSystem.climbCommandUp());
 
     // driverController.buttonUp() // Prepare or Release Climb
     // .onTrue(superSystem.climbPrep()) 
@@ -278,7 +278,7 @@ public class RobotContainer {
 
     driverController.buttonRight() // Execute Climb
     .onTrue(superSystem.climbCommandDown());
-    
+
   
 
     //////////////////////
