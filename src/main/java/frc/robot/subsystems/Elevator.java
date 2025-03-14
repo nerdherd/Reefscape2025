@@ -220,17 +220,17 @@ public class Elevator extends SubsystemBase implements Reportable {
             case ALL:
                 tab.addString("Elevator Control Mode", elevatorMotor.getControlMode()::toString);
                 tab.addNumber("Elevator MM Position", () -> motionMagicRequest.Position);
-                tab.addBoolean("Elevator Enabled", () -> enabled);
                 tab.addNumber("Elevator FF", () -> motionMagicRequest.FeedForward);
-                tab.addBoolean("Elevator At Position", () -> atPosition());
-                tab.addNumber("Elevator Temperature 1", () -> elevatorMotor.getDeviceTemp().getValueAsDouble());
-                tab.addNumber("Elevator Temperature 2", () -> elevatorMotor2.getDeviceTemp().getValueAsDouble());
+                tab.addNumber("Elevator Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
             case MEDIUM:
-            tab.addNumber("Elevator Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
-            case MINIMAL:
+                tab.addBoolean("Elevator Enabled", () -> enabled);
                 tab.addNumber("Elevator Desired Position", ()-> desiredPosition);
                 tab.addNumber("Elevator Current Position", () -> getPosition());
+                tab.addBoolean("Elevator At Position", () -> atPosition());
+            case MINIMAL:
                 tab.addNumber("Elevator Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Elevator Temperature 1", () -> elevatorMotor.getDeviceTemp().getValueAsDouble());
+                tab.addNumber("Elevator Temperature 2", () -> elevatorMotor2.getDeviceTemp().getValueAsDouble());
                 
                 break;
             }        
