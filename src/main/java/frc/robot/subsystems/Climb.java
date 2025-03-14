@@ -26,7 +26,7 @@ public class Climb extends SubsystemBase implements Reportable{
     private final TalonFXConfigurator motorConfigurator;
 
     private final MotionMagicVoltage motionMagicRequest; // Was 0 during initialization
-    private final NeutralOut brakeRequest = new NeutralOut();
+    private final NeutralOut neutralRequest = new NeutralOut();
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
     private double desiredPosition; // Should be ~90 or wherever initial position is
@@ -40,7 +40,7 @@ public class Climb extends SubsystemBase implements Reportable{
         
         desiredPosition = 0;
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
-        motor.setControl(brakeRequest);
+        motor.setControl(neutralRequest);
 
         // configure motor
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
@@ -86,7 +86,7 @@ public class Climb extends SubsystemBase implements Reportable{
     @Override
     public void periodic() {
         if (!enabled) {
-            motor.setControl(brakeRequest);
+            motor.setControl(neutralRequest);
             return;
         } 
         else {
@@ -110,7 +110,7 @@ public class Climb extends SubsystemBase implements Reportable{
     }
 
     public void stopMotion() {
-        motor.setControl(brakeRequest);
+        motor.setControl(neutralRequest);
     }
 
     public void setNeutralMode(NeutralModeValue neutralMode) {
@@ -163,7 +163,7 @@ public class Climb extends SubsystemBase implements Reportable{
     private Command stopCommand() {
         return Commands.sequence(
             setEnabledCommand(false),
-            Commands.runOnce(() -> motor.setControl(brakeRequest))
+            Commands.runOnce(() -> motor.setControl(neutralRequest))
         );
     }
 

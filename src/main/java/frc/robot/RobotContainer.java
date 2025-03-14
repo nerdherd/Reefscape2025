@@ -219,7 +219,7 @@ public class RobotContainer {
       double Elevator_OFFSET = 0.05;
       elevator.setDefaultCommand(Commands.run(() -> {
         double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
-        if (Math.abs(leftY) > 0.05) {
+        if (Math.abs(leftY) > 0.05 && elevatorPivot.getPosition() > (NamedPositions.Station.pivotPosition - 0.02)) {
         double currentPos = elevator.getPosition();
         elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
         }
@@ -247,10 +247,10 @@ public class RobotContainer {
       superSystem.moveTo(NamedPositions.AlgaeL3)
     );
 
-    driverController.buttonLeft().onTrue(
+    driverController.dpadLeft().onTrue(
       superSystem.repositionCoralLeft()
     );
-    driverController.buttonRight().onTrue(
+    driverController.dpadRight().onTrue(
       superSystem.repositionCoralRight()
     );
     driverController.triggerLeft()
@@ -259,18 +259,21 @@ public class RobotContainer {
 
 
     // Climb sequence
-    driverController.dpadUp()
+    driverController.buttonDown() // Prepare Position for Climb
     .onTrue(superSystem.climbCommandUp());
 
-    driverController.buttonUp()
-    .onTrue(superSystem.climbPrep())
+    // driverController.buttonUp() // Prepare or Release Climb
+    // .onTrue(superSystem.climbPrep()) 
+    // .onFalse(superSystem.stopClimb());
+
+    driverController.buttonLeft() // Soft Clamp
+    .onTrue(superSystem.climbSoftClamp())
     .onFalse(superSystem.stopClimb());
 
-    driverController.buttonUp()
-    .onTrue(superSystem.climbClamp())
-    .onFalse(superSystem.stopClimb());
+    driverController.buttonUp() // Hard Clamp
+    .onTrue(superSystem.climbHardClamp());
 
-    driverController.dpadDown()
+    driverController.buttonRight() // Execute Climb
     .onTrue(superSystem.climbCommandDown());
     
   

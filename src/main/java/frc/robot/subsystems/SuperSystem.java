@@ -150,8 +150,12 @@ public class SuperSystem {
         return climbMotor.setVoltageCommand(0.5);
     }
 
-    public Command climbClamp() {
+    public Command climbHardClamp() {
         return climbMotor.setVoltageCommand(-3.0);
+    }
+
+    public Command climbSoftClamp() {
+        return climbMotor.setVoltageCommand(-0.4);
     }
 
     public Command stopClimb() {
@@ -168,7 +172,7 @@ public class SuperSystem {
     
     public Command climbCommandDown() {
         return Commands.sequence(
-            climbClamp(), 
+            climbHardClamp(), 
             moveTo(NamedPositions.ClimbDown) 
         );
     }
