@@ -386,8 +386,8 @@ public class RobotContainer {
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
     
-    autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
-    // autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "BottomwT", superSystem));
+    autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomwTwoPiece", superSystem));
    
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
     
@@ -398,6 +398,8 @@ public class RobotContainer {
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
+    autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
+    autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
 
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
