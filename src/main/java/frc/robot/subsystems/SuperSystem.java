@@ -26,6 +26,7 @@ public class SuperSystem {
     public BannerSensor floorSensor;
     
     public NamedPositions currentPosition = NamedPositions.Stow;
+    public NamedPositions lastPosition;
     
     boolean elevatorWithinRange;
 
@@ -38,7 +39,8 @@ public class SuperSystem {
         PVT_ELV_WRT,
         PVT_WRT_ELV,
         WRT_ELV_PVT,
-        WRT_PVT_ELV
+        WRT_PVT_ELV,
+        WRTELV_PVT
     }
 
     private boolean isStarted = false;
@@ -190,6 +192,7 @@ public class SuperSystem {
 
     // movement
     public Command moveTo(NamedPositions position) {
+        lastPosition = currentPosition;
         currentPosition = position;
         if (position.equals(NamedPositions.GroundIntake))
             return Commands.race(
@@ -207,6 +210,18 @@ public class SuperSystem {
                 position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
                               
             );
+        else if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake) {
+            return Commands.sequence(
+            preExecute(),
+            execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
+            NamedPositions.intermediateGround.pivotPosition, NamedPositions.intermediateGround.elevatorPosition, NamedPositions.intermediateGround.intermediateWristPosition),
+            wrist.setPositionCommand(NamedPositions.intermediateGround.finalWristPosition),
+            preExecute(),
+            execute(position.executionOrder, 10.0, 
+            position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
+            wrist.setPositionCommand(position.finalWristPosition)
+        );
+        }
         else return Commands.sequence(
             preExecute(),
             execute(position.executionOrder, 10.0, 
@@ -388,6 +403,17 @@ public class SuperSystem {
                         }
                     }
                     break;
+
+                case WRTELV_PVT:
+                wrist.setTargetPosition(wristAngle);
+                wristSet = true;
+                elevator.setTargetPosition(elevatorPosition);
+                elevatorSet = true;
+                if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                    pivot.setTargetPosition(pivotAngle);
+                    pivotSet = true;
+                }
+                break;
             
                 default:
                     break;
