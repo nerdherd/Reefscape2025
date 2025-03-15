@@ -157,12 +157,10 @@ public class SuperSystem {
     }
 
     public Command outtake() {
-        // if (currentPosition == NamedPositions.L1) { // TODO is it working??
-        //     return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
-        // }
-        // else {
-            return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
-        // }
+        if (currentPosition == NamedPositions.L1) { // TODO is it working??
+            return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
+        }
+        return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
     }
 
     public Command shootAlgae() {
@@ -217,7 +215,7 @@ public class SuperSystem {
 
     // movement
     private Command goTo(NamedPositions position) {
-        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor) {
+        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor || position == NamedPositions.ClimbDown) {
             return Commands.sequence(
                 preExecute(),
                 execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
