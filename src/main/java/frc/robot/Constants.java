@@ -268,12 +268,12 @@ public final class Constants {
       public static final Pose2d tag6Right = new Pose2d(13.938, 2.892, new Rotation2d(Math.toRadians(-60)));  
       public static final Pose2d tag6Mid = new Pose2d(13.770, 2.795, new Rotation2d(Math.toRadians(-60))); 
   
-      public static final Pose2d tag7Left = new Pose2d(14.481, 3.832, new Rotation2d(Math.toRadians(0))); 
-      public static final Pose2d tag7Right = new Pose2d(14.481, 4.220, new Rotation2d(Math.toRadians(0))); 
-      public static final Pose2d tag7Mid = new Pose2d(14.481, 4.026, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag7Left = new Pose2d(14.481, 3.732, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag7Right = new Pose2d(14.481, 4.120, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag7Mid = new Pose2d(14.481, 3.926, new Rotation2d(Math.toRadians(0))); 
   
-      public static final Pose2d tag8Left = new Pose2d(13.938, 5.160, new Rotation2d(Math.toRadians(60))); 
-      public static final Pose2d tag8Right = new Pose2d(13.602, 5.354, new Rotation2d(Math.toRadians(60))); 
+      public static final Pose2d tag8Left = new Pose2d(13.99, 5.140, new Rotation2d(Math.toRadians(60))); 
+      public static final Pose2d tag8Right = new Pose2d(14.10, 5.334, new Rotation2d(Math.toRadians(60))); 
       public static final Pose2d tag8Mid = new Pose2d(13.770, 5.257, new Rotation2d(Math.toRadians(60))); 
   
       public static final Pose2d tag9Left = new Pose2d(12.516, 5.354, new Rotation2d(Math.toRadians(120)));
