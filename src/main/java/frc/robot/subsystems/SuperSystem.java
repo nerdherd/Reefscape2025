@@ -320,7 +320,7 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            if (pivotAngle == PivotConstants.kElevatorPivotStowPosition) {
+            if (pivotAngle == NamedPositions.Stow.pivotPosition) {
                 elevatorWithinRange = elevator.atPositionWide();
             } else {
                 elevatorWithinRange = elevator.atPosition();
