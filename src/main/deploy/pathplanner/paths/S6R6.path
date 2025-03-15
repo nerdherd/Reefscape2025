@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 5.1,
-        "y": 2.725
+        "x": 5.202663934426229,
+        "y": 2.5145491803278683
       },
       "prevControl": {
-        "x": 5.406454918032787,
-        "y": 2.77827868852459
+        "x": 5.509118852459016,
+        "y": 2.5678278688524583
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "R6"
+      "linkedName": "r6"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.07578977529488
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "Bottom Half Paths",

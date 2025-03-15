@@ -7,49 +7,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S3R2"
+            "pathName": "S6r6"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R2C1"
+            "pathName": "r6R6"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C1R1"
+            "pathName": "R6C4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R1C1"
+            "pathName": "C4r7"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C1R12"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R12C1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C1R11"
+            "pathName": "r7R7"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Top Half Autos",
+  "folder": "Bottom Half Autos",
   "choreoAuto": false
 }

@@ -388,8 +388,10 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
-    autoChooser.addOption("2PieceLeft", new TwoPieceOffset(swerveDrive, "TopTwoPiece", superSystem));
-    autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
+    autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
+    // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
+    // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
     

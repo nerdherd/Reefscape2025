@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.521415879259421,
-        "y": 2.4286198011646474
+        "x": 4.9269467213114755,
+        "y": 1.9990778688524597
       },
       "isLocked": false,
       "linkedName": "R6"
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 54.03957555992522
+    "rotation": -127.01700751911238
   },
   "reversed": false,
   "folder": "Bottom Half Paths",

@@ -7,7 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S3R2"
+            "pathName": "S3r2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "r2R2"
           }
         },
         {
@@ -19,31 +25,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "C1R1"
+            "pathName": "C1r1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R1C1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C1R12"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "R12C1"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C1R11"
+            "pathName": "r1R1"
           }
         }
       ]
