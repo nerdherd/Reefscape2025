@@ -223,29 +223,29 @@ public final class Constants {
       public static final Pose2d tag4RightBlueOnRed = new Pose2d(9.51, 5.054, new Rotation2d(Math.toRadians(0))); // cage btm
      
       // Reef
-      public static final Pose2d tag17Left = new Pose2d(3.610, 2.892, new Rotation2d(Math.toRadians(-120)));
-      public static final Pose2d tag17Right = new Pose2d(3.946, 2.697, new Rotation2d(Math.toRadians(-120)));
-      public static final Pose2d tag17Mid = new Pose2d(3.778, 2.794, new Rotation2d(Math.toRadians(-120)));
- 
-      public static final Pose2d tag18Left = new Pose2d(3.067, 4.220, new Rotation2d(Math.toRadians(180)));
-      public static final Pose2d tag18Right = new Pose2d(3.067, 3.832, new Rotation2d(Math.toRadians(180)));
-      public static final Pose2d tag18Mid = new Pose2d(3.067, 4.026, new Rotation2d(Math.toRadians(180)));
- 
-      public static final Pose2d tag19Left = new Pose2d(3.946, 5.354, new Rotation2d(Math.toRadians(120)));
-      public static final Pose2d tag19Right = new Pose2d(3.610, 5.160, new Rotation2d(Math.toRadians(120)));
-      public static final Pose2d tag19Mid = new Pose2d(3.778, 5.257, new Rotation2d(Math.toRadians(120)));
- 
+      public static final Pose2d tag17Left = new Pose2d(3.513, 2.959, new Rotation2d(Math.toRadians(-120))); 
+      public static final Pose2d tag17Right = new Pose2d(3.88, 2.745, new Rotation2d(Math.toRadians(-120))); 
+      public static final Pose2d tag17Mid = new Pose2d(3.70, 2.6, new Rotation2d(Math.toRadians(-120))); 
+  
+      public static final Pose2d tag18Left = new Pose2d(3.067, 4.220, new Rotation2d(Math.toRadians(180))); 
+      public static final Pose2d tag18Right = new Pose2d(3.067, 3.832, new Rotation2d(Math.toRadians(180))); 
+      public static final Pose2d tag18Mid = new Pose2d(3.067, 4.026, new Rotation2d(Math.toRadians(180))); 
+  
+      public static final Pose2d tag19Left = new Pose2d(3.946, 5.354, new Rotation2d(Math.toRadians(120))); 
+      public static final Pose2d tag19Right = new Pose2d(3.610, 5.160, new Rotation2d(Math.toRadians(120))); 
+      public static final Pose2d tag19Mid = new Pose2d(3.778, 5.257, new Rotation2d(Math.toRadians(120))); 
+  
       public static final Pose2d tag20Left = new Pose2d(5.368, 5.160, new Rotation2d(Math.toRadians(60)));
       public static final Pose2d tag20Right = new Pose2d(5.032, 5.354, new Rotation2d(Math.toRadians(60)));
       public static final Pose2d tag20Mid = new Pose2d(5.200, 5.257, new Rotation2d(Math.toRadians(60)));
- 
+  
       public static final Pose2d tag21Left = new Pose2d(5.912, 3.832, new Rotation2d(Math.toRadians(0)));
       public static final Pose2d tag21Right = new Pose2d(5.912, 4.220, new Rotation2d(Math.toRadians(0)));
       public static final Pose2d tag21Mid = new Pose2d(5.912, 4.026, new Rotation2d(Math.toRadians(0)));
- 
-      public static final Pose2d tag22Left = new Pose2d(5.032, 2.697, new Rotation2d(Math.toRadians(-60)));
-      public static final Pose2d tag22Right = new Pose2d(5.368, 2.892, new Rotation2d(Math.toRadians(-60)));
-      public static final Pose2d tag22Mid = new Pose2d(5.200, 2.794, new Rotation2d(Math.toRadians(-60)));
+  
+      public static final Pose2d tag22Left = new Pose2d(5.1, 2.725, new Rotation2d(Math.toRadians(-60)));
+      public static final Pose2d tag22Right = new Pose2d(5.391, 2.921, new Rotation2d(Math.toRadians(-60)));
+      public static final Pose2d tag22Mid = new Pose2d(5.26, 2.77, new Rotation2d(Math.toRadians(-60)));
      
       // Red Side
       public static final Pose2d tag1Left = new Pose2d(16.771, 1.490, new Rotation2d(Math.toRadians(-55))); // Bot Station
@@ -264,29 +264,29 @@ public final class Constants {
       public static final Pose2d tag15LeftRedOnBlue = new Pose2d(8.03, 0.802, new Rotation2d(Math.toRadians(180))); // cage btm
  
       // Reef
-      public static final Pose2d tag6Left = new Pose2d(13.602, 2.697, new Rotation2d(Math.toRadians(-60)));  
+      public static final Pose2d tag6Left = new Pose2d(13.602, 2.697, new Rotation2d(Math.toRadians(-60)));   
       public static final Pose2d tag6Right = new Pose2d(13.938, 2.892, new Rotation2d(Math.toRadians(-60)));  
-      public static final Pose2d tag6Mid = new Pose2d(13.770, 2.794, new Rotation2d(Math.toRadians(-60)));
- 
-      public static final Pose2d tag7Left = new Pose2d(14.481, 3.832, new Rotation2d(Math.toRadians(0)));
-      public static final Pose2d tag7Right = new Pose2d(14.481, 4.220, new Rotation2d(Math.toRadians(0)));
-      public static final Pose2d tag7Mid = new Pose2d(14.481, 4.026, new Rotation2d(Math.toRadians(0)));
- 
-      public static final Pose2d tag8Left = new Pose2d(13.938, 5.160, new Rotation2d(Math.toRadians(60)));
-      public static final Pose2d tag8Right = new Pose2d(13.602, 5.354, new Rotation2d(Math.toRadians(60)));
-      public static final Pose2d tag8Mid = new Pose2d(13.770, 5.257, new Rotation2d(Math.toRadians(60)));
- 
+      public static final Pose2d tag6Mid = new Pose2d(13.770, 2.795, new Rotation2d(Math.toRadians(-60))); 
+  
+      public static final Pose2d tag7Left = new Pose2d(14.481, 3.832, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag7Right = new Pose2d(14.481, 4.220, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag7Mid = new Pose2d(14.481, 4.026, new Rotation2d(Math.toRadians(0))); 
+  
+      public static final Pose2d tag8Left = new Pose2d(13.938, 5.160, new Rotation2d(Math.toRadians(60))); 
+      public static final Pose2d tag8Right = new Pose2d(13.602, 5.354, new Rotation2d(Math.toRadians(60))); 
+      public static final Pose2d tag8Mid = new Pose2d(13.770, 5.257, new Rotation2d(Math.toRadians(60))); 
+  
       public static final Pose2d tag9Left = new Pose2d(12.516, 5.354, new Rotation2d(Math.toRadians(120)));
       public static final Pose2d tag9Right = new Pose2d(12.180, 5.160, new Rotation2d(Math.toRadians(120)));
       public static final Pose2d tag9Mid = new Pose2d(12.348, 5.257, new Rotation2d(Math.toRadians(120)));
- 
+  
       public static final Pose2d tag10Left = new Pose2d(11.636, 4.220, new Rotation2d(Math.toRadians(180)));
       public static final Pose2d tag10Right = new Pose2d(11.636, 3.832, new Rotation2d(Math.toRadians(180)));
       public static final Pose2d tag10Mid = new Pose2d(11.636, 4.026, new Rotation2d(Math.toRadians(180)));
- 
+  
       public static final Pose2d tag11Left = new Pose2d(12.180, 2.892, new Rotation2d(Math.toRadians(-120)));
       public static final Pose2d tag11Right = new Pose2d(12.516, 2.697, new Rotation2d(Math.toRadians(-120)));
-      public static final Pose2d tag11Mid = new Pose2d(12.348, 2.794, new Rotation2d(Math.toRadians(-120)));
+      public static final Pose2d tag11Mid = new Pose2d(12.348, 2.795, new Rotation2d(Math.toRadians(-120)));
     }
   }
 
@@ -443,7 +443,7 @@ public final class Constants {
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
     public static final double kIntakePower  = -2.4;
-    public static final double kOuttakePower = 1.0;
+    public static final double kOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
   }
   public static final class WristConstants{
@@ -501,10 +501,10 @@ public final class Constants {
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180, -0.180      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210, -0.210      ),
       L3(                  ExecutionOrder.PVT_ELV_WRT , 0.25,  1.14, -0.240, -0.240      ),
-      L4(                  ExecutionOrder.PVT_ELV_WRT , 0.26,  3.18, -0.270, -0.270      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.26,    -1.12, -0.570, -0.570      ),
-      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT , 0.247, 0.5,  -0.317, -0.317      ), 
-      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT , 0.24,  2,    -0.307, -0.307      ), 
+      L4(                  ExecutionOrder.PVT_WRT_ELV , 0.255,  3.18, -0.270, -0.270      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
+      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT , 0.247, 0.5,  -0.267, -0.267      ), 
+      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT , 0.24,  2,    -0.267, -0.267      ), 
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.075, 0.05, -0.164, -0.164      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
       intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      ),

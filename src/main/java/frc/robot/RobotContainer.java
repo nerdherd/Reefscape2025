@@ -41,6 +41,7 @@ import frc.robot.commands.autos.PathOnlyBottom2Piece;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.PreloadTaxiAutoMove;
 import frc.robot.commands.autos.TwoPiece;
+import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.TwoPiecePath;
 import frc.robot.Constants.ROBOT_ID;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -387,7 +388,7 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
-    autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    autoChooser.addOption("2PieceLeft", new TwoPieceOffset(swerveDrive, "TopTwoPiece", superSystem));
     autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));

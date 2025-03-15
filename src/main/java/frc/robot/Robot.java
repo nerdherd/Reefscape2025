@@ -92,6 +92,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Brake);
     m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Brake);
     m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.superSystem.reConfigureMotors();
 
     m_robotContainer.refreshSupersystem();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();

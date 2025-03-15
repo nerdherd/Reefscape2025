@@ -86,7 +86,7 @@ public class SuperSystem {
         elevator.setMotorConfigs();
         wrist.configurePID(wrist.motorConfigs);
         intakeRoller.configureMotor(intakeRoller.motorConfigs);
-
+        climbMotor.configurePID(climbMotor.motorConfigs);
     }
 
     public Command zeroEncoders() {
@@ -172,7 +172,7 @@ public class SuperSystem {
     }
 
     public Command climbHardClamp() {
-        return climbMotor.setVoltageCommand(-3.0);
+        return climbMotor.setVoltageCommand(-4.5);
     }
 
     public Command climbSoftClamp() {

@@ -32,6 +32,7 @@ public class Climb extends SubsystemBase implements Reportable{
     private double desiredPosition; // Should be ~90 or wherever initial position is
     private boolean enabled = true;
     private double desiredVoltage = 0;
+    public TalonFXConfiguration motorConfigs;
 
     public Climb() {
         motor = new TalonFX(ClimbConstants.kMotorID);
@@ -42,7 +43,7 @@ public class Climb extends SubsystemBase implements Reportable{
         motor.setControl(neutralRequest);
 
         // configure motor
-        TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
+        motorConfigs = new TalonFXConfiguration();
         configurePID(motorConfigs);
         
         zeroEncoder();
@@ -51,7 +52,7 @@ public class Climb extends SubsystemBase implements Reportable{
 
     //****************************** SETUP METHODS ******************************//
 
-    private void configurePID(TalonFXConfiguration motorConfigs) {
+    public void configurePID(TalonFXConfiguration motorConfigs) {
         motorConfigurator.refresh(motorConfigs);
 
         // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
