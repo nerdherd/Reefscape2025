@@ -322,7 +322,7 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            if (pivotAngle == NamedPositions.Stow.pivotPosition || pivotAngle == NamedPositions.intermediateGround.pivotPosition) {
+            if (pivotAngle == NamedPositions.Stow.pivotPosition || pivotAngle == NamedPositions.intermediateGround.pivotPosition || pivotAngle == NamedPositions.Station.pivotPosition) {
                 elevatorWithinRange = elevator.atPositionWide();
             } else {
                 elevatorWithinRange = elevator.atPosition();

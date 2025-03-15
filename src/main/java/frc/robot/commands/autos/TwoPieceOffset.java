@@ -26,7 +26,9 @@ public class TwoPieceOffset extends SequentialCommandGroup {
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll), //Check if needed
             // Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
-            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose))//,
+            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose))
+
             // Commands.runOnce(() ),
             
             /*Commands.sequence(

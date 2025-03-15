@@ -212,7 +212,7 @@ public final class Constants {
       public static final Pose2d tag12Mid = new Pose2d(1.678, 0.83, new Rotation2d(Math.toRadians(-125))); // Bot Station
  
       public static final Pose2d tag13Left = new Pose2d(0.0887, 6.488, new Rotation2d(Math.toRadians(125))); // Top Station
-      public static final Pose2d tag13Right = new Pose2d(1.774, 7.148, new Rotation2d(Math.toRadians(125))); // Top Station
+      public static final Pose2d tag13Right = new Pose2d(1.72,7.269, new Rotation2d(Math.toRadians(125))); // Top Station
       public static final Pose2d tag13Mid = new Pose2d(1.367, 6.896, new Rotation2d(Math.toRadians(125))); // Top Station
  
       public static final Pose2d tag16Mid = new Pose2d(6.0, 0.75, new Rotation2d(Math.toRadians(-90))); // Processor

@@ -391,7 +391,7 @@ public class RobotContainer {
     
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
-    autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
+    autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
     autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
     autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
