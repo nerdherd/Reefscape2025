@@ -31,11 +31,15 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                     superSystem.holdPiece(),
                     Commands.parallel(
                         AutoBuilder.followPath(pathGroup.get(0)), // Go to ready
-                        superSystem.moveToAuto(NamedPositions.L4Auto)
+                        superSystem.moveToAuto(NamedPositions.L4AutoPre)
                         ),
-                    AutoBuilder.followPath(pathGroup.get(1)) // Move to reef
+                    Commands.parallel(
+                        superSystem.moveToAuto(NamedPositions.L4Auto),
+                        AutoBuilder.followPath(pathGroup.get(1)) // Move to reef
+                    )
                 ),
                 Commands.sequence(
+                    Commands.waitSeconds(0.3),
                     superSystem.outtake(),
                     Commands.waitSeconds(0.3)
                     ),
@@ -63,22 +67,22 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                             Commands.waitSeconds(0.3)
                         ),
                         AutoBuilder.followPath(pathGroup.get(3))
-                    ),
-                    Commands.parallel(
-                        superSystem.moveToAuto(NamedPositions.L4Auto),
-                        AutoBuilder.followPath(pathGroup.get(4))
-                    )
-                ),
-                Commands.sequence(
-                    superSystem.outtake(),
-                    Commands.waitSeconds(0.5),
-                    superSystem.stopRoller()
-                ),
+                    ))
+                //     Commands.parallel(
+                //         superSystem.moveToAuto(NamedPositions.L4Auto),
+                //         AutoBuilder.followPath(pathGroup.get(4))
+                //     )
+                // ),
+                // Commands.sequence(
+                //     superSystem.outtake(),
+                //     Commands.waitSeconds(0.5),
+                //     superSystem.stopRoller()
+                // ),
 
-                Commands.sequence(
-                    superSystem.moveTo(NamedPositions.L5),
-                    superSystem.moveTo(NamedPositions.SemiStow)
-                )
+                // Commands.sequence(
+                //     superSystem.moveTo(NamedPositions.L5),
+                //     superSystem.moveTo(NamedPositions.SemiStow)
+                // )
             )
         );
     }

@@ -442,7 +442,7 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kIntakePower  = -2.4;
+    public static final double kIntakePower  = -2.8;
     public static final double kOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
   }
@@ -503,6 +503,7 @@ public final class Constants {
       L3(                  ExecutionOrder.PVT_ELV_WRT , 0.25,  1.14, -0.240, -0.570      ),
       L4(                  ExecutionOrder.PVT_WRT_ELV , 0.255,  3.18, -0.270, -0.570      ),
       L4Auto(              ExecutionOrder.WRTPVT_ELV_Auto , 0.255,  3.18, -0.270, -0.570      ),
+      L4AutoPre(              ExecutionOrder.ALL_TOGETHER , 0.255,  0.0, -0.570, -0.570      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
       AlgaeL2(             ExecutionOrder.PVT_ELV_WRT , 0.247, 0.5,  -0.267, -0.570      ), 
       AlgaeL3(             ExecutionOrder.PVT_ELV_WRT , 0.24,  2,    -0.267, -0.570      ), 
