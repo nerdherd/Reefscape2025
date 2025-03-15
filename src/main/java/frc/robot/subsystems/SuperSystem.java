@@ -7,6 +7,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.signals.S1StateValue;
 import com.ctre.phoenix6.signals.S2StateValue;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.hal.CANData;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -216,7 +217,7 @@ public class SuperSystem {
 
     // movement
     private Command goTo(NamedPositions position) {
-        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake) {
+        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor) {
             return Commands.sequence(
                 preExecute(),
                 execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
@@ -321,7 +322,7 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            if (pivotAngle == NamedPositions.Stow.pivotPosition) {
+            if (pivotAngle == NamedPositions.Stow.pivotPosition || pivotAngle == NamedPositions.intermediateGround.pivotPosition) {
                 elevatorWithinRange = elevator.atPositionWide();
             } else {
                 elevatorWithinRange = elevator.atPosition();

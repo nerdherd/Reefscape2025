@@ -787,7 +787,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if(RobotContainer.IsRedSide())
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(13, 4, 5.06, xp, yp)) {
                 return 1;
             }
             // Station
@@ -809,7 +809,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         else
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 9, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 5.06, xp, yp)) {
                 return 1;
             }
             // Bot and Top Station

@@ -21,10 +21,11 @@ public class TwoPieceOffset extends SequentialCommandGroup {
         
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
 
+        Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
         addCommands(
-            Commands.runOnce(swerve.getImu()::zeroAll), //Check if needed
+            // Commands.runOnce(swerve.getImu()::zeroAll), //Check if needed
             // Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
-            // Commands.runOnce(()->swerve.resetOdometryWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
             
             Commands.sequence(
                 Commands.sequence(
