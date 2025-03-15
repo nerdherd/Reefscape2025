@@ -27,19 +27,19 @@ public class TwoPieceOffset extends SequentialCommandGroup {
             Commands.runOnce(swerve.getImu()::zeroAll), //Check if needed
             // Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose))
+            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
 
             // Commands.runOnce(() ),
             
-            /*Commands.sequence(
+            Commands.sequence(
                 Commands.sequence(
-                    superSystem.holdPiece(),
+                    // superSystem.holdPiece(),
                     Commands.parallel(
-                        AutoBuilder.followPath(pathGroup.get(0)), // Go to ready
-                        superSystem.moveToAuto(NamedPositions.L4AutoPre)
-                        ),
+                        AutoBuilder.followPath(pathGroup.get(0)) // Go to ready
+                        // superSystem.moveToAuto(NamedPositions.L4AutoPre)
+                    ),
                     Commands.parallel(
-                        superSystem.moveToAuto(NamedPositions.L4Auto),
+                        // superSystem.moveToAuto(NamedPositions.L4Auto),
                         AutoBuilder.followPath(pathGroup.get(1)) // Move to reef
                     )
                 ),
@@ -47,15 +47,15 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                     Commands.waitSeconds(0.3),
                     superSystem.outtake(),
                     Commands.waitSeconds(0.3)
+                ),
+                Commands.sequence(
+                    Commands.parallel(
+                        superSystem.moveTo(NamedPositions.L5),
+                        superSystem.stopRoller()
                     ),
-                    Commands.sequence(
-                        Commands.parallel(
-                            superSystem.moveTo(NamedPositions.L5),
-                            superSystem.stopRoller()
-                        ),
-                        Commands.parallel(
-                            AutoBuilder.followPath(pathGroup.get(2)), // To station
-                            superSystem.moveToAuto(NamedPositions.Station)
+                    Commands.parallel(
+                        AutoBuilder.followPath(pathGroup.get(2)), // To station
+                        superSystem.moveToAuto(NamedPositions.Station)
                     )
                 ),
                 Commands.sequence(
@@ -72,23 +72,22 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                             Commands.waitSeconds(0.3)
                         ),
                         AutoBuilder.followPath(pathGroup.get(3))
-                    ))
-                //     Commands.parallel(
-                //         superSystem.moveToAuto(NamedPositions.L4Auto),
-                //         AutoBuilder.followPath(pathGroup.get(4))
-                //     )
-                // ),
-                // Commands.sequence(
-                //     superSystem.outtake(),
-                //     Commands.waitSeconds(0.5),
-                //     superSystem.stopRoller()
-                // ),
-
-                // Commands.sequence(
-                //     superSystem.moveTo(NamedPositions.L5),
-                //     superSystem.moveTo(NamedPositions.SemiStow)
-                // )
-            )*/
+                    )
+                )
+                    // Commands.parallel(
+                    //     superSystem.moveToAuto(NamedPositions.L4Auto),
+                    //     AutoBuilder.followPath(pathGroup.get(4))
+                    // ),
+                    // Commands.sequence(
+                    //     superSystem.outtake(),
+                    //     Commands.waitSeconds(0.5),
+                    //     superSystem.stopRoller()
+                    // ),
+                    // Commands.sequence(
+                    //     superSystem.moveTo(NamedPositions.L5),
+                    //     superSystem.moveTo(NamedPositions.SemiStow)
+                    // )
+            )
         );
     }
 }
