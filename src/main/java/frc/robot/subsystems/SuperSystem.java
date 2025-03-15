@@ -47,7 +47,8 @@ public class SuperSystem {
         PVT_WRT_ELV,
         WRT_ELV_PVT,
         WRT_PVT_ELV,
-        WRTELV_PVT
+        WRTELV_PVT,
+        WRTPVT_ELV_Auto
     }
 
     private boolean isStarted = false;
@@ -418,15 +419,26 @@ public class SuperSystem {
                     break;
 
                 case WRTELV_PVT:
-                wrist.setTargetPosition(wristAngle);
-                wristSet = true;
-                elevator.setTargetPosition(elevatorPosition);
-                elevatorSet = true;
-                if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                    wrist.setTargetPosition(wristAngle);
+                    wristSet = true;
+                    elevator.setTargetPosition(elevatorPosition);
+                    elevatorSet = true;
+                    if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                        pivot.setTargetPosition(pivotAngle);
+                        pivotSet = true;
+                    }
+                    break;
+                
+                case WRTPVT_ELV_Auto:
+                    wrist.setTargetPosition(wristAngle);
+                    wristSet = true;
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                }
-                break;
+                    if (wristAtPositionWide.getAsBoolean() && pivotAtPositionWide.getAsBoolean()) {
+                        elevator.setTargetPosition(elevatorPosition);
+                        elevatorSet = true;
+                    }
+                    break;
             
                 default:
                     break;

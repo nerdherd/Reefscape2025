@@ -29,29 +29,31 @@ public class TwoPieceOffset extends SequentialCommandGroup {
             Commands.sequence(
                 Commands.sequence(
                     superSystem.holdPiece(),
-                    AutoBuilder.followPath(pathGroup.get(0)),
-                    Commands.sequence(
-                        superSystem.moveToAuto(NamedPositions.L4),
-                        AutoBuilder.followPath(pathGroup.get(1))
-                    )
+                    Commands.parallel(
+                        AutoBuilder.followPath(pathGroup.get(0)), // Go to ready
+                        superSystem.moveToAuto(NamedPositions.L4Auto)
+                        ),
+                    AutoBuilder.followPath(pathGroup.get(1)) // Move to reef
                 ),
                 Commands.sequence(
                     superSystem.outtake(),
-                    Commands.waitSeconds(0.3),
-                    superSystem.stopRoller()
-                ),
-                Commands.sequence(
-                    superSystem.moveTo(NamedPositions.L5),
-                    Commands.parallel(
-                        AutoBuilder.followPath(pathGroup.get(2)),
-                        superSystem.moveToAuto(NamedPositions.Station)
+                    Commands.waitSeconds(0.3)
+                    ),
+                    Commands.sequence(
+                        Commands.parallel(
+                            superSystem.moveTo(NamedPositions.L5),
+                            superSystem.stopRoller()
+                        ),
+                        Commands.parallel(
+                            AutoBuilder.followPath(pathGroup.get(2)), // To station
+                            superSystem.moveToAuto(NamedPositions.Station)
                     )
                 ),
                 Commands.sequence(
                     // superSystem.intake(),
                     Commands.deadline(
                         superSystem.intakeUntilSensed(),
-                        Commands.waitSeconds(3)),
+                        Commands.waitSeconds(10)),
                     // Commands.waitSeconds(2),
                     superSystem.holdPiece()
                 ),
@@ -62,8 +64,8 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                         ),
                         AutoBuilder.followPath(pathGroup.get(3))
                     ),
-                    Commands.sequence(
-                        superSystem.moveToAuto(NamedPositions.L4),
+                    Commands.parallel(
+                        superSystem.moveToAuto(NamedPositions.L4Auto),
                         AutoBuilder.followPath(pathGroup.get(4))
                     )
                 ),

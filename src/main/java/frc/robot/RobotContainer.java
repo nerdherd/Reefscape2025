@@ -388,6 +388,12 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
+    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+    // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
+    autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
+    autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
+    autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
+    
     autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
     // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
     autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
@@ -398,11 +404,6 @@ public class RobotContainer {
     // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
     // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
     
-    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
-    // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
-    autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
-    autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
-    autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
 
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
