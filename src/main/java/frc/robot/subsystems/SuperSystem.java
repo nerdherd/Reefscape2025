@@ -49,7 +49,7 @@ public class SuperSystem {
         WRT_ELV_PVT,
         WRT_PVT_ELV,
         WRTELV_PVT,
-        WRTPVT_ELV_Auto
+        WRTPVT_ELV
     }
 
     private boolean isStarted = false;
@@ -430,7 +430,7 @@ public class SuperSystem {
                     }
                     break;
                 
-                case WRTPVT_ELV_Auto:
+                case WRTPVT_ELV:
                     wrist.setTargetPosition(wristAngle);
                     wristSet = true;
                     pivot.setTargetPosition(pivotAngle);
