@@ -297,8 +297,8 @@ public class RobotContainer {
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-      .onTrue(superSystem.())
-      .onFalse(superSystem.stopRoller());
+      .onTrue(superSystem.repositionCoralLeft())
+      .onFalse(superSystem.holdPiece());
     
     operatorController.controllerRight()
     .onTrue(superSystem.moveTo(NamedPositions.Processor));

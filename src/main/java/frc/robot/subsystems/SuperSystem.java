@@ -116,19 +116,26 @@ public class SuperSystem {
         return intakeRoller.setVoltageCommand(RollerConstants.kIntakePower);
     }
 
+    public Command repositionCoral() {
+        return Commands.sequence(
+            repositionCoralLeft(),
+            Commands.waitSeconds(0.3),
+            repositionCoralRight(),
+            holdPiece()
+        );
+    }
+
     public Command repositionCoralLeft() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(0.5),
-            intakeRoller.setVoltageCommandRight(1.0)
-
+            intakeRoller.setVoltageCommandLeft(-0.5),
+            intakeRoller.setVoltageCommandRight(-1.0)
         );
     }
 
     public Command repositionCoralRight() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(-1.0),
+            intakeRoller.setVoltageCommandLeft(-1),
             intakeRoller.setVoltageCommandRight(-0.5)
-
         );
     }
 
