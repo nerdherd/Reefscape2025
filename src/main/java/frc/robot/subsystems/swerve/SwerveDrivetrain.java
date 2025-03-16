@@ -684,6 +684,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void stopAutoPath() {
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
             pathfindingCommand.cancel();
+            stopModules();
         }
     }
 

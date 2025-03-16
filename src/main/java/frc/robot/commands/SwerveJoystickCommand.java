@@ -150,13 +150,13 @@ public class SwerveJoystickCommand extends Command {
         // let's not pass the driver's speed into the autopath...
         if(zoneId.get() != 0)
         { 
-            // If both buttons held
-            if(moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed) {
-                checkButtonStates((moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed), 0);
-                wasLeftPressed = moveLeft.get();
-                wasRightPressed = moveRight.get();
-                return;
-            }
+            // // If both buttons held
+            // if(moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed) {
+            //     checkButtonStates((moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed), 0);
+            //     wasLeftPressed = moveLeft.get();
+            //     wasRightPressed = moveRight.get();
+            //     return;
+            // }
 
             // Check moveLeft states
             checkButtonStates(moveLeft.get(), wasLeftPressed, -1); // autopaths called in here

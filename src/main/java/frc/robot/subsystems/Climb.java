@@ -59,10 +59,10 @@ public class Climb extends SubsystemBase implements Reportable{
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         motorConfigs.Feedback.SensorToMechanismRatio = 0.5; 
         // motorConfigs.Feedback.RotorToSensorRatio;
-        motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+        motorConfigs.CurrentLimits.SupplyCurrentLimit = 45;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 45;
-        motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+        motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0;
         motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     
         motorConfigs.Slot0.kP = ClimbConstants.kPMotor;

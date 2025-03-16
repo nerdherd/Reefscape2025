@@ -127,7 +127,7 @@ public class SuperSystem {
 
     public Command repositionCoralLeft() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(-0.5),
+            intakeRoller.setVoltageCommandLeft(0.5),
             intakeRoller.setVoltageCommandRight(-1.0)
         );
     }
@@ -135,7 +135,7 @@ public class SuperSystem {
     public Command repositionCoralRight() {
         return Commands.sequence(
             intakeRoller.setVoltageCommandLeft(-1),
-            intakeRoller.setVoltageCommandRight(-0.5)
+            intakeRoller.setVoltageCommandRight(0.5)
         );
     }
 
