@@ -502,7 +502,7 @@ public final class Constants {
     public enum NamedPositions { 
       Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
-      // GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ),
+      // GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ), Before plate
       GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.02, 0.55, -0.780, -0.780      ),
       Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.4),
       Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
@@ -517,7 +517,7 @@ public final class Constants {
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
       AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
       AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ), 
-      ClimbDown(           ExecutionOrder.WRT_ELV_PVT ,   -0.06, 1.38, 0, 0      ),
+      ClimbDown(           ExecutionOrder.WRT_ELV_PVT ,   -0.06, 1.5, 0, 0      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
       intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      ),
       ;
