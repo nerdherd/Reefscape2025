@@ -254,15 +254,9 @@ public class RobotContainer {
       superSystem.moveTo(NamedPositions.AlgaeL3)
     );
 
-    driverController.dpadLeft()
-    .onTrue(superSystem.repositionCoralLeft())
-    .onFalse(superSystem.stopRoller());
-    // driverController.dpadRight().onTrue(
-    //   superSystem.repositionCoralRight()
-    // );
     driverController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
+      .onTrue(superSystem.repositionCoralLeft())
+      .onFalse(superSystem.holdPiece());
 
     // Climb sequence
     driverController.buttonDown() // Prepare Position for Climb
@@ -303,7 +297,7 @@ public class RobotContainer {
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-      .onTrue(superSystem.outtake())
+      .onTrue(superSystem.())
       .onFalse(superSystem.stopRoller());
     
     operatorController.controllerRight()
