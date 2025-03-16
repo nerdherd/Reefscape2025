@@ -222,7 +222,7 @@ public class SuperSystem {
 
     // movement
     private Command goTo(NamedPositions position) {
-        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor || position == NamedPositions.ClimbDown) {
+        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor) {
             return Commands.sequence(
                 preExecute(),
                 execute(NamedPositions.intermediateGround.executionOrder, 10.0, 

@@ -515,10 +515,9 @@ public final class Constants {
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.570      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      AlgaeL2(             ExecutionOrder.WRTPVT_ELV , 0.247, 0,  -0.266, -0.570      ), 
-      AlgaeL3(             ExecutionOrder.WRTPVT_ELV , 0.24,  1,    -0.266, -0.570      ), 
-      // ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 0.55, -0.760, -0.760      ),
-      ClimbDown(           ExecutionOrder.WRT_ELV_PVT  ,   -0.06, 1.5, 0, 0      ),
+      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
+      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ), 
+      ClimbDown(           ExecutionOrder.WRT_ELV_PVT ,   -0.06, 1.38, 0, 0      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
       intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      ),
       ;
