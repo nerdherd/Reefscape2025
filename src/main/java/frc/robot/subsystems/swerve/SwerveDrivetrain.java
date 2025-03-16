@@ -1025,6 +1025,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
                 tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
                 tab.addNumber("Odometry Angle", () -> poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+                tab.add("Pose Estimator Pose", poseEstimator.getEstimatedPosition());
+                tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
                 tab.addString("Drive Mode", () -> this.driveMode.toString());
                 break;
         }

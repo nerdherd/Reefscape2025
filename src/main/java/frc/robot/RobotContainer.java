@@ -254,8 +254,8 @@ public class RobotContainer {
     );
 
     driverController.triggerLeft()
-      .onTrue(superSystem.repositionCoralLeft())
-      .onFalse(superSystem.holdPiece());
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
 
     // Climb sequence
     driverController.buttonDown() // Prepare Position for Climb
@@ -296,7 +296,7 @@ public class RobotContainer {
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-      .onTrue(superSystem.repositionCoralLeft())
+      .onTrue(superSystem.repositionCoral())
       .onFalse(superSystem.holdPiece());
     
     operatorController.controllerRight()

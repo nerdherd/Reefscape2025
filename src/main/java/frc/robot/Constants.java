@@ -207,9 +207,9 @@ public final class Constants {
     }
 
     public static final class MapPoses {
-      public static final double CCReefOffset = 0.0; // meters
+      public static final double CWReefOffset = 0.0; // meters
       
-      public static Pose2d offsetPosWithRotation(Pose2d pos) { return offsetPosWithRotation(pos, CCReefOffset); }
+      public static Pose2d offsetPosWithRotation(Pose2d pos) { return offsetPosWithRotation(pos, CWReefOffset); }
       public static Pose2d offsetPosWithRotation(Pose2d pos, double offset) {
         return new Pose2d(pos.getX() + offset * (Math.cos(pos.getRotation().getRadians() - Math.toRadians(90.0))), 
                           pos.getY() + offset * (Math.sin(pos.getRotation().getRadians() - Math.toRadians(90.0))), 
@@ -503,7 +503,7 @@ public final class Constants {
       Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
       // GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ), Before plate
-      GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.02, 0.55, -0.780, -0.780      ),
+      GroundIntake(        ExecutionOrder.WRTELV_PVT, 0.02, 0.55, -0.780, -0.780      ),
       Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.4),
       Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
       Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ),

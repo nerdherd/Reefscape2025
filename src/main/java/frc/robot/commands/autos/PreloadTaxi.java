@@ -29,6 +29,7 @@ public class PreloadTaxi extends SequentialCommandGroup{
             Commands.sequence(
                 Commands.sequence(
                     superSystem.holdPiece(),
+                    Commands.waitSeconds(3),
                     AutoBuilder.followPath(pathGroup.get(0)), 
                     superSystem.moveToAuto(NamedPositions.L4Auto)
                 ),

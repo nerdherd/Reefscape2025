@@ -25,21 +25,18 @@ public class TwoPieceOffset extends SequentialCommandGroup {
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll), //Check if needed
-            // Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
 
-            // Commands.runOnce(() ),
-            
             Commands.sequence(
                 Commands.sequence(
-                    // superSystem.holdPiece(),
+                    superSystem.holdPiece(),
                     Commands.parallel(
-                        AutoBuilder.followPath(pathGroup.get(0)) // Go to ready
-                        // superSystem.moveToAuto(NamedPositions.L4AutoPre)
+                        AutoBuilder.followPath(pathGroup.get(0)), // Go to ready
+                        superSystem.moveToAuto(NamedPositions.L4AutoPre)
                     ),
                     Commands.parallel(
-                        // superSystem.moveToAuto(NamedPositions.L4Auto),
+                        superSystem.moveToAuto(NamedPositions.L4Auto),
                         AutoBuilder.followPath(pathGroup.get(1)) // Move to reef
                     )
                 ),
@@ -59,11 +56,11 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                     )
                 ),
                 Commands.sequence(
-                    // superSystem.intake(),
-                    Commands.deadline(
-                        superSystem.intakeUntilSensed(),
-                        Commands.waitSeconds(10)),
-                    // Commands.waitSeconds(2),
+                    superSystem.intake(),
+                    // Commands.deadline(
+                    //     superSystem.intakeUntilSensed(),
+                    //     Commands.waitSeconds(10)),
+                    Commands.waitSeconds(3),
                     superSystem.holdPiece()
                 ),
                 Commands.sequence(
