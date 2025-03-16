@@ -408,8 +408,8 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 60.0; // TODO: NEED TO CALCULATE AND INPUT A kP
-    // 1V = kP * 0.01         max kP = 100 .01 error is pretty high
+    public static final double kPElevatorPivot = 50; // TODO: NEED TO CALCULATE AND INPUT A kP
+    // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
     public static final double kVElevatorPivot = 0; 
@@ -417,7 +417,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; 
     public static final double kGElevatorPivot = 0;
 
-    public static final double kFElevatorPivot = 0.5; 
+    public static final double kFElevatorPivot = 0.22; 
 
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
@@ -427,12 +427,12 @@ public final class Constants {
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 80.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
+    public static final double kElevatorPivotGearRatio = 125.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 0.5;//0.25 // 0.4S
-    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 3; // 0.5
+    public static final double kEPivotCruiseVelocity = 0.8;//0.25 // 0.4S
+    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 5; // 0.5
     public static final double kElevatorPivotJerk = kElevatorPivotCruiseAcceleration * 10; 
     
   }
@@ -517,7 +517,8 @@ public final class Constants {
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
       AlgaeL2(             ExecutionOrder.WRTPVT_ELV , 0.247, 0,  -0.266, -0.570      ), 
       AlgaeL3(             ExecutionOrder.WRTPVT_ELV , 0.24,  1,    -0.266, -0.570      ), 
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.085, 0.55, -0.760, -0.760      ),
+      // ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 0.55, -0.760, -0.760      ),
+      ClimbDown(           ExecutionOrder.WRT_ELV_PVT  ,   -0.06, 1.5, 0, 0      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
       intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      ),
       ;
