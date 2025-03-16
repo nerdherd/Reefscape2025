@@ -41,6 +41,7 @@ import frc.robot.commands.autos.PathOnlyBottom2Piece;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.PreloadTaxiAutoMove;
 import frc.robot.commands.autos.TwoPiece;
+import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.TwoPiecePath;
 import frc.robot.Constants.ROBOT_ID;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -179,22 +180,24 @@ public class RobotContainer {
       () -> -driverController.getLeftY(), // Horizontal translation
       () -> driverController.getLeftX(), // Vertical Translation
       () -> driverController.getRightX(), // Rotation
+      // () -> driverController.getControllerRight(), // robot oriented variable (false = field oriented)
       () -> false, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
       () -> driverController.getBumperLeft(), //move left of 
       () -> driverController.getBumperRight(), // move right of
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
       () -> swerveDrive.getCurrentZoneByPose(),
-      () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
+      () -> false,
+      // () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
-        if (driverController.getButtonRight())
-          if (!IsRedSide())
-            return 90.0; 
-          else return 270.0;
-        if (driverController.getButtonDown())
-           return 180.0;
-        if (driverController.getButtonUp())
-          return 0.0;
+        // if (driverController.getButtonRight())
+        //   if (!IsRedSide())
+        //     return 90.0; 
+        //   else return 270.0;
+        // if (driverController.getButtonDown())
+        //    return 180.0;
+        // if (driverController.getButtonUp())
+        //   return 0.0;
         return swerveDrive.getImu().getHeading();
       }
     );
@@ -227,7 +230,6 @@ public class RobotContainer {
         double currentPos = elevator.getPosition();
         elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
         }
-        SmartDashboard.putNumber("Operator Left Y", operatorController.getLeftY());
       }, elevator));  
 
   }
@@ -251,31 +253,27 @@ public class RobotContainer {
       superSystem.moveTo(NamedPositions.AlgaeL3)
     );
 
-    driverController.dpadLeft().onTrue(
-      superSystem.repositionCoralLeft()
-    );
-    driverController.dpadRight().onTrue(
-      superSystem.repositionCoralRight()
-    );
     driverController.triggerLeft()
       .onTrue(superSystem.outtake())
       .onFalse(superSystem.stopRoller());
 
-
     // Climb sequence
     driverController.buttonDown() // Prepare Position for Climb
-      .onTrue(superSystem.climbCommandUp());
-
-    // driverController.buttonUp() // Prepare or Release Climb
-    // .onTrue(superSystem.climbPrep()) 
-    // .onFalse(superSystem.stopClimb());
+      .onTrue(Commands.sequence(
+        Commands.runOnce(() -> climbMotor.setEnabled(true)),
+        superSystem.climbCommandUp()));
 
     driverController.buttonLeft() // Soft Clamp
-    .onTrue(superSystem.climbSoftClamp())
-    .onFalse(superSystem.stopClimb());
-
-    driverController.buttonUp() // Hard Clamp
-    .onTrue(superSystem.climbHardClamp());
+      .onTrue(Commands.sequence(
+        Commands.runOnce(() -> climbMotor.setEnabled(true)),
+        superSystem.climbSoftClamp()
+        ))
+      .onFalse(superSystem.stopClimb());
+      
+      driverController.buttonUp() // Hard Clamp
+        .onTrue(Commands.sequence(
+          Commands.runOnce(() -> climbMotor.setEnabled(true)),
+          superSystem.climbHardClamp()));
 
     driverController.buttonRight() // Execute Climb
     .onTrue(superSystem.climbCommandDown());
@@ -294,26 +292,12 @@ public class RobotContainer {
     operatorController.dpadRight()
     .onTrue(superSystem.moveTo(NamedPositions.L4));
     
-    // Climb sequence to uncomment if it cannot fit on driver
-    // driverController.bumperLeft() // Prepare Position for Climb
-    //   .onTrue(superSystem.climbCommandUp());
-
-    // driverController.bumperRight() // Execute Climb
-    // .onTrue(superSystem.climbCommandDown());
-
-    // // driverController.() // Soft Clamp
-    // // .onTrue(superSystem.climbSoftClamp())
-    // // .onFalse(superSystem.stopClimb());
-
-    // driverController.controllerLeft() // Hard Clamp
-    // .onTrue(superSystem.climbHardClamp());
-
     operatorController.triggerRight()
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
+      .onTrue(superSystem.repositionCoral())
+      .onFalse(superSystem.holdPiece());
     
     operatorController.controllerRight()
     .onTrue(superSystem.moveTo(NamedPositions.Processor));
@@ -335,44 +319,44 @@ public class RobotContainer {
 
     // //////////////////////////
     // /// DO NOT REMOVE IT
-    // operatorController.controllerLeft()
-    // .onTrue(superSystem.zeroEncoders());
+    operatorController.controllerLeft()
+      .onTrue(superSystem.zeroEncoders());
     // ////////////////////////
     
     // operatorController.controllerRight()
     // .onTrue(superSystem.moveTo(NamedPositions.Processor));    
 
-    operatorController.dpadDown()
-    .onTrue(superSystem.moveTo(NamedPositions.L1));
-    operatorController.dpadLeft()
-    .onTrue(superSystem.moveTo(NamedPositions.L2));
-    operatorController.dpadUp()
-    .onTrue(superSystem.moveTo(NamedPositions.L3));
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveTo(NamedPositions.L4));
+    // operatorController.dpadDown()
+    // .onTrue(superSystem.moveTo(NamedPositions.L1));
+    // operatorController.dpadLeft()
+    // .onTrue(superSystem.moveTo(NamedPositions.L2));
+    // operatorController.dpadUp()
+    // .onTrue(superSystem.moveTo(NamedPositions.L3));
+    // operatorController.dpadRight()
+    // .onTrue(superSystem.moveTo(NamedPositions.L4));
     
 
-    operatorController.triggerRight()
-      .onTrue(superSystem.intake())
-      .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
+    // operatorController.triggerRight()
+    //   .onTrue(superSystem.intake())
+    //   .onFalse(superSystem.holdPiece());
+    // operatorController.triggerLeft()
+    //   .onTrue(superSystem.outtake())
+    //   .onFalse(superSystem.stopRoller());
 
-    operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(NamedPositions.Station));
-    operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
-    operatorController.buttonDown()
-      .onTrue(superSystem.moveTo(NamedPositions.Stow));
-    operatorController.buttonLeft()
-      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+    // operatorController.buttonUp()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Station));
+    // operatorController.buttonRight()
+    //   .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+    // operatorController.buttonDown()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
+    // operatorController.buttonLeft()
+    //   .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     
-    driverController.buttonUp()
-    .onTrue(superSystem.climbCommandUp());
+    // driverController.buttonUp()
+    // .onTrue(superSystem.climbCommandUp());
 
-    driverController.buttonDown()
-    .onTrue(superSystem.climbCommandDown());
+    // driverController.buttonDown()
+    // .onTrue(superSystem.climbCommandDown());
     
 
     // operatorController.triggerRight()
@@ -396,19 +380,24 @@ public class RobotContainer {
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
+    autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
-    autoChooser.addOption("2PieceSubsystem", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
-   
-    // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
-    
-    // autoChooser.setDefaultOption("Generic Bottom 2 Piece", bottom2Piece);
-    // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
-    // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
-
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
-    autoChooser.addOption("TaxiPreloadPath", AutoBuilder.buildAuto("TaxiPreload"));
-  
+    autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
+    autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
+    autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
+    
+    autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
+    // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
+    // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
+    
+    // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
+    
+    // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
+    // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
+    
 
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
@@ -422,7 +411,8 @@ public class RobotContainer {
       elevator.initShuffleboard(loggingLevel);
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
-      superSystem.initShuffleboard(LOG_LEVEL.ALL);
+      climbMotor.initShuffleboard(loggingLevel);
+      superSystem.initShuffleboard(loggingLevel);
     }
   }
   
@@ -454,12 +444,6 @@ public class RobotContainer {
 
   public void DisableAllMotors_Test()
   {
-    // let all motor move freely 
-    elevator.setNeutralMode(NeutralModeValue.Coast);
-    elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
-    intakeWrist.setNeutralMode(NeutralModeValue.Coast);
-    climbMotor.setNeutralMode(NeutralModeValue.Coast);
-    
     elevator.stopMotion();
     elevatorPivot.stopMotion();
     intakeWrist.stopMotion();
@@ -469,6 +453,7 @@ public class RobotContainer {
     intakeWrist.setEnabled(false);
     intakeRoller.setEnabled(false);
     climbMotor.setEnabled(false);
+    swerveDrive.setBreak(true);
   }
   
 

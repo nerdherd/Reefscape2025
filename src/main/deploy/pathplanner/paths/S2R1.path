@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 5.082582361557904,
-        "y": 5.286960736443015
+        "x": 5.079,
+        "y": 5.376
       },
       "prevControl": {
-        "x": 6.1348146948767175,
-        "y": 5.694083736391963
+        "x": 6.131232333318813,
+        "y": 5.783122999948949
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Top Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.02922833196660894
   },
   "useDefaultConstraints": true
 }

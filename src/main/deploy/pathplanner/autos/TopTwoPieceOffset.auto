@@ -7,37 +7,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": null
+            "pathName": "S2R1O"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R6C4"
+            "pathName": "R1OR1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C4R7"
+            "pathName": "R1C1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R7C4"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "C4R8"
+            "pathName": "C1R1O"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
-  "folder": null,
+  "resetOdom": false,
+  "folder": "Top Half Autos",
   "choreoAuto": false
 }

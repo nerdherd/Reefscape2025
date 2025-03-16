@@ -38,7 +38,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private boolean V1 = true;
     private double ff = 0;
     private double pivotAngle = 0;
-    private double manualOffset = 0;
     public TalonFXConfiguration motorConfigs;
 
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
@@ -140,15 +139,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             return;
         }
 
-        SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Current Rotations", motor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Current Velocity", motor.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("Current Acceleration", motor.getAcceleration().getValueAsDouble());
-        SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
-        SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
-
-        // TODO: Uncomment when ready to do position control
-
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
         ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.54 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
@@ -172,7 +162,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     public void setTargetPosition(double position) {
         //TODO NerdyMath.clamp(
         desiredPosition = position;
-        motionMagicRequest.Position = desiredPosition + manualOffset;
+        motionMagicRequest.Position = desiredPosition;
     }
 
     // public void setPositionDegrees(double positionDegrees) {
@@ -210,10 +200,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
                                 desiredPosition - 0.15,
                                 desiredPosition + 0.15);
-    }
-
-    public void incrementOffset(double increment) {
-        manualOffset += increment;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -265,19 +251,15 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 tab.addString("Wrist Control Mode", motor.getControlMode()::toString);
-                tab.addNumber("Wrist Offset",() -> manualOffset);
-                tab.addDouble("Wrist MM Position", () -> motionMagicRequest.Position);
+                tab.addBoolean("Wrist At Position", () -> atPosition());
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
-                tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
             case MEDIUM:
-                tab.addBoolean("Wrist Enabled", () -> enabled);
+                tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
+            case MINIMAL:
+                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Wrist Desired Position", () -> desiredPosition);
                 tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());
-                tab.addBoolean("Wrist At Position", () -> atPosition());
-            case MINIMAL:
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
-                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
-                
                 break;
         }
     }

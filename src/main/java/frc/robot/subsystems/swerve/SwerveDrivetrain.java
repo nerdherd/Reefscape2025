@@ -363,8 +363,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 doRejectUpdate = true;
             }
     
-            SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
-            SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
+            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
             
             // 1 target with large area and close to estimated pose
             if (megaTag1.avgTagArea > 0.8 && megaTag1.rawFiducials[0].distToCamera < 0.5) {
@@ -438,15 +438,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // SmartDashboard.putBoolean(limelightName+" Is Null", estimate == null);
         // SmartDashboard.putNumber(limelightName+" Megatag Count", megaTag2.tagCount);
 
-        SmartDashboard.putString(limelightName + "Info", log);
+        // SmartDashboard.putString(limelightName + "Info", log);
 
         if(!doRejectUpdate)
         {
             Pose2d botPose1 = estimate.pose;
 
-            SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
-            SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
-            SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
+            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
+            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
+            // SmartDashboard.putNumber(limelightName + " Rotation"  , botPose1.getRotation().getDegrees());
 ;
             if (megaTag2.tagCount >= 2) {
                 xyStds = 0.5;
@@ -556,9 +556,21 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
             
     private int getMostClosedApriltagIdInReefZone(int zoneId) {
-        if(zoneId == 1)
-            return vision.getLargerApriltagByTa(VisionConstants.kLimelightBackLeftName, 
-                VisionConstants.kLimelightBackRightName);
+        if(zoneId == 1) {
+            int startIndex = RobotContainer.IsRedSide() ? 6 : 17;
+            int indexToGet = -1;
+            double distance = getDistanceFromTag(false, startIndex);
+            for (int index = startIndex; index <= startIndex + 5; index++) {
+                double distance2 = getDistanceFromTag(false, index);
+                if(distance2 < distance) {
+                    distance = distance2;
+                    indexToGet = index;
+                }
+            }
+            return indexToGet;
+        }
+            // return vision.getLargerApriltagByTa(VisionConstants.kLimelightBackLeftName, 
+            //     VisionConstants.kLimelightBackRightName);
         return -1; 
     }
 
@@ -664,14 +676,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             Units.degreesToRadians(360), Units.degreesToRadians(720)
         );
 
-        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);;
-        
+        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);
+
         pathfindingCommand.schedule();
     }
 
     public void stopAutoPath() {
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
             pathfindingCommand.cancel();
+            stopModules();
         }
     }
 
@@ -775,7 +788,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if(RobotContainer.IsRedSide())
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(13, 4, 7.5, xp, yp)) {
                 return 1;
             }
             // Station
@@ -797,7 +810,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         else
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 9, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 5.06, xp, yp)) {
                 return 1;
             }
             // Bot and Top Station
@@ -995,13 +1008,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             case OFF:
                 break;
             case ALL:
-                tab.add("Field Position", field).withSize(6, 3);
-                // tab.addString(("Current Command"), () -> {
+            // tab.addString(("Current Command"), () -> {
                 //     Command currCommand = this.getCurrentCommand();
                 //     if (currCommand == null) {
-                //         return "null";
+                    //         return "null";
                 //     } else {
-                //         return currCommand.getName();
+                    //         return currCommand.getName();
                 //     }
                 // }
                 // );
@@ -1009,10 +1021,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 tab.addBoolean("Test Mode", () -> isTest);
                 // Might be negative because our swerveDriveKinematics is flipped across the Y axis
             case MEDIUM:
+                tab.add("Field Position", field).withSize(6, 3);
             case MINIMAL:
                 tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
                 tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
                 tab.addNumber("Odometry Angle", () -> poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+                // tab.add("Pose Estimator Pose", poseEstimator.getEstimatedPosition());
+                // tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
                 tab.addString("Drive Mode", () -> this.driveMode.toString());
                 break;
         }

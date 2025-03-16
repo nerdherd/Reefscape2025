@@ -12,6 +12,7 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -206,87 +207,95 @@ public final class Constants {
     }
 
     public static final class MapPoses {
+      public static final double CWReefOffset = 0.0; // meters
+      
+      public static Pose2d offsetPosWithRotation(Pose2d pos) { return offsetPosWithRotation(pos, CWReefOffset); }
+      public static Pose2d offsetPosWithRotation(Pose2d pos, double offset) {
+        return new Pose2d(pos.getX() + offset * (Math.cos(pos.getRotation().getRadians() - Math.toRadians(90.0))), 
+                          pos.getY() + offset * (Math.sin(pos.getRotation().getRadians() - Math.toRadians(90.0))), 
+                          pos.getRotation());
+      }
       // Blue Side
-      public static final Pose2d tag12Left = new Pose2d(0.899, 1.394, new Rotation2d(Math.toRadians(-125))); // Bot Station
-      public static final Pose2d tag12Right = new Pose2d(1.295, 1.118, new Rotation2d(Math.toRadians(-125))); // Bot Station
+      public static final Pose2d tag12Left = new Pose2d(1.768, 0.783, new Rotation2d(Math.toRadians(-125))); // Bot Station
+      public static final Pose2d tag12Right = new Pose2d(0.797, 1.489, new Rotation2d(Math.toRadians(-125))); // Bot Station
       public static final Pose2d tag12Mid = new Pose2d(1.678, 0.83, new Rotation2d(Math.toRadians(-125))); // Bot Station
-  
-      public static final Pose2d tag13Left = new Pose2d(0.0887, 6.488, new Rotation2d(Math.toRadians(125))); // Top Station
-      public static final Pose2d tag13Right = new Pose2d(1.774, 7.148, new Rotation2d(Math.toRadians(125))); // Top Station
+ 
+      public static final Pose2d tag13Left = new Pose2d(0.797, 6.563, new Rotation2d(Math.toRadians(125))); // Top Station
+      public static final Pose2d tag13Right = new Pose2d(1.768,7.269, new Rotation2d(Math.toRadians(125))); // Top Station
       public static final Pose2d tag13Mid = new Pose2d(1.367, 6.896, new Rotation2d(Math.toRadians(125))); // Top Station
-  
+ 
       public static final Pose2d tag16Mid = new Pose2d(6.0, 0.75, new Rotation2d(Math.toRadians(-90))); // Processor
-  
+ 
       // they are for blue; but tag is on the red field
       public static final Pose2d tag4LeftBlueOnRed = new Pose2d(9.496, 7.233, new Rotation2d(Math.toRadians(0))); // cage top
       public static final Pose2d tag4MidBlueOnRed = new Pose2d(9.511, 6.151, new Rotation2d(Math.toRadians(0))); // cage mid
       public static final Pose2d tag4RightBlueOnRed = new Pose2d(9.51, 5.054, new Rotation2d(Math.toRadians(0))); // cage btm
-      
+     
       // Reef
-      public static final Pose2d tag17Left = new Pose2d(3.513, 2.959, new Rotation2d(Math.toRadians(-120))); 
-      public static final Pose2d tag17Right = new Pose2d(3.88, 2.745, new Rotation2d(Math.toRadians(-120))); 
-      public static final Pose2d tag17Mid = new Pose2d(3.70, 2.6, new Rotation2d(Math.toRadians(-120))); 
+      public static final Pose2d tag17Left  = offsetPosWithRotation(new Pose2d(3.513, 2.959, new Rotation2d(Math.toRadians(-120)))); 
+      public static final Pose2d tag17Right = offsetPosWithRotation(new Pose2d(3.88, 2.745, new Rotation2d(Math.toRadians(-120)))); 
+      public static final Pose2d tag17Mid   = offsetPosWithRotation(new Pose2d(3.70, 2.6, new Rotation2d(Math.toRadians(-120)))); 
   
-      public static final Pose2d tag18Left = new Pose2d(3.067, 4.220, new Rotation2d(Math.toRadians(180))); 
-      public static final Pose2d tag18Right = new Pose2d(3.067, 3.832, new Rotation2d(Math.toRadians(180))); 
-      public static final Pose2d tag18Mid = new Pose2d(3.067, 4.026, new Rotation2d(Math.toRadians(180))); 
+      public static final Pose2d tag18Left  = offsetPosWithRotation(new Pose2d(3.067, 4.220, new Rotation2d(Math.toRadians(180)))); 
+      public static final Pose2d tag18Right = offsetPosWithRotation(new Pose2d(3.067, 3.832, new Rotation2d(Math.toRadians(180)))); 
+      public static final Pose2d tag18Mid   = offsetPosWithRotation(new Pose2d(3.067, 4.026, new Rotation2d(Math.toRadians(180)))); 
   
-      public static final Pose2d tag19Left = new Pose2d(3.946, 5.354, new Rotation2d(Math.toRadians(120))); 
-      public static final Pose2d tag19Right = new Pose2d(3.610, 5.160, new Rotation2d(Math.toRadians(120))); 
-      public static final Pose2d tag19Mid = new Pose2d(3.778, 5.257, new Rotation2d(Math.toRadians(120))); 
+      public static final Pose2d tag19Left  = offsetPosWithRotation(new Pose2d(3.946, 5.354, new Rotation2d(Math.toRadians(120)))); 
+      public static final Pose2d tag19Right = offsetPosWithRotation(new Pose2d(3.610, 5.160, new Rotation2d(Math.toRadians(120)))); 
+      public static final Pose2d tag19Mid   = offsetPosWithRotation(new Pose2d(3.778, 5.257, new Rotation2d(Math.toRadians(120)))); 
   
-      public static final Pose2d tag20Left = new Pose2d(5.368, 5.160, new Rotation2d(Math.toRadians(60)));
-      public static final Pose2d tag20Right = new Pose2d(5.032, 5.354, new Rotation2d(Math.toRadians(60)));
-      public static final Pose2d tag20Mid = new Pose2d(5.200, 5.257, new Rotation2d(Math.toRadians(60)));
+      public static final Pose2d tag20Left  = offsetPosWithRotation(new Pose2d(5.368, 5.160, new Rotation2d(Math.toRadians(60))));
+      public static final Pose2d tag20Right = offsetPosWithRotation(new Pose2d(5.032, 5.354, new Rotation2d(Math.toRadians(60))));
+      public static final Pose2d tag20Mid   = offsetPosWithRotation(new Pose2d(5.200, 5.257, new Rotation2d(Math.toRadians(60))));
   
-      public static final Pose2d tag21Left = new Pose2d(5.912, 3.832, new Rotation2d(Math.toRadians(0)));
-      public static final Pose2d tag21Right = new Pose2d(5.912, 4.220, new Rotation2d(Math.toRadians(0)));
-      public static final Pose2d tag21Mid = new Pose2d(5.912, 4.026, new Rotation2d(Math.toRadians(0)));
+      public static final Pose2d tag21Left  = offsetPosWithRotation(new Pose2d(5.912, 3.832, new Rotation2d(Math.toRadians(0))));
+      public static final Pose2d tag21Right = offsetPosWithRotation(new Pose2d(5.912, 4.220, new Rotation2d(Math.toRadians(0))));
+      public static final Pose2d tag21Mid   = offsetPosWithRotation(new Pose2d(5.912, 4.026, new Rotation2d(Math.toRadians(0))));
   
-      public static final Pose2d tag22Left = new Pose2d(5.1, 2.725, new Rotation2d(Math.toRadians(-60)));
-      public static final Pose2d tag22Right = new Pose2d(5.391, 2.921, new Rotation2d(Math.toRadians(-60)));
-      public static final Pose2d tag22Mid = new Pose2d(5.26, 2.77, new Rotation2d(Math.toRadians(-60)));
-      
+      public static final Pose2d tag22Left  = offsetPosWithRotation(new Pose2d(5.1, 2.725, new Rotation2d(Math.toRadians(-60))));
+      public static final Pose2d tag22Right = offsetPosWithRotation(new Pose2d(5.391, 2.921, new Rotation2d(Math.toRadians(-60))));
+      public static final Pose2d tag22Mid   = offsetPosWithRotation(new Pose2d(5.26, 2.77, new Rotation2d(Math.toRadians(-60))));
+     
       // Red Side
-      public static final Pose2d tag1Left = new Pose2d(16.771, 1.490, new Rotation2d(Math.toRadians(-55))); // Bot Station
-      public static final Pose2d tag1Right = new Pose2d(15.776, 0.782, new Rotation2d(Math.toRadians(-55))); 
-      public static final Pose2d tag1Mid = new Pose2d(16.255, 1.238, new Rotation2d(Math.toRadians(-55))); 
-  
-      public static final Pose2d tag2Left = new Pose2d(15.632, 7.20, new Rotation2d(Math.toRadians(55))); // Top Station
-      public static final Pose2d tag2Right = new Pose2d(16.639, 6.50, new Rotation2d(Math.toRadians(55))); 
-      public static final Pose2d tag2Mid = new Pose2d(16.0, 6.860, new Rotation2d(Math.toRadians(55))); 
-      
+      public static final Pose2d tag1Left = new Pose2d(16.751, 1.489, new Rotation2d(Math.toRadians(-55))); // Bot Station
+      public static final Pose2d tag1Right = new Pose2d(15.78, 0.783, new Rotation2d(Math.toRadians(-55)));
+      public static final Pose2d tag1Mid = new Pose2d(16.255, 1.238, new Rotation2d(Math.toRadians(-55)));
+ 
+      public static final Pose2d tag2Left = new Pose2d(15.78, 7.269, new Rotation2d(Math.toRadians(55))); // Top Station
+      public static final Pose2d tag2Right = new Pose2d(16.751, 6.563, new Rotation2d(Math.toRadians(55)));
+      public static final Pose2d tag2Mid = new Pose2d(16.0, 6.860, new Rotation2d(Math.toRadians(55)));
+     
       public static final Pose2d tag3Mid = new Pose2d(11.560, 7.2, new Rotation2d(Math.toRadians(90))); // Processor
-  
+ 
       // they are for red; but tag is on the blue field
       public static final Pose2d tag15RightRedOnBlue = new Pose2d(8.024, 2.996, new Rotation2d(Math.toRadians(180))); // cage top
       public static final Pose2d tag15MidRedOnBlue = new Pose2d(8.024, 1.944, new Rotation2d(Math.toRadians(180))); // cage mid
       public static final Pose2d tag15LeftRedOnBlue = new Pose2d(8.03, 0.802, new Rotation2d(Math.toRadians(180))); // cage btm
-  
+ 
       // Reef
-      public static final Pose2d tag6Left = new Pose2d(13.602, 2.697, new Rotation2d(Math.toRadians(-60)));   
-      public static final Pose2d tag6Right = new Pose2d(13.938, 2.892, new Rotation2d(Math.toRadians(-60)));  
-      public static final Pose2d tag6Mid = new Pose2d(13.770, 2.795, new Rotation2d(Math.toRadians(-60))); 
+      public static final Pose2d tag6Left  = offsetPosWithRotation(new Pose2d(13.602, 2.697, new Rotation2d(Math.toRadians(-60))));   
+      public static final Pose2d tag6Right = offsetPosWithRotation(new Pose2d(13.938, 2.892, new Rotation2d(Math.toRadians(-60))));  
+      public static final Pose2d tag6Mid   = offsetPosWithRotation(new Pose2d(13.770, 2.795, new Rotation2d(Math.toRadians(-60)))); 
   
-      public static final Pose2d tag7Left = new Pose2d(14.481, 3.832, new Rotation2d(Math.toRadians(0))); 
-      public static final Pose2d tag7Right = new Pose2d(14.481, 4.220, new Rotation2d(Math.toRadians(0))); 
-      public static final Pose2d tag7Mid = new Pose2d(14.481, 4.026, new Rotation2d(Math.toRadians(0))); 
+      public static final Pose2d tag7Left  = offsetPosWithRotation(new Pose2d(14.481, 3.832, new Rotation2d(Math.toRadians(0)))); 
+      public static final Pose2d tag7Right = offsetPosWithRotation(new Pose2d(14.481, 4.220, new Rotation2d(Math.toRadians(0)))); 
+      public static final Pose2d tag7Mid   = offsetPosWithRotation(new Pose2d(14.481, 4.026, new Rotation2d(Math.toRadians(0)))); 
   
-      public static final Pose2d tag8Left = new Pose2d(13.938, 5.160, new Rotation2d(Math.toRadians(60))); 
-      public static final Pose2d tag8Right = new Pose2d(13.602, 5.354, new Rotation2d(Math.toRadians(60))); 
-      public static final Pose2d tag8Mid = new Pose2d(13.770, 5.257, new Rotation2d(Math.toRadians(60))); 
+      public static final Pose2d tag8Left  = offsetPosWithRotation(new Pose2d(13.938, 5.160, new Rotation2d(Math.toRadians(60)))); 
+      public static final Pose2d tag8Right = offsetPosWithRotation(new Pose2d(13.602, 5.354, new Rotation2d(Math.toRadians(60)))); 
+      public static final Pose2d tag8Mid   = offsetPosWithRotation(new Pose2d(13.770, 5.257, new Rotation2d(Math.toRadians(60)))); 
   
-      public static final Pose2d tag9Left = new Pose2d(12.516, 5.354, new Rotation2d(Math.toRadians(120)));
-      public static final Pose2d tag9Right = new Pose2d(12.180, 5.160, new Rotation2d(Math.toRadians(120)));
-      public static final Pose2d tag9Mid = new Pose2d(12.348, 5.257, new Rotation2d(Math.toRadians(120)));
+      public static final Pose2d tag9Left  = offsetPosWithRotation(new Pose2d(12.516, 5.354, new Rotation2d(Math.toRadians(120))));
+      public static final Pose2d tag9Right = offsetPosWithRotation(new Pose2d(12.180, 5.160, new Rotation2d(Math.toRadians(120))));
+      public static final Pose2d tag9Mid   = offsetPosWithRotation(new Pose2d(12.348, 5.257, new Rotation2d(Math.toRadians(120))));
   
-      public static final Pose2d tag10Left = new Pose2d(11.636, 4.220, new Rotation2d(Math.toRadians(180)));
-      public static final Pose2d tag10Right = new Pose2d(11.636, 3.832, new Rotation2d(Math.toRadians(180)));
-      public static final Pose2d tag10Mid = new Pose2d(11.636, 4.026, new Rotation2d(Math.toRadians(180)));
+      public static final Pose2d tag10Left  = offsetPosWithRotation(new Pose2d(11.636, 4.220, new Rotation2d(Math.toRadians(180))));
+      public static final Pose2d tag10Right = offsetPosWithRotation(new Pose2d(11.636, 3.832, new Rotation2d(Math.toRadians(180))));
+      public static final Pose2d tag10Mid   = offsetPosWithRotation(new Pose2d(11.636, 4.026, new Rotation2d(Math.toRadians(180))));
   
-      public static final Pose2d tag11Left = new Pose2d(12.180, 2.892, new Rotation2d(Math.toRadians(-120)));
-      public static final Pose2d tag11Right = new Pose2d(12.516, 2.697, new Rotation2d(Math.toRadians(-120)));
-      public static final Pose2d tag11Mid = new Pose2d(12.348, 2.795, new Rotation2d(Math.toRadians(-120)));
+      public static final Pose2d tag11Left  = offsetPosWithRotation(new Pose2d(12.180, 2.892, new Rotation2d(Math.toRadians(-120))));
+      public static final Pose2d tag11Right = offsetPosWithRotation(new Pose2d(12.516, 2.697, new Rotation2d(Math.toRadians(-120))));
+      public static final Pose2d tag11Mid   = offsetPosWithRotation(new Pose2d(12.348, 2.795, new Rotation2d(Math.toRadians(-120))));
     }
   }
 
@@ -399,8 +408,8 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 60.0; // TODO: NEED TO CALCULATE AND INPUT A kP
-    // 1V = kP * 0.01         max kP = 100 .01 error is pretty high
+    public static final double kPElevatorPivot = 50; // TODO: NEED TO CALCULATE AND INPUT A kP
+    // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
     public static final double kVElevatorPivot = 0; 
@@ -408,7 +417,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; 
     public static final double kGElevatorPivot = 0;
 
-    public static final double kFElevatorPivot = 0.5; 
+    public static final double kFElevatorPivot = 0.22; 
 
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
@@ -418,12 +427,12 @@ public final class Constants {
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 80.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
+    public static final double kElevatorPivotGearRatio = 125.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 0.5;//0.25 // 0.4S
-    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 3; // 0.5
+    public static final double kEPivotCruiseVelocity = 0.8;//0.25 // 0.4S
+    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 5; // 0.5
     public static final double kElevatorPivotJerk = kElevatorPivotCruiseAcceleration * 10; 
     
   }
@@ -442,11 +451,9 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kIntakePower  = -3.5;
-    public static final double kOuttakePower = 1;
+    public static final double kIntakePower  = -2.8;
+    public static final double kOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
-
-
   }
   public static final class WristConstants{
     public static final int kMotorID = 54;
@@ -492,30 +499,33 @@ public final class Constants {
   
 
   public static final class SuperSystemConstants {
-    public enum NamedPositions { // positions are all in human-readable, converted internally
-      Stow(                ExecutionOrder.WRTELV_PVT, 0.01, 0, -0.01, -0.4),
-      SemiStow(            ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.164, -0.4),
-      GroundIntake(        ExecutionOrder.WRTELV_PVT, 0.022, 0.62, -0.76, -0.76),
-      Station(             ExecutionOrder.WRTELV_PVT, 0.18, 1.12, -0.85, -0.4),
-      Processor(           ExecutionOrder.WRTELV_PVT, 0.047, 0.53, -0.79, -0.4),
-      Net(                 ExecutionOrder.WRTELV_PVT, 0.24, 0.05, -0.1, -0.4),
-      Cage(                ExecutionOrder.WRTELV_PVT, 0.11, 0.05, -0.1, -0.4),
-      L1(                  ExecutionOrder.WRTELV_PVT, 0.25, 0, -0.18, -0.3),
-      L2(                  ExecutionOrder.WRTELV_PVT, 0.24, 0.0, -0.21, -0.3),
-      L3(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 1.14, -0.24, -0.3),
-      L4(                  ExecutionOrder.PVT_ELV_WRT, 0.25, 3.18, -0.26, -0.3),
-      L5(                  ExecutionOrder.WRTELV_PVT, 0.24, 1.12, -0.57, -0.57),
-      AlgaeL2(             ExecutionOrder.PVT_ELV_WRT, 0.247, 0.5, -0.317, -0.3), // TODO update
-      AlgaeL3(             ExecutionOrder.PVT_ELV_WRT, 0.24, 2, -0.307, -0.3), // TODO update
-      ClimbDown(           ExecutionOrder.WRTELV_PVT, -0.075, 0.05, -0.164, -0.4),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT, 0.14, 0.05, -0.164, -0.4),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT,0.06 ,0.62, -0.76,-0.4),
+    public enum NamedPositions { 
+      Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
+      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
+      // GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ), Before plate
+      GroundIntake(        ExecutionOrder.WRTELV_PVT, 0.02, 0.55, -0.780, -0.780      ),
+      Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.4),
+      Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
+      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ),
+      Cage(                ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.100, -0.100      ),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180, -0.570      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210, -0.570      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.14, -0.240, -0.570      ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.570      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
+      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
+      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ), 
+      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      ),
       ;
-      // todo: we might need pre position for wrist
+
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
       public ExecutionOrder executionOrder;
       NamedPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
-        intermediateWristPosition = iwp; // TODO: add conversions
+        intermediateWristPosition = iwp;
         finalWristPosition = fwp;
         elevatorPosition = ep;
         pivotPosition = pp;

@@ -7,6 +7,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.signals.S1StateValue;
 import com.ctre.phoenix6.signals.S2StateValue;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.hal.CANData;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -32,8 +33,8 @@ public class SuperSystem {
     public StatusSignal<S1StateValue> intakeSensor;
     public StatusSignal<S2StateValue> floorSensor;
     
-    public NamedPositions currentPosition = NamedPositions.Stow;
-    public NamedPositions lastPosition;
+    private NamedPositions currentPosition = NamedPositions.Stow;
+    private NamedPositions lastPosition = NamedPositions.Stow;
     
     boolean elevatorWithinRange;
 
@@ -47,7 +48,8 @@ public class SuperSystem {
         PVT_WRT_ELV,
         WRT_ELV_PVT,
         WRT_PVT_ELV,
-        WRTELV_PVT
+        WRTELV_PVT,
+        WRTPVT_ELV
     }
 
     private boolean isStarted = false;
@@ -86,7 +88,7 @@ public class SuperSystem {
         elevator.setMotorConfigs();
         wrist.configurePID(wrist.motorConfigs);
         intakeRoller.configureMotor(intakeRoller.motorConfigs);
-
+        climbMotor.configurePID(climbMotor.motorConfigs);
     }
 
     public Command zeroEncoders() {
@@ -114,19 +116,26 @@ public class SuperSystem {
         return intakeRoller.setVoltageCommand(RollerConstants.kIntakePower);
     }
 
+    public Command repositionCoral() {
+        return Commands.sequence(
+            repositionCoralLeft(),
+            Commands.waitSeconds(0.3),
+            repositionCoralRight(),
+            holdPiece()
+        );
+    }
+
     public Command repositionCoralLeft() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(1),
-            intakeRoller.setVoltageCommandRight(2.0)
-
+            intakeRoller.setVoltageCommandLeft(0.5),
+            intakeRoller.setVoltageCommandRight(-1.0)
         );
     }
 
     public Command repositionCoralRight() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(-2.0),
-            intakeRoller.setVoltageCommandRight(-1)
-
+            intakeRoller.setVoltageCommandLeft(-1),
+            intakeRoller.setVoltageCommandRight(0.5)
         );
     }
 
@@ -158,9 +167,7 @@ public class SuperSystem {
         if (currentPosition == NamedPositions.L1) { // TODO is it working??
             return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
         }
-        else {
-            return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
-        }
+        return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
     }
 
     public Command shootAlgae() {
@@ -172,7 +179,7 @@ public class SuperSystem {
     }
 
     public Command climbHardClamp() {
-        return climbMotor.setVoltageCommand(-3.0);
+        return climbMotor.setVoltageCommand(-4.5);
     }
 
     public Command climbSoftClamp() {
@@ -200,7 +207,7 @@ public class SuperSystem {
 
     public Command updatePositions(NamedPositions position) {
         return Commands.runOnce(() -> {
-            lastPosition = currentPosition;
+            if(currentPosition != position) lastPosition = currentPosition;
             currentPosition = position;
         });
     }
@@ -215,7 +222,7 @@ public class SuperSystem {
 
     // movement
     private Command goTo(NamedPositions position) {
-        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake) {
+        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor) {
             return Commands.sequence(
                 preExecute(),
                 execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
@@ -279,11 +286,13 @@ public class SuperSystem {
         wrist.setEnabled(true);
         elevator.setEnabled(true);
         intakeRoller.setEnabled(true);
+        climbMotor.setEnabled(true);
         
         pivot.setTargetPosition(0.0);
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(0.0);
         intakeRoller.setVoltageCommand(0.0);
+        climbMotor.setVoltageCommand(0.0);
         isStarted = false;
     }
 
@@ -318,7 +327,7 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            if (pivotAngle == PivotConstants.kElevatorPivotStowPosition) {
+            if (pivotAngle == NamedPositions.Stow.pivotPosition || pivotAngle == NamedPositions.intermediateGround.pivotPosition || pivotAngle == NamedPositions.Station.pivotPosition) {
                 elevatorWithinRange = elevator.atPositionWide();
             } else {
                 elevatorWithinRange = elevator.atPosition();
@@ -416,15 +425,26 @@ public class SuperSystem {
                     break;
 
                 case WRTELV_PVT:
-                wrist.setTargetPosition(wristAngle);
-                wristSet = true;
-                elevator.setTargetPosition(elevatorPosition);
-                elevatorSet = true;
-                if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                    wrist.setTargetPosition(wristAngle);
+                    wristSet = true;
+                    elevator.setTargetPosition(elevatorPosition);
+                    elevatorSet = true;
+                    if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                        pivot.setTargetPosition(pivotAngle);
+                        pivotSet = true;
+                    }
+                    break;
+                
+                case WRTPVT_ELV:
+                    wrist.setTargetPosition(wristAngle);
+                    wristSet = true;
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                }
-                break;
+                    if (wristAtPositionWide.getAsBoolean() && pivotAtPositionWide.getAsBoolean()) {
+                        elevator.setTargetPosition(elevatorPosition);
+                        elevatorSet = true;
+                    }
+                    break;
             
                 default:
                     break;
@@ -455,8 +475,11 @@ public class SuperSystem {
             case OFF:
                 break;
             case ALL:
-                tab.addString("Super System Current Position", () -> currentPosition.toString());
+                tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
+                tab.addString("Super System Current Position", () -> currentPosition.toString());
+                tab.addBoolean("Floor Detected", floorDetected);
+                tab.addBoolean("Intake Detected", intakeDetected);
             case MINIMAL:
                 break;
         }
