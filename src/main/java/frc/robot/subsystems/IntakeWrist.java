@@ -38,7 +38,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     private boolean V1 = true;
     private double ff = 0;
     private double pivotAngle = 0;
-    private double manualOffset = 0;
     public TalonFXConfiguration motorConfigs;
 
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
@@ -163,7 +162,7 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
     public void setTargetPosition(double position) {
         //TODO NerdyMath.clamp(
         desiredPosition = position;
-        motionMagicRequest.Position = desiredPosition + manualOffset;
+        motionMagicRequest.Position = desiredPosition;
     }
 
     // public void setPositionDegrees(double positionDegrees) {
@@ -201,10 +200,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
                                 desiredPosition - 0.15,
                                 desiredPosition + 0.15);
-    }
-
-    public void incrementOffset(double increment) {
-        manualOffset += increment;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -256,19 +251,15 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 tab.addString("Wrist Control Mode", motor.getControlMode()::toString);
-                tab.addNumber("Wrist Offset",() -> manualOffset);
                 tab.addBoolean("Wrist At Position", () -> atPosition());
-                tab.addDouble("Wrist MM Position", () -> motionMagicRequest.Position);
-            case MEDIUM:
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
-                tab.addBoolean("Wrist Enabled", () -> enabled);
+            case MEDIUM:
                 tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
             case MINIMAL:
                 tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Wrist Desired Position", () -> desiredPosition);
                 tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
-                
                 break;
         }
     }
