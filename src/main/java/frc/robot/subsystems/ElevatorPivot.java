@@ -329,6 +329,7 @@ public class ElevatorPivot extends SubsystemBase implements Reportable{
                 tab.addBoolean("Pivot Enabled", () -> enabled);
                 tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
                 tab.addNumber("Pivot Current Position", () -> getPosition());
+                tab.addNumber("Pivot Current Position", () -> pivotMotorRight.getPosition().getValueAsDouble());
                 tab.addBoolean("Pivot At Position", () -> atPosition());
             case MINIMAL:
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
