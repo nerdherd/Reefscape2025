@@ -412,7 +412,7 @@ public class RobotContainer {
       intakeWrist.initShuffleboard(loggingLevel);
       elevatorPivot.initShuffleboard(loggingLevel);
       climbMotor.initShuffleboard(loggingLevel);
-      superSystem.initShuffleboard(LOG_LEVEL.ALL);
+      superSystem.initShuffleboard(loggingLevel);
     }
   }
   
