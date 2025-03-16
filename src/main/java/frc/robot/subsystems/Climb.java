@@ -92,12 +92,6 @@ public class Climb extends SubsystemBase implements Reportable{
         else {
             motor.setVoltage(desiredVoltage);  
         }
-
-        SmartDashboard.putNumber("Climb Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Current Rotations", motor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Current Velocity", motor.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("Current Acceleration", motor.getAcceleration().getValueAsDouble());
-        SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
     }
 
     // ****************************** STATE METHODS ****************************** //
@@ -218,10 +212,11 @@ public class Climb extends SubsystemBase implements Reportable{
                 tab.addDouble("Desired Position", () -> desiredPosition);
                 tab.addBoolean("At position", () -> atPosition());
                 tab.addNumber("Current Climb Angle", () -> motor.getPosition().getValueAsDouble());
+                tab.addBoolean("Enabled", () -> enabled);
             case MEDIUM:
                 tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
-                tab.addBoolean("Enabled", () -> enabled);
             case MINIMAL:
+                tab.addDouble("Motor Temp", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Climb Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 break;
         }

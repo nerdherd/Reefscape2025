@@ -229,7 +229,6 @@ public class RobotContainer {
         double currentPos = elevator.getPosition();
         elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
         }
-        SmartDashboard.putNumber("Operator Left Y", operatorController.getLeftY());
       }, elevator));  
 
   }

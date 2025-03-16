@@ -223,11 +223,11 @@ public class Elevator extends SubsystemBase implements Reportable {
                 tab.addBoolean("Elevator Enabled", () -> enabled);
                 tab.addNumber("Elevator FF", () -> motionMagicRequest.FeedForward);
                 tab.addBoolean("Elevator At Position", () -> atPosition());
+                case MEDIUM:
+                tab.addNumber("Elevator Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
+                case MINIMAL:
                 tab.addNumber("Elevator Temperature 1", () -> elevatorMotor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Elevator Temperature 2", () -> elevatorMotor2.getDeviceTemp().getValueAsDouble());
-            case MEDIUM:
-            tab.addNumber("Elevator Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
-            case MINIMAL:
                 tab.addNumber("Elevator Desired Position", ()-> desiredPosition);
                 tab.addNumber("Elevator Current Position", () -> getPosition());
                 tab.addNumber("Elevator Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());    

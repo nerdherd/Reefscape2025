@@ -995,13 +995,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             case OFF:
                 break;
             case ALL:
-                tab.add("Field Position", field).withSize(6, 3);
-                // tab.addString(("Current Command"), () -> {
+            // tab.addString(("Current Command"), () -> {
                 //     Command currCommand = this.getCurrentCommand();
                 //     if (currCommand == null) {
-                //         return "null";
+                    //         return "null";
                 //     } else {
-                //         return currCommand.getName();
+                    //         return currCommand.getName();
                 //     }
                 // }
                 // );
@@ -1009,6 +1008,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 tab.addBoolean("Test Mode", () -> isTest);
                 // Might be negative because our swerveDriveKinematics is flipped across the Y axis
             case MEDIUM:
+                tab.add("Field Position", field).withSize(6, 3);
             case MINIMAL:
                 tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
                 tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());

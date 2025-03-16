@@ -140,15 +140,6 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
             return;
         }
 
-        SmartDashboard.putNumber("Wrist Voltage", motor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Current Rotations", motor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Current Velocity", motor.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("Current Acceleration", motor.getAcceleration().getValueAsDouble());
-        SmartDashboard.putNumber("Commanded Rotations", desiredPosition);
-        SmartDashboard.putNumber("Commanded Degrees", desiredAngle);
-
-        // TODO: Uncomment when ready to do position control
-
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
         ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.54 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
@@ -268,12 +259,12 @@ public class IntakeWrist extends SubsystemBase implements Reportable{
                 tab.addNumber("Wrist Offset",() -> manualOffset);
                 tab.addBoolean("Wrist At Position", () -> atPosition());
                 tab.addDouble("Wrist MM Position", () -> motionMagicRequest.Position);
-                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
             case MEDIUM:
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 tab.addBoolean("Wrist Enabled", () -> enabled);
                 tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
             case MINIMAL:
+                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Wrist Desired Position", () -> desiredPosition);
                 tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());

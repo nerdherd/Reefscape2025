@@ -457,9 +457,11 @@ public class SuperSystem {
             case OFF:
                 break;
             case ALL:
-                tab.addString("Super System Current Position", () -> currentPosition.toString());
                 tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
+                tab.addString("Super System Current Position", () -> currentPosition.toString());
+                tab.addBoolean("Floor Detected", floorDetected);
+                tab.addBoolean("Intake Detected", intakeDetected);
             case MINIMAL:
                 break;
         }
