@@ -7,6 +7,7 @@ import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.signals.S1StateValue;
 import com.ctre.phoenix6.signals.S2StateValue;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.hal.CANData;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -47,7 +48,8 @@ public class SuperSystem {
         PVT_WRT_ELV,
         WRT_ELV_PVT,
         WRT_PVT_ELV,
-        WRTELV_PVT
+        WRTELV_PVT,
+        WRTPVT_ELV
     }
 
     private boolean isStarted = false;
@@ -114,19 +116,26 @@ public class SuperSystem {
         return intakeRoller.setVoltageCommand(RollerConstants.kIntakePower);
     }
 
+    public Command repositionCoral() {
+        return Commands.sequence(
+            repositionCoralLeft(),
+            Commands.waitSeconds(0.3),
+            repositionCoralRight(),
+            holdPiece()
+        );
+    }
+
     public Command repositionCoralLeft() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(0.5),
-            intakeRoller.setVoltageCommandRight(1.0)
-
+            intakeRoller.setVoltageCommandLeft(-0.5),
+            intakeRoller.setVoltageCommandRight(-1.0)
         );
     }
 
     public Command repositionCoralRight() {
         return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(-1.0),
+            intakeRoller.setVoltageCommandLeft(-1),
             intakeRoller.setVoltageCommandRight(-0.5)
-
         );
     }
 
@@ -155,12 +164,10 @@ public class SuperSystem {
     }
 
     public Command outtake() {
-        // if (currentPosition == NamedPositions.L1) { // TODO is it working??
-        //     return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
-        // }
-        // else {
-            return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
-        // }
+        if (currentPosition == NamedPositions.L1) { // TODO is it working??
+            return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
+        }
+        return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
     }
 
     public Command shootAlgae() {
@@ -215,7 +222,7 @@ public class SuperSystem {
 
     // movement
     private Command goTo(NamedPositions position) {
-        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake) {
+        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor || position == NamedPositions.ClimbDown) {
             return Commands.sequence(
                 preExecute(),
                 execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
@@ -320,7 +327,7 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            if (pivotAngle == NamedPositions.Stow.pivotPosition) {
+            if (pivotAngle == NamedPositions.Stow.pivotPosition || pivotAngle == NamedPositions.intermediateGround.pivotPosition || pivotAngle == NamedPositions.Station.pivotPosition) {
                 elevatorWithinRange = elevator.atPositionWide();
             } else {
                 elevatorWithinRange = elevator.atPosition();
@@ -418,15 +425,26 @@ public class SuperSystem {
                     break;
 
                 case WRTELV_PVT:
-                wrist.setTargetPosition(wristAngle);
-                wristSet = true;
-                elevator.setTargetPosition(elevatorPosition);
-                elevatorSet = true;
-                if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                    wrist.setTargetPosition(wristAngle);
+                    wristSet = true;
+                    elevator.setTargetPosition(elevatorPosition);
+                    elevatorSet = true;
+                    if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                        pivot.setTargetPosition(pivotAngle);
+                        pivotSet = true;
+                    }
+                    break;
+                
+                case WRTPVT_ELV:
+                    wrist.setTargetPosition(wristAngle);
+                    wristSet = true;
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                }
-                break;
+                    if (wristAtPositionWide.getAsBoolean() && pivotAtPositionWide.getAsBoolean()) {
+                        elevator.setTargetPosition(elevatorPosition);
+                        elevatorSet = true;
+                    }
+                    break;
             
                 default:
                     break;

@@ -556,9 +556,21 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
             
     private int getMostClosedApriltagIdInReefZone(int zoneId) {
-        if(zoneId == 1)
-            return vision.getLargerApriltagByTa(VisionConstants.kLimelightBackLeftName, 
-                VisionConstants.kLimelightBackRightName);
+        if(zoneId == 1) {
+            int startIndex = RobotContainer.IsRedSide() ? 6 : 17;
+            int indexToGet = -1;
+            double distance = getDistanceFromTag(false, startIndex);
+            for (int index = startIndex; index <= startIndex + 5; index++) {
+                double distance2 = getDistanceFromTag(false, index);
+                if(distance2 < distance) {
+                    distance = distance2;
+                    indexToGet = index;
+                }
+            }
+            return indexToGet;
+        }
+            // return vision.getLargerApriltagByTa(VisionConstants.kLimelightBackLeftName, 
+            //     VisionConstants.kLimelightBackRightName);
         return -1; 
     }
 
@@ -664,8 +676,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             Units.degreesToRadians(360), Units.degreesToRadians(720)
         );
 
-        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);;
-        
+        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);
+
         pathfindingCommand.schedule();
     }
 
@@ -775,7 +787,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if(RobotContainer.IsRedSide())
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(13, 4, 9, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(13, 4, 7.5, xp, yp)) {
                 return 1;
             }
             // Station
@@ -797,7 +809,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         else
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 9, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 5.06, xp, yp)) {
                 return 1;
             }
             // Bot and Top Station
