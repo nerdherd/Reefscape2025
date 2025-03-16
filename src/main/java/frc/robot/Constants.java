@@ -502,8 +502,8 @@ public final class Constants {
     public enum NamedPositions { 
       Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
-      GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ),
-      // GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.02, 0.55, -0.780, -0.780      ),
+      // GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ),
+      GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.02, 0.55, -0.780, -0.780      ),
       Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.4),
       Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
       Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ),
