@@ -28,8 +28,6 @@ import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.commands.StationCommand;
-import frc.robot.commands.StowCommand;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
@@ -37,18 +35,14 @@ import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 // import frc.robot.commands.autSquare;
 import frc.robot.commands.SwerveJoystickCommand;
 // import frc.robot.commands.autos.AutoDriving;
-import frc.robot.commands.autos.PathOnlyBottom2Piece;
 import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.commands.autos.PreloadTaxiAutoMove;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.autos.TwoPieceOffset;
-import frc.robot.commands.autos.TwoPiecePath;
 import frc.robot.Constants.ROBOT_ID;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.Generic3Piece;
 import frc.robot.commands.autos.Generic4Piece;
-import frc.robot.commands.autos.isMeBottom2Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
@@ -59,9 +53,9 @@ import frc.robot.subsystems.BannerSensor;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
-import frc.robot.subsystems.IntakeWrist;
+import frc.robot.subsystems.Wrist;
 import frc.robot.subsystems.SuperSystem;
-import frc.robot.subsystems.ElevatorPivot;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.BannerSensor;
 
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
@@ -79,15 +73,13 @@ public class RobotContainer {
   public IntakeRoller intakeRoller;
   public BannerSensor intakeSensor;
   public Elevator elevator;
-  public ElevatorPivot elevatorPivot;
-  public IntakeWrist intakeWrist;
+  public Pivot pivot;
+  public Wrist wrist;
   public BannerSensor floorSensor;
   public SuperSystem superSystem;
   public Climb climbMotor;
   public CANdi candi;
 
-  private PathOnlyBottom2Piece pathOnlyBottom2Piece;
-  
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort,false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
   
@@ -96,7 +88,6 @@ public class RobotContainer {
   public Generic2Piece bottom2Piece;
   public Generic3Piece bottom3Piece;
   public Generic4Piece bottom4Piece;
-  public isMeBottom2Piece isMeBottom2Piece;
 
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.MEDIUM;
   
@@ -131,15 +122,15 @@ public class RobotContainer {
     }
 
     if (USE_SUBSYSTEMS) {
-      intakeWrist = new IntakeWrist(V1);
+      wrist = new Wrist(V1);
       elevator = new Elevator();
-      elevatorPivot = new ElevatorPivot();
+      pivot = new Pivot();
       intakeRoller = new IntakeRoller();
       candi = new CANdi(6);
       // intakeSensor = new BannerSensor("Intake Roller", IntakeSensorConstants.blackPort, IntakeSensorConstants.whitePort);
       // floorSensor = new BannerSensor("Intake Wrist", FloorSensorConstants.blackPort, FloorSensorConstants.whitePort);
       climbMotor = new Climb();
-      superSystem = new SuperSystem(elevator, elevatorPivot, intakeWrist, intakeRoller, candi, climbMotor);
+      superSystem = new SuperSystem(elevator, pivot, wrist, intakeRoller, candi, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -205,28 +196,28 @@ public class RobotContainer {
       swerveDrive.setDefaultCommand(swerveJoystickCommand);
 
       double PIVOT_SPEED = 1;// Degrees per second
-        elevatorPivot.setDefaultCommand(Commands.run(() -> {
+        pivot.setDefaultCommand(Commands.run(() -> {
           double rightY = -operatorController.getRightY(); // Left Y (inverted for up = positive)
           if (Math.abs(rightY) > 0.05) {
-              double currentAngle = elevatorPivot.getPosition();
-              elevatorPivot.setTargetPosition(currentAngle + (rightY * PIVOT_SPEED * 0.02)); // 20ms loop
+              double currentAngle = pivot.getPosition();
+              pivot.setTargetPosition(currentAngle + (rightY * PIVOT_SPEED * 0.02)); // 20ms loop
           }
-      }, elevatorPivot));
+      }, pivot));
 
       double Wrist_SPEED = 2;// Degree  per second
-        intakeWrist.setDefaultCommand(Commands.run(() -> {
+        wrist.setDefaultCommand(Commands.run(() -> {
           double leftX = operatorController.getLeftX(); // leftX (inverted for up = positive)
           if (Math.abs(leftX) > 0.3) {
-              double currentRot = intakeWrist.getPosition();
-              intakeWrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
+              double currentRot = wrist.getPosition();
+              wrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
           }
-      }, intakeWrist));
+      }, wrist));
 
       double Elevator_SPEED = 3.0;// Meters per second // 0.3
       double Elevator_OFFSET = 0.05;
       elevator.setDefaultCommand(Commands.run(() -> {
         double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
-        if (Math.abs(leftY) > 0.05 && elevatorPivot.getPosition() > (NamedPositions.Station.pivotPosition - 0.02)) {
+        if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (NamedPositions.Station.pivotPosition - 0.02)) {
         double currentPos = elevator.getPosition();
         elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
         }
@@ -409,8 +400,8 @@ public class RobotContainer {
     if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
-      intakeWrist.initShuffleboard(loggingLevel);
-      elevatorPivot.initShuffleboard(loggingLevel);
+      wrist.initShuffleboard(loggingLevel);
+      pivot.initShuffleboard(loggingLevel);
       climbMotor.initShuffleboard(loggingLevel);
       superSystem.initShuffleboard(loggingLevel);
     }
@@ -432,25 +423,25 @@ public class RobotContainer {
   public void refreshSupersystem() {
     elevator.setPivotAngle(0);
 
-    elevatorPivot.setTargetPosition(0);
+    pivot.setTargetPosition(0);
     elevator.setTargetPosition(0);
-    intakeWrist.setTargetPosition(0);
+    wrist.setTargetPosition(0);
 
-    elevatorPivot.setEnabled(true);
+    pivot.setEnabled(true);
     elevator.setEnabled(true);
-    intakeWrist.setEnabled(true);
+    wrist.setEnabled(true);
     intakeRoller.setEnabled(true);
   }
 
   public void DisableAllMotors_Test()
   {
     elevator.stopMotion();
-    elevatorPivot.stopMotion();
-    intakeWrist.stopMotion();
+    pivot.stopMotion();
+    wrist.stopMotion();
 
-    elevatorPivot.setEnabled(false);
+    pivot.setEnabled(false);
     elevator.setEnabled(false);
-    intakeWrist.setEnabled(false);
+    wrist.setEnabled(false);
     intakeRoller.setEnabled(false);
     climbMotor.setEnabled(false);
     swerveDrive.setBreak(true);

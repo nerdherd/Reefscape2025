@@ -25,8 +25,8 @@ import frc.robot.Constants.SuperSystemConstants.NamedPositions;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 public class SuperSystem {
     public Elevator elevator;
-    public ElevatorPivot pivot;
-    public IntakeWrist wrist;
+    public Pivot pivot;
+    public Wrist wrist;
     public IntakeRoller intakeRoller;
     public Climb climbMotor;
 
@@ -56,7 +56,7 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, ElevatorPivot pivot, IntakeWrist wrist, IntakeRoller intakeRoller, CANdi candi, Climb climbMotor) {
+    public SuperSystem(Elevator elevator, Pivot pivot, Wrist wrist, IntakeRoller intakeRoller, CANdi candi, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;

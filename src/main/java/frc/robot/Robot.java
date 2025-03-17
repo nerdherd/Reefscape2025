@@ -60,9 +60,9 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.setBreak(true);
     
-    m_robotContainer.elevatorPivot.setEnabled(false);
+    m_robotContainer.pivot.setEnabled(false);
     m_robotContainer.elevator.setEnabled(false);
-    m_robotContainer.intakeWrist.setEnabled(false);
+    m_robotContainer.wrist.setEnabled(false);
     m_robotContainer.intakeRoller.setEnabled(false);
     m_robotContainer.climbMotor.setEnabled(false);
   }
@@ -73,8 +73,8 @@ public class Robot extends TimedRobot {
     // m_robotContainer.elevator.setTargetPosition(m_robotContainer.elevator.getPosition());
     // m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
     m_robotContainer.elevator.stopMotion();
-    m_robotContainer.elevatorPivot.stopMotion();
-    m_robotContainer.intakeWrist.stopMotion();
+    m_robotContainer.pivot.stopMotion();
+    m_robotContainer.wrist.stopMotion();
     // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
     //m_robotContainer.elevator.setTargetPosition(0);
     //m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
@@ -89,10 +89,9 @@ public class Robot extends TimedRobot {
     
     // need them once it comes back from Test Mode
     m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.pivot.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.wrist.setNeutralMode(NeutralModeValue.Brake);
     m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.superSystem.reConfigureMotors();
 
     m_robotContainer.refreshSupersystem();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -120,8 +119,8 @@ public class Robot extends TimedRobot {
     
     // need them once it comes back from Test Mode
     m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.pivot.setNeutralMode(NeutralModeValue.Brake);
+    m_robotContainer.wrist.setNeutralMode(NeutralModeValue.Brake);
     m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
     m_robotContainer.superSystem.reConfigureMotors();
 
@@ -142,8 +141,8 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.elevatorPivot.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.intakeWrist.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.pivot.setNeutralMode(NeutralModeValue.Coast);
+    m_robotContainer.wrist.setNeutralMode(NeutralModeValue.Coast);
     m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Coast);
     m_robotContainer.superSystem.reConfigureMotors();
     
