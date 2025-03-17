@@ -901,22 +901,61 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     /**
-     * Calculate position to move to based on apriltag and reef side
+     * Calculate position to move to based on Reef side AprilTags
      * @param tagID ID of tag to move to
-     * @param side -1 for Left 0 for Middle 1 for Right
+     * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Pose2d of position to drive to
      */
     public Pose2d calcReefSidePose(int tagID, int side) {
-        
+        // get tag info
         Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
-        Rotation2d tagRotation = tagPose.getRotation();
-        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
-        Double theta_0 = tagRotationInverse.getRadians();
-        Double lateralOffset = 0.17 * -side; // Side-Side offset TODO: Change Later
-        Double verticalOffset = 0.7; // Offset from reef Invert?
-        // D_x = R_x + M cos (theta_0)
-        // D_y = R_y + M sin (theta_0)
-        return new Pose2d((tagPose.getX() + lateralOffset * Math.cos(theta_0) + verticalOffset * Math.cos(theta_0 + 1.57)), (tagPose.getY() + lateralOffset * Math.sin(theta_0) + verticalOffset * Math.cos(theta_0 + 1.57)), tagRotation); // 1.57 = 3.14/2
+        double tagAngle = tagPose.getRotation().getRadians();
+
+        // add vert offset and find bot rotation
+        double xPos = tagPose.getX() + ReefOffsets.frontOffset*Math.cos(tagAngle);
+        double yPos = tagPose.getY() + ReefOffsets.frontOffset*Math.sin(tagAngle);
+        Rotation2d botRotation = new Rotation2d(-tagAngle);
+
+        if (side == 0) return new Pose2d(xPos, yPos, botRotation); // mid pose has vert offset
+
+        // use side rotation to add side offset
+        Rotation2d sideRotation;
+        if (side == -1) sideRotation = new Rotation2d(botRotation.getRadians() + Math.PI/2); // left: 90 deg ccw
+        else sideRotation = new Rotation2d(botRotation.getRadians() - Math.PI/2); // right: 90 deg cw
+
+        xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians());
+        yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
+
+        return new Pose2d(xPos, yPos, botRotation); // side poses have vert and side offsets
+    }
+
+    /**
+     * Calculate position to move to based on Station side AprilTags
+     * @param tagID ID of tag to move to
+     * @param side -1 for Left, 0 for Middle, 1 for Right
+     * @return Pose2d of position to drive to
+     */
+    public Pose2d calcStationSidePose(int tagID, int side) {
+        // get tag info
+        Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
+        double tagAngle = tagPose.getRotation().getRadians();
+
+        // add vert offset and find bot rotation
+        double xPos = tagPose.getX() + StationOffsets.frontOffset*Math.cos(tagAngle);
+        double yPos = tagPose.getY() + StationOffsets.frontOffset*Math.sin(tagAngle);
+        Rotation2d botRotation = new Rotation2d(-tagAngle);
+
+        if (side == 0) return new Pose2d(xPos, yPos, botRotation); // mid pose has vert offset
+
+        // use side rotation to add side offset
+        Rotation2d sideRotation;
+        if (side == -1) sideRotation = new Rotation2d(botRotation.getRadians() + Math.PI/2); // left: 90 deg ccw
+        else sideRotation = new Rotation2d(botRotation.getRadians() - Math.PI/2); // right: 90 deg cw
+
+        xPos += StationOffsets.sideOffset*Math.cos(sideRotation.getRadians());
+        yPos += StationOffsets.sideOffset*Math.sin(sideRotation.getRadians());
+
+        return new Pose2d(xPos, yPos, botRotation); // side poses have vert and side offsets
     }
 
     public Command driveToRelativePose(double maxVelocityMps, double maxAccelerationMpsSq, Transform2d translation) {
