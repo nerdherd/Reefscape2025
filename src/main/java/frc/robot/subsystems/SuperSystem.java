@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.CANdi;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.S1StateValue;
 import com.ctre.phoenix6.signals.S2StateValue;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -77,7 +78,6 @@ public class SuperSystem {
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
         tab.addBoolean("isStarted", () -> isStarted);
-        initialize(); // todo need to move to each mode's init in container 
         //(after power on, during Disable mode, motors disabled and not applying brake)
         //(after auto/teleop mode, During disable mode, motor disabled and applying brake)
     }
@@ -89,6 +89,15 @@ public class SuperSystem {
         wrist.configurePID(wrist.motorConfigs);
         intakeRoller.configureMotor(intakeRoller.motorConfigs);
         climbMotor.configurePID(climbMotor.motorConfigs);
+    }
+
+    public void setNeutralMode(NeutralModeValue neutralMode) {
+        elevator.setNeutralMode(neutralMode);
+        pivot.setNeutralMode(neutralMode);
+        wrist.setNeutralMode(neutralMode);
+        climbMotor.setNeutralMode(neutralMode);
+
+        reConfigureMotors();
     }
 
     public Command zeroEncoders() {
