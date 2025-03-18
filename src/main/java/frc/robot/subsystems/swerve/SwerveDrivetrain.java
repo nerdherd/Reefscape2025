@@ -3,7 +3,6 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -25,12 +24,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
-import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
 import frc.robot.subsystems.imu.Gyro;
-import frc.robot.util.NerdyLine;
 import frc.robot.util.NerdyMath;
 import frc.robot.vision.LimelightHelpers;
 import frc.robot.vision.VisionSys;
@@ -46,11 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.lang.model.util.ElementScanner14;
-
-import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathConstraints;
@@ -74,6 +67,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
+    
     ArrayList<Pose2d> list1 = new ArrayList<>();
     ArrayList<Pose2d> list2 = new ArrayList<>();
     ArrayList<Pose2d> list3 = new ArrayList<>();
