@@ -20,9 +20,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
+import frc.robot.Constants.SuperSystemConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
+import frc.robot.Constants.SuperSystemConstants.CoralPositions;
 import frc.robot.Constants.SuperSystemConstants.Position;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
@@ -240,17 +242,16 @@ public class SuperSystem {
     // movement
     private Command goTo(Position position) {
         // TODO Ask Zach
-        // if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor) {
-        //     return Commands.sequence(
-        //         preExecute(),
-        //         execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
-        //         NamedPositions.intermediateGround.pivotPosition, NamedPositions.intermediateGround.elevatorPosition, NamedPositions.intermediateGround.intermediateWristPosition),
-        //         wrist.setPositionCommand(NamedPositions.intermediateGround.finalWristPosition),
-        //         preExecute(),
-        //         execute(position.executionOrder, 10.0, 
-        //         position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
-        //     );
-        // }
+        if (currentPosition == PositionEquivalents.GroundIntake || lastPosition == PositionEquivalents.GroundIntake || currentPosition == PositionEquivalents.Processor || lastPosition == PositionEquivalents.Processor) {
+            return Commands.sequence(
+                preExecute(),
+                execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
+                PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
+                wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
+                execute(position.executionOrder, 10.0, 
+                position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
+            );
+        }
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
@@ -291,12 +292,12 @@ public class SuperSystem {
     }
 
     public Command moveToNet() { //TODO
-        return moveTo(NamedPositions.Net);
+        return moveTo(PositionEquivalents.Net);
     }
 
     public Command moveToProcessor() { //TODO
         // note: we may not need this one, because the intake action could cover it.
-        return moveTo(NamedPositions.Processor);
+        return moveTo(PositionEquivalents.Processor);
     }    
 
     public void initialize() {
@@ -345,7 +346,7 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            if (pivotAngle == NamedPositions.Stow.pivotPosition || pivotAngle == NamedPositions.intermediateGround.pivotPosition || pivotAngle == NamedPositions.Station.pivotPosition) {
+            if (pivotAngle == PositionEquivalents.Stow.coralPos.pivotPosition || pivotAngle == PositionEquivalents.intermediateGround.coralPos.pivotPosition || pivotAngle == PositionEquivalents.Station.coralPos.pivotPosition) {
                 elevatorWithinRange = elevator.atPositionWide();
             } else {
                 elevatorWithinRange = elevator.atPosition();
