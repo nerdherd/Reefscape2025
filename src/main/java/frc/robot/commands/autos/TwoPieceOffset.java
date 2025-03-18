@@ -56,7 +56,7 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                     )
                 ),
                 Commands.sequence(
-                    superSystem.intake(),
+                    superSystem.algaeintake(),
                     // Commands.deadline(
                     //     superSystem.intakeUntilSensed(),
                     //     Commands.waitSeconds(10)),

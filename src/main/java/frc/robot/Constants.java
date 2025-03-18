@@ -439,8 +439,8 @@ public final class Constants {
 
   public static final class RollerConstants {
 
-    public static final int kLeftMotorID = 61; 
-    public static final int kRightMotorID = 62; 
+    public static final int kAlgaeMotorID = 61; 
+    public static final int kCoralMotorID = 62; 
     public static final double kPMotor = 0.05;
     public static final double kIMotor = 0;
     public static final double kDMotor = 0;
@@ -451,8 +451,10 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kIntakePower  = -2.8;
-    public static final double kOuttakePower = 1.5;
+    public static final double kCoralIntakePower  = -2.8;
+    public static final double kCoralOuttakePower = 1.5;
+    public static final double kAlgaelIntakePower  = -2.8;
+    public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
   }
   public static final class WristConstants{

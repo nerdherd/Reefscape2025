@@ -49,7 +49,7 @@ public class TwoPiece extends SequentialCommandGroup {
                     
                 ),
                 Commands.sequence(
-                    superSystem.intake(),
+                    superSystem.algaeintake(),
                     // superSystem.intakeUntilSensed(2),
                     Commands.waitSeconds(2),
                     superSystem.holdPiece()

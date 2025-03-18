@@ -284,14 +284,14 @@ public class RobotContainer {
     .onTrue(superSystem.moveTo(NamedPositions.L4));
     
     operatorController.triggerRight()
-      .onTrue(superSystem.intake())
+      .onTrue(superSystem.algaeintake())
       .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
       .onTrue(superSystem.repositionCoral())
       .onFalse(superSystem.holdPiece());
     
     operatorController.controllerRight()
-    .onTrue(superSystem.moveTo(NamedPositions.Processor));
+      .onTrue(superSystem.moveTo(NamedPositions.Processor));
 
     operatorController.buttonUp()
       .onTrue(superSystem.moveTo(NamedPositions.Station));
