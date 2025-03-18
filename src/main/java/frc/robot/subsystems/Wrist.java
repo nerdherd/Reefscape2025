@@ -35,34 +35,20 @@ public class Wrist extends SubsystemBase implements Reportable{
     private double desiredPosition; // Should be ~90 or wherever initial position is
     private double desiredAngle;
     private boolean enabled = false;
-    private boolean V1 = true;
     private double ff = 0;
     private double pivotAngle = 0;
     public TalonFXConfiguration motorConfigs;
 
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
-    public Wrist(boolean V1) {
-        this.V1 = V1;
+    public Wrist() {
         motor = new TalonFX(WristConstants.kMotorID);
         motorConfigurator = motor.getConfigurator();
         
-        // TODO: Took out immediate stow to work on Wrist tuning
-
-        if(V1) {
-            // pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
-            desiredPosition = 0;
-            // desiredPosition = pigeon.getRoll().getValueAsDouble();
-            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
-        }
-        else {
-            pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
-            // desiredPosition = 89;
-            desiredPosition = pigeon.getRoll().getValueAsDouble();
-
-
-            motionMagicRequest = new MotionMagicVoltage(desiredPosition);
-        }
+        // pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
+        desiredPosition = 0;
+        // desiredPosition = pigeon.getRoll().getValueAsDouble();
+        motionMagicRequest = new MotionMagicVoltage(desiredPosition);
         motor.setControl(brakeRequest);
 
         // configure motor
@@ -76,59 +62,34 @@ public class Wrist extends SubsystemBase implements Reportable{
     //****************************** SETUP METHODS ******************************//
 
     public void configurePID(TalonFXConfiguration motorConfigs) {
-        if (V1){
-            motorConfigurator.refresh(motorConfigs);
+        motorConfigurator.refresh(motorConfigs);
 
-            // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
-            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = 13.89; 
-            // motorConfigs.Feedback.RotorToSensorRatio;
-            motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
-            motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 45;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        
-            motorConfigs.Slot0.kP = WristConstants.kPMotor;
-            motorConfigs.Slot0.kI = WristConstants.kItMotor;
-            motorConfigs.Slot0.kD = WristConstants.kDMotor;
-            motorConfigs.Slot0.kV = WristConstants.kVMotor;
-            motorConfigs.Slot0.kS = WristConstants.kSMotor;
-            motorConfigs.Slot0.kG = WristConstants.kGMotor;
-
-            motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  WristConstants.kCruiseVelocity;
-            motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
-            motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
-        
-            motorConfigs.MotorOutput.NeutralMode = neutralMode;
-
-            StatusCode response = motorConfigurator.apply(motorConfigs);
-            if (!response.isOK()){
-                DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
-            }
-        } else {
-            motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
-            motorConfigs.Feedback.SensorToMechanismRatio = 12.0/54.0;
-            motorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
-            motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 30;
-            motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-            motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        
-            motorConfigs.Slot0.kP = WristConstants.kPMotor;
-            motorConfigs.Slot0.kI = WristConstants.kItMotor;
-            motorConfigs.Slot0.kD = WristConstants.kDMotor;
-            motorConfigs.Slot0.kV = WristConstants.kVMotor;
-            motorConfigs.Slot0.kS = WristConstants.kSMotor;
-            // motorConfigs.Slot0.kG = WristConstants.kGMotor; kG applied in ff
+        // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
+        motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
+        motorConfigs.Feedback.SensorToMechanismRatio = 13.89; 
+        // motorConfigs.Feedback.RotorToSensorRatio;
+        motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+        motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;
+        motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 45;
+        motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
+        motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     
-            motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
-            motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
-        
-            StatusCode response = motorConfigurator.apply(motorConfigs);
-            if (!response.isOK()){
-                DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
-            }
+        motorConfigs.Slot0.kP = WristConstants.kPMotor;
+        motorConfigs.Slot0.kI = WristConstants.kItMotor;
+        motorConfigs.Slot0.kD = WristConstants.kDMotor;
+        motorConfigs.Slot0.kV = WristConstants.kVMotor;
+        motorConfigs.Slot0.kS = WristConstants.kSMotor;
+        motorConfigs.Slot0.kG = WristConstants.kGMotor;
+
+        motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  WristConstants.kCruiseVelocity;
+        motorConfigs.MotionMagic.MotionMagicAcceleration = WristConstants.kAcceleration;
+        motorConfigs.MotionMagic.MotionMagicJerk = WristConstants.kJerk;
+    
+        motorConfigs.MotorOutput.NeutralMode = neutralMode;
+
+        StatusCode response = motorConfigurator.apply(motorConfigs);
+        if (!response.isOK()){
+            DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
         }
     }
 

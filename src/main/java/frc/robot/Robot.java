@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.util.datalog.DataLog;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.Commands;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -86,14 +83,11 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.refreshAlliance();
     m_robotContainer.imu.zeroAll();
-    
-    // need them once it comes back from Test Mode
-    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.pivot.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.wrist.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
-
-    m_robotContainer.refreshSupersystem();
+        
+    if (RobotContainer.USE_SUBSYSTEMS) {
+      m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
+      m_robotContainer.superSystem.initialize();
+    }
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -118,17 +112,14 @@ public class Robot extends TimedRobot {
     }
     
     // need them once it comes back from Test Mode
-    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.pivot.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.wrist.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Brake);
-    m_robotContainer.superSystem.reConfigureMotors();
+    if (RobotContainer.USE_SUBSYSTEMS) {
+      m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
+      m_robotContainer.superSystem.initialize();
+    }
 
     m_robotContainer.initDefaultCommands_teleop();
     m_robotContainer.configureBindings_teleop();
     m_robotContainer.initDefaultCommands_teleop();
-
-    m_robotContainer.refreshSupersystem();
   }
 
   /** This function is called periodically during operator control. */
@@ -140,11 +131,9 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    m_robotContainer.elevator.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.pivot.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.wrist.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.climbMotor.setNeutralMode(NeutralModeValue.Coast);
-    m_robotContainer.superSystem.reConfigureMotors();
+    if (RobotContainer.USE_SUBSYSTEMS) {
+      m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Coast);
+    }
     
     // m_robotContainer.superSystem.initialize();
     m_robotContainer.initDefaultCommands_test();
