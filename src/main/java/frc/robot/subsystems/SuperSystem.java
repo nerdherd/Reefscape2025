@@ -23,6 +23,8 @@ import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.Position;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 public class SuperSystem {
     public Elevator elevator;
@@ -34,8 +36,8 @@ public class SuperSystem {
     public StatusSignal<S1StateValue> intakeSensor;
     public StatusSignal<S2StateValue> floorSensor;
     
-    private NamedPositions currentPosition = NamedPositions.Stow;
-    private NamedPositions lastPosition = NamedPositions.Stow;
+    private PositionEquivalents currentPosition = PositionEquivalents.Stow;
+    private PositionEquivalents lastPosition = PositionEquivalents.Stow;
     
     boolean elevatorWithinRange;
 
@@ -52,6 +54,13 @@ public class SuperSystem {
         WRTELV_PVT,
         WRTPVT_ELV
     }
+    
+    public enum PositionMode {
+        Coral,
+        Algae,
+    }
+
+    private PositionMode positionMode = PositionMode.Coral;
 
     private boolean isStarted = false;
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
@@ -173,7 +182,7 @@ public class SuperSystem {
     }
 
     public Command outtake() {
-        if (currentPosition == NamedPositions.L1) { // TODO is it working??
+        if (currentPosition == PositionEquivalents.L1) { // TODO is it working??
             return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
         }
         return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
@@ -202,7 +211,7 @@ public class SuperSystem {
     public Command climbCommandUp() {
         return Commands.sequence(
             climbPrep(), 
-            moveTo(NamedPositions.ClimbUp) 
+            moveTo(PositionEquivalents.ClimbUp) 
         );
     }
 
@@ -210,38 +219,38 @@ public class SuperSystem {
     public Command climbCommandDown() {
         return Commands.sequence(
             climbHardClamp(), 
-            moveTo(NamedPositions.ClimbDown) 
+            moveTo(PositionEquivalents.ClimbDown) 
         );
     }
 
-    public Command updatePositions(NamedPositions position) {
+    public Command updatePositions(PositionEquivalents position) {
         return Commands.runOnce(() -> {
             if(currentPosition != position) lastPosition = currentPosition;
             currentPosition = position;
         });
     }
 
-    public Command moveTo(NamedPositions position) {
+    public Command moveTo(PositionEquivalents position) {
         return Commands.sequence(
             updatePositions(position),
-            // Commands.waitSeconds(.001),
-            goTo(position)
+            Commands.either(goTo(position.coralPos), goTo(position.algaePos), () -> (positionMode == PositionMode.Coral))
         );
     }
 
     // movement
-    private Command goTo(NamedPositions position) {
-        if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor) {
-            return Commands.sequence(
-                preExecute(),
-                execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
-                NamedPositions.intermediateGround.pivotPosition, NamedPositions.intermediateGround.elevatorPosition, NamedPositions.intermediateGround.intermediateWristPosition),
-                wrist.setPositionCommand(NamedPositions.intermediateGround.finalWristPosition),
-                preExecute(),
-                execute(position.executionOrder, 10.0, 
-                position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
-            );
-        }
+    private Command goTo(Position position) {
+        // TODO Ask Zach
+        // if (position == NamedPositions.GroundIntake || lastPosition == NamedPositions.GroundIntake || position == NamedPositions.Processor || lastPosition == NamedPositions.Processor) {
+        //     return Commands.sequence(
+        //         preExecute(),
+        //         execute(NamedPositions.intermediateGround.executionOrder, 10.0, 
+        //         NamedPositions.intermediateGround.pivotPosition, NamedPositions.intermediateGround.elevatorPosition, NamedPositions.intermediateGround.intermediateWristPosition),
+        //         wrist.setPositionCommand(NamedPositions.intermediateGround.finalWristPosition),
+        //         preExecute(),
+        //         execute(position.executionOrder, 10.0, 
+        //         position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
+        //     );
+        // }
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
