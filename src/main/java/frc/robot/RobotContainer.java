@@ -283,17 +283,6 @@ public class RobotContainer {
     .onTrue(Commands.runOnce(() -> superSystem.togglePositionMode()));
 
 
-    // On Algae Mode
-    operatorController.dpadDown().onTrue(
-      superSystem.moveTo(PositionEquivalents.AlgaeL2)
-    );
-    driverController.dpadUp().onTrue(
-      superSystem.moveTo(PositionEquivalents.AlgaeL3)
-    );
-    operatorController.buttonUp()
-    .onTrue(superSystem.moveTo(PositionEquivalents.Processor));
-
-
     
     
     
