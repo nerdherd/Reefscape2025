@@ -229,16 +229,16 @@ public class SwerveJoystickCommand extends Command {
         if(dPadSupplier.get()) {
             if (dPadDirectionalSupplier.get() == 0.0) {
                 swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(0.75, 0, 0);
+                chassisSpeeds = new ChassisSpeeds(0, -0.75, 0);
             } else if (dPadDirectionalSupplier.get() == 90.0) {
                 swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(0, -0.75, 0);
+                chassisSpeeds = new ChassisSpeeds(0.75, 0, 0);
             } else if (dPadDirectionalSupplier.get() == 180.0) {
                 swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(-0.75, 0, 0);
+                chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
             } else if (dPadDirectionalSupplier.get() == 270.0) {
                 swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
+                chassisSpeeds = new ChassisSpeeds(-0.75, 0, 0);
             } else {
                 return;
             }
