@@ -24,7 +24,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.CoralPositions;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
+import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.TwoPieceOffset;
@@ -261,8 +263,7 @@ public class RobotContainer {
       .onTrue(superSystem.intake())
       .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-      .onTrue(superSystem.repositionCoral())
-      .onFalse(superSystem.holdPiece());
+      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
     
     operatorController.controllerRight()
     .onTrue(superSystem.moveTo(NamedPositions.Processor));
@@ -270,11 +271,12 @@ public class RobotContainer {
     operatorController.buttonUp()
       .onTrue(superSystem.moveTo(NamedPositions.Station));
     operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     operatorController.buttonDown()
       .onTrue(superSystem.moveTo(NamedPositions.Stow));
     operatorController.buttonLeft()
-      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+      .onTrue(Commands.runOnce(() -> superSystem.togglePositionMode()));
+
   }
 
 

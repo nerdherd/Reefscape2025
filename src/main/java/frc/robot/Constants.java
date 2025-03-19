@@ -541,7 +541,9 @@ public final class Constants {
       AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
       AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      );
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
+
       public Position position;
       AlgaePositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);
@@ -560,6 +562,10 @@ public final class Constants {
       L4(CoralPositions.L4, AlgaePositions.Net),
       ClimbUp(CoralPositions.ClimbUp, AlgaePositions.ClimbUp),
       ClimbDown(CoralPositions.ClimbDown, AlgaePositions.ClimbDown),
+      Net(AlgaePositions.Net, AlgaePositions.Net),
+      Processor(AlgaePositions.Processor, AlgaePositions.Processor),
+      intermediateGround(CoralPositions.intermediateGround, AlgaePositions.intermediateGround),
+      Station(CoralPositions.Station, CoralPositions.Station),
 
       ;
       

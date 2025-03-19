@@ -241,13 +241,13 @@ public class SuperSystem {
 
     // movement
     private Command goTo(Position position) {
-        // TODO Ask Zach
         if (currentPosition == PositionEquivalents.GroundIntake || lastPosition == PositionEquivalents.GroundIntake || currentPosition == PositionEquivalents.Processor || lastPosition == PositionEquivalents.Processor) {
             return Commands.sequence(
                 preExecute(),
                 execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
                 PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
                 wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
+                preExecute(),
                 execute(position.executionOrder, 10.0, 
                 position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
             );
@@ -268,7 +268,7 @@ public class SuperSystem {
         );
     }
 
-    public Command moveToAuto(NamedPositions position) {
+    public Command moveToAuto(Position position) {
         // currentPosition = position;
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
@@ -287,18 +287,26 @@ public class SuperSystem {
     }
 
     // game elements
-    public Command moveToCage() { //TODO
-        return moveTo(NamedPositions.Cage);
-    }
+    // public Command moveToCage() { //TODO
+    //     return moveTo(NamedPositions.Cage);
+    // }
 
     public Command moveToNet() { //TODO
         return moveTo(PositionEquivalents.Net);
     }
 
-    public Command moveToProcessor() { //TODO
-        // note: we may not need this one, because the intake action could cover it.
-        return moveTo(PositionEquivalents.Processor);
-    }    
+    public void togglePositionMode() {
+        if (positionMode == PositionMode.Coral) {
+            positionMode = PositionMode.Algae;
+        } else {
+            positionMode = PositionMode.Coral;
+        }
+    }
+
+    // public Command moveToProcessor() { //TODO
+    //     // note: we may not need this one, because the intake action could cover it.
+    //     return moveTo(PositionEquivalents.Processor);
+    // }    
 
     public void initialize() {
         pivot.setEnabled(true);
