@@ -226,29 +226,29 @@ public class SwerveJoystickCommand extends Command {
         }
         
         ChassisSpeeds chassisSpeeds;
-        // Check if in field oriented mode
+        if(dPadSupplier.get()) {
+            if (dPadDirectionalSupplier.get() == 0.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(0.75, 0, 0);
+            } else if (dPadDirectionalSupplier.get() == 90.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(0, -0.75, 0);
+            } else if (dPadDirectionalSupplier.get() == 180.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(-0.75, 0, 0);
+            } else if (dPadDirectionalSupplier.get() == 270.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
+            } else {
+                return;
+            }
         if (!fieldOrientedFunction.get()) {
             swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
                 swerveDrive.getImu().getRotation2d());
-        } else if(dPadSupplier.get()) {
-            if (dPadDirectionalSupplier.get() == 0.0) {
-                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(0, -0.75, 0);
-            } else if (dPadDirectionalSupplier.get() == 90.0) {
-                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(0.75, 0, 0);
-            } else if (dPadDirectionalSupplier.get() == 180.0) {
-                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
-            } else if (dPadDirectionalSupplier.get() == 270.0) {
-                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
-                chassisSpeeds = new ChassisSpeeds(-0.75, 0, 0);
-            } else {
-                return;
-            }
         }
+        
         else {
             swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
             chassisSpeeds = new ChassisSpeeds(
@@ -261,7 +261,8 @@ public class SwerveJoystickCommand extends Command {
         
         // Calculate swerve module states
         swerveDrive.setModuleStates(moduleStates);
-    }
+    } 
+}
 
     private void checkButtonStates(boolean isPressed, boolean wasPressed, int direction) {
         // Pressed: Transition from not pressed to pressed

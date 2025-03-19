@@ -169,16 +169,16 @@ public class RobotContainer {
       () -> {
 
         if (driverController.getDpadDown()) {
-          return 270.0;
-        }
-        if (driverController.getDpadLeft()) {
           return 180.0;
         }
+        if (driverController.getDpadLeft()) {
+          return 270.0;
+        }
         if (driverController.getDpadRight()) {
-          return 0.0;
+          return 90.0;
         }
         if (driverController.getDpadUp()) {
-          return 90.0;
+          return 0.0;
         }
         return swerveDrive.getImu().getHeading();
 
