@@ -11,10 +11,8 @@ import org.json.simple.parser.ParseException;
 
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
-import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.pathplanner.lib.auto.AutoBuilder;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -25,21 +23,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
-import frc.robot.Constants.ElevatorConstants;
-import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants.PivotConstants;
-import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.SuperSystemConstants.NamedPositions;
-// import frc.robot.commands.autos.PreloadTaxi;
-// import frc.robot.commands.autSquare;
-import frc.robot.commands.SwerveJoystickCommand;
-// import frc.robot.commands.autos.AutoDriving;
 import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.commands.autos.TwoPiece;
-import frc.robot.commands.autos.TwoPieceOffset;
-import frc.robot.Constants.ROBOT_ID;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.Generic3Piece;
 import frc.robot.commands.autos.Generic4Piece;
@@ -54,14 +42,8 @@ import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Wrist;
-import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.Pivot;
-import frc.robot.subsystems.BannerSensor;
-
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
-
 import frc.robot.util.Controller;
-import frc.robot.util.filters.OldDriverFilter2;
 
 public class RobotContainer {
   public Gyro imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
@@ -95,13 +77,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private static boolean USE_SUBSYSTEMS = true;
-  private static boolean USE_ELEV = false;
-  private static boolean USE_WRIST = false;
-  private static boolean USE_PIVOT = false;
-  private static boolean USE_INTAKE = false;
-  private static boolean V1 = true;
-  
+  public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
@@ -122,13 +98,11 @@ public class RobotContainer {
     }
 
     if (USE_SUBSYSTEMS) {
-      wrist = new Wrist(V1);
+      wrist = new Wrist();
       elevator = new Elevator();
       pivot = new Pivot();
       intakeRoller = new IntakeRoller();
       candi = new CANdi(6);
-      // intakeSensor = new BannerSensor("Intake Roller", IntakeSensorConstants.blackPort, IntakeSensorConstants.whitePort);
-      // floorSensor = new BannerSensor("Intake Wrist", FloorSensorConstants.blackPort, FloorSensorConstants.whitePort);
       climbMotor = new Climb();
       superSystem = new SuperSystem(elevator, pivot, wrist, intakeRoller, candi, climbMotor);
       try { // ide displayed error fix
@@ -139,8 +113,8 @@ public class RobotContainer {
         DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
       } catch (ParseException e) {
         DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
+      }
     }
-  }
 
     initShuffleboard();
     initAutoChoosers();
@@ -263,7 +237,7 @@ public class RobotContainer {
       
       driverController.buttonUp() // Hard Clamp
         .onTrue(Commands.sequence(
-          Commands.runOnce(() -> climbMotor.setEnabled(true)),
+          Commands.runOnce(() -> climbMotor.setEnabled(true)), // TODO: Find real solution
           superSystem.climbHardClamp()));
 
     driverController.buttonRight() // Execute Climb
@@ -417,20 +391,6 @@ public class RobotContainer {
     
     swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
     return currentAuto;
-  }
-
-
-  public void refreshSupersystem() {
-    elevator.setPivotAngle(0);
-
-    pivot.setTargetPosition(0);
-    elevator.setTargetPosition(0);
-    wrist.setTargetPosition(0);
-
-    pivot.setEnabled(true);
-    elevator.setEnabled(true);
-    wrist.setEnabled(true);
-    intakeRoller.setEnabled(true);
   }
 
   public void DisableAllMotors_Test()
