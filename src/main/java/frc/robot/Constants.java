@@ -12,7 +12,6 @@ import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -179,6 +178,7 @@ public final class Constants {
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
 
     public static enum FieldPositions {
+
       Reef1(5.008,5.279,-120.0),
       Reef2(5.345, 5.12, -120.0),
       Reef3(5.84, 4.084, 180.0),
@@ -204,9 +204,11 @@ public final class Constants {
       FieldPositions(double _x, double _y, double _heading) {
         pos = new Pose2d(new Translation2d(_x, _y), new Rotation2d(Units.degreesToRadians(_heading)));
       }
+
     }
 
     public static final class MapPoses {
+
       public static final double CWReefOffset = 0.0; // meters
       
       public static Pose2d offsetPosWithRotation(Pose2d pos) { return offsetPosWithRotation(pos, CWReefOffset); }
@@ -296,7 +298,23 @@ public final class Constants {
       public static final Pose2d tag11Left  = offsetPosWithRotation(new Pose2d(12.180, 2.892, new Rotation2d(Math.toRadians(-120))));
       public static final Pose2d tag11Right = offsetPosWithRotation(new Pose2d(12.516, 2.697, new Rotation2d(Math.toRadians(-120))));
       public static final Pose2d tag11Mid   = offsetPosWithRotation(new Pose2d(12.348, 2.795, new Rotation2d(Math.toRadians(-120))));
+    
     }
+
+    public static final class ReefOffsets {
+
+      public static final double frontOffset = 0.554; // calculated from two reef sides on spreadsheet
+      public static final double sideOffset = 0.197; // calculated from two reef sides on spreadsheet
+
+    }
+
+    public static final class StationOffsets {
+
+      public static final double frontOffset = 0; // TODO need date to calculate
+      public static final double sideOffset = 0; // TODO need data to calculate
+
+    }
+
   }
 
   public static final class PathPlannerConstants {
