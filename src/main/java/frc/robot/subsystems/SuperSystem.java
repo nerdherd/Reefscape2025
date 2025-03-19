@@ -242,7 +242,7 @@ public class SuperSystem {
 
     // movement
     private Command goTo(Position position) {
-        if (currentPosition == PositionEquivalents.GroundIntake || lastPosition == PositionEquivalents.GroundIntake || currentPosition == PositionEquivalents.Processor || lastPosition == PositionEquivalents.Processor) {
+        if (currentPosition == PositionEquivalents.GroundIntake || lastPosition == PositionEquivalents.GroundIntake || currentPosition == PositionEquivalents.L1 || lastPosition == PositionEquivalents.L1) {
             return Commands.sequence(
                 preExecute(),
                 execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
@@ -293,7 +293,7 @@ public class SuperSystem {
     // }
 
     public Command moveToNet() { //TODO
-        return moveTo(PositionEquivalents.Net);
+        return moveTo(PositionEquivalents.L4); //Uses net position from position equivalents
     }
 
     public void togglePositionMode() {

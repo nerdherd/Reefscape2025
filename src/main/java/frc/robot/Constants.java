@@ -580,13 +580,8 @@ public final class Constants {
       L4(CoralPositions.L4, AlgaePositions.Net),
       ClimbUp(CoralPositions.ClimbUp, AlgaePositions.ClimbUp),
       ClimbDown(CoralPositions.ClimbDown, AlgaePositions.ClimbDown),
-      Net(AlgaePositions.Net, AlgaePositions.Net),
-      Processor(AlgaePositions.Processor, AlgaePositions.Processor),
       intermediateGround(CoralPositions.intermediateGround, AlgaePositions.intermediateGround),
       Station(CoralPositions.Station, CoralPositions.Station),
-      AlgaeL2(AlgaePositions.AlgaeL2, AlgaePositions.AlgaeL2),
-      AlgaeL3(AlgaePositions.AlgaeL3, AlgaePositions.AlgaeL3),
-
 
       ;
       
