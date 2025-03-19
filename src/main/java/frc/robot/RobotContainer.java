@@ -34,6 +34,7 @@ import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.Generic3Piece;
 import frc.robot.commands.autos.Generic4Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
+import frc.robot.subsystems.SuperSystem.PositionMode;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -63,6 +64,7 @@ public class RobotContainer {
   public SuperSystem superSystem;
   public Climb climbMotor;
   public CANdi candi;
+  public PositionMode positionMode;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort,false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
@@ -193,7 +195,7 @@ public class RobotContainer {
       double Elevator_OFFSET = 0.05;
       elevator.setDefaultCommand(Commands.run(() -> {
         double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
-        if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (NamedPositions.Station.pivotPosition - 0.02)) {
+        if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
         double currentPos = elevator.getPosition();
         elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
         }
@@ -213,12 +215,12 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.dpadDown().onTrue(
-      superSystem.moveTo(NamedPositions.AlgaeL2)
-    );
-    driverController.dpadUp().onTrue(
-      superSystem.moveTo(NamedPositions.AlgaeL3)
-    );
+    // driverController.dpadDown().onTrue(
+    //   superSystem.moveTo(NamedPositions.AlgaeL2)
+    // );
+    // driverController.dpadUp().onTrue(
+    //   superSystem.moveTo(NamedPositions.AlgaeL3)
+    // );
 
     driverController.triggerLeft()
       .onTrue(superSystem.outtake())
@@ -247,35 +249,80 @@ public class RobotContainer {
 
   
 
+  
     //////////////////////
     // Operator bindings
     //////////////////////
-    operatorController.dpadDown()
-    .onTrue(superSystem.moveTo(NamedPositions.L1));
-    operatorController.dpadLeft()
-    .onTrue(superSystem.moveTo(NamedPositions.L2));
-    operatorController.dpadUp()
-    .onTrue(superSystem.moveTo(NamedPositions.L3));
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveTo(NamedPositions.L4));
-    
-    operatorController.triggerRight()
-      .onTrue(superSystem.intake())
-      .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
-    
-    operatorController.controllerRight()
-    .onTrue(superSystem.moveTo(NamedPositions.Processor));
 
+
+
+    
+    operatorController.dpadDown()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L1));
+    operatorController.dpadLeft()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L2));
+    operatorController.dpadUp()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L3));
+    operatorController.dpadRight()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L4));
+
+
+    operatorController.triggerRight()
+    .onTrue(superSystem.intake())
+    .onFalse(superSystem.holdPiece());
+    operatorController.triggerLeft()
+    .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
+  
     operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(NamedPositions.Station));
+      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
     operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+      .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
     operatorController.buttonDown()
-      .onTrue(superSystem.moveTo(NamedPositions.Stow));
+      .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
     operatorController.buttonLeft()
-      .onTrue(Commands.runOnce(() -> superSystem.togglePositionMode()));
+    .onTrue(Commands.runOnce(() -> superSystem.togglePositionMode()));
+
+
+    // On Algae Mode
+    operatorController.dpadDown().onTrue(
+      superSystem.moveTo(PositionEquivalents.AlgaeL2)
+    );
+    driverController.dpadUp().onTrue(
+      superSystem.moveTo(PositionEquivalents.AlgaeL3)
+    );
+    operatorController.buttonUp()
+    .onTrue(superSystem.moveTo(PositionEquivalents.Processor));
+
+
+    
+    
+    
+
+    // operatorController.dpadDown()
+    // .onTrue(superSystem.moveTo(NamedPositions.L1));
+    // operatorController.dpadLeft()
+    // .onTrue(superSystem.moveTo(NamedPositions.L2));
+    // operatorController.dpadUp()
+    // .onTrue(superSystem.moveTo(NamedPositions.L3));
+    // operatorController.dpadRight()
+    // .onTrue(superSystem.moveTo(NamedPositions.L4));
+    
+    // operatorController.triggerRight()
+    //   .onTrue(superSystem.intake())
+    //   .onFalse(superSystem.holdPiece());
+    // operatorController.triggerLeft()
+    //   .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+    
+    // operatorController.controllerRight()
+    // .onTrue(superSystem.moveTo(NamedPositions.Processor));
+
+    // operatorController.buttonUp()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Station));
+    // operatorController.buttonRight()
+    //   .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+    // operatorController.buttonDown()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
+
 
   }
 
