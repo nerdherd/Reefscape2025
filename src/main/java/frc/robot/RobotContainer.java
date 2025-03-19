@@ -168,6 +168,24 @@ public class RobotContainer {
         // if (driverController.getButtonUp())
         //   return 0.0;
         return swerveDrive.getImu().getHeading();
+      }, 
+      () -> driverController.getDpadDown() || driverController.getDpadUp() || driverController.getDpadLeft() || driverController.getDpadRight(),
+      () -> {
+
+        if (driverController.getDpadDown()) {
+          return 180.0;
+        }
+        if (driverController.getDpadLeft()) {
+          return 270.0;
+        }
+        if (driverController.getDpadRight()) {
+          return 90.0;
+        }
+        if (driverController.getDpadUp()) {
+          return 0.0;
+        }
+        return swerveDrive.getImu().getHeading();
+
       }
     );
 
@@ -190,6 +208,8 @@ public class RobotContainer {
               wrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
           }
       }, wrist));
+
+      
 
       double Elevator_SPEED = 3.0;// Meters per second // 0.3
       double Elevator_OFFSET = 0.05;
