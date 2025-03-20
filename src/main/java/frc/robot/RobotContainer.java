@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -174,17 +175,17 @@ public class RobotContainer {
 
         if (driverController.getDpadDown()) {
           return 180.0;
-        }
-        if (driverController.getDpadLeft()) {
+       } else if (driverController.getDpadLeft()) {
           return 270.0;
-        }
-        if (driverController.getDpadRight()) {
+        }else if (driverController.getDpadRight()) {
           return 90.0;
-        }
-        if (driverController.getDpadUp()) {
+        } else if (driverController.getDpadUp()){
           return 0.0;
-        }
-        return swerveDrive.getImu().getHeading();
+        } else {
+          return -1.0;
+        } 
+
+
 
       }
     );
