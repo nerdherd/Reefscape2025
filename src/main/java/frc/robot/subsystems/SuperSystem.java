@@ -269,7 +269,11 @@ public class SuperSystem {
         );
     }
 
-    public Command moveToAuto(Position position) {
+    public Command moveToAuto(PositionEquivalents position) {
+        return Commands.either(goToAuto(position.coralPos), goToAuto(position.algaePos), () -> (positionMode == PositionMode.Coral));
+    }
+
+    public Command goToAuto(Position position) {
         // currentPosition = position;
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
@@ -278,7 +282,7 @@ public class SuperSystem {
                 position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
                               
             );
-        else return Commands.sequence(
+        return Commands.sequence(
             preExecute(),
             execute(position.executionOrder, 5.0, 
             position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
@@ -297,11 +301,12 @@ public class SuperSystem {
     }
 
     public void togglePositionMode() {
-        if (positionMode == PositionMode.Coral) {
-            positionMode = PositionMode.Algae;
-        } else {
-            positionMode = PositionMode.Coral;
-        }
+        if (positionMode == PositionMode.Coral) positionMode = PositionMode.Algae;
+        else positionMode = PositionMode.Coral;
+    }
+
+    public Command togglePositionModeCommand() {
+        return Commands.runOnce(() -> togglePositionMode());
     }
 
     // public Command moveToProcessor() { //TODO

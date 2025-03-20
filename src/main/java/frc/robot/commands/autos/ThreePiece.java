@@ -11,7 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
@@ -33,7 +33,7 @@ public class ThreePiece extends SequentialCommandGroup {
                     AutoBuilder.followPath(pathGroup.get(0)),
                     Commands.sequence(
                         Commands.waitSeconds(0.4),
-                        superSystem.moveToAuto(NamedPositions.L2)
+                        superSystem.moveToAuto(PositionEquivalents.L2)
                     )
                 ),
                 Commands.sequence(
@@ -41,11 +41,11 @@ public class ThreePiece extends SequentialCommandGroup {
                     Commands.waitSeconds(0.2)
                 ),
                 Commands.parallel(
-                    superSystem.moveTo(NamedPositions.SemiStow),
+                    superSystem.moveTo(PositionEquivalents.SemiStow),
                     AutoBuilder.followPath(pathGroup.get(1)),
                     Commands.sequence(
                         Commands.waitSeconds(1),
-                        superSystem.moveToAuto(NamedPositions.Station)
+                        superSystem.moveToAuto(PositionEquivalents.Station)
                     )
                 ),
                 Commands.sequence(
@@ -53,11 +53,11 @@ public class ThreePiece extends SequentialCommandGroup {
                     superSystem.holdPiece()
                 ),
                 Commands.parallel(
-                    superSystem.moveTo(NamedPositions.SemiStow),
+                    superSystem.moveTo(PositionEquivalents.SemiStow),
                     AutoBuilder.followPath(pathGroup.get(2)),
                     Commands.sequence(
                         Commands.waitSeconds(1),
-                        superSystem.moveToAuto(NamedPositions.L2)
+                        superSystem.moveToAuto(PositionEquivalents.L2)
                     )
                 ),
                 Commands.sequence(
@@ -66,11 +66,11 @@ public class ThreePiece extends SequentialCommandGroup {
                 ),
 
                 Commands.parallel(
-                    superSystem.moveTo(NamedPositions.SemiStow),
+                    superSystem.moveTo(PositionEquivalents.SemiStow),
                     AutoBuilder.followPath(pathGroup.get(3)),
                     Commands.sequence(
                         Commands.waitSeconds(1),
-                        superSystem.moveToAuto(NamedPositions.Station)
+                        superSystem.moveToAuto(PositionEquivalents.Station)
                     )
                 ),
                 Commands.sequence(
@@ -78,11 +78,11 @@ public class ThreePiece extends SequentialCommandGroup {
                     superSystem.holdPiece()
                 ),
                 Commands.parallel(
-                    superSystem.moveTo(NamedPositions.SemiStow),
+                    superSystem.moveTo(PositionEquivalents.SemiStow),
                     AutoBuilder.followPath(pathGroup.get(4)),
                     Commands.sequence(
                         Commands.waitSeconds(1),
-                        superSystem.moveToAuto(NamedPositions.L2)
+                        superSystem.moveToAuto(PositionEquivalents.L2)
                     )
                 ),
                 Commands.sequence(
