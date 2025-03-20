@@ -51,7 +51,7 @@ public class Generic2Piece extends SequentialCommandGroup {
             }),
             superSystem.outtake(),
             Commands.waitSeconds(1.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Coral Station and intake coral 2
             Commands.parallel(
@@ -61,7 +61,7 @@ public class Generic2Piece extends SequentialCommandGroup {
             // elevator.moveToStation(),
             // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Reef and place coral 2
             Commands.parallel(
@@ -76,7 +76,7 @@ public class Generic2Piece extends SequentialCommandGroup {
                 case 4: superSystem.moveTo(PositionEquivalents.L4);
                 }
             }),
-            superSystem.algaeRoller.outtake(),
+            superSystem.intakeRoller.outtake(),
             Commands.waitSeconds(1.5),
 
             // Stop
@@ -86,7 +86,7 @@ public class Generic2Piece extends SequentialCommandGroup {
 
     public Command stopAuto() {
         return Commands.sequence(
-            superSystem.algaeRoller.stop()//,
+            superSystem.intakeRoller.stop()//,
             // elevator.stow()
         );
     }

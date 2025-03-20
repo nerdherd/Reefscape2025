@@ -49,7 +49,7 @@ public class Generic4Piece extends SequentialCommandGroup {
             }),
             superSystem.outtake(),
             Commands.waitSeconds(1.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Coral Station and intake coral 2%
             Commands.parallel(
@@ -59,7 +59,7 @@ public class Generic4Piece extends SequentialCommandGroup {
             // elevator.moveToStation(),
             // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Reef and place coral 2
             Commands.parallel(
@@ -77,7 +77,7 @@ public class Generic4Piece extends SequentialCommandGroup {
             }),
             superSystem.outtake(),
             Commands.waitSeconds(1.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
             
             // Drive to Coral Station and intake coral 3
             Commands.parallel(
@@ -87,7 +87,7 @@ public class Generic4Piece extends SequentialCommandGroup {
             // elevator.moveToStation(),
             // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Reef and place coral 3
             Commands.parallel(
@@ -105,7 +105,7 @@ public class Generic4Piece extends SequentialCommandGroup {
             }),
             superSystem.outtake(),
             Commands.waitSeconds(1.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
             
             // Drive to Coral Station and intake coral 4
             Commands.parallel(
@@ -115,7 +115,7 @@ public class Generic4Piece extends SequentialCommandGroup {
             // elevator.moveToStation(),
             // intakeRoller.intake(),
             Commands.waitSeconds(2.5),
-            superSystem.algaeRoller.stop(),
+            superSystem.intakeRoller.stop(),
 
             // Drive to Reef and place coral 4
             Commands.parallel(
@@ -139,7 +139,7 @@ public class Generic4Piece extends SequentialCommandGroup {
 
     public Command stopAuto() {
         return Commands.sequence(
-            superSystem.algaeRoller.stop()//,
+            superSystem.intakeRoller.stop()//,
             // elevator.stow()
         );
     }

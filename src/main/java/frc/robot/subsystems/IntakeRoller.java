@@ -136,6 +136,14 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         velocityRequestAlgae.Velocity = velocity;
         velocityRequestCoral.Velocity = velocity;
     }
+    
+    private void setVelocityCoral(double velocity) {
+        velocityRequestCoral.Velocity = velocity;
+    }
+
+    private void setVelocityAlgae(double velocity) {
+        velocityRequestAlgae.Velocity = velocity;
+    }
 
     private double getTargetVelocity() {
         return velocityRequestAlgae.Velocity;
@@ -160,29 +168,25 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
  
     private Command setVelocityCommand(double velocity) {
-        velocityRequestAlgae.Velocity = velocity;
-        velocityRequestCoral.Velocity = velocity;
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
     private Command setVelocityCommandAlgae(double velocity) {
-        velocityRequestAlgae.Velocity = velocity;
-        return Commands.runOnce(() -> setVelocity(velocity));
+        return Commands.runOnce(() -> setVelocityAlgae(velocity));
     }
     private Command setVelocityCommandCoral(double velocity) {
-        velocityRequestCoral.Velocity = velocity;
-        return Commands.runOnce(() -> setVelocity(velocity));
+        return Commands.runOnce(() -> setVelocityCoral(velocity));
     }
 
     public Command setVoltageCommand(double volt) {
         return Commands.runOnce(() -> setVoltage(volt));
     }
 
-    public Command setVoltageCommandLeft(double volt) {
+    public Command setVoltageCommandCoral(double volt) {
         return Commands.runOnce(() -> setVoltageCoral(volt));
     }
 
-    public Command setVoltageCommandRight(double volt) {
+    public Command setVoltageCommandAlgae(double volt) {
         return Commands.runOnce(() -> setVoltageAlgae(volt));
     }
 
@@ -197,16 +201,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            // setVelocityCommandAlgae(RollerConstants.kIntakePower),
-            // setVelocityCommandCoral(RollerConstants.kIntakePower)
-            setVelocityCommand(RollerConstants.kCoralIntakePower)
-        );
-    }
-
-    public Command intakeLeft() {
-        return Commands.sequence(
-            setEnabledCommand(true),
-            setVelocityCommandAlgae(RollerConstants.kCoralIntakePower)
+            setVelocityCommandAlgae(RollerConstants.kAlgaeIntakePower)
         );
     }
 
@@ -217,22 +212,37 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         );
     }
 
-    public Command outtake() {
+    public Command outtakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(RollerConstants.kCoralOuttakePower)
+            setVelocityCommandCoral(RollerConstants.kCoralOuttakePower)
+        );
+    }
+
+    public Command outtakeAlgae() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommandAlgae(RollerConstants.kAlgaeOuttakePower)
         );
     }
 
     public Command outtakeL1() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandAlgae(RollerConstants.kCoralOuttakePower)
+            setVelocityCommand(RollerConstants.kL1OuttakePower)
             
         );
     }
 
-
+    public Command outtake() {
+        return Commands.sequence(
+          setEnabledCommand(true),
+          Commands.parallel(
+            outtakeAlgae(),
+            outtakeCoral()
+          )  
+        );
+    }
     public Command stop() {
         return stopCommand();
     }
@@ -249,14 +259,13 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
             case ALL:
                 tab.addNumber("Intake Stator Current", () -> this.algaeMotor.getStatorCurrent().getValueAsDouble());
                 tab.addBoolean("Intake Velocity Control", () -> this.velocityControl);
-                tab.addNumber("Intake Feed Forward", () -> velocityRequestAlgae.FeedForward);
                 tab.addNumber("Intake Desired Velocity", () -> velocityRequestAlgae.Velocity);
-                tab.addNumber("Intake Velocity", () -> algaeMotor.getVelocity().getValueAsDouble());
-                case MEDIUM:
                 tab.addNumber("Intake Position", () -> this.algaeMotor.getPosition().getValueAsDouble());
+                tab.addNumber("Intake Velocity", () -> algaeMotor.getVelocity().getValueAsDouble());
+            case MEDIUM:
                 tab.addNumber("Intake Supply Current", () -> this.algaeMotor.getSupplyCurrent().getValueAsDouble());
                 tab.addBoolean("Intake Enabled", () -> this.enabled);
-                case MINIMAL:
+            case MINIMAL:
                 tab.addNumber("Intake Applied Voltage Right", () -> this.coralMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Intake Applied Voltage Left", () -> this.algaeMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Intake Temperature", () -> this.algaeMotor.getDeviceTemp().getValueAsDouble());    

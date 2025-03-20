@@ -33,8 +33,7 @@ public class SuperSystem {
     public Elevator elevator;
     public Pivot pivot;
     public Wrist wrist;
-    public IntakeRoller algaeRoller;
-    public IntakeRoller coralRoller;
+    public IntakeRoller intakeRoller;
     public Climb climbMotor;
 
     public StatusSignal<S1StateValue> intakeSensor;
@@ -45,7 +44,7 @@ public class SuperSystem {
     
     boolean elevatorWithinRange;
 
-    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition,pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected, floorDetected;
+    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition, pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected, floorDetected;
 
     public enum ExecutionOrder {
         ALL_TOGETHER,
@@ -74,8 +73,7 @@ public class SuperSystem {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
-        this.algaeRoller = algaeRoller;
-        this.coralRoller = coralRoller;
+        this.intakeRoller = algaeRoller;
         this.intakeSensor = candi.getS1State(true);
         this.floorSensor = candi.getS2State(true);
         this.climbMotor = climbMotor;
@@ -101,8 +99,7 @@ public class SuperSystem {
         pivot.configureMotorV1();
         elevator.setMotorConfigs();
         wrist.configurePID(wrist.motorConfigs);
-        algaeRoller.configureMotor(algaeRoller.motorConfigs);
-        coralRoller.configureMotor(coralRoller.motorConfigs);
+        intakeRoller.configureMotor(intakeRoller.motorConfigs);
         climbMotor.configurePID(climbMotor.motorConfigs);
     }
 
@@ -132,39 +129,46 @@ public class SuperSystem {
     }
 
     public Command stopRoller() {
-        return algaeRoller.setVoltageCommand(0.0);
+        return intakeRoller.setVoltageCommand(0.0);
     }
 
+    public Command intake() {
+        return Commands.either(
+            intakeCoral(), 
+            algaeintake(), 
+            () -> (positionMode == PositionMode.Coral)
+            );
+    }
 
     public Command algaeintake() {
-        return algaeRoller.setVoltageCommand(RollerConstants.kCoralIntakePower);
+        return intakeRoller.intakeAlgae();
     }
-    public Command coralintake() {
-        return coralRoller.setVoltageCommand(RollerConstants.kCoralOuttakePower);
-    }
-
-    public Command repositionCoral() {
-        return Commands.sequence(
-            repositionCoralLeft(),
-            Commands.waitSeconds(0.3),
-            repositionCoralRight(),
-            holdPiece()
-        );
+    public Command intakeCoral() {
+        return intakeRoller.intakeCoral();
     }
 
-    public Command repositionCoralLeft() {
-        return Commands.sequence(
-            algaeRoller.setVoltageCommandLeft(0.5),
-            algaeRoller.setVoltageCommandRight(-1.0)
-        );
-    }
+    // public Command repositionCoral() {
+    //     return Commands.sequence(
+    //         repositionCoralLeft(),
+    //         Commands.waitSeconds(0.3),
+    //         repositionCoralRight(),
+    //         holdPiece()
+    //     );
+    // }
 
-    public Command repositionCoralRight() {
-        return Commands.sequence(
-            algaeRoller.setVoltageCommandLeft(-1),
-            algaeRoller.setVoltageCommandRight(0.5)
-        );
-    }
+    // public Command repositionCoralLeft() {
+    //     return Commands.sequence(
+    //         algaeRoller.setVoltageCommandLeft(0.5),
+    //         algaeRoller.setVoltageCommandRight(-1.0)
+    //     );
+    // }
+
+    // public Command repositionCoralRight() {
+    //     return Commands.sequence(
+    //         algaeRoller.setVoltageCommandLeft(-1),
+    //         algaeRoller.setVoltageCommandRight(0.5)
+    //     );
+    // }
 
     public Command intakeUntilSensed() {
         return Commands.sequence(
@@ -187,18 +191,18 @@ public class SuperSystem {
     }
 
     public Command holdPiece() {
-        return algaeRoller.setVoltageCommand(-1); // holding coral
+        return intakeRoller.setVoltageCommand(-1); // holding coral
     }
 
     public Command outtake() {
-        if (currentPosition == NamedPositions.L1) { // TODO is it working??
-            return algaeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
+        if (currentPosition == PositionEquivalents.L1) { // TODO is it working??
+            return intakeRoller.outtakeL1(); // Might need to make new constant for this
         }
-        return algaeRoller.setVoltageCommand(RollerConstants.kCoralOuttakePower);
+        return intakeRoller.outtake();
     }
 
     public Command shootAlgae() {
-        return algaeRoller.setVoltageCommand(4.25);
+        return intakeRoller.setVoltageCommand(4.25);
     } 
     
     public Command climbPrep() {
@@ -311,10 +315,22 @@ public class SuperSystem {
         else positionMode = PositionMode.Coral;
     }
 
+    public void setPositionMode(PositionMode mode) {
+        positionMode = mode;
+    }
+
     public Command togglePositionModeCommand() {
         return Commands.runOnce(() -> togglePositionMode());
     }
 
+    public Command setPositionModeCoral() {
+        return Commands.runOnce(() -> setPositionMode(PositionMode.Coral));
+    }
+
+    public Command setPositionModeAlgae() {
+        return Commands.runOnce(() -> setPositionMode(PositionMode.Algae));
+    }
+    
     // public Command moveToProcessor() { //TODO
     //     // note: we may not need this one, because the intake action could cover it.
     //     return moveTo(PositionEquivalents.Processor);
@@ -324,13 +340,13 @@ public class SuperSystem {
         pivot.setEnabled(true);
         wrist.setEnabled(true);
         elevator.setEnabled(true);
-        algaeRoller.setEnabled(true);
+        intakeRoller.setEnabled(true);
         climbMotor.setEnabled(true);
         
         pivot.setTargetPosition(0.0);
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(0.0);
-        algaeRoller.setVoltageCommand(0.0);
+        intakeRoller.setVoltageCommand(0.0);
         climbMotor.setVoltageCommand(0.0);
         isStarted = false;
     }

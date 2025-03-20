@@ -287,21 +287,23 @@ public class RobotContainer {
     operatorController.dpadRight()
     .onTrue(superSystem.moveTo(PositionEquivalents.L4));
 
-
-    operatorController.triggerRight()
-    .onTrue(superSystem.intake())
-    .onFalse(superSystem.holdPiece());
+    // TODO new intake bindings
+    // operatorController.triggerRight()
+    // .onTrue(superSystem.intake())
+    // .onFalse(superSystem.holdPiece());
     operatorController.triggerLeft()
-    .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-  
+    .onTrue(superSystem.setPositionModeAlgae())
+    .onFalse(superSystem.setPositionModeCoral());
+
+    
     operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
+    .onTrue(superSystem.moveTo(PositionEquivalents.Station));
     operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
+    .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
     operatorController.buttonDown()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
+    .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
     operatorController.buttonLeft()
-    .onTrue(superSystem.togglePositionModeCommand());
+    .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
 
 
     

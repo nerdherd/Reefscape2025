@@ -471,7 +471,7 @@ public final class Constants {
 
     public static final double kCoralIntakePower  = -2.8;
     public static final double kCoralOuttakePower = 1.5;
-    public static final double kAlgaelIntakePower  = -2.8;
+    public static final double kAlgaeIntakePower  = -2.8;
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
   }
