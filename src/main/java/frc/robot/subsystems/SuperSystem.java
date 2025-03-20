@@ -129,7 +129,7 @@ public class SuperSystem {
     }
 
     public Command stopRoller() {
-        return intakeRoller.setVoltageCommand(0.0);
+        return intakeRoller.stop();
     }
 
     public Command intake() {
@@ -191,14 +191,26 @@ public class SuperSystem {
     }
 
     public Command holdPiece() {
-        return intakeRoller.setVoltageCommand(-1); // holding coral
+        if (positionMode == PositionMode.Coral) 
+            return Commands.none();
+        return intakeRoller.holdAlgae();
     }
 
     public Command outtake() {
-        if (currentPosition == PositionEquivalents.L1) { // TODO is it working??
+        return Commands.either(
+            outtakeCoral(), 
+            outtakeAlgae(), 
+           () -> positionMode == PositionMode.Coral);
+    }
+    public Command outtakeAlgae(){
+        return intakeRoller.outtakeAlgae();
+    }
+    
+    public Command outtakeCoral() {
+        if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) { // TODO is it working??
             return intakeRoller.outtakeL1(); // Might need to make new constant for this
         }
-        return intakeRoller.outtake();
+        return intakeRoller.outtakeCoral();
     }
 
     public Command shootAlgae() {

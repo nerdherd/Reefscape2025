@@ -205,17 +205,26 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         );
     }
 
+    public Command holdAlgae() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVelocityCommandAlgae(RollerConstants.kAlgaeHoldPower)
+        );
+    }
+
     public Command intakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandCoral(RollerConstants.kCoralIntakePower)
+            setVelocityCommandCoral(RollerConstants.kCoralIntakePower),
+            setVelocityCommandAlgae(-RollerConstants.kCoralIntakePower)
         );
     }
 
     public Command outtakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandCoral(RollerConstants.kCoralOuttakePower)
+            setVelocityCommandCoral(RollerConstants.kCoralOuttakePower),
+            setVelocityCommandAlgae(-RollerConstants.kCoralOuttakePower)
         );
     }
 
@@ -229,20 +238,11 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command outtakeL1() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(RollerConstants.kL1OuttakePower)
-            
+            setVelocityCommandCoral(RollerConstants.kL1OuttakePower),
+            setVelocityCommandAlgae(-RollerConstants.kL1OuttakePower)
         );
     }
 
-    public Command outtake() {
-        return Commands.sequence(
-          setEnabledCommand(true),
-          Commands.parallel(
-            outtakeAlgae(),
-            outtakeCoral()
-          )  
-        );
-    }
     public Command stop() {
         return stopCommand();
     }
