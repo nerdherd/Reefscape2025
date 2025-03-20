@@ -517,15 +517,22 @@ public final class Constants {
   
 
   public static final class SuperSystemConstants {
-    public enum NamedPositions { 
+    public static final class Position {
+      public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; 
+      public ExecutionOrder executionOrder;
+      Position(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
+        intermediateWristPosition = iwp;
+        finalWristPosition = fwp;
+        elevatorPosition = ep;
+        pivotPosition = pp;
+        executionOrder = eo;
+      }
+    }
+    public enum CoralPositions { 
       Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
-      // GroundIntake(        ExecutionOrder.ALL_TOGETHER, 0.018, 0.55, -0.760, -0.760      ), Before plate
-      GroundIntake(        ExecutionOrder.WRTELV_PVT, 0.02, 0.55, -0.780, -0.780      ),
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.55, -0.780, -0.780      ),
       Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.4),
-      Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
-      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ),
-      Cage(                ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.100, -0.100      ),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180, -0.570      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210, -0.570      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.14, -0.240, -0.570      ),
@@ -533,24 +540,67 @@ public final class Constants {
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.570      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
-      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ), 
       ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      ),
-      ;
-
-      public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; // rotations not degrees
-      public ExecutionOrder executionOrder;
-      NamedPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
-        intermediateWristPosition = iwp;
-        finalWristPosition = fwp;
-        elevatorPosition = ep;
-        pivotPosition = pp;
-        executionOrder = eo;
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
+      public Position position;
+      CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
+        position = new Position(eo, pp, ep, fwp, iwp);
       }
-      NamedPositions(ExecutionOrder eo, double pp, double ep, double fwp) {
+      CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp) {
         this(eo, pp, ep, fwp, fwp);
+      }
+    }
+    
+    public enum AlgaePositions {
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.55, -0.780, -0.780      ),
+      Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
+      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ), //not real
+      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
+      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
+
+      public Position position;
+      AlgaePositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
+        position = new Position(eo, pp, ep, fwp, iwp);
+      }
+      AlgaePositions(ExecutionOrder eo, double pp, double ep, double fwp) {
+        this(eo, pp, ep, fwp, fwp);
+      }
+    }
+    public enum PositionEquivalents {
+      Stow(CoralPositions.Stow, CoralPositions.Stow),
+      SemiStow(CoralPositions.SemiStow, CoralPositions.SemiStow),
+      GroundIntake(CoralPositions.GroundIntake, AlgaePositions.GroundIntake),
+      L1(CoralPositions.L1, AlgaePositions.Processor),
+      L2(CoralPositions.L2, AlgaePositions.AlgaeL2),
+      L3(CoralPositions.L3, AlgaePositions.AlgaeL3),
+      L4(CoralPositions.L4, AlgaePositions.Net),
+      L4Auto(CoralPositions.L4Auto, CoralPositions.L4Auto),
+      L4AutoPre(CoralPositions.L4AutoPre, CoralPositions.L4AutoPre),
+      L5(CoralPositions.L5, CoralPositions.L5),
+      ClimbUp(CoralPositions.ClimbUp, AlgaePositions.ClimbUp),
+      ClimbDown(CoralPositions.ClimbDown, AlgaePositions.ClimbDown),
+      intermediateGround(CoralPositions.intermediateGround, AlgaePositions.intermediateGround),
+      Station(CoralPositions.Station, CoralPositions.Station),
+
+      ;
+      
+      public Position coralPos;
+      public Position algaePos;
+      PositionEquivalents(CoralPositions cp, AlgaePositions ap) {
+        coralPos = cp.position;
+        algaePos = ap.position;
+      }
+      PositionEquivalents(CoralPositions cp, CoralPositions ap) {
+        coralPos = cp.position;
+        algaePos = ap.position;
+      }
+      PositionEquivalents(AlgaePositions cp, AlgaePositions ap) {
+        coralPos = cp.position;
+        algaePos = ap.position;
       }
     }
   }

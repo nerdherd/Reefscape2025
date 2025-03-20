@@ -12,7 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
@@ -33,10 +33,10 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                     superSystem.holdPiece(),
                     Commands.parallel(
                         AutoBuilder.followPath(pathGroup.get(0)), // Go to ready
-                        superSystem.moveToAuto(NamedPositions.L4AutoPre)
+                        superSystem.moveToAuto(PositionEquivalents.L4AutoPre)
                     ),
                     Commands.parallel(
-                        superSystem.moveToAuto(NamedPositions.L4Auto),
+                        superSystem.moveToAuto(PositionEquivalents.L4Auto),
                         AutoBuilder.followPath(pathGroup.get(1)) // Move to reef
                     )
                 ),
@@ -47,12 +47,12 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                 ),
                 Commands.sequence(
                     Commands.parallel(
-                        superSystem.moveTo(NamedPositions.L5),
+                        superSystem.moveTo(PositionEquivalents.L5),
                         superSystem.stopRoller()
                     ),
                     Commands.parallel(
                         AutoBuilder.followPath(pathGroup.get(2)), // To station
-                        superSystem.moveToAuto(NamedPositions.Station)
+                        superSystem.moveToAuto(PositionEquivalents.Station)
                     )
                 ),
                 Commands.sequence(
@@ -72,7 +72,7 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                     )
                 )
                     // Commands.parallel(
-                    //     superSystem.moveToAuto(NamedPositions.L4Auto),
+                    //     superSystem.moveToAuto(PositionEquivalents.L4Auto),
                     //     AutoBuilder.followPath(pathGroup.get(4))
                     // ),
                     // Commands.sequence(
@@ -81,8 +81,8 @@ public class TwoPieceOffset extends SequentialCommandGroup {
                     //     superSystem.stopRoller()
                     // ),
                     // Commands.sequence(
-                    //     superSystem.moveTo(NamedPositions.L5),
-                    //     superSystem.moveTo(NamedPositions.SemiStow)
+                    //     superSystem.moveTo(PositionEquivalents.L5),
+                    //     superSystem.moveTo(PositionEquivalents.SemiStow)
                     // )
             )
         );

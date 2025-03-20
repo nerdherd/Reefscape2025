@@ -35,6 +35,8 @@ public class SwerveJoystickCommand extends Command {
     private final Supplier<Double> desiredAngle;
     private final Supplier<Boolean> turnToAngleSupplier;
     private final PIDController turnToAngleController;
+    private final Supplier<Boolean> dPadSupplier;
+    private final Supplier<Double> dPadDirectionalSupplier;
     private Filter xFilter, yFilter, turningFilter;
 
     public static double targetAngle = 0;
@@ -67,7 +69,9 @@ public class SwerveJoystickCommand extends Command {
             Supplier<Boolean> precisionSupplier,
             Supplier<Integer> insideZoneId,
             Supplier<Boolean> turnToAngleSupplier,
-            Supplier<Double> desiredAngleSupplier
+            Supplier<Double> desiredAngleSupplier,
+            Supplier<Boolean> dPadSupplier, 
+            Supplier<Double> dPadDirectionalSupplier
         ) {
         this.swerveDrive = swerveDrive;
         this.xSpdFunction = xSpdFunction;
@@ -84,6 +88,11 @@ public class SwerveJoystickCommand extends Command {
 
         this.moveLeft = moveLeftSupplier;
         this.moveRight = moveRightSupplier;
+
+        this.dPadSupplier = dPadSupplier;
+        this.dPadDirectionalSupplier = dPadDirectionalSupplier;
+        
+
 
         this.xFilter = new OldDriverFilter2(
             ControllerConstants.kDeadband, 
@@ -217,17 +226,42 @@ public class SwerveJoystickCommand extends Command {
         }
         
         ChassisSpeeds chassisSpeeds;
-        // Check if in field oriented mode
+       
         if (!fieldOrientedFunction.get()) {
             swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
                 swerveDrive.getImu().getRotation2d());
-        } else {
+        }
+        
+        else {
             swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
             chassisSpeeds = new ChassisSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed);
         }
+
+        
+        if(dPadDirectionalSupplier.get() == -1.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
+            chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
+                swerveDrive.getImu().getRotation2d());
+            }
+        if (dPadDirectionalSupplier.get() == 0.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(0.75, 0, 0);
+            } else if (dPadDirectionalSupplier.get() == 90.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(0, -0.75, 0);
+            } else if (dPadDirectionalSupplier.get() == 180.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(-0.75, 0, 0);
+            } else if (dPadDirectionalSupplier.get() == 270.0) {
+                swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
+                chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
+            } else {
+                System.out.println("end");
+            }
 
         SwerveModuleState[] moduleStates;
 
@@ -235,7 +269,7 @@ public class SwerveJoystickCommand extends Command {
         
         // Calculate swerve module states
         swerveDrive.setModuleStates(moduleStates);
-    }
+    } 
 
     private void checkButtonStates(boolean isPressed, boolean wasPressed, int direction) {
         // Pressed: Transition from not pressed to pressed

@@ -21,10 +21,13 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.CoralPositions;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
+import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.TwoPieceOffset;
@@ -32,6 +35,7 @@ import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.Generic3Piece;
 import frc.robot.commands.autos.Generic4Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
+import frc.robot.subsystems.SuperSystem.PositionMode;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -61,6 +65,7 @@ public class RobotContainer {
   public SuperSystem superSystem;
   public Climb climbMotor;
   public CANdi candi;
+  public PositionMode positionMode;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort,false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
@@ -164,6 +169,24 @@ public class RobotContainer {
         // if (driverController.getButtonUp())
         //   return 0.0;
         return swerveDrive.getImu().getHeading();
+      }, 
+      () -> driverController.getDpadDown() || driverController.getDpadUp() || driverController.getDpadLeft() || driverController.getDpadRight(),
+      () -> {
+
+        if (driverController.getDpadDown()) {
+          return 180.0;
+       } else if (driverController.getDpadLeft()) {
+          return 270.0;
+        }else if (driverController.getDpadRight()) {
+          return 90.0;
+        } else if (driverController.getDpadUp()){
+          return 0.0;
+        } else {
+          return -1.0;
+        } 
+
+
+
       }
     );
 
@@ -187,11 +210,13 @@ public class RobotContainer {
           }
       }, wrist));
 
+      
+
       double Elevator_SPEED = 3.0;// Meters per second // 0.3
       double Elevator_OFFSET = 0.05;
       elevator.setDefaultCommand(Commands.run(() -> {
         double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
-        if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (NamedPositions.Station.pivotPosition - 0.02)) {
+        if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
         double currentPos = elevator.getPosition();
         elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
         }
@@ -211,12 +236,12 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
     
-    driverController.dpadDown().onTrue(
-      superSystem.moveTo(NamedPositions.AlgaeL2)
-    );
-    driverController.dpadUp().onTrue(
-      superSystem.moveTo(NamedPositions.AlgaeL3)
-    );
+    // driverController.dpadDown().onTrue(
+    //   superSystem.moveTo(NamedPositions.AlgaeL2)
+    // );
+    // driverController.dpadUp().onTrue(
+    //   superSystem.moveTo(NamedPositions.AlgaeL3)
+    // );
 
     driverController.triggerLeft()
       .onTrue(superSystem.outtake())
@@ -245,36 +270,70 @@ public class RobotContainer {
 
   
 
+  
     //////////////////////
     // Operator bindings
     //////////////////////
-    operatorController.dpadDown()
-    .onTrue(superSystem.moveTo(NamedPositions.L1));
-    operatorController.dpadLeft()
-    .onTrue(superSystem.moveTo(NamedPositions.L2));
-    operatorController.dpadUp()
-    .onTrue(superSystem.moveTo(NamedPositions.L3));
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveTo(NamedPositions.L4));
-    
-    operatorController.triggerRight()
-      .onTrue(superSystem.intake())
-      .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-      .onTrue(superSystem.repositionCoral())
-      .onFalse(superSystem.holdPiece());
-    
-    operatorController.controllerRight()
-    .onTrue(superSystem.moveTo(NamedPositions.Processor));
 
+
+
+    
+    operatorController.dpadDown()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L1));
+    operatorController.dpadLeft()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L2));
+    operatorController.dpadUp()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L3));
+    operatorController.dpadRight()
+    .onTrue(superSystem.moveTo(PositionEquivalents.L4));
+
+
+    operatorController.triggerRight()
+    .onTrue(superSystem.intake())
+    .onFalse(superSystem.holdPiece());
+    operatorController.triggerLeft()
+    .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
+  
     operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(NamedPositions.Station));
+      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
     operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+      .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
     operatorController.buttonDown()
-      .onTrue(superSystem.moveTo(NamedPositions.Stow));
+      .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
     operatorController.buttonLeft()
-      .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+    .onTrue(superSystem.togglePositionModeCommand());
+
+
+    
+    
+    
+
+    // operatorController.dpadDown()
+    // .onTrue(superSystem.moveTo(NamedPositions.L1));
+    // operatorController.dpadLeft()
+    // .onTrue(superSystem.moveTo(NamedPositions.L2));
+    // operatorController.dpadUp()
+    // .onTrue(superSystem.moveTo(NamedPositions.L3));
+    // operatorController.dpadRight()
+    // .onTrue(superSystem.moveTo(NamedPositions.L4));
+    
+    // operatorController.triggerRight()
+    //   .onTrue(superSystem.intake())
+    //   .onFalse(superSystem.holdPiece());
+    // operatorController.triggerLeft()
+    //   .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
+    
+    // operatorController.controllerRight()
+    // .onTrue(superSystem.moveTo(NamedPositions.Processor));
+
+    // operatorController.buttonUp()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Station));
+    // operatorController.buttonRight()
+    //   .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
+    // operatorController.buttonDown()
+    //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
+
+
   }
 
 
