@@ -57,11 +57,14 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.setBreak(true);
     
-    m_robotContainer.pivot.setEnabled(false);
-    m_robotContainer.elevator.setEnabled(false);
-    m_robotContainer.wrist.setEnabled(false);
-    m_robotContainer.intakeRoller.setEnabled(false);
-    m_robotContainer.climbMotor.setEnabled(false);
+    if (RobotContainer.USE_SUBSYSTEMS){
+      m_robotContainer.pivot.setEnabled(false);
+      m_robotContainer.elevator.setEnabled(false);
+      m_robotContainer.wrist.setEnabled(false);
+      m_robotContainer.intakeRoller.setEnabled(false);
+      m_robotContainer.climbMotor.setEnabled(false);
+    }
+
   }
   
   @Override
@@ -69,9 +72,12 @@ public class Robot extends TimedRobot {
     // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
     // m_robotContainer.elevator.setTargetPosition(m_robotContainer.elevator.getPosition());
     // m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
-    m_robotContainer.elevator.stopMotion();
-    m_robotContainer.pivot.stopMotion();
-    m_robotContainer.wrist.stopMotion();
+    if (RobotContainer.USE_SUBSYSTEMS){
+      m_robotContainer.elevator.stopMotion();
+      m_robotContainer.pivot.stopMotion();
+      m_robotContainer.wrist.stopMotion();
+    }
+
     // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
     //m_robotContainer.elevator.setTargetPosition(0);
     //m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());

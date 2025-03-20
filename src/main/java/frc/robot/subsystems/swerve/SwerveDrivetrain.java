@@ -343,6 +343,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         {
         LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
         
+        if (mt1 == null){
+            return;
+        }
         if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
         {
             if(mt1.rawFiducials[0].ambiguity > .7)
@@ -372,6 +375,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
         LimelightHelpers.SetRobotOrientation(limelightName, currentPoseYaw, 0, 0, 0, 0, 0);
         LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+        if (mt2 == null){
+            return;
+        }
         // if(Math.abs(gyro.) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         // {
         //     doRejectUpdate = true;
