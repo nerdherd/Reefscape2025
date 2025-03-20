@@ -114,11 +114,31 @@ public class Elevator extends SubsystemBase implements Reportable {
             elevatorMotor.setControl(neutralRequest);
             return;
         }
-        
-        double a = 1; // horizontal elevator position of robot perimeter TODO update
-        double b = 3; // max elevator position TODO update
-        double c = 0; // min elevator position
-        motionMagicRequest.Position = NerdyMath.clamp(desiredPosition, c, Math.min(a / Math.cos(pivotAngle * 2*Math.PI), b));
+
+        // https://www.desmos.com/calculator/8lprz4wyev
+        // PARAMETERS
+        double r_perim = 18; // horizontal elevator position of robot perimeter in inches? TODO
+        double e_min = 9; // max elevator position in inches? TODO
+        double e_max = 36; // min elevator position in inches? TODO
+        double p_angle = pivotAngle; // pivot angle 0-90 deg in radians (it better be)
+        double i_radius = 5; // intake radius in inches? (imagine pacman) TODO
+        double i_open = 0; // intake opening angle in radians (imagine pacman's mouth) TODO
+        double w_angle = NerdyMath.clamp(0, 0.875*Math.PI - 0.5*i_open, 0.875*Math.PI + 0.5*i_open); // wrist angle in radians limited by how open intake is TODO
+
+        // INTERMEDIATE VALUES
+        double w_angle_real = p_angle + w_angle; // actual wrist angle relative to ground (radians)
+        double i1_angle = w_angle_real + i_open/2; // actual upper intake angle (radians)
+        double i2_angle = w_angle_real - i_open/2; // actual lower intake angle (radians)
+
+        // ELEVATOR POSITION
+        motionMagicRequest.Position = NerdyMath.clamp(
+            Math.abs(
+                (r_perim - Math.max(Math.max(
+                i_radius*Math.cos(i1_angle), i_radius*Math.cos(i2_angle)), 0))
+                / Math.cos(p_angle)
+            ),
+            e_min, e_max // 18 to 36, ideally the above equation
+        ) / 9; // 2 to 4 in elevator position (convert inches to position) TODO
 
         elevatorMotor2.setControl(followRequest);
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
