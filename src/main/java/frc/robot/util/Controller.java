@@ -3,6 +3,7 @@ package frc.robot.util;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PS5Controller;
 import edu.wpi.first.wpilibj.event.EventLoop;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandPS5Controller;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -86,22 +87,20 @@ public class Controller {
     public boolean getJoystickRight() { return isPS4 ? PS4.getR3Button() : (isPS5 ? PS5.getR3Button() : guliKit.getRightJoy()); }
 
     /** <STRONG> PS4/5 ONLY </STRONG> */
-    public boolean getDpadUp(EventLoop loop) { return isPS4 ? PS4.povUp(loop).getAsBoolean() : PS5.povUp(loop).getAsBoolean(); }
+    public boolean getDpadUp() { return isPS4 ? PS4.getPOV() == 0 : PS5.getPOV() == 0; }
     /** <STRONG> GULIKIT ONLY </STRONG> */
-    public boolean getDpadUp() { return guliKit.getDpadUp(); }
+    // public boolean getDpadUp() { return guliKit.getDpadUp(); }
     /** <STRONG> PS4 ONLY </STRONG> */
-    public boolean getDpadRight(EventLoop loop) { return isPS4 ? PS4.povRight(loop).getAsBoolean() : PS5.povRight(loop).getAsBoolean(); }
+    public boolean getDpadRight() { return isPS4 ? PS4.getPOV() == 90 : PS5.getPOV() == 90; }
     /** <STRONG> GULIKIT ONLY </STRONG> */
-    public boolean getDpadRight() { return guliKit.getDpadRight(); }
+    // public boolean getDpadRight() { return guliKit.getDpadRight(); }
     /** <STRONG> PS4 ONLY </STRONG> */
-    public boolean getDpadDown(EventLoop loop) { return isPS4 ? PS4.povDown(loop).getAsBoolean() : PS5.povDown(loop).getAsBoolean(); }
+    public boolean getDpadDown() { return isPS4 ? PS4.getPOV() == 180 : PS5.getPOV() == 180; }
     /** <STRONG> GULIKIT ONLY </STRONG> */
-    public boolean getDpadDown() { return guliKit.getDpadDown(); }
+    // public boolean getDpadDown() { return guliKit.getDpadDown(); }
     /** <STRONG> PS4 ONLY </STRONG> */
-    public boolean getDpadLeft(EventLoop loop) { return isPS4 ? PS4.povLeft(loop).getAsBoolean() : PS5.povLeft(loop).getAsBoolean(); }
+    public boolean getDpadLeft() { return isPS4 ? PS4.getPOV() == 270 : PS5.getPOV() == 270; }
     /** <STRONG> GULIKIT ONLY </STRONG> */
-    public boolean getDpadLeft() { return guliKit.getDpadLeft(); }
-
     // ***** OBJECT METHODS ***** //
 
     public Trigger buttonRight() { return isPS4 ? cmdPS4.circle() : (isPS5 ? cmdPS5.circle() : guliKit.buttonA()); }
