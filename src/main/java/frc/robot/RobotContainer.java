@@ -96,20 +96,20 @@ public class RobotContainer {
    * s subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    try {
-      swerveDrive = new SwerveDrivetrain(imu);
-    } catch (IllegalArgumentException e) {
-      DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
-    }
+    // try {
+    //   swerveDrive = new SwerveDrivetrain(imu);
+    // } catch (IllegalArgumentException e) {
+    //   DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
+    // }
 
     if (USE_SUBSYSTEMS) {
       wrist = new Wrist();
-      elevator = new Elevator();
+      // elevator = new Elevator();
       pivot = new Pivot();
-      intakeRoller = new IntakeRoller();
-      candi = new CANdi(6);
-      climbMotor = new Climb();
-      superSystem = new SuperSystem(elevator, pivot, wrist, intakeRoller, candi, climbMotor);
+      // intakeRoller = new IntakeRoller();
+      // candi = new CANdi(6);
+      // climbMotor = new Climb();
+      // superSystem = new SuperSystem(elevator, pivot, wrist, intakeRoller, candi, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -212,16 +212,6 @@ public class RobotContainer {
 
       
 
-      double Elevator_SPEED = 3.0;// Meters per second // 0.3
-      double Elevator_OFFSET = 0.05;
-      elevator.setDefaultCommand(Commands.run(() -> {
-        double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
-        if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
-        double currentPos = elevator.getPosition();
-        elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
-        }
-      }, elevator));  
-
   }
 
   public void initDefaultCommands_test() {
@@ -243,69 +233,23 @@ public class RobotContainer {
     //   superSystem.moveTo(NamedPositions.AlgaeL3)
     // );
 
-    driverController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
-
-    // Climb sequence
-    driverController.buttonDown() // Prepare Position for Climb
-      .onTrue(Commands.sequence(
-        Commands.runOnce(() -> climbMotor.setEnabled(true)),
-        superSystem.climbCommandUp()));
-
-    driverController.buttonLeft() // Soft Clamp
-      .onTrue(Commands.sequence(
-        Commands.runOnce(() -> climbMotor.setEnabled(true)),
-        superSystem.climbSoftClamp()
-        ))
-      .onFalse(superSystem.stopClimb());
-      
-      driverController.buttonUp() // Hard Clamp
-        .onTrue(Commands.sequence(
-          Commands.runOnce(() -> climbMotor.setEnabled(true)), // TODO: Find real solution
-          superSystem.climbHardClamp()));
-
-    driverController.buttonRight() // Execute Climb
-    .onTrue(superSystem.climbCommandDown());
-
-  
-
-  
     //////////////////////
     // Operator bindings
     //////////////////////
 
-
-
-    
-    operatorController.dpadDown()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L1));
-    operatorController.dpadLeft()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L2));
     operatorController.dpadUp()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L3));
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L4));
+    .onTrue(Commands.runOnce(() -> pivot.setTargetPosition(0.2)));
+    operatorController.dpadLeft()
+    .onTrue(Commands.runOnce(() -> pivot.setTargetPosition(0.1)));
+    operatorController.dpadDown()
+    .onTrue(Commands.runOnce(() -> pivot.setTargetPosition(0.05)));
 
-
-    operatorController.triggerRight()
-    .onTrue(superSystem.intake())
-    .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-    .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-  
     operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
-    operatorController.buttonRight()
-      .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
-    operatorController.buttonDown()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
+      .onTrue(Commands.runOnce(() -> wrist.setTargetPosition(-0.2)));
     operatorController.buttonLeft()
-    .onTrue(superSystem.togglePositionModeCommand());
-
-
-    
-    
+    .onTrue(Commands.runOnce(() -> wrist.setTargetPosition(-0.35)));
+    operatorController.buttonDown()
+      .onTrue(Commands.runOnce(() -> wrist.setTargetPosition(-0.5)));
     
 
     // operatorController.dpadDown()
