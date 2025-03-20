@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,13 +40,13 @@ public class Generic2Piece extends SequentialCommandGroup {
         return Commands.sequence(
             // Place preload
             AutoBuilder.followPath(pathGroup.get(0)),
-            superSystem.moveTo(NamedPositions.L2),
+            superSystem.moveTo(PositionEquivalents.L2),
             Commands.runOnce(() -> {
                 switch (pos1) {
-                case 1: superSystem.moveTo(NamedPositions.L1);
-                case 2: superSystem.moveTo(NamedPositions.L2);
-                case 3: superSystem.moveTo(NamedPositions.L3);
-                case 4: superSystem.moveTo(NamedPositions.L4);
+                case 1: superSystem.moveTo(PositionEquivalents.L1);
+                case 2: superSystem.moveTo(PositionEquivalents.L2);
+                case 3: superSystem.moveTo(PositionEquivalents.L3);
+                case 4: superSystem.moveTo(PositionEquivalents.L4);
                 }
             }),
             superSystem.outtake(),
@@ -70,10 +70,10 @@ public class Generic2Piece extends SequentialCommandGroup {
             ),
             Commands.runOnce(() -> {
                 switch (pos2) {
-                case 1: superSystem.moveTo(NamedPositions.L1);
-                case 2: superSystem.moveTo(NamedPositions.L2);
-                case 3: superSystem.moveTo(NamedPositions.L3);
-                case 4: superSystem.moveTo(NamedPositions.L4);
+                case 1: superSystem.moveTo(PositionEquivalents.L1);
+                case 2: superSystem.moveTo(PositionEquivalents.L2);
+                case 3: superSystem.moveTo(PositionEquivalents.L3);
+                case 4: superSystem.moveTo(PositionEquivalents.L4);
                 }
             }),
             superSystem.algaeRoller.outtake(),

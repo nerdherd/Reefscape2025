@@ -11,7 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Constants.SuperSystemConstants.NamedPositions;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
@@ -31,7 +31,7 @@ public class TwoPiece extends SequentialCommandGroup {
                     superSystem.holdPiece(),
                     AutoBuilder.followPath(pathGroup.get(0)),
                     Commands.sequence(
-                        superSystem.moveToAuto(NamedPositions.L4)
+                        superSystem.moveToAuto(PositionEquivalents.L4)
                     )
                 ),
                 Commands.sequence(
@@ -40,10 +40,10 @@ public class TwoPiece extends SequentialCommandGroup {
                     superSystem.stopRoller()
                 ),
                 Commands.sequence(
-                    superSystem.moveTo(NamedPositions.L5),
+                    superSystem.moveTo(PositionEquivalents.L5),
                     Commands.parallel(
                         AutoBuilder.followPath(pathGroup.get(1)),
-                        superSystem.moveToAuto(NamedPositions.Station)
+                        superSystem.moveToAuto(PositionEquivalents.Station)
 
                     )
                     
@@ -63,7 +63,7 @@ public class TwoPiece extends SequentialCommandGroup {
                     ),
                     Commands.sequence(
                         Commands.waitSeconds(1),
-                        superSystem.moveToAuto(NamedPositions.L4)
+                        superSystem.moveToAuto(PositionEquivalents.L4)
                     )
                 ),
                 Commands.sequence(
@@ -73,8 +73,8 @@ public class TwoPiece extends SequentialCommandGroup {
                 ),
 
                 Commands.sequence(
-                    superSystem.moveTo(NamedPositions.L5),
-                    superSystem.moveTo(NamedPositions.SemiStow)
+                    superSystem.moveTo(PositionEquivalents.L5),
+                    superSystem.moveTo(PositionEquivalents.SemiStow)
                 )
                 )
             );
