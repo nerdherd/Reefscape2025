@@ -300,7 +300,7 @@ public class RobotContainer {
     operatorController.buttonDown()
       .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
     operatorController.buttonLeft()
-    .onTrue(Commands.runOnce(() -> superSystem.togglePositionMode()));
+    .onTrue(superSystem.togglePositionModeCommand());
 
 
     
