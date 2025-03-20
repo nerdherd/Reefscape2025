@@ -259,10 +259,8 @@ public class SwerveJoystickCommand extends Command {
             } else if (dPadDirectionalSupplier.get() == 270.0) {
                 swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
                 chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
-            } else {
-                System.out.println("end");
-            }
-
+            } 
+            
         SwerveModuleState[] moduleStates;
 
         moduleStates = kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
