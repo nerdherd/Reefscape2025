@@ -9,8 +9,12 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 
+import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.pathplanner.lib.auto.AutoBuilder;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -23,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SuperSystemConstants.CoralPositions;
@@ -36,6 +41,7 @@ import frc.robot.commands.autos.Generic3Piece;
 import frc.robot.commands.autos.Generic4Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem.PositionMode;
+import frc.robot.subsystems.SysidTest;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -54,8 +60,12 @@ public class RobotContainer {
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
-  
+  public final TalonFX motor = new TalonFX(8);
+  public final TalonFX motor2 = new TalonFX(9);
+  public final Follower follower = new Follower(8, false);
+  public final NeutralOut brakeRequest = new NeutralOut();
 
+  private final SysidTest systest = new SysidTest(motor, motor2);
   public IntakeRoller intakeRoller;
   public BannerSensor intakeSensor;
   public Elevator elevator;
@@ -251,6 +261,22 @@ public class RobotContainer {
     operatorController.buttonDown()
       .onTrue(Commands.runOnce(() -> wrist.setTargetPosition(-0.5)));
     
+      driverController.bumperRight()
+      .whileTrue(
+        Commands.run(
+          () -> {
+            voltage += 0.2 / 50.0;
+            motor.setControl(voltageRequest.withOutput(voltage));
+            motor2.setControl(follower.withOpposeMasterDirection(true));
+          }
+      ))
+      .onFalse(Commands.parallel(
+        Commands.runOnce(() -> motor.setControl(brakeRequest)),
+        Commands.runOnce(() -> motor2.setControl(brakeRequest)),
+        Commands.runOnce(() -> voltage = 0)
+      ));
+    }
+    
 
     // operatorController.dpadDown()
     // .onTrue(superSystem.moveTo(NamedPositions.L1));
@@ -278,7 +304,6 @@ public class RobotContainer {
     //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
 
 
-  }
 
 
   public void configureBindings_test() {
