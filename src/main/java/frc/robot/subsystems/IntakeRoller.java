@@ -19,12 +19,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RollerConstants;
  
 public class IntakeRoller extends SubsystemBase implements Reportable {
-    private final TalonFX rollerMotor;
-    private final TalonFX rollerMotorRight;
+    private final TalonFX algaeMotor;
+    private final TalonFX coralMotor;
     private final TalonFXConfigurator rollerConfigurator;
     private final TalonFXConfigurator rollerConfiguratorRight;
-    private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
-    private final VelocityVoltage velocityRequestRight = new VelocityVoltage(0);
+    private final VelocityVoltage velocityRequestAlgae = new VelocityVoltage(0);
+    private final VelocityVoltage velocityRequestCoral = new VelocityVoltage(0);
     public TalonFXConfiguration motorConfigs;
 
     private final NeutralOut brakeRequest = new NeutralOut();
@@ -32,28 +32,28 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private boolean enabled = false;
     private boolean velocityControl = true;
 
-    private double desiredVoltageLeft = 0;
-    private double desiredVoltageRight = 0;
+    private double desiredVoltageAlgae = 0;
+    private double desiredVoltageCoral = 0;
 
     public IntakeRoller() {
-        rollerMotor = new TalonFX(RollerConstants.kLeftMotorID);
-        rollerMotorRight = new TalonFX(RollerConstants.kRightMotorID);
-        rollerConfigurator = rollerMotor.getConfigurator();
-        rollerConfiguratorRight = rollerMotorRight.getConfigurator();
-        velocityRequestRight.EnableFOC = true;
-        velocityRequestRight.Acceleration = 0;
-        velocityRequestRight.FeedForward = 0;
-        velocityRequestRight.Slot = 0;
-        velocityRequestRight.OverrideBrakeDurNeutral = false;
-        velocityRequestRight.LimitForwardMotion = false;
-        velocityRequestRight.LimitReverseMotion = false;
-        velocityRequest.EnableFOC = true;
-        velocityRequest.Acceleration = 0;
-        velocityRequest.FeedForward = 0;
-        velocityRequest.Slot = 0;
-        velocityRequest.OverrideBrakeDurNeutral = false;
-        velocityRequest.LimitForwardMotion = false;
-        velocityRequest.LimitReverseMotion = false;
+        algaeMotor = new TalonFX(RollerConstants.kAlgaeMotorID);
+        coralMotor = new TalonFX(RollerConstants.kCoralMotorID);
+        rollerConfigurator = algaeMotor.getConfigurator();
+        rollerConfiguratorRight = coralMotor.getConfigurator();
+        velocityRequestCoral.EnableFOC = true;
+        velocityRequestCoral.Acceleration = 0;
+        velocityRequestCoral.FeedForward = 0;
+        velocityRequestCoral.Slot = 0;
+        velocityRequestCoral.OverrideBrakeDurNeutral = false;
+        velocityRequestCoral.LimitForwardMotion = false;
+        velocityRequestCoral.LimitReverseMotion = false;
+        velocityRequestAlgae.EnableFOC = true;
+        velocityRequestAlgae.Acceleration = 0;
+        velocityRequestAlgae.FeedForward = 0;
+        velocityRequestAlgae.Slot = 0;
+        velocityRequestAlgae.OverrideBrakeDurNeutral = false;
+        velocityRequestAlgae.LimitForwardMotion = false;
+        velocityRequestAlgae.LimitReverseMotion = false;
 
         CommandScheduler.getInstance().registerSubsystem(this);
  
@@ -116,12 +116,14 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            rollerMotor.setControl(brakeRequest);
-            rollerMotorRight.setControl(brakeRequest);
+            desiredVoltageAlgae = 0.0;
+            desiredVoltageCoral = 0.0;
+            algaeMotor.setControl(brakeRequest);
+            coralMotor.setControl(brakeRequest);
         }
         else {
-            rollerMotor.setVoltage(desiredVoltageLeft);  
-            rollerMotorRight.setVoltage(desiredVoltageRight * 1.15);
+            algaeMotor.setVoltage(desiredVoltageAlgae);  
+            coralMotor.setVoltage(desiredVoltageCoral);
         } 
 
     }
@@ -133,21 +135,32 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
 
     private void setVelocity(double velocity) {
-        velocityRequest.Velocity = velocity;
+        velocityRequestAlgae.Velocity = velocity;
+        velocityRequestCoral.Velocity = velocity;
+    }
+    
+    private void setVelocityCoral(double velocity) {
+        velocityRequestCoral.Velocity = velocity;
+    }
+
+    private void setVelocityAlgae(double velocity) {
+        velocityRequestAlgae.Velocity = velocity;
     }
 
     private double getTargetVelocity() {
-        return velocityRequest.Velocity;
+        return velocityRequestAlgae.Velocity;
     }
-
     private void setVoltage(double volt) {
-        desiredVoltageLeft = volt;
-        desiredVoltageRight = -volt;
+        desiredVoltageCoral = volt;
+        desiredVoltageAlgae = volt;
     }
 
-    private void setVoltageLeft(double volt) {
-        desiredVoltageLeft = volt;
-        desiredVoltageRight = 0;
+    private void setVoltageCoral(double volt) {
+        desiredVoltageCoral = volt;
+    }
+
+    private void setVoltageAlgae(double volt) {
+        desiredVoltageAlgae = volt;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -157,35 +170,31 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
  
     private Command setVelocityCommand(double velocity) {
-        velocityRequest.Velocity = velocity;
-        velocityRequestRight.Velocity = -velocity;
         return Commands.runOnce(() -> setVelocity(velocity));
     }
 
-    private Command setVelocityCommandLeft(double velocity) {
-        velocityRequest.Velocity = velocity;
-        return Commands.runOnce(() -> setVelocity(velocity));
+    private Command setVelocityCommandAlgae(double velocity) {
+        return Commands.runOnce(() -> setVelocityAlgae(velocity));
     }
-    private Command setVelocityCommandRight(double velocity) {
-        velocityRequestRight.Velocity = -velocity;
-        return Commands.runOnce(() -> setVelocity(velocity));
+    private Command setVelocityCommandCoral(double velocity) {
+        return Commands.runOnce(() -> setVelocityCoral(velocity));
     }
 
     public Command setVoltageCommand(double volt) {
         return Commands.runOnce(() -> setVoltage(volt));
     }
 
-    public Command setVoltageCommandLeft(double volt) {
-        return Commands.runOnce(() -> setVoltageLeft(volt));
+    public Command setVoltageCommandCoral(double volt) {
+        return Commands.runOnce(() -> setVoltageCoral(volt));
     }
 
-    public Command setVoltageCommandRight(double volt) {
-        return Commands.runOnce(() -> setVoltage(volt));
+    public Command setVoltageCommandAlgae(double volt) {
+        return Commands.runOnce(() -> setVoltageAlgae(volt));
     }
 
     private Command stopCommand() {
         return Commands.sequence(
-            setVelocityCommand(0),
+            setVoltageCommand(0),
             setEnabledCommand(false)
         );
     }
@@ -194,40 +203,47 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandLeft(RollerConstants.kIntakePower),
-            setVelocityCommandRight(RollerConstants.kIntakePower)
+            setVoltageCommandAlgae(RollerConstants.kAlgaeIntakePower)
         );
     }
 
-    public Command intakeLeft() {
+    public Command holdAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandLeft(RollerConstants.kIntakePower)
+            setVoltageCommandAlgae(RollerConstants.kAlgaeHoldPower)
         );
     }
 
     public Command intakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandRight(RollerConstants.kIntakePower)
+            setVoltageCommandCoral(RollerConstants.kCoralIntakePower),
+            setVoltageCommandAlgae(-RollerConstants.kCoralIntakePower)
         );
     }
 
-    public Command outtake() {
+    public Command outtakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommand(RollerConstants.kOuttakePower)
+            setVoltageCommandCoral(RollerConstants.kCoralOuttakePower),
+            setVoltageCommandAlgae(-RollerConstants.kCoralOuttakePower)
+        );
+    }
+
+    public Command outtakeAlgae() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVoltageCommandAlgae(RollerConstants.kAlgaeOuttakePower)
         );
     }
 
     public Command outtakeL1() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandLeft(RollerConstants.kOuttakePower)
-            
+            setVoltageCommandCoral(RollerConstants.kL1OuttakePower),
+            setVoltageCommandAlgae(-RollerConstants.kL1OuttakePower)
         );
     }
-
 
     public Command stop() {
         return stopCommand();
@@ -243,19 +259,18 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         ShuffleboardTab tab = Shuffleboard.getTab("Intake Roller");
         switch (priority) {
             case ALL:
-                tab.addNumber("Intake Stator Current", () -> this.rollerMotor.getStatorCurrent().getValueAsDouble());
+                tab.addNumber("Intake Stator Current", () -> this.algaeMotor.getStatorCurrent().getValueAsDouble());
                 tab.addBoolean("Intake Velocity Control", () -> this.velocityControl);
-                tab.addNumber("Intake Feed Forward", () -> velocityRequest.FeedForward);
-                tab.addNumber("Intake Desired Velocity", () -> velocityRequest.Velocity);
-                tab.addNumber("Intake Velocity", () -> rollerMotor.getVelocity().getValueAsDouble());
-                case MEDIUM:
-                tab.addNumber("Intake Position", () -> this.rollerMotor.getPosition().getValueAsDouble());
-                tab.addNumber("Intake Supply Current", () -> this.rollerMotor.getSupplyCurrent().getValueAsDouble());
+                tab.addNumber("Intake Desired Velocity", () -> velocityRequestAlgae.Velocity);
+                tab.addNumber("Intake Position", () -> this.algaeMotor.getPosition().getValueAsDouble());
+                tab.addNumber("Intake Velocity", () -> algaeMotor.getVelocity().getValueAsDouble());
+            case MEDIUM:
+                tab.addNumber("Intake Supply Current", () -> this.algaeMotor.getSupplyCurrent().getValueAsDouble());
                 tab.addBoolean("Intake Enabled", () -> this.enabled);
-                case MINIMAL:
-                tab.addNumber("Intake Applied Voltage Right", () -> this.rollerMotorRight.getMotorVoltage().getValueAsDouble());    
-                tab.addNumber("Intake Applied Voltage Left", () -> this.rollerMotor.getMotorVoltage().getValueAsDouble());    
-                tab.addNumber("Intake Temperature", () -> this.rollerMotor.getDeviceTemp().getValueAsDouble());    
+            case MINIMAL:
+                tab.addNumber("Intake Applied Voltage Right", () -> this.coralMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Intake Applied Voltage Left", () -> this.algaeMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Intake Temperature", () -> this.algaeMotor.getDeviceTemp().getValueAsDouble());    
                 break;
             default:
                 break;

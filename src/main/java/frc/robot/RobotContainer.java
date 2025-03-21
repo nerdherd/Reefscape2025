@@ -243,67 +243,65 @@ public class RobotContainer {
     //   superSystem.moveTo(NamedPositions.AlgaeL3)
     // );
     if (USE_SUBSYSTEMS){
-    driverController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
+      driverController.triggerLeft()
+        .onTrue(superSystem.outtake())
+        .onFalse(superSystem.stopRoller());
+        // Climb sequence
+      driverController.buttonDown() // Prepare Position for Climb
+        .onTrue(Commands.sequence(
+          superSystem.climbCommandUp()));
 
-    // Climb sequence
-    driverController.buttonDown() // Prepare Position for Climb
-      .onTrue(Commands.sequence(
-        Commands.runOnce(() -> climbMotor.setEnabled(true)),
-        superSystem.climbCommandUp()));
-
-    driverController.buttonLeft() // Soft Clamp
-      .onTrue(Commands.sequence(
-        Commands.runOnce(() -> climbMotor.setEnabled(true)),
-        superSystem.climbSoftClamp()
-        ))
-      .onFalse(superSystem.stopClimb());
-      
+      driverController.buttonLeft() // Soft Clamp
+        .onTrue(Commands.sequence(
+          superSystem.climbSoftClamp()
+          ))
+        .onFalse(superSystem.stopClimb());
+        
       driverController.buttonUp() // Hard Clamp
         .onTrue(Commands.sequence(
-          Commands.runOnce(() -> climbMotor.setEnabled(true)), // TODO: Find real solution
-          superSystem.climbHardClamp()));
+          superSystem.climbHardClamp()
+        ));
 
-    driverController.buttonRight() // Execute Climb
-    .onTrue(superSystem.climbCommandDown());
-
-  
-
-  
-    //////////////////////
-    // Operator bindings
-    //////////////////////
-
-
+      driverController.buttonRight() // Execute Climb
+      .onTrue(superSystem.climbCommandDown());
 
     
-    operatorController.dpadDown()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L1));
-    operatorController.dpadLeft()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L2));
-    operatorController.dpadUp()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L3));
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L4));
+
+    
+      //////////////////////
+      // Operator bindings
+      //////////////////////
 
 
-    operatorController.triggerRight()
-    .onTrue(superSystem.intake())
-    .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-    .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-  
-    operatorController.buttonUp()
+
+      
+      operatorController.dpadDown()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L1));
+      operatorController.dpadLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L2));
+      operatorController.dpadUp()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L3));
+      operatorController.dpadRight()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L4));
+
+      operatorController.triggerRight()
+      .onTrue(superSystem.intake())
+      .onFalse(superSystem.holdPiece());
+      operatorController.triggerLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
+
+      operatorController.buttonUp()
       .onTrue(superSystem.moveTo(PositionEquivalents.Station));
-    operatorController.buttonRight()
+      operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
-    operatorController.buttonDown()
+      operatorController.buttonDown()
       .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
-    operatorController.buttonLeft()
-    .onTrue(superSystem.togglePositionModeCommand());
-    }
 
+      operatorController.controllerLeft()
+      .onTrue(superSystem.setPositionModeCoral());
+      operatorController.controllerRight()
+      .onTrue(superSystem.setPositionModeAlgae());
+    }
 
     
     
@@ -333,8 +331,6 @@ public class RobotContainer {
     //   .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     // operatorController.buttonDown()
     //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
-
-
   }
 
 

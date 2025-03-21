@@ -37,14 +37,13 @@ public class SuperSystem {
     public Climb climbMotor;
 
     public StatusSignal<S1StateValue> intakeSensor;
-    public StatusSignal<S2StateValue> floorSensor;
     
     private PositionEquivalents currentPosition = PositionEquivalents.Stow;
     private PositionEquivalents lastPosition = PositionEquivalents.Stow;
     
     boolean elevatorWithinRange;
 
-    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition,pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected, floorDetected;
+    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition, pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected;
 
     public enum ExecutionOrder {
         ALL_TOGETHER,
@@ -75,7 +74,6 @@ public class SuperSystem {
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
         this.intakeSensor = candi.getS1State(true);
-        this.floorSensor = candi.getS2State(true);
         this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
@@ -85,7 +83,6 @@ public class SuperSystem {
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
         intakeDetected = () -> (intakeSensor.getValue().value == 1);
-        floorDetected = () -> (floorSensor.getValue().value == 1);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -129,40 +126,50 @@ public class SuperSystem {
     }
 
     public Command stopRoller() {
-        return intakeRoller.setVoltageCommand(0.0);
+        return intakeRoller.stop();
     }
-
 
     public Command intake() {
-        return intakeRoller.setVoltageCommand(RollerConstants.kIntakePower);
+        return Commands.either(
+            intakeCoral(), 
+            algaeintake(), 
+            () -> (positionMode == PositionMode.Coral)
+            );
     }
 
-    public Command repositionCoral() {
-        return Commands.sequence(
-            repositionCoralLeft(),
-            Commands.waitSeconds(0.3),
-            repositionCoralRight(),
-            holdPiece()
-        );
+    public Command algaeintake() {
+        return intakeRoller.intakeAlgae();
+    }
+    public Command intakeCoral() {
+        return intakeRoller.intakeCoral();
     }
 
-    public Command repositionCoralLeft() {
-        return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(0.5),
-            intakeRoller.setVoltageCommandRight(-1.0)
-        );
-    }
+    // public Command repositionCoral() {
+    //     return Commands.sequence(
+    //         repositionCoralLeft(),
+    //         Commands.waitSeconds(0.3),
+    //         repositionCoralRight(),
+    //         holdPiece()
+    //     );
+    // }
 
-    public Command repositionCoralRight() {
-        return Commands.sequence(
-            intakeRoller.setVoltageCommandLeft(-1),
-            intakeRoller.setVoltageCommandRight(0.5)
-        );
-    }
+    // public Command repositionCoralLeft() {
+    //     return Commands.sequence(
+    //         algaeRoller.setVoltageCommandLeft(0.5),
+    //         algaeRoller.setVoltageCommandRight(-1.0)
+    //     );
+    // }
+
+    // public Command repositionCoralRight() {
+    //     return Commands.sequence(
+    //         algaeRoller.setVoltageCommandLeft(-1),
+    //         algaeRoller.setVoltageCommandRight(0.5)
+    //     );
+    // }
 
     public Command intakeUntilSensed() {
         return Commands.sequence(
-            intake(), 
+            algaeintake(), 
             Commands.race(Commands.waitUntil(
                 intakeDetected),
                 Commands.waitSeconds(5)),
@@ -172,7 +179,7 @@ public class SuperSystem {
 
     public Command intakeUntilSensed(double timeout) {
         return Commands.sequence(
-            intake(), 
+            algaeintake(), 
             Commands.race(Commands.waitUntil(
                 intakeDetected),
                 Commands.waitSeconds(timeout)),
@@ -181,14 +188,28 @@ public class SuperSystem {
     }
 
     public Command holdPiece() {
-        return intakeRoller.setVoltageCommand(-1); // holding coral
+        return Commands.either(
+            Commands.none(),
+            intakeRoller.holdAlgae(),
+            () -> (positionMode == PositionMode.Coral)
+        );
     }
 
     public Command outtake() {
-        if (currentPosition == PositionEquivalents.L1) { // TODO is it working??
-            return intakeRoller.setVoltageCommandLeft(RollerConstants.kL1OuttakePower); // Might need to make new constant for this
+        return Commands.either(
+            outtakeCoral(), 
+            outtakeAlgae(), 
+           () -> positionMode == PositionMode.Coral);
+    }
+    public Command outtakeAlgae(){
+        return intakeRoller.outtakeAlgae();
+    }
+    
+    public Command outtakeCoral() {
+        if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) {
+            return intakeRoller.outtakeL1();   
         }
-        return intakeRoller.setVoltageCommand(RollerConstants.kOuttakePower);
+        return intakeRoller.outtakeCoral();
     }
 
     public Command shootAlgae() {
@@ -250,7 +271,7 @@ public class SuperSystem {
                 wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
                 preExecute(),
                 execute(position.executionOrder, 10.0, 
-                position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
+                position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
             );
         }
         if (position.intermediateWristPosition == position.finalWristPosition)
@@ -305,10 +326,22 @@ public class SuperSystem {
         else positionMode = PositionMode.Coral;
     }
 
+    public void setPositionMode(PositionMode mode) {
+        positionMode = mode;
+    }
+
     public Command togglePositionModeCommand() {
         return Commands.runOnce(() -> togglePositionMode());
     }
 
+    public Command setPositionModeCoral() {
+        return Commands.runOnce(() -> setPositionMode(PositionMode.Coral));
+    }
+
+    public Command setPositionModeAlgae() {
+        return Commands.runOnce(() -> setPositionMode(PositionMode.Algae));
+    }
+    
     // public Command moveToProcessor() { //TODO
     //     // note: we may not need this one, because the intake action could cover it.
     //     return moveTo(PositionEquivalents.Processor);
@@ -511,7 +544,6 @@ public class SuperSystem {
                 tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
                 tab.addString("Super System Current Position", () -> currentPosition.toString());
-                tab.addBoolean("Floor Detected", floorDetected);
                 tab.addBoolean("Intake Detected", intakeDetected);
             case MINIMAL:
                 break;

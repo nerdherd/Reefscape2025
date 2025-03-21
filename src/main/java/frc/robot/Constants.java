@@ -20,6 +20,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.SuperSystem.ExecutionOrder;
 
@@ -457,8 +458,8 @@ public final class Constants {
 
   public static final class RollerConstants {
 
-    public static final int kLeftMotorID = 61; 
-    public static final int kRightMotorID = 62; 
+    public static final int kAlgaeMotorID = 61; 
+    public static final int kCoralMotorID = 62; 
     public static final double kPMotor = 0.05;
     public static final double kIMotor = 0;
     public static final double kDMotor = 0;
@@ -469,12 +470,20 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kIntakePower  = -2.8;
-    public static final double kOuttakePower = 1.5;
+    public static final double kCoralIntakePower  = -2.8;
+    public static final double kCoralOuttakePower = 1.5;
+    public static final double kAlgaeIntakePower  = -2.8;
+    public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
+    public static final double kAlgaeHoldPower = 1;
+
   }
-  public static final class WristConstants{
+
+  public static final class WristConstants {
+
     public static final int kMotorID = 54;
+    public static final int kPigeonID = 2;
+    public static final int kEncoderID = 0; // TODO change
   
     public static final double kPMotor =  40; 
     // kP * err_rotations = Max_Volt_Needed (A little higher than kG)
@@ -492,7 +501,7 @@ public final class Constants {
     public static final double kMinPosition = 0;
 
     public static final double kSpeed = 0.5;
-    public static final int kPigeonID = 2;
+    
   }
 
   public static final class ClimbConstants { // TODO change
@@ -517,6 +526,7 @@ public final class Constants {
   
 
   public static final class SuperSystemConstants {
+
     public static final class Position {
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; 
       public ExecutionOrder executionOrder;
@@ -528,6 +538,7 @@ public final class Constants {
         executionOrder = eo;
       }
     }
+    
     public enum CoralPositions { 
       Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
