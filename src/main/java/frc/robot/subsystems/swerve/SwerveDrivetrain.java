@@ -691,23 +691,37 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             
     double maxVelocityMps = 1;
     double maxAccelerationMpsSq = 1;
-    private Command pathfindingCommand; // Store the command reference
-    public void setAutoPathRun(int zoneId, int poseId)
+    private Command pathfindingCommand = Commands.none(); // Store the command reference
+    private Pose2d destPoseInBlue = new Pose2d();
+    private PathConstraints pathcons = new PathConstraints(
+        maxVelocityMps, maxAccelerationMpsSq, 
+        Units.degreesToRadians(360), Units.degreesToRadians(720)
+    );
+    public Command setAutoPathRun(int poseId)
     {
-        Pose2d destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId); // base on (poseid and zoneid and apriltag id)
-        
-        if(destPoseInBlue == null) return;
-
-        PathConstraints pathcons = new PathConstraints(
-            maxVelocityMps, maxAccelerationMpsSq, 
-            Units.degreesToRadians(360), Units.degreesToRadians(720)
+        return Commands.sequence(
+            Commands.parallel(
+                Commands.run(() -> {
+                    SmartDashboard.putNumber("Pose ID", poseId);
+                    int zoneId = getCurrentZoneByPose();
+                    if(zoneId == 0) {
+                        pathfindingCommand = Commands.none();
+                        return;
+                    }
+                    destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId);
+                    SmartDashboard.putNumber("zone id", zoneId);
+    
+                    if(destPoseInBlue == null) {
+                        pathfindingCommand = Commands.none();
+                    }
+                    SmartDashboard.putString("destination pose", destPoseInBlue.toString());
+                }),
+                AutoBuilder.pathfindToPose(destPoseInBlue, pathcons)
+            )
         );
-
-        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);
-
-        pathfindingCommand.schedule();
     }
-
+    int counterpathfindingStop = 0;
+    int counterpathfindingStopFailed = 0;
     public void stopAutoPath() {
         SmartDashboard.putBoolean("Stop ran", true);
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
@@ -715,7 +729,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             pathfindingCommand.cancel();
             CommandScheduler.getInstance().cancel(pathfindingCommand);
             stopModules();
+            counter += 1;
+            SmartDashboard.putNumber("Counter Path Finding Value", counterpathfindingStop);
         }
+        SmartDashboard.putNumber("Counter failed stop", counterpathfindingStopFailed);
     }
 
     //****************************** GETTERS ******************************/
