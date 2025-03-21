@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import org.json.simple.parser.ParseException;
 
@@ -66,6 +67,8 @@ public class RobotContainer {
   public Climb climbMotor;
   public CANdi candi;
   public PositionMode positionMode;
+  BooleanSupplier leftBumper;
+  BooleanSupplier rightBumper;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort,false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
@@ -153,10 +156,7 @@ public class RobotContainer {
       // () -> driverController.getControllerRight(), // robot oriented variable (false = field oriented)
       () -> false, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
-      () -> driverController.getBumperLeft(), //move left of 
-      () -> driverController.getBumperRight(), // move right of
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
-      () -> swerveDrive.getCurrentZoneByPose(),
       () -> false,
       // () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
@@ -220,7 +220,9 @@ public class RobotContainer {
           }
         }, elevator));  
       }
-    
+    leftBumper = (() -> driverController.bumperLeft().getAsBoolean());
+    rightBumper = (() -> driverController.bumperRight().getAsBoolean());
+
 
   }
 
@@ -235,6 +237,15 @@ public class RobotContainer {
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
+
+    driverController.bumperLeft().onTrue(
+      Commands.either(swerveDrive.setAutoPathRun(0, () -> !driverController.bumperLeft().getAsBoolean()), swerveDrive.setAutoPathRun(-1, () -> !driverController.bumperLeft().getAsBoolean()), rightBumper)
+    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
+
+    
+    driverController.bumperRight().onTrue(
+      Commands.either(swerveDrive.setAutoPathRun(0, () -> !driverController.bumperRight().getAsBoolean()), swerveDrive.setAutoPathRun(1, () -> !driverController.bumperRight().getAsBoolean()), leftBumper)
+    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
     
     // driverController.dpadDown().onTrue(
     //   superSystem.moveTo(NamedPositions.AlgaeL2)

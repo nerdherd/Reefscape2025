@@ -80,7 +80,7 @@ public final class Constants {
     public static final double kDDrive = 0; 
     public static final double kVDrive = 0.0469; 
 
-    public static final String kCANivoreName = "CANivore";//"CANivore";
+    public static final String kCANivoreName = "rio";//"CANivore";
 
   } 
 
