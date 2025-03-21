@@ -249,19 +249,16 @@ public class RobotContainer {
         // Climb sequence
       driverController.buttonDown() // Prepare Position for Climb
         .onTrue(Commands.sequence(
-          Commands.runOnce(() -> climbMotor.setEnabled(true)),
           superSystem.climbCommandUp()));
 
       driverController.buttonLeft() // Soft Clamp
         .onTrue(Commands.sequence(
-          Commands.runOnce(() -> climbMotor.setEnabled(true)),
           superSystem.climbSoftClamp()
           ))
         .onFalse(superSystem.stopClimb());
         
       driverController.buttonUp() // Hard Clamp
         .onTrue(Commands.sequence(
-          Commands.runOnce(() -> climbMotor.setEnabled(true)), // TODO: Find real solution
           superSystem.climbHardClamp()
         ));
 

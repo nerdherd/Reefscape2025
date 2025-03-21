@@ -37,14 +37,13 @@ public class SuperSystem {
     public Climb climbMotor;
 
     public StatusSignal<S1StateValue> intakeSensor;
-    public StatusSignal<S2StateValue> floorSensor;
     
     private PositionEquivalents currentPosition = PositionEquivalents.Stow;
     private PositionEquivalents lastPosition = PositionEquivalents.Stow;
     
     boolean elevatorWithinRange;
 
-    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition, pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected, floorDetected;
+    private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition, pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected;
 
     public enum ExecutionOrder {
         ALL_TOGETHER,
@@ -69,13 +68,12 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, Pivot pivot, Wrist wrist, IntakeRoller algaeRoller, CANdi candi, Climb climbMotor) {
+    public SuperSystem(Elevator elevator, Pivot pivot, Wrist wrist, IntakeRoller intakeRoller, CANdi candi, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
-        this.intakeRoller = algaeRoller;
+        this.intakeRoller = intakeRoller;
         this.intakeSensor = candi.getS1State(true);
-        this.floorSensor = candi.getS2State(true);
         this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
@@ -85,7 +83,6 @@ public class SuperSystem {
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
         intakeDetected = () -> (intakeSensor.getValue().value == 1);
-        floorDetected = () -> (floorSensor.getValue().value == 1);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -274,7 +271,7 @@ public class SuperSystem {
                 wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
                 preExecute(),
                 execute(position.executionOrder, 10.0, 
-                position.pivotPosition, position.elevatorPosition, position.finalWristPosition).until(floorDetected)
+                position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
             );
         }
         if (position.intermediateWristPosition == position.finalWristPosition)
@@ -547,7 +544,6 @@ public class SuperSystem {
                 tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
                 tab.addString("Super System Current Position", () -> currentPosition.toString());
-                tab.addBoolean("Floor Detected", floorDetected);
                 tab.addBoolean("Intake Detected", intakeDetected);
             case MINIMAL:
                 break;
