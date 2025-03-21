@@ -116,12 +116,14 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
+            desiredVoltageAlgae = 0.0;
+            desiredVoltageCoral = 0.0;
             algaeMotor.setControl(brakeRequest);
             coralMotor.setControl(brakeRequest);
         }
         else {
             algaeMotor.setVoltage(desiredVoltageAlgae);  
-            coralMotor.setVoltage(desiredVoltageCoral * 1.15);
+            coralMotor.setVoltage(desiredVoltageCoral);
         } 
 
     }
@@ -192,7 +194,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     private Command stopCommand() {
         return Commands.sequence(
-            setVelocityCommand(0),
+            setVoltageCommand(0),
             setEnabledCommand(false)
         );
     }
@@ -201,45 +203,45 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandAlgae(RollerConstants.kAlgaeIntakePower)
+            setVoltageCommandAlgae(RollerConstants.kAlgaeIntakePower)
         );
     }
 
     public Command holdAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandAlgae(RollerConstants.kAlgaeHoldPower)
+            setVoltageCommandAlgae(RollerConstants.kAlgaeHoldPower)
         );
     }
 
     public Command intakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandCoral(RollerConstants.kCoralIntakePower),
-            setVelocityCommandAlgae(-RollerConstants.kCoralIntakePower)
+            setVoltageCommandCoral(RollerConstants.kCoralIntakePower),
+            setVoltageCommandAlgae(-RollerConstants.kCoralIntakePower)
         );
     }
 
     public Command outtakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandCoral(RollerConstants.kCoralOuttakePower),
-            setVelocityCommandAlgae(-RollerConstants.kCoralOuttakePower)
+            setVoltageCommandCoral(RollerConstants.kCoralOuttakePower),
+            setVoltageCommandAlgae(-RollerConstants.kCoralOuttakePower)
         );
     }
 
     public Command outtakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandAlgae(RollerConstants.kAlgaeOuttakePower)
+            setVoltageCommandAlgae(RollerConstants.kAlgaeOuttakePower)
         );
     }
 
     public Command outtakeL1() {
         return Commands.sequence(
             setEnabledCommand(true),
-            setVelocityCommandCoral(RollerConstants.kL1OuttakePower),
-            setVelocityCommandAlgae(-RollerConstants.kL1OuttakePower)
+            setVoltageCommandCoral(RollerConstants.kL1OuttakePower),
+            setVoltageCommandAlgae(-RollerConstants.kL1OuttakePower)
         );
     }
 

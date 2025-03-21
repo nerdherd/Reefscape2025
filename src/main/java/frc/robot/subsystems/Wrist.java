@@ -13,7 +13,6 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -29,7 +28,6 @@ public class Wrist extends SubsystemBase implements Reportable{
     private final TalonFX motor;
     private final TalonFXConfigurator motorConfigurator;
     private Pigeon2 pigeon;
-    private DutyCycleEncoder encoder;
 
     private final MotionMagicVoltage motionMagicRequest; // Was 0 during initialization
     private final NeutralOut brakeRequest = new NeutralOut();
@@ -48,7 +46,6 @@ public class Wrist extends SubsystemBase implements Reportable{
         motorConfigurator = motor.getConfigurator();
         
         // pigeon = new Pigeon2(WristConstants.kPigeonID, "rio");
-        encoder = new DutyCycleEncoder(WristConstants.kEncoderID);
         desiredPosition = 0;
         // desiredPosition = pigeon.getRoll().getValueAsDouble();
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
@@ -155,13 +152,13 @@ public class Wrist extends SubsystemBase implements Reportable{
     }
 
     public boolean atPosition() {
-        return NerdyMath.inRange(encoder.get(), 
+        return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
                                 desiredPosition - 0.05,
                                 desiredPosition + 0.05);
     }
 
     public boolean atPositionWide() {
-        return NerdyMath.inRange(encoder.get(), 
+        return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
                                 desiredPosition - 0.15,
                                 desiredPosition + 0.15);
     }
@@ -197,7 +194,6 @@ public class Wrist extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 SmartDashboard.putNumber("Coral Wrist Position", motor.getPosition().getValueAsDouble());
-                SmartDashboard.putNumber("Coral Wrist Encoder Position", encoder.get());
             case MEDIUM:
                 SmartDashboard.putNumber("Coral Wrist Current", motor.getStatorCurrent().getValueAsDouble());
             case MINIMAL:
@@ -223,7 +219,7 @@ public class Wrist extends SubsystemBase implements Reportable{
             case MINIMAL:
                 tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Wrist Desired Position", () -> desiredPosition);
-                tab.addNumber("Wrist Current Position", () -> encoder.get());
+                tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 break;
         }

@@ -191,9 +191,11 @@ public class SuperSystem {
     }
 
     public Command holdPiece() {
-        if (positionMode == PositionMode.Coral) 
-            return Commands.none();
-        return intakeRoller.holdAlgae();
+        return Commands.either(
+            Commands.none(),
+            intakeRoller.holdAlgae(),
+            () -> (positionMode == PositionMode.Coral)
+        );
     }
 
     public Command outtake() {
@@ -207,8 +209,8 @@ public class SuperSystem {
     }
     
     public Command outtakeCoral() {
-        if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) { // TODO is it working??
-            return intakeRoller.outtakeL1(); // Might need to make new constant for this
+        if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) {
+            return intakeRoller.outtakeL1();   
         }
         return intakeRoller.outtakeCoral();
     }
