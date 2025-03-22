@@ -20,7 +20,6 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.SuperSystem.ExecutionOrder;
 
@@ -409,11 +408,11 @@ public final class Constants {
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
 
-    public static final double kPElevatorMotor = 4.0; // 3.0 as of 3/1/25
+    public static final double kPElevatorMotor = 8.0; // 3.0 as of 3/1/25
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
-    public static final double kGElevatorMotor = 0.2;
+    public static final double kGElevatorMotor = 0.17;
     public static final double kSElevatorMotor = 0.11;
 
     public static final double kElevatorCruiseVelocity = 100; //16.333 //20
@@ -427,7 +426,7 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 50; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 40; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
@@ -436,7 +435,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; 
     public static final double kGElevatorPivot = 0;
 
-    public static final double kFElevatorPivot = 0.22; 
+    public static final double kFElevatorPivot = 0.21; 
 
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
@@ -446,7 +445,7 @@ public final class Constants {
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 125.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
+    public static final double kElevatorPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
@@ -470,20 +469,18 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kCoralIntakePower  = -2.8;
+    public static final double kIntakePower  = -2.8;
+    public static final double kCoralIntakePower  = -2.4;
     public static final double kCoralOuttakePower = 1.5;
-    public static final double kAlgaeIntakePower  = -2.8;
+    public static final double kAlgaeIntakePower  = -2.88;
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
     public static final double kAlgaeHoldPower = 1;
 
   }
 
-  public static final class WristConstants {
-
+  public static final class WristConstants{
     public static final int kMotorID = 54;
-    public static final int kPigeonID = 2;
-    public static final int kEncoderID = 0; // TODO change
   
     public static final double kPMotor =  40; 
     // kP * err_rotations = Max_Volt_Needed (A little higher than kG)
@@ -492,7 +489,7 @@ public final class Constants {
     public static final double kDMotor = 0;
     public static final double kVMotor = 0;
     public static final double kSMotor = 0; //Static Friction
-    public static final double kGMotor = 0.6; //Gravity
+    public static final double kGMotor = 0.636; //Gravity
     public static final double kCruiseVelocity = 2;
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
@@ -501,7 +498,7 @@ public final class Constants {
     public static final double kMinPosition = 0;
 
     public static final double kSpeed = 0.5;
-    
+    public static final int kPigeonID = 2;
   }
 
   public static final class ClimbConstants { // TODO change
@@ -526,7 +523,6 @@ public final class Constants {
   
 
   public static final class SuperSystemConstants {
-
     public static final class Position {
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; 
       public ExecutionOrder executionOrder;
@@ -538,22 +534,21 @@ public final class Constants {
         executionOrder = eo;
       }
     }
-    
     public enum CoralPositions { 
-      Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
-      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.55, -0.780, -0.780      ),
-      Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.4),
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180, -0.570      ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210, -0.570      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.14, -0.240, -0.570      ),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.570      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
+      Stow(                ExecutionOrder.ELV_WRT_PVT  , 0.01,  0.07,    -0.096, -0.35),
+      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.35      ),
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.39, -0.783, -0.35      ),
+      Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.35),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.35      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.35      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  0.97, -0.102, -0.35     ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  2.87, -0.19, -0.35      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.35      ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.35      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.35      ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.35     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.783, -0.783      );
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);

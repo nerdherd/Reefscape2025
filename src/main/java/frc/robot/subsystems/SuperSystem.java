@@ -418,7 +418,7 @@ public class SuperSystem {
                     if (elevatorAtPositionWide.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if (pivotAtPositionWide.getAsBoolean()) {
+                        if (pivotAtPosition.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -431,7 +431,7 @@ public class SuperSystem {
                     if (elevatorAtPositionWide.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if (wristAtPositionWide.getAsBoolean()) {
+                        if (wristAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -444,7 +444,7 @@ public class SuperSystem {
                     if (pivotAtPositionWide.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if (wristAtPositionWide.getAsBoolean()) {
+                        if (wristAtPosition.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -457,7 +457,7 @@ public class SuperSystem {
                     if (pivotAtPositionWide.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if (elevatorAtPositionWide.getAsBoolean()) {
+                        if (elevatorAtPosition.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -470,7 +470,7 @@ public class SuperSystem {
                     if (wristAtPositionWide.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if (elevatorAtPositionWide.getAsBoolean()) {
+                        if (elevatorAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -483,7 +483,7 @@ public class SuperSystem {
                     if (wristAtPositionWide.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if (pivotAtPositionWide.getAsBoolean()) {
+                        if (pivotAtPosition.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -495,7 +495,7 @@ public class SuperSystem {
                     wristSet = true;
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
                     }
@@ -506,7 +506,7 @@ public class SuperSystem {
                     wristSet = true;
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if (wristAtPositionWide.getAsBoolean() && pivotAtPositionWide.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean() && pivotAtPositionWide.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
                     }

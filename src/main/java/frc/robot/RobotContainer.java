@@ -82,7 +82,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  public static boolean USE_SUBSYSTEMS = false;
+  public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
