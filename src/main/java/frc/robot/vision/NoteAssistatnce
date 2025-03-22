@@ -1,0 +1,61 @@
+package frc.robot;
+
+public class NoteAssistance {
+
+    public double tx;
+    public double ty;
+    public double ta;
+    public String name;
+
+    public NoteAssistance(String name) {
+        this.name = name;
+
+        tx = LimelightHelpers.getTX(name);  // Horizontal offset from crosshair to target in degrees
+        ty = LimelightHelpers.getTY(name);  // Vertical offset from crosshair to target in degrees
+        ta = LimelightHelpers.getTA(name);  // Target area (0% to 100% of image)
+
+        public void driveToNote(SwerveDrivetrain drivetrain, double targetArea, double targetTX, double targetTY, int maxSamples, Pose2d defaultPose) {
+            // must reset counts before or after call this function!!!
+            dataSampleCount++;
+    
+            Pose2d currentPose = drivetrain.getPose();
+            double currentX = currentPose.getX();
+            double currentY = currentPose.getY();
+            double currentR = currentPose.getRotation().getDegrees();
+    
+            if(defaultPose != null) {
+                double defaultX = defaultPose.getX();
+                double defaultY = defaultPose.getY();
+                double defaultR = defaultPose.getRotation().getDegrees();
+            
+            
+    
+                // todo, need to convert angle to continues value!!! bug
+                if(currentX < defaultX-1 || currentX > defaultX+1 ||  // todo, tuning pls
+                currentY < defaultY-1 || currentY > defaultY+1 ||
+                currentR < NerdyMath.continueAngle(defaultR, defaultR - 30) || currentR > NerdyMath.continueAngle(defaultR, defaultR + 30))
+                {
+                    speeds[0] = speeds[1] = 0; // stop because moved too far
+                    dataSampleCount = maxSamples+1;
+                }
+            }
+            if(maxSamples > 0 && dataSampleCount > maxSamples)
+            {
+                speeds[0] = speeds[1] = 0; // stop because running time too long
+            }
+            else 
+            {
+                speedToNote(targetArea, targetTX, targetTY);
+            }
+    
+            if(forwardSpeed != null)
+                forwardSpeed.setDouble(speeds[0]);
+            if(sidewaysSpeed != null)
+                sidewaysSpeed.setDouble(speeds[1]);
+            drivetrain.drive(getForwardSpeed(), getSidewaysSpeed(), 0);
+        }
+
+    }
+
+
+}
