@@ -166,7 +166,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         initProcesPoses();
         initStationsPoses();
 
-        CommandScheduler.getInstance().registerSubsystem(this);
         
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         //ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);

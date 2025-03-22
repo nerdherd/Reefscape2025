@@ -118,7 +118,8 @@ public class Elevator extends SubsystemBase implements Reportable {
         double a = 1; // horizontal elevator position of robot perimeter TODO update
         double b = 3; // max elevator position TODO update
         double c = 0; // min elevator position
-        motionMagicRequest.Position = NerdyMath.clamp(desiredPosition, c, Math.min(a / Math.cos(pivotAngle * 2*Math.PI), b));
+        // motionMagicRequest.Position = NerdyMath.clamp(desiredPosition, c, Math.min(a / Math.cos(pivotAngle * 2*Math.PI), b));
+        motionMagicRequest.Position = desiredPosition;
 
         elevatorMotor2.setControl(followRequest);
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);

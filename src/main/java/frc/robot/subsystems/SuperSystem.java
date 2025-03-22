@@ -36,7 +36,7 @@ public class SuperSystem {
     public IntakeRoller intakeRoller;
     public Climb climbMotor;
 
-    public StatusSignal<S1StateValue> intakeSensor;
+    public StatusSignal<S2StateValue> intakeSensor;
     
     private PositionEquivalents currentPosition = PositionEquivalents.Stow;
     private PositionEquivalents lastPosition = PositionEquivalents.Stow;
@@ -73,15 +73,15 @@ public class SuperSystem {
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
-        this.intakeSensor = candi.getS1State(true);
+        this.intakeSensor = candi.getS2State(true);
         this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
-        pivotAtPositionWide = () -> pivot.atPositionWide();
+        pivotAtPositionWide = () -> pivot.atPosition();
         elevatorAtPosition = () -> elevator.atPosition();
-        elevatorAtPositionWide = () -> elevator.atPositionWide();
+        elevatorAtPositionWide = () -> elevator.atPosition();
         wristAtPosition = () -> wrist.atPosition();
-        wristAtPositionWide = () -> wrist.atPositionWide();
+        wristAtPositionWide = () -> wrist.atPosition();
         intakeDetected = () -> (intakeSensor.getValue().value == 1);
         
 
@@ -291,7 +291,10 @@ public class SuperSystem {
     }
 
     public Command moveToAuto(PositionEquivalents position) {
-        return Commands.either(goToAuto(position.coralPos), goToAuto(position.algaePos), () -> (positionMode == PositionMode.Coral));
+        return Commands.sequence(
+            updatePositions(position),
+            Commands.either(goToAuto(position.coralPos), goToAuto(position.algaePos), () -> (positionMode == PositionMode.Coral))
+        );
     }
 
     public Command goToAuto(Position position) {
