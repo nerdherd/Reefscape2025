@@ -984,7 +984,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void driveToCoral(String limelightName, double targetArea){
         if (LimelightHelpers.getTV(limelightName)){
             double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
-            double ty = LimelightHelpers.getTY(limelightName);  // Vertical offset from crosshair to target in degrees
             double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
 
             // IMPORTANT: These values were copied from the old code, so they are probably wrong
@@ -998,6 +997,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
             drive(forwardSpeed,sidewaySpeed);
         }
+    }
+
+    public Command driveToCoralCommand(String limelightName, double targetArea) {
+        return Commands.runOnce(() -> driveToCoral(limelightName, targetArea));
     }
 
     //****************************** SETTERS ******************************/
