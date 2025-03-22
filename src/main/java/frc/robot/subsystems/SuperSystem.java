@@ -318,8 +318,8 @@ public class SuperSystem {
         pivot.setEnabled(true);
         wrist.setEnabled(true);
         elevator.setEnabled(true);
-        intakeRoller.setEnabled(true);
-        climbMotor.setEnabled(true);
+        intakeRoller.setEnabled(false);
+        climbMotor.setEnabled(false);
         
         pivot.setTargetPosition(0.0);
         elevator.setTargetPosition(0.0);

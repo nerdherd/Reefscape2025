@@ -12,6 +12,7 @@ import org.json.simple.parser.ParseException;
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -41,7 +42,7 @@ import frc.robot.commands.autos.Generic3Piece;
 import frc.robot.commands.autos.Generic4Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem.PositionMode;
-import frc.robot.subsystems.SysidTest;
+// import frc.robot.subsystems.SysidTest;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.subsystems.imu.PigeonV2;
@@ -64,8 +65,8 @@ public class RobotContainer {
   public final TalonFX motor2 = new TalonFX(9);
   public final Follower follower = new Follower(8, false);
   public final NeutralOut brakeRequest = new NeutralOut();
-
-  private final SysidTest systest = new SysidTest(motor, motor2);
+  
+  // private final SysidTest systest = new SysidTest(motor, motor2);
   public IntakeRoller intakeRoller;
   public BannerSensor intakeSensor;
   public Elevator elevator;
@@ -107,21 +108,21 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // try {
-    //   swerveDrive = new SwerveDrivetrain(imu);
+      swerveDrive = new SwerveDrivetrain(imu);
     // } catch (IllegalArgumentException e) {
     //   DriverStation.reportError("Illegal Swerve Drive Module Type", e.getStackTrace());
     // }
 
     if (USE_SUBSYSTEMS) {
       wrist = new Wrist();
-      // elevator = new Elevator();
+      elevator = new Elevator();
       pivot = new Pivot();
-      // intakeRoller = new IntakeRoller();
-      // candi = new CANdi(6);
-      // climbMotor = new Climb();
-      // superSystem = new SuperSystem(elevator, pivot, wrist, intakeRoller, candi, climbMotor);
+      intakeRoller = new IntakeRoller();
+      candi = new CANdi(6);
+      climbMotor = new Climb();
+      superSystem = new SuperSystem(elevator, pivot, wrist, intakeRoller, candi, climbMotor);
       try { // ide displayed error fix
-        bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
+        // bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
         bottom4Piece = new Generic4Piece(swerveDrive, superSystem, "Bottom4Piece", 2, 2, 2, 2);
       } catch (IOException e) {
@@ -248,7 +249,7 @@ public class RobotContainer {
     //////////////////////
 
     operatorController.dpadUp()
-    .onTrue(Commands.runOnce(() -> pivot.setTargetPosition(0.2)));
+    .onTrue(Commands.runOnce(() -> pivot.setTargetPosition(0.25)));
     operatorController.dpadLeft()
     .onTrue(Commands.runOnce(() -> pivot.setTargetPosition(0.1)));
     operatorController.dpadDown()
@@ -260,22 +261,16 @@ public class RobotContainer {
     .onTrue(Commands.runOnce(() -> wrist.setTargetPosition(-0.35)));
     operatorController.buttonDown()
       .onTrue(Commands.runOnce(() -> wrist.setTargetPosition(-0.5)));
-    
-      driverController.bumperRight()
-      .whileTrue(
-        Commands.run(
-          () -> {
-            voltage += 0.2 / 50.0;
-            motor.setControl(voltageRequest.withOutput(voltage));
-            motor2.setControl(follower.withOpposeMasterDirection(true));
-          }
-      ))
-      .onFalse(Commands.parallel(
-        Commands.runOnce(() -> motor.setControl(brakeRequest)),
-        Commands.runOnce(() -> motor2.setControl(brakeRequest)),
-        Commands.runOnce(() -> voltage = 0)
-      ));
+    operatorController.bumperLeft()
+      .onTrue(Commands.runOnce(() -> elevator.setTargetPosition(0.8)));
+    operatorController.bumperRight()
+      .onTrue(Commands.runOnce(() -> elevator.setTargetPosition(1.6)));
+      operatorController.triggerLeft()
+      .onTrue(Commands.runOnce(() -> elevator.setTargetPosition(2.4)));
+      
+      
     }
+
     
 
     // operatorController.dpadDown()
@@ -375,15 +370,15 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
-    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
-    // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
-    autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
-    autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
-    autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
+    // autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+    // // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
+    // autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
+    // autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
+    // autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
-    autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
-    // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
-    autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
+    // autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
+    // // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    // autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
     // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));

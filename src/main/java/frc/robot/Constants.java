@@ -408,11 +408,11 @@ public final class Constants {
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
 
-    public static final double kPElevatorMotor = 4.0; // 3.0 as of 3/1/25
+    public static final double kPElevatorMotor = 8.0; // 3.0 as of 3/1/25
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
-    public static final double kGElevatorMotor = 0.2;
+    public static final double kGElevatorMotor = 0.17;
     public static final double kSElevatorMotor = 0.11;
 
     public static final double kElevatorCruiseVelocity = 100; //16.333 //20
@@ -426,7 +426,7 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 50; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 40; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
@@ -435,7 +435,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; 
     public static final double kGElevatorPivot = 0;
 
-    public static final double kFElevatorPivot = 0.22; 
+    public static final double kFElevatorPivot = 0.21; 
 
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
@@ -445,7 +445,7 @@ public final class Constants {
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 125.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
+    public static final double kElevatorPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
@@ -483,7 +483,7 @@ public final class Constants {
     public static final double kDMotor = 0;
     public static final double kVMotor = 0;
     public static final double kSMotor = 0; //Static Friction
-    public static final double kGMotor = 0.6; //Gravity
+    public static final double kGMotor = 0.636; //Gravity
     public static final double kCruiseVelocity = 2;
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed

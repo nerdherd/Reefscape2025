@@ -260,7 +260,7 @@ public class SwerveJoystickCommand extends Command {
                 swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
                 chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
             } else {
-                System.out.println("end");
+                // System.out.println("end");
             }
 
         SwerveModuleState[] moduleStates;
