@@ -515,8 +515,7 @@ public final class Constants {
     public static final double kSMotor = 0;
     public static final double kGMotor = 0;
 
-    public static final double kOpenVoltage = 0;
-    public static final double kCloseVoltage = 0;
+    public static final double kInVoltage = 4.5;
   }
   
 
@@ -546,9 +545,10 @@ public final class Constants {
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.570      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
+      ClimbDown(           ExecutionOrder.ALL_TOGETHER  ,   -0.06, 1.2, -0.4, -0.4      ),
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      )
+      ;
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);
@@ -564,9 +564,8 @@ public final class Constants {
       Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ), //not real
       AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
       AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      )
+      ;
 
       public Position position;
       AlgaePositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
@@ -587,11 +586,10 @@ public final class Constants {
       L4Auto(CoralPositions.L4Auto, CoralPositions.L4Auto),
       L4AutoPre(CoralPositions.L4AutoPre, CoralPositions.L4AutoPre),
       L5(CoralPositions.L5, CoralPositions.L5),
-      ClimbUp(CoralPositions.ClimbUp, AlgaePositions.ClimbUp),
-      ClimbDown(CoralPositions.ClimbDown, AlgaePositions.ClimbDown),
+      ClimbUp(CoralPositions.ClimbUp, CoralPositions.ClimbUp),
+      ClimbDown(CoralPositions.ClimbDown, CoralPositions.ClimbDown),
       intermediateGround(CoralPositions.intermediateGround, AlgaePositions.intermediateGround),
       Station(CoralPositions.Station, CoralPositions.Station),
-
       ;
       
       public Position coralPos;

@@ -139,12 +139,11 @@ public class Climb extends SubsystemBase implements Reportable{
         return motor;
     }
 
-    public Command open() {
-        return setVoltageCommand(ClimbConstants.kOpenVoltage);
-    }
-
-    public Command close() {
-        return setVoltageCommand(ClimbConstants.kCloseVoltage);
+    public Command in() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVoltageCommand(ClimbConstants.kInVoltage)
+        );
     }
 
     public Command stop() {
