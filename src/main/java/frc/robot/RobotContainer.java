@@ -83,7 +83,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  public static boolean USE_SUBSYSTEMS = false;
+  public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
@@ -413,6 +413,7 @@ public class RobotContainer {
     autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
     autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
     autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
+    autoChooser.addOption("2PieceGround", new TwoPiece(swerveDrive, "BottomTwoPieceGround", superSystem));
     // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
