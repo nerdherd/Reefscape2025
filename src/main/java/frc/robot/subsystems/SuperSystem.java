@@ -214,18 +214,10 @@ public class SuperSystem {
 
     public Command shootAlgae() {
         return intakeRoller.setVoltageCommand(4.25);
-    } 
-    
-    public Command climbPrep() {
-        return climbMotor.setVoltageCommand(0.5);
     }
 
-    public Command climbHardClamp() {
-        return climbMotor.setVoltageCommand(-4.5);
-    }
-
-    public Command climbSoftClamp() {
-        return climbMotor.setVoltageCommand(-0.4);
+    public Command climbIn() {
+        return climbMotor.in();
     }
 
     public Command stopClimb() {
@@ -233,18 +225,11 @@ public class SuperSystem {
     }
 
     public Command climbCommandUp() {
-        return Commands.sequence(
-            climbPrep(), 
-            moveTo(PositionEquivalents.ClimbUp) 
-        );
+        return moveTo(PositionEquivalents.ClimbUp) ;
     }
 
-    
     public Command climbCommandDown() {
-        return Commands.sequence(
-            climbHardClamp(), 
-            moveTo(PositionEquivalents.ClimbDown) 
-        );
+        return moveTo(PositionEquivalents.ClimbDown);
     }
 
     public Command updatePositions(PositionEquivalents position) {
