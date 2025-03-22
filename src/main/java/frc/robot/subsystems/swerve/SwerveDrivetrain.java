@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -977,6 +978,26 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void setChassisSpeedsBi(ChassisSpeeds speeds, DriveFeedforwards drives) {
         SwerveModuleState[] targetStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
         setModuleStates(targetStates);
+    }
+
+
+    public void driveToCoral(String limelightName, double targetArea){
+        if (LimelightHelpers.getTV(limelightName)){
+            double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
+            double ty = LimelightHelpers.getTY(limelightName);  // Vertical offset from crosshair to target in degrees
+            double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
+
+            // IMPORTANT: These values were copied from the old code, so they are probably wrong
+            // TODO: Move these to constants or something
+            PIDController areaController = new PIDController(0.18, 0, 0.004);     // TODO: tune
+            PIDController txController = new PIDController(0.05, 0, 0.001);       // TODO: tune
+            // PIDController rotationController = new PIDController(0.08, 0, 0.006);       // TODO: tune
+
+            double forwardSpeed = areaController.calculate(ta,targetArea);
+            double sidewaySpeed = txController.calculate(tx,0);
+
+            drive(forwardSpeed,sidewaySpeed);
+        }
     }
 
     //****************************** SETTERS ******************************/
