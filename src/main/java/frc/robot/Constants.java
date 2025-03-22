@@ -515,13 +515,8 @@ public final class Constants {
     public static final double kSMotor = 0;
     public static final double kGMotor = 0;
 
-    public static final double kCruiseVelocity = 0;
-    public static final double kAcceleration = 0;
-    public static final double kJerk = 0;
-
-    public static final double kOpenPosition = 0;
-    public static final double kClosedPosition = 0;
-
+    public static final double kOpenVoltage = 0;
+    public static final double kCloseVoltage = 0;
   }
   
 
