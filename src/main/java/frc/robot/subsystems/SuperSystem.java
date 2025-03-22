@@ -262,7 +262,9 @@ public class SuperSystem {
 
     // movement
     private Command goTo(Position position, Position previousPosition) {
-        if (position == PositionEquivalents.GroundIntake.coralPos) {
+        if (position == PositionEquivalents.GroundIntake.coralPos ||
+            previousPosition == PositionEquivalents.GroundIntake.coralPos
+        ) {
             return Commands.sequence(
                 preExecute(),
                 execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
