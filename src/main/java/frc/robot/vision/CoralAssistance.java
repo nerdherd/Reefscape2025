@@ -1,6 +1,8 @@
 package frc.robot.vision;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 public class CoralAssistance {
@@ -38,6 +40,10 @@ public class CoralAssistance {
 
             swerveDrivetrain.drive(forwardSpeed,sidewaySpeed);
         }
+    }
+
+    public Command driveToCoralCommand(SwerveDrivetrain swerveDrivetrain, double targetArea) {
+        return Commands.runOnce(() -> driveToCoral(swerveDrivetrain, targetArea));
     }
 
 
