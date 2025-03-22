@@ -32,32 +32,33 @@ public class TwoPiece extends SequentialCommandGroup {
             Commands.sequence(
                 Commands.sequence(
                     // superSystem.holdPiece(),
+                    superSystem.moveTo(PositionEquivalents.Stow),
                     AutoBuilder.followPath(pathGroup.get(0)),
                     Commands.sequence(
                         // superSystem.moveToAuto(PositionEquivalents.L4)
-                        // superSystem.moveToAuto(PositionEquivalents.L1)
+                        superSystem.moveToAuto(PositionEquivalents.L1),
+                        Commands.runOnce(() ->swerve.setAutoPathRun(1, -1)).withTimeout(2)
                     )
                 ),
                 Commands.sequence(
-                    // superSystem.outtake(),
-                    Commands.waitSeconds(2.0)
-                    // superSystem.stopRoller()
+                    superSystem.outtake(),
+                    Commands.waitSeconds(2.0),
+                    superSystem.stopRoller()
                 ),
                 Commands.sequence(
                     // superSystem.moveTo(PositionEquivalents.L5),
                     // superSystem.moveTo(PositionEquivalents.L1),
                     Commands.parallel(
                         AutoBuilder.followPath(pathGroup.get(1)),
-                        // superSystem.moveToAuto(PositionEquivalents.GroundIntake),
+                        superSystem.moveToAuto(PositionEquivalents.GroundIntake)
                         // superSystem.moveToAuto(PositionEquivalents.Stow),
-                        Commands.waitSeconds(2.0)
+                        // Commands.waitSeconds(2.0)
                     )
-                    
                 ),
                 Commands.sequence(
                     // superSystem.intake(),
-                    // superSystem.intakeUntilSensed(2),
-                    Commands.waitSeconds(2)
+                    superSystem.intakeUntilSensed(2)
+                    // Commands.waitSeconds(2)
                     // superSystem.holdPiece()
                 ),
                 Commands.sequence(
@@ -68,21 +69,24 @@ public class TwoPiece extends SequentialCommandGroup {
                         AutoBuilder.followPath(pathGroup.get(2))
                     ),
                     Commands.sequence(
-                        Commands.waitSeconds(1)
+                        superSystem.moveToAuto(PositionEquivalents.L1),
+                        Commands.runOnce(() ->swerve.setAutoPathRun(1, 1)).withTimeout(2)
+
                         // superSystem.moveToAuto(PositionEquivalents.L1)
                     )
                 ),
                 Commands.sequence(
-                    // superSystem.outtake(),
-                    Commands.waitSeconds(2)
-                    // superSystem.stopRoller()
-                )
+                    superSystem.outtake(),
+                    Commands.waitSeconds(2),
+                    superSystem.stopRoller()
+                ),
 
-                // Commands.sequence(
-                //     // superSystem.moveTo(PositionEquivalents.L5),
-                //     superSystem.moveTo(PositionEquivalents.L1),
-                //     superSystem.moveTo(PositionEquivalents.SemiStow)
-                // )
+                
+                Commands.sequence(
+                    // superSystem.moveTo(PositionEquivalents.L5),
+                    superSystem.moveTo(PositionEquivalents.L1),
+                    superSystem.moveTo(PositionEquivalents.Stow)
+                )
                 )
             );
     }

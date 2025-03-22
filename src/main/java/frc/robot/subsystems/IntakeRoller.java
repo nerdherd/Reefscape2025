@@ -165,7 +165,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     // ****************************** COMMAND METHODS ****************************** //
 
-    private Command setEnabledCommand(boolean enabled) {
+    Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
  
