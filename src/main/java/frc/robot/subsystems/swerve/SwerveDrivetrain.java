@@ -14,6 +14,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.vision.VisionRunner;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -100,6 +101,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private Field2d field;
     private VisionSys vision = new VisionSys();
     public boolean useVision = true;
+
+    private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
     public enum DRIVE_MODE {
         FIELD_ORIENTED, // always use it
@@ -987,15 +990,17 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     
     public void driveToCoral(String limelightName, double targetArea){
-        if (LimelightHelpers.getTV(limelightName)){
+        String[] labels = classLabels.getStringArray(new String[]{});
+        if (labels.length > 1) System.out.println("too many labels: " + labels.length);
+        if (LimelightHelpers.getTV(limelightName) && labels.length == 1 && labels[0].equals("coral")){
             double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
             double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
 
             // PIDController rotationController = new PIDController(0.08, 0, 0.006);       // TODO: tune
-
+            areaController.setTolerance(0.5);
             double forwardSpeed = areaController.calculate(ta,targetArea);
             double turnSpeed = -txController.calculate(tx,0);
-
+            if (areaController.atSetpoint()) forwardSpeed = 0.0;
             drive(forwardSpeed, 0, turnSpeed);
         }
     }

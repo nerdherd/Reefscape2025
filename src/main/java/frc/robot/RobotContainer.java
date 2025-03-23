@@ -266,7 +266,7 @@ public class RobotContainer {
       // driverController.buttonRight() // Execute Climb
       // .onTrue(superSystem.climbCommandDown());
       driverController.buttonDown()
-        .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 9));
+        .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
 
     
 
