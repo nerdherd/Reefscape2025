@@ -11,6 +11,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.PathPlannerConstants;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -31,7 +32,7 @@ public class TwoPiece extends SequentialCommandGroup {
             
             Commands.sequence(
                 Commands.sequence(
-                    // superSystem.holdPiece(),
+                    superSystem.holdPiece(),
                     superSystem.moveTo(PositionEquivalents.Stow),
                     AutoBuilder.followPath(pathGroup.get(0)),
                     Commands.sequence(
@@ -48,6 +49,7 @@ public class TwoPiece extends SequentialCommandGroup {
                 Commands.sequence(
                     // superSystem.moveTo(PositionEquivalents.L5),
                     // superSystem.moveTo(PositionEquivalents.L1),
+                    superSystem.moveTo(PositionEquivalents.SemiStow),
                     Commands.parallel(
                         AutoBuilder.followPath(pathGroup.get(1)),
                         superSystem.moveToAuto(PositionEquivalents.GroundIntake)
@@ -55,18 +57,21 @@ public class TwoPiece extends SequentialCommandGroup {
                         // Commands.waitSeconds(2.0)
                     )
                 ),
-                Commands.sequence(
+                Commands.race(
                     // superSystem.intake(),
-                    superSystem.intakeUntilSensed(2)
+                    superSystem.intakeUntilSensed(2),
+                    swerve.driveToCoralCommand("limelight-coral", 8)
+
                     // Commands.waitSeconds(2)
                     // superSystem.holdPiece()
                 ),
+                swerve.driveToPose(pathGroup.get(3).getStartingDifferentialPose(), PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAngularAcceleration),
                 Commands.sequence(
                     Commands.parallel(
                         Commands.sequence(
                             Commands.waitSeconds(0.3)
                         ),
-                        AutoBuilder.followPath(pathGroup.get(2))
+                        AutoBuilder.followPath(pathGroup.get(3))
                     ),
                     Commands.sequence(
                         superSystem.moveToAuto(PositionEquivalents.L1),
