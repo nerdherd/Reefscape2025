@@ -20,18 +20,24 @@ public class TwoPiece extends SequentialCommandGroup {
     public TwoPiece(SwerveDrivetrain swerve, String autoname, SuperSystem superSystem) throws IOException, ParseException {
         
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
+        Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
 
         addCommands(
-            Commands.runOnce(swerve.getImu()::zeroAll), //Check if needed
-            // Commands.runOnce(() -> swerve.getImu().setOffset(startingPose.getRotation().getDegrees())),
-            // Commands.runOnce(()->swerve.resetOdometryWithAlliance(startingPose)),
+            Commands.runOnce(swerve.getImu()::zeroAll),
+            // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+            // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             
             Commands.sequence(
                 Commands.sequence(
-                    superSystem.holdPiece(),
+                    // superSystem.holdPiece(),
+                    superSystem.moveTo(PositionEquivalents.Stow),
                     AutoBuilder.followPath(pathGroup.get(0)),
                     Commands.sequence(
-                        superSystem.moveToAuto(PositionEquivalents.L4)
+                        // superSystem.moveToAuto(PositionEquivalents.L4)
+                        superSystem.moveToAuto(PositionEquivalents.L1),
+                        Commands.runOnce(() ->swerve.setAutoPathRun(1, -1)).withTimeout(2)
                     )
                 ),
                 Commands.sequence(
@@ -40,19 +46,20 @@ public class TwoPiece extends SequentialCommandGroup {
                     superSystem.stopRoller()
                 ),
                 Commands.sequence(
-                    superSystem.moveTo(PositionEquivalents.L5),
+                    // superSystem.moveTo(PositionEquivalents.L5),
+                    // superSystem.moveTo(PositionEquivalents.L1),
                     Commands.parallel(
                         AutoBuilder.followPath(pathGroup.get(1)),
-                        superSystem.moveToAuto(PositionEquivalents.Station)
-
+                        superSystem.moveToAuto(PositionEquivalents.GroundIntake)
+                        // superSystem.moveToAuto(PositionEquivalents.Stow),
+                        // Commands.waitSeconds(2.0)
                     )
-                    
                 ),
                 Commands.sequence(
-                    superSystem.intake(),
-                    // superSystem.intakeUntilSensed(2),
-                    Commands.waitSeconds(2),
-                    superSystem.holdPiece()
+                    // superSystem.intake(),
+                    superSystem.intakeUntilSensed(2)
+                    // Commands.waitSeconds(2)
+                    // superSystem.holdPiece()
                 ),
                 Commands.sequence(
                     Commands.parallel(
@@ -62,8 +69,10 @@ public class TwoPiece extends SequentialCommandGroup {
                         AutoBuilder.followPath(pathGroup.get(2))
                     ),
                     Commands.sequence(
-                        Commands.waitSeconds(1),
-                        superSystem.moveToAuto(PositionEquivalents.L4)
+                        superSystem.moveToAuto(PositionEquivalents.L1),
+                        Commands.runOnce(() ->swerve.setAutoPathRun(1, 1)).withTimeout(2)
+
+                        // superSystem.moveToAuto(PositionEquivalents.L1)
                     )
                 ),
                 Commands.sequence(
@@ -72,9 +81,11 @@ public class TwoPiece extends SequentialCommandGroup {
                     superSystem.stopRoller()
                 ),
 
+                
                 Commands.sequence(
-                    superSystem.moveTo(PositionEquivalents.L5),
-                    superSystem.moveTo(PositionEquivalents.SemiStow)
+                    // superSystem.moveTo(PositionEquivalents.L5),
+                    superSystem.moveTo(PositionEquivalents.L1),
+                    superSystem.moveTo(PositionEquivalents.Stow)
                 )
                 )
             );

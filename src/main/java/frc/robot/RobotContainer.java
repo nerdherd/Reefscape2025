@@ -29,6 +29,7 @@ import frc.robot.Constants.SuperSystemConstants.CoralPositions;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
 import frc.robot.commands.autos.PreloadTaxi;
+import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.Generic2Piece;
@@ -82,7 +83,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  public static boolean USE_SUBSYSTEMS = false;
+  public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
@@ -125,6 +126,7 @@ public class RobotContainer {
     initAutoChoosers();
 
     SmartDashboard.putData("Swerve Drive", swerveDrive);
+    
     DriverStation.reportWarning("Initalization complete", false);
   }
 
@@ -212,11 +214,13 @@ public class RobotContainer {
       
         double Elevator_SPEED = 3.0;// Meters per second // 0.3
         double Elevator_OFFSET = 0.05;
+        SmartDashboard.putNumber("Left y axis", operatorController.getLeftY());
         elevator.setDefaultCommand(Commands.run(() -> {
           double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
           if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
           double currentPos = elevator.getPosition();
           elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
+          SmartDashboard.putNumber("Left joystick in the y axis movement", leftY);
           }
         }, elevator));  
       }
@@ -278,13 +282,20 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(PositionEquivalents.L4));
 
       operatorController.triggerRight()
-      .onTrue(superSystem.intake())
+      .onTrue(superSystem.intakeUntilSensed())
       .onFalse(superSystem.holdPiece());
+      operatorController.bumperRight()
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
+      operatorController.bumperLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
 
       operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake2));
+      operatorController.buttonLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake3));
       operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
       operatorController.buttonDown()
@@ -394,17 +405,18 @@ public class RobotContainer {
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Do Nothing", Commands.none());
+    // autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
-    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+    autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
     autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
     autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
     autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
-    // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
     autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
+    autoChooser.addOption("2PieceGround", new TwoPiece(swerveDrive, "BottomTwoPieceGround", superSystem));
     // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));

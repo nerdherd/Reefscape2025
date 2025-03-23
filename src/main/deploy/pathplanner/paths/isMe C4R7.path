@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.906045081967213,
-        "y": 1.1359631147540983
+        "x": 1.8580942622950818,
+        "y": 2.088985655737704
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9618650306027037,
-        "y": 1.6524941968524276
+        "x": 1.9139142109305725,
+        "y": 2.605516737836033
       },
       "isLocked": false,
       "linkedName": "C4"
     },
     {
       "anchor": {
-        "x": 3.88,
-        "y": 2.745
+        "x": 3.7401639344262296,
+        "y": 2.5565061475409836
       },
       "prevControl": {
-        "x": 3.630009848117461,
-        "y": 2.747219000167883
+        "x": 3.4901737825436907,
+        "y": 2.5587251477088664
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Bottom Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -127.01700751911238
+    "rotation": 106.90515809863565
   },
   "useDefaultConstraints": true
 }

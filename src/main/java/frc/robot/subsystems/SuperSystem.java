@@ -54,7 +54,8 @@ public class SuperSystem {
         WRT_ELV_PVT,
         WRT_PVT_ELV,
         WRTELV_PVT,
-        WRTPVT_ELV
+        WRTPVT_ELV,
+        PVT_WRTELV
     }
     
     public enum PositionMode {
@@ -82,7 +83,7 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
-        intakeDetected = () -> (intakeSensor.getValue().value == 1);
+        intakeDetected = () -> (intakeSensor.getValue().value == 0);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -132,12 +133,12 @@ public class SuperSystem {
     public Command intake() {
         return Commands.either(
             intakeCoral(), 
-            algaeintake(), 
+            intakeAlgae(), 
             () -> (positionMode == PositionMode.Coral)
             );
     }
 
-    public Command algaeintake() {
+    public Command intakeAlgae() {
         return intakeRoller.intakeAlgae();
     }
     public Command intakeCoral() {
@@ -169,29 +170,26 @@ public class SuperSystem {
 
     public Command intakeUntilSensed() {
         return Commands.sequence(
-            algaeintake(), 
-            Commands.race(Commands.waitUntil(
-                intakeDetected),
-                Commands.waitSeconds(5)),
-            holdPiece()
+            intakeCoral(), 
+            Commands.race(
+                Commands.waitUntil(intakeDetected),
+                Commands.waitSeconds(2))
         );
     }
 
     public Command intakeUntilSensed(double timeout) {
         return Commands.sequence(
-            algaeintake(), 
-            Commands.race(Commands.waitUntil(
-                intakeDetected),
-                Commands.waitSeconds(timeout)),
-            holdPiece()
+            intakeCoral(), 
+            Commands.race(Commands.waitUntil(intakeDetected),
+            Commands.waitSeconds(timeout))
         );
     }
 
     public Command holdPiece() {
-        return Commands.either(
-            Commands.none(),
-            intakeRoller.holdAlgae(),
-            () -> (positionMode == PositionMode.Coral)
+        return Commands.runOnce(() ->
+            stopRoller()
+            // intakeRoller.holdAlgae(),
+            // () -> (positionMode == PositionMode.Coral)
         );
     }
 
@@ -206,9 +204,9 @@ public class SuperSystem {
     }
     
     public Command outtakeCoral() {
-        if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) {
-            return intakeRoller.outtakeL1();   
-        }
+        // if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) {
+        //     return intakeRoller.outtakeL1();   
+        // }
         return intakeRoller.outtakeCoral();
     }
 
@@ -242,13 +240,16 @@ public class SuperSystem {
     public Command moveTo(PositionEquivalents position) {
         return Commands.sequence(
             updatePositions(position),
-            Commands.either(goTo(position.coralPos), goTo(position.algaePos), () -> (positionMode == PositionMode.Coral))
+            Commands.waitSeconds(0.02),
+            Commands.either(goTo(position.coralPos, lastPosition.coralPos), goTo(position.algaePos, lastPosition.algaePos), () -> (positionMode == PositionMode.Coral))
         );
     }
 
     // movement
-    private Command goTo(Position position) {
-        if (currentPosition == PositionEquivalents.GroundIntake || lastPosition == PositionEquivalents.GroundIntake || currentPosition == PositionEquivalents.L1 || lastPosition == PositionEquivalents.L1) {
+    private Command goTo(Position position, Position previousPosition) {
+        if (position == PositionEquivalents.GroundIntake.coralPos ||
+            previousPosition == PositionEquivalents.GroundIntake.coralPos
+        ) {
             return Commands.sequence(
                 preExecute(),
                 execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
@@ -276,7 +277,10 @@ public class SuperSystem {
     }
 
     public Command moveToAuto(PositionEquivalents position) {
-        return Commands.either(goToAuto(position.coralPos), goToAuto(position.algaePos), () -> (positionMode == PositionMode.Coral));
+        return Commands.sequence(
+            updatePositions(position),
+            Commands.either(goToAuto(position.coralPos), goToAuto(position.algaePos), () -> (positionMode == PositionMode.Coral))
+        );
     }
 
     public Command goToAuto(Position position) {
@@ -340,7 +344,7 @@ public class SuperSystem {
         climbMotor.setEnabled(true);
         
         pivot.setTargetPosition(0.0);
-        elevator.setTargetPosition(0.0);
+        elevator.setTargetPosition(0.125);
         wrist.setTargetPosition(0.0);
         intakeRoller.setVoltageCommand(0.0);
         climbMotor.setVoltageCommand(0.0);
@@ -378,11 +382,7 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            if (pivotAngle == PositionEquivalents.Stow.coralPos.pivotPosition || pivotAngle == PositionEquivalents.intermediateGround.coralPos.pivotPosition || pivotAngle == PositionEquivalents.Station.coralPos.pivotPosition) {
-                elevatorWithinRange = elevator.atPositionWide();
-            } else {
-                elevatorWithinRange = elevator.atPosition();
-            }
+            elevatorWithinRange = elevator.atPosition();
             
             // TODO move this functionality to each subsystem
             updateDependencies(); 
@@ -400,10 +400,10 @@ public class SuperSystem {
                 case ELV_PVT_WRT:
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if (elevatorAtPositionWide.getAsBoolean()) {
+                    if (elevatorAtPosition.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if (pivotAtPositionWide.getAsBoolean()) {
+                        if (pivotAtPosition.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -413,10 +413,10 @@ public class SuperSystem {
                 case ELV_WRT_PVT:
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if (elevatorAtPositionWide.getAsBoolean()) {
+                    if (elevatorAtPosition.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if (wristAtPositionWide.getAsBoolean()) {
+                        if (wristAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -426,10 +426,10 @@ public class SuperSystem {
                 case PVT_WRT_ELV:
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if (pivotAtPositionWide.getAsBoolean()) {
+                    if (pivotAtPosition.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if (wristAtPositionWide.getAsBoolean()) {
+                        if (wristAtPosition.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -439,10 +439,10 @@ public class SuperSystem {
                 case PVT_ELV_WRT:
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if (pivotAtPositionWide.getAsBoolean()) {
+                    if (pivotAtPosition.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if (elevatorAtPositionWide.getAsBoolean()) {
+                        if (elevatorAtPosition.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -452,10 +452,10 @@ public class SuperSystem {
                 case WRT_ELV_PVT:
                     wrist.setTargetPosition(wristAngle);
                     wristSet = true;
-                    if (wristAtPositionWide.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if (elevatorAtPositionWide.getAsBoolean()) {
+                        if (elevatorAtPosition.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -465,10 +465,10 @@ public class SuperSystem {
                 case WRT_PVT_ELV:
                     wrist.setTargetPosition(wristAngle);
                     wristSet = true;
-                    if (wristAtPositionWide.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if (pivotAtPositionWide.getAsBoolean()) {
+                        if (pivotAtPosition.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -480,7 +480,7 @@ public class SuperSystem {
                     wristSet = true;
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean() && elevatorAtPosition.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
                     }
@@ -491,7 +491,18 @@ public class SuperSystem {
                     wristSet = true;
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if (wristAtPositionWide.getAsBoolean() && pivotAtPositionWide.getAsBoolean()) {
+                    if (wristAtPosition.getAsBoolean() && pivotAtPosition.getAsBoolean()) {
+                        elevator.setTargetPosition(elevatorPosition);
+                        elevatorSet = true;
+                    }
+                    break;
+
+                case PVT_WRTELV:
+                pivot.setTargetPosition(pivotAngle);
+                pivotSet = true;
+                if (pivotAtPosition.getAsBoolean()) {
+                        wrist.setTargetPosition(wristAngle);
+                        wristSet = true;
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
                     }
@@ -531,6 +542,7 @@ public class SuperSystem {
                 tab.addString("Super System Current Position", () -> currentPosition.toString());
                 tab.addBoolean("Intake Detected", intakeDetected);
             case MINIMAL:
+                tab.addString("Super System Mode", () -> positionMode.toString()); 
                 break;
         }
     }

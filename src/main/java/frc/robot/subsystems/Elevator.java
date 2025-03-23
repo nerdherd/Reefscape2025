@@ -118,7 +118,8 @@ public class Elevator extends SubsystemBase implements Reportable {
         double a = 1; // horizontal elevator position of robot perimeter TODO update
         double b = 3; // max elevator position TODO update
         double c = 0; // min elevator position
-        motionMagicRequest.Position = NerdyMath.clamp(desiredPosition, c, Math.min(a / Math.cos(pivotAngle * 2*Math.PI), b));
+        // motionMagicRequest.Position = NerdyMath.clamp(desiredPosition, c, Math.min(a / Math.cos(pivotAngle * 2*Math.PI), b));
+        motionMagicRequest.Position = desiredPosition;
 
         elevatorMotor2.setControl(followRequest);
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
@@ -163,16 +164,16 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public boolean atPosition() {
         return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.125,
-        desiredPosition + 0.125);
+        desiredPosition - 0.07,
+        desiredPosition + 0.07);
     }
 
     public boolean atPositionWide() {
         return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
         // desiredPosition - 0.25,
         // desiredPosition + 0.25);
-        desiredPosition - 0.5,
-        desiredPosition + 0.5);
+        desiredPosition - 0.125,
+        desiredPosition + 0.125);
 
     }
 

@@ -23,6 +23,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.SuperSystem.ExecutionOrder;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -235,29 +236,57 @@ public final class Constants {
       public static final Pose2d tag4RightBlueOnRed = new Pose2d(9.51, 5.054, new Rotation2d(Math.toRadians(0))); // cage btm
      
       // Reef
-      public static final Pose2d tag17Left  = offsetPosWithRotation(new Pose2d(3.513, 2.959, new Rotation2d(Math.toRadians(-120)))); 
-      public static final Pose2d tag17Right = offsetPosWithRotation(new Pose2d(3.88, 2.745, new Rotation2d(Math.toRadians(-120)))); 
-      public static final Pose2d tag17Mid   = offsetPosWithRotation(new Pose2d(3.70, 2.6, new Rotation2d(Math.toRadians(-120)))); 
+      public static final Pose2d[][] reefTagsBlue = { // Blue
+        { // Tag 17
+          SwerveDrivetrain.calcReefSidePose(17, -1),
+          SwerveDrivetrain.calcReefSidePose(17, -0),
+          SwerveDrivetrain.calcReefSidePose(17, 1)
+        }, { // Tag 18
+          SwerveDrivetrain.calcReefSidePose(18, -1),
+          SwerveDrivetrain.calcReefSidePose(18, -0),
+          SwerveDrivetrain.calcReefSidePose(18, 1)
+        }, { // Tag 19
+          SwerveDrivetrain.calcReefSidePose(19, -1),
+          SwerveDrivetrain.calcReefSidePose(19, -0),
+          SwerveDrivetrain.calcReefSidePose(19, 1)
+        }, { // Tag 20
+          SwerveDrivetrain.calcReefSidePose(20, -1),
+          SwerveDrivetrain.calcReefSidePose(20, -0),
+          SwerveDrivetrain.calcReefSidePose(20, 1)
+        }, { // Tag 21
+          SwerveDrivetrain.calcReefSidePose(21, -1),
+          SwerveDrivetrain.calcReefSidePose(21, -0),
+          SwerveDrivetrain.calcReefSidePose(21, 1)
+        }, { // Tag 22
+          SwerveDrivetrain.calcReefSidePose(22, -1),
+          SwerveDrivetrain.calcReefSidePose(22, -0),
+          SwerveDrivetrain.calcReefSidePose(22, 1)
+        }
+      };
+
+      // public static final Pose2d tag17Left  = offsetPosWithRotation(new Pose2d(3.513, 2.959, new Rotation2d(Math.toRadians(-120)))); 
+      // public static final Pose2d tag17Right = offsetPosWithRotation(new Pose2d(3.88, 2.745, new Rotation2d(Math.toRadians(-120)))); 
+      // public static final Pose2d tag17Mid   = offsetPosWithRotation(new Pose2d(3.70, 2.6, new Rotation2d(Math.toRadians(-120)))); 
   
-      public static final Pose2d tag18Left  = offsetPosWithRotation(new Pose2d(3.067, 4.220, new Rotation2d(Math.toRadians(180)))); 
-      public static final Pose2d tag18Right = offsetPosWithRotation(new Pose2d(3.067, 3.832, new Rotation2d(Math.toRadians(180)))); 
-      public static final Pose2d tag18Mid   = offsetPosWithRotation(new Pose2d(3.067, 4.026, new Rotation2d(Math.toRadians(180)))); 
+      // public static final Pose2d tag18Left  = offsetPosWithRotation(new Pose2d(3.067, 4.220, new Rotation2d(Math.toRadians(180)))); 
+      // public static final Pose2d tag18Right = offsetPosWithRotation(new Pose2d(3.067, 3.832, new Rotation2d(Math.toRadians(180)))); 
+      // public static final Pose2d tag18Mid   = offsetPosWithRotation(new Pose2d(3.067, 4.026, new Rotation2d(Math.toRadians(180)))); 
   
-      public static final Pose2d tag19Left  = offsetPosWithRotation(new Pose2d(3.946, 5.354, new Rotation2d(Math.toRadians(120)))); 
-      public static final Pose2d tag19Right = offsetPosWithRotation(new Pose2d(3.610, 5.160, new Rotation2d(Math.toRadians(120)))); 
-      public static final Pose2d tag19Mid   = offsetPosWithRotation(new Pose2d(3.778, 5.257, new Rotation2d(Math.toRadians(120)))); 
+      // public static final Pose2d tag19Left  = offsetPosWithRotation(new Pose2d(3.946, 5.354, new Rotation2d(Math.toRadians(120)))); 
+      // public static final Pose2d tag19Right = offsetPosWithRotation(new Pose2d(3.610, 5.160, new Rotation2d(Math.toRadians(120)))); 
+      // public static final Pose2d tag19Mid   = offsetPosWithRotation(new Pose2d(3.778, 5.257, new Rotation2d(Math.toRadians(120)))); 
   
-      public static final Pose2d tag20Left  = offsetPosWithRotation(new Pose2d(5.368, 5.160, new Rotation2d(Math.toRadians(60))));
-      public static final Pose2d tag20Right = offsetPosWithRotation(new Pose2d(5.032, 5.354, new Rotation2d(Math.toRadians(60))));
-      public static final Pose2d tag20Mid   = offsetPosWithRotation(new Pose2d(5.200, 5.257, new Rotation2d(Math.toRadians(60))));
+      // public static final Pose2d tag20Left  = offsetPosWithRotation(new Pose2d(5.368, 5.160, new Rotation2d(Math.toRadians(60))));
+      // public static final Pose2d tag20Right = offsetPosWithRotation(new Pose2d(5.032, 5.354, new Rotation2d(Math.toRadians(60))));
+      // public static final Pose2d tag20Mid   = offsetPosWithRotation(new Pose2d(5.200, 5.257, new Rotation2d(Math.toRadians(60))));
   
-      public static final Pose2d tag21Left  = offsetPosWithRotation(new Pose2d(5.912, 3.832, new Rotation2d(Math.toRadians(0))));
-      public static final Pose2d tag21Right = offsetPosWithRotation(new Pose2d(5.912, 4.220, new Rotation2d(Math.toRadians(0))));
-      public static final Pose2d tag21Mid   = offsetPosWithRotation(new Pose2d(5.912, 4.026, new Rotation2d(Math.toRadians(0))));
+      // public static final Pose2d tag21Left  = offsetPosWithRotation(new Pose2d(5.912, 3.832, new Rotation2d(Math.toRadians(0))));
+      // public static final Pose2d tag21Right = offsetPosWithRotation(new Pose2d(5.912, 4.220, new Rotation2d(Math.toRadians(0))));
+      // public static final Pose2d tag21Mid   = offsetPosWithRotation(new Pose2d(5.912, 4.026, new Rotation2d(Math.toRadians(0))));
   
-      public static final Pose2d tag22Left  = offsetPosWithRotation(new Pose2d(5.1, 2.725, new Rotation2d(Math.toRadians(-60))));
-      public static final Pose2d tag22Right = offsetPosWithRotation(new Pose2d(5.391, 2.921, new Rotation2d(Math.toRadians(-60))));
-      public static final Pose2d tag22Mid   = offsetPosWithRotation(new Pose2d(5.26, 2.77, new Rotation2d(Math.toRadians(-60))));
+      // public static final Pose2d tag22Left  = offsetPosWithRotation(new Pose2d(5.1, 2.725, new Rotation2d(Math.toRadians(-60))));
+      // public static final Pose2d tag22Right = offsetPosWithRotation(new Pose2d(5.391, 2.921, new Rotation2d(Math.toRadians(-60))));
+      // public static final Pose2d tag22Mid   = offsetPosWithRotation(new Pose2d(5.26, 2.77, new Rotation2d(Math.toRadians(-60))));
      
       // Red Side
       public static final Pose2d tag1Left = new Pose2d(16.751, 1.489, new Rotation2d(Math.toRadians(-55))); // Bot Station
@@ -276,29 +305,57 @@ public final class Constants {
       public static final Pose2d tag15LeftRedOnBlue = new Pose2d(8.03, 0.802, new Rotation2d(Math.toRadians(180))); // cage btm
  
       // Reef
-      public static final Pose2d tag6Left  = offsetPosWithRotation(new Pose2d(13.602, 2.697, new Rotation2d(Math.toRadians(-60))));   
-      public static final Pose2d tag6Right = offsetPosWithRotation(new Pose2d(13.938, 2.892, new Rotation2d(Math.toRadians(-60))));  
-      public static final Pose2d tag6Mid   = offsetPosWithRotation(new Pose2d(13.770, 2.795, new Rotation2d(Math.toRadians(-60)))); 
+      public static final Pose2d[][] reefTagsRed = { // Red
+        { // Tag 6
+          SwerveDrivetrain.calcReefSidePose(6, -1),
+          SwerveDrivetrain.calcReefSidePose(6, -0),
+          SwerveDrivetrain.calcReefSidePose(6, 1)
+        }, { // Tag 7
+          SwerveDrivetrain.calcReefSidePose(7, -1),
+          SwerveDrivetrain.calcReefSidePose(7, -0),
+          SwerveDrivetrain.calcReefSidePose(7, 1)
+        }, { // Tag 8
+          SwerveDrivetrain.calcReefSidePose(8, -1),
+          SwerveDrivetrain.calcReefSidePose(8, -0),
+          SwerveDrivetrain.calcReefSidePose(8, 1)
+        }, { // Tag 9
+          SwerveDrivetrain.calcReefSidePose(9, -1),
+          SwerveDrivetrain.calcReefSidePose(9, -0),
+          SwerveDrivetrain.calcReefSidePose(9, 1)
+        }, { // Tag 10
+          SwerveDrivetrain.calcReefSidePose(10, -1),
+          SwerveDrivetrain.calcReefSidePose(10, -0),
+          SwerveDrivetrain.calcReefSidePose(10, 1)
+        }, { // Tag 11
+          SwerveDrivetrain.calcReefSidePose(11, -1),
+          SwerveDrivetrain.calcReefSidePose(11, -0),
+          SwerveDrivetrain.calcReefSidePose(11, 1)
+        }
+      };
+
+      // public static final Pose2d tag6Left  = offsetPosWithRotation(new Pose2d(13.602, 2.697, new Rotation2d(Math.toRadians(-60))));   
+      // public static final Pose2d tag6Right = offsetPosWithRotation(new Pose2d(13.938, 2.892, new Rotation2d(Math.toRadians(-60))));  
+      // public static final Pose2d tag6Mid   = offsetPosWithRotation(new Pose2d(13.770, 2.795, new Rotation2d(Math.toRadians(-60)))); 
   
-      public static final Pose2d tag7Left  = offsetPosWithRotation(new Pose2d(14.481, 3.832, new Rotation2d(Math.toRadians(0)))); 
-      public static final Pose2d tag7Right = offsetPosWithRotation(new Pose2d(14.481, 4.220, new Rotation2d(Math.toRadians(0)))); 
-      public static final Pose2d tag7Mid   = offsetPosWithRotation(new Pose2d(14.481, 4.026, new Rotation2d(Math.toRadians(0)))); 
+      // public static final Pose2d tag7Left  = offsetPosWithRotation(new Pose2d(14.481, 3.832, new Rotation2d(Math.toRadians(0)))); 
+      // public static final Pose2d tag7Right = offsetPosWithRotation(new Pose2d(14.481, 4.220, new Rotation2d(Math.toRadians(0)))); 
+      // public static final Pose2d tag7Mid   = offsetPosWithRotation(new Pose2d(14.481, 4.026, new Rotation2d(Math.toRadians(0)))); 
   
-      public static final Pose2d tag8Left  = offsetPosWithRotation(new Pose2d(13.938, 5.160, new Rotation2d(Math.toRadians(60)))); 
-      public static final Pose2d tag8Right = offsetPosWithRotation(new Pose2d(13.602, 5.354, new Rotation2d(Math.toRadians(60)))); 
-      public static final Pose2d tag8Mid   = offsetPosWithRotation(new Pose2d(13.770, 5.257, new Rotation2d(Math.toRadians(60)))); 
+      // public static final Pose2d tag8Left  = offsetPosWithRotation(new Pose2d(13.938, 5.160, new Rotation2d(Math.toRadians(60)))); 
+      // public static final Pose2d tag8Right = offsetPosWithRotation(new Pose2d(13.602, 5.354, new Rotation2d(Math.toRadians(60)))); 
+      // public static final Pose2d tag8Mid   = offsetPosWithRotation(new Pose2d(13.770, 5.257, new Rotation2d(Math.toRadians(60)))); 
   
-      public static final Pose2d tag9Left  = offsetPosWithRotation(new Pose2d(12.516, 5.354, new Rotation2d(Math.toRadians(120))));
-      public static final Pose2d tag9Right = offsetPosWithRotation(new Pose2d(12.180, 5.160, new Rotation2d(Math.toRadians(120))));
-      public static final Pose2d tag9Mid   = offsetPosWithRotation(new Pose2d(12.348, 5.257, new Rotation2d(Math.toRadians(120))));
+      // public static final Pose2d tag9Left  = offsetPosWithRotation(new Pose2d(12.516, 5.354, new Rotation2d(Math.toRadians(120))));
+      // public static final Pose2d tag9Right = offsetPosWithRotation(new Pose2d(12.180, 5.160, new Rotation2d(Math.toRadians(120))));
+      // public static final Pose2d tag9Mid   = offsetPosWithRotation(new Pose2d(12.348, 5.257, new Rotation2d(Math.toRadians(120))));
   
-      public static final Pose2d tag10Left  = offsetPosWithRotation(new Pose2d(11.636, 4.220, new Rotation2d(Math.toRadians(180))));
-      public static final Pose2d tag10Right = offsetPosWithRotation(new Pose2d(11.636, 3.832, new Rotation2d(Math.toRadians(180))));
-      public static final Pose2d tag10Mid   = offsetPosWithRotation(new Pose2d(11.636, 4.026, new Rotation2d(Math.toRadians(180))));
+      // public static final Pose2d tag10Left  = offsetPosWithRotation(new Pose2d(11.636, 4.220, new Rotation2d(Math.toRadians(180))));
+      // public static final Pose2d tag10Right = offsetPosWithRotation(new Pose2d(11.636, 3.832, new Rotation2d(Math.toRadians(180))));
+      // public static final Pose2d tag10Mid   = offsetPosWithRotation(new Pose2d(11.636, 4.026, new Rotation2d(Math.toRadians(180))));
   
-      public static final Pose2d tag11Left  = offsetPosWithRotation(new Pose2d(12.180, 2.892, new Rotation2d(Math.toRadians(-120))));
-      public static final Pose2d tag11Right = offsetPosWithRotation(new Pose2d(12.516, 2.697, new Rotation2d(Math.toRadians(-120))));
-      public static final Pose2d tag11Mid   = offsetPosWithRotation(new Pose2d(12.348, 2.795, new Rotation2d(Math.toRadians(-120))));
+      // public static final Pose2d tag11Left  = offsetPosWithRotation(new Pose2d(12.180, 2.892, new Rotation2d(Math.toRadians(-120))));
+      // public static final Pose2d tag11Right = offsetPosWithRotation(new Pose2d(12.516, 2.697, new Rotation2d(Math.toRadians(-120))));
+      // public static final Pose2d tag11Mid   = offsetPosWithRotation(new Pose2d(12.348, 2.795, new Rotation2d(Math.toRadians(-120))));
     
     }
 
@@ -331,7 +388,7 @@ public final class Constants {
 
     public static final PIDConstants kPPTranslationPIDConstants = new PIDConstants(kPP_P, kPP_I, kPP_D);
 
-    public static final double kPP_ThetaP = 3.0; //3
+    public static final double kPP_ThetaP = 4.0; //3
     public static final double kPP_ThetaI = 0;
     public static final double kPP_ThetaD = 0.1;
 
@@ -409,11 +466,11 @@ public final class Constants {
     public static final int kElevatorMotorID = 8;
     public static final int kElevatorMotorID2 = 9; 
 
-    public static final double kPElevatorMotor = 4.0; // 3.0 as of 3/1/25
+    public static final double kPElevatorMotor = 8.0; // 3.0 as of 3/1/25
     public static final double kIElevatorMotor = 0;
     public static final double kDElevatorMotor = 0;
     public static final double kVElevatorMotor = 0;
-    public static final double kGElevatorMotor = 0.2;
+    public static final double kGElevatorMotor = 0.17;
     public static final double kSElevatorMotor = 0.11;
 
     public static final double kElevatorCruiseVelocity = 100; //16.333 //20
@@ -427,7 +484,7 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 50; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 65; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
@@ -436,7 +493,7 @@ public final class Constants {
     public static final double kAElevatorPivot = 0.0; 
     public static final double kGElevatorPivot = 0;
 
-    public static final double kFElevatorPivot = 0.22; 
+    public static final double kFElevatorPivot = 0.21; 
 
     public static final double kElevatorPivotStowPosition = 0.01; 
     public static final double kElevatorPivotSemiStowPosition = 0.11; 
@@ -446,7 +503,7 @@ public final class Constants {
     public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 125.0 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
+    public static final double kElevatorPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kElevatorPivotDeadBand = 0;
     public static final double kElevatorPivotOffSet = 0;
 
@@ -485,14 +542,16 @@ public final class Constants {
     public static final int kPigeonID = 2;
     public static final int kEncoderID = 0; // TODO change
   
-    public static final double kPMotor =  40; 
+    public static final double kPMotor =  40;//40; 
     // kP * err_rotations = Max_Volt_Needed (A little higher than kG)
     //      err = 0.28 (10/360 degrees)
     public static final double kItMotor = 0;
     public static final double kDMotor = 0;
     public static final double kVMotor = 0;
     public static final double kSMotor = 0; //Static Friction
-    public static final double kGMotor = 0.6; //Gravity
+    public static final double kGMotor = 0; //Gravity
+    public static final double kFMotor = 0.6; //Gravity
+    public static final double kFOffset = 0.2973; //Gravity
     public static final double kCruiseVelocity = 2;
     public static final double kAcceleration = kCruiseVelocity * 1.5; // Double velocity - Rotations per second squared
     public static final double kJerk = kAcceleration * 10; // 10 times accel - Rotations per second cubed
@@ -534,21 +593,23 @@ public final class Constants {
     }
     
     public enum CoralPositions { 
-      Stow(                ExecutionOrder.WRTELV_PVT  , 0.01,  0,    -0.010, -0.01),
-      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.11,  0.05, -0.164, -0.164      ),
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.55, -0.780, -0.780      ),
-      Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.4),
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0,    -0.180, -0.570      ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.210, -0.570      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.14, -0.240, -0.570      ),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.570      ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.570      ),
+      Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
+      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.03, 0.58, -0.711, -0.711      ), //0.02 0.39 -.783 -0.783
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.027, 0.58, -0.711, -0.711      ), 
+      GroundIntake2(        ExecutionOrder.ELV_WRT_PVT  , 0.022, 0.58, -0.711, -0.711      ), 
+      GroundIntake3(        ExecutionOrder.ELV_WRT_PVT  , 0.021, 0.58, -0.711, -0.711      ), 
+      Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.35),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.2, -0.102, -0.102     ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.19, -0.102      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.270      ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.2, -0.4, -0.4     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      ClimbDown(           ExecutionOrder.ALL_TOGETHER  ,   -0.06, 1.2, -0.4, -0.4      ),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      )
-      ;
+      intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.35, -0.711, -0.35      );
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);
@@ -579,6 +640,9 @@ public final class Constants {
       Stow(CoralPositions.Stow, CoralPositions.Stow),
       SemiStow(CoralPositions.SemiStow, CoralPositions.SemiStow),
       GroundIntake(CoralPositions.GroundIntake, AlgaePositions.GroundIntake),
+      GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
+      GroundIntake2(CoralPositions.GroundIntake2, AlgaePositions.GroundIntake),
+      GroundIntake3(CoralPositions.GroundIntake3, AlgaePositions.GroundIntake),
       L1(CoralPositions.L1, AlgaePositions.Processor),
       L2(CoralPositions.L2, AlgaePositions.AlgaeL2),
       L3(CoralPositions.L3, AlgaePositions.AlgaeL3),
