@@ -212,14 +212,14 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.007,
-        desiredPosition + 0.007);
+        desiredPosition - 0.001,
+        desiredPosition + 0.001);
     }
     
     public boolean atPositionWide() {
         return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.04,
-        desiredPosition + 0.04);
+        desiredPosition - 0.007,
+        desiredPosition + 0.007);
     }
 
     // private void setPositionDegrees(double positionDegrees) {
@@ -330,6 +330,7 @@ public class Pivot extends SubsystemBase implements Reportable{
                 tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
                 tab.addNumber("Pivot Current Position", () -> getPosition());
                 tab.addBoolean("Pivot At Position", () -> atPosition());
+                tab.addBoolean("Pivot At Position Wide", () -> atPositionWide());
             case MINIMAL:
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Pivot Temperature 1", () -> pivotMotor.getDeviceTemp().getValueAsDouble());

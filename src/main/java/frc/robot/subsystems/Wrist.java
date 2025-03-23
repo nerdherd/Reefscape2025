@@ -153,8 +153,8 @@ public class Wrist extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-                                desiredPosition - 0.05,
-                                desiredPosition + 0.05);
+                                desiredPosition - 0.01,
+                                desiredPosition + 0.01);
     }
 
     public boolean atPositionWide() {
@@ -212,8 +212,8 @@ public class Wrist extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 tab.addString("Wrist Control Mode", motor.getControlMode()::toString);
-                tab.addBoolean("Wrist At Position", () -> atPosition());
                 case MEDIUM:
+                tab.addBoolean("Wrist At Position", () -> atPosition());
                 tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
                 tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 case MINIMAL:

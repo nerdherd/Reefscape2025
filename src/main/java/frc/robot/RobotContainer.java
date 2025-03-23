@@ -68,7 +68,7 @@ public class RobotContainer {
   public CANdi candi;
   public PositionMode positionMode;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort,false);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -126,6 +126,7 @@ public class RobotContainer {
     initAutoChoosers();
 
     SmartDashboard.putData("Swerve Drive", swerveDrive);
+    
     DriverStation.reportWarning("Initalization complete", false);
   }
 
@@ -211,15 +212,17 @@ public class RobotContainer {
           }
       }, wrist));
       
-        double Elevator_SPEED = 3.0;// Meters per second // 0.3
-        double Elevator_OFFSET = 0.05;
-        elevator.setDefaultCommand(Commands.run(() -> {
-          double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
-          if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
-          double currentPos = elevator.getPosition();
-          elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
-          }
-        }, elevator));  
+        // double Elevator_SPEED = 3.0;// Meters per second // 0.3
+        // double Elevator_OFFSET = 0.05;
+        // SmartDashboard.putNumber("Left y axis", operatorController.getLeftY());
+        // elevator.setDefaultCommand(Commands.run(() -> {
+        //   double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
+        //   if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
+        //   double currentPos = elevator.getPosition();
+        //   elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
+        //   SmartDashboard.putNumber("Left joystick in the y axis movement", leftY);
+        //   }
+        // }, elevator));  
       }
     
 
@@ -288,13 +291,20 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(PositionEquivalents.L4));
 
       operatorController.triggerRight()
-      .onTrue(superSystem.intake())
+      .onTrue(superSystem.intakeUntilSensed())
       .onFalse(superSystem.holdPiece());
+      operatorController.bumperRight()
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
+      // operatorController.bumperLeft()
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
 
-      operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
+      // operatorController.buttonUp()
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake2));
+      // operatorController.buttonLeft()
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake3));
       operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
       operatorController.buttonDown()

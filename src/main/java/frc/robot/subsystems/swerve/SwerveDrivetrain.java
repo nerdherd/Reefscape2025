@@ -73,6 +73,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
+    private double pipeline;
     
     ArrayList<Pose2d> list1 = new ArrayList<>();
     ArrayList<Pose2d> list2 = new ArrayList<>();
@@ -756,6 +757,35 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public Command toggleTurnToAngleMode() {
       return Commands.runOnce(() -> turnToAngleMode = !turnToAngleMode);
+    }
+
+    public void disableLimelight() {
+        pipeline = 0.0;
+        
+
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setDouble(pipeline);
+
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setDouble(pipeline); 
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setDouble(pipeline);
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    public void enableLimeLight() {
+        pipeline = 1.0;
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setDouble(pipeline);
+
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setDouble(pipeline); 
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setDouble(pipeline);
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    public Command disableLimelightCommand() {
+        return Commands.runOnce(() -> disableLimelight());
+
+    }
+
+    public Command enableLimelightCommand() {
+        return Commands.runOnce(() -> enableLimeLight());
     }
 
     public boolean getTurnToAngleMode() {
