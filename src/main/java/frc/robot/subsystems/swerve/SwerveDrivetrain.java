@@ -981,26 +981,24 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
 
+    PIDController areaController = new PIDController(0.5, 0, 0.0);     // TODO: tune
+    PIDController txController = new PIDController(0.08, 0, 0.0);
     public void driveToCoral(String limelightName, double targetArea){
         if (LimelightHelpers.getTV(limelightName)){
             double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
             double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
 
-            // IMPORTANT: These values were copied from the old code, so they are probably wrong
-            // TODO: Move these to constants or something
-            PIDController areaController = new PIDController(0.18, 0, 0.004);     // TODO: tune
-            PIDController txController = new PIDController(0.05, 0, 0.001);       // TODO: tune
             // PIDController rotationController = new PIDController(0.08, 0, 0.006);       // TODO: tune
 
             double forwardSpeed = areaController.calculate(ta,targetArea);
-            double sidewaySpeed = txController.calculate(tx,0);
+            double turnSpeed = -txController.calculate(tx,0);
 
-            drive(forwardSpeed,sidewaySpeed);
+            drive(forwardSpeed, 0, turnSpeed);
         }
     }
 
     public Command driveToCoralCommand(String limelightName, double targetArea) {
-        return Commands.runOnce(() -> driveToCoral(limelightName, targetArea));
+        return Commands.run(() -> driveToCoral(limelightName, targetArea));
     }
 
     //****************************** SETTERS ******************************/
