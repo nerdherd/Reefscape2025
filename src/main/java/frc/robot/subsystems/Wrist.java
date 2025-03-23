@@ -102,7 +102,7 @@ public class Wrist extends SubsystemBase implements Reportable{
 
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
-        ff = WristConstants.kGMotor * Math.cos((getPosition() + 0.54 + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
+        ff = WristConstants.kFMotor * Math.cos((getPosition() + WristConstants.kFOffset + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
         motor.setControl(motionMagicRequest.withFeedForward(ff));
     }
 
@@ -153,8 +153,8 @@ public class Wrist extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-                                desiredPosition - 0.05,
-                                desiredPosition + 0.05);
+                                desiredPosition - 0.01,
+                                desiredPosition + 0.01);
     }
 
     public boolean atPositionWide() {
@@ -212,11 +212,11 @@ public class Wrist extends SubsystemBase implements Reportable{
                 break;
             case ALL:
                 tab.addString("Wrist Control Mode", motor.getControlMode()::toString);
+                case MEDIUM:
                 tab.addBoolean("Wrist At Position", () -> atPosition());
-                tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
-            case MEDIUM:
                 tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
-            case MINIMAL:
+                tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
+                case MINIMAL:
                 tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Wrist Desired Position", () -> desiredPosition);
                 tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());

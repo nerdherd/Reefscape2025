@@ -76,7 +76,7 @@ public class Generic2Piece extends SequentialCommandGroup {
                 case 4: superSystem.moveTo(PositionEquivalents.L4);
                 }
             }),
-            superSystem.intakeRoller.outtake(),
+            superSystem.outtake(),
             Commands.waitSeconds(1.5),
 
             // Stop

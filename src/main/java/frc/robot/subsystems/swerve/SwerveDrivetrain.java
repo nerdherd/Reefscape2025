@@ -3,6 +3,7 @@ package frc.robot.subsystems.swerve;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
@@ -13,7 +14,9 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 //import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.vision.VisionRunner;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -28,6 +31,8 @@ import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
+import frc.robot.Constants.SwerveDriveConstants.ReefOffsets;
+import frc.robot.Constants.SwerveDriveConstants.StationOffsets;
 import frc.robot.subsystems.imu.Gyro;
 import frc.robot.util.NerdyMath;
 import frc.robot.vision.LimelightHelpers;
@@ -68,6 +73,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
+    private double pipeline;
     
     ArrayList<Pose2d> list1 = new ArrayList<>();
     ArrayList<Pose2d> list2 = new ArrayList<>();
@@ -90,8 +96,14 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     ArrayList<Pose2d> list21 = new ArrayList<>();
     ArrayList<Pose2d> list22 = new ArrayList<>();
 
+    PIDController areaController;     // TODO: tune
+    PIDController txController;
+
     private Field2d field;
     private VisionSys vision = new VisionSys();
+    public boolean useVision = true;
+
+    private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
     public enum DRIVE_MODE {
         FIELD_ORIENTED, // always use it
@@ -106,9 +118,11 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
         // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
-        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
+        // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontRightName, 1);
-        
+        areaController = VisionConstants.PIDControllerArea;
+        areaController.setTolerance(0.5);
+        txController = VisionConstants.PIDControllerTX;
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,
@@ -162,7 +176,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         initProcesPoses();
         initStationsPoses();
 
-        CommandScheduler.getInstance().registerSubsystem(this);
         
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         //ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
@@ -321,73 +334,74 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
             SmartDashboard.putNumber("Robot Rotation", robotRotation);
     
-            visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
-            visionupdateOdometry(VisionConstants.kLimelightBackRightName);
-            visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
-            visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
+            if (useVision){
+                visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
+                visionupdateOdometry(VisionConstants.kLimelightBackRightName);
+                // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
+                visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
+            }
         
             //todo try MegaTag2
     }
 
     //******************************  Vision ******************************/
 	private void visionupdateOdometry(String limelightName) {
+        boolean useMegaTag2 = true; //set to false to use MegaTag1
         boolean doRejectUpdate = false;
-
-        LimelightHelpers.PoseEstimate megaTag1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName); //TODO: test if we need to account for alliance
-        double xyStds = 0.5; //Tune 
-        double degStds = 999999; //
-
-        boolean receivedValidData = LimelightHelpers.getTV(limelightName);
-        PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName); //MegatTag1
+        if(useMegaTag2 == false)
+        {
+        LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
         
-        if(estimate == null) {
+        if (mt1 == null){
             return;
         }
-        Pose2d botPose1 = estimate.pose;
-        
-        if(!receivedValidData)
-            doRejectUpdate = true;
-        // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
-        //     doRejectUpdate = true;
-        else if(megaTag1.tagCount == 1 && megaTag1.rawFiducials.length == 1)
+        if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
         {
-            if(megaTag1.rawFiducials[0].ambiguity > .7)
+            if(mt1.rawFiducials[0].ambiguity > .7)
             {
-                doRejectUpdate = true;
+            doRejectUpdate = true;
             }
-            if(megaTag1.rawFiducials[0].distToCamera > 3)
+            if(mt1.rawFiducials[0].distToCamera > 3)
             {
-                doRejectUpdate = true;
-            }
-    
-            // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
-            // SmartDashboard.putNumber(limelightName + " Y Position", botPose1.getY());
-            
-            // 1 target with large area and close to estimated pose
-            if (megaTag1.avgTagArea > 0.8 && megaTag1.rawFiducials[0].distToCamera < 0.5) {
-                xyStds = 1.0;
-                degStds = 12;
-            }
-            // 1 target farther away and estimated pose is close
-            else if (megaTag1.avgTagArea > 0.1 && megaTag1.rawFiducials[0].distToCamera < 0.3) {
-                xyStds = 2.0;
-                degStds = 30;
+            doRejectUpdate = true;
             }
         }
-        else if (megaTag1.tagCount >= 2) {
-            xyStds = 0.5;
-            degStds = 6;
+        if(mt1.tagCount == 0)
+        {
+            doRejectUpdate = true;
         }
 
         if(!doRejectUpdate)
         {
-            poseEstimator.setVisionMeasurementStdDevs(
-              VecBuilder.fill(xyStds, xyStds, Units.degreesToRadians(degStds)));
-
-            //poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
             poseEstimator.addVisionMeasurement(
-                megaTag1.pose,
-                megaTag1.timestampSeconds);
+                mt1.pose,
+                mt1.timestampSeconds);
+        }
+        }
+        else if (useMegaTag2 == true)
+        {
+        double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        LimelightHelpers.SetRobotOrientation(limelightName, currentPoseYaw, 0, 0, 0, 0, 0);
+        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+        if (mt2 == null){
+            return;
+        }
+        // if(Math.abs(gyro.) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        // {
+        //     doRejectUpdate = true;
+        // }
+        if(mt2.tagCount == 0)
+        {
+            doRejectUpdate = true;
+        }
+        if(!doRejectUpdate)
+        {
+            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+            poseEstimator.addVisionMeasurement(
+                mt2.pose,
+                mt2.timestampSeconds);
+        }
         }
     }
 	
@@ -745,6 +759,35 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
       return Commands.runOnce(() -> turnToAngleMode = !turnToAngleMode);
     }
 
+    public void disableLimelight() {
+        pipeline = 0.0;
+        
+
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setDouble(pipeline);
+
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setDouble(pipeline); 
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setDouble(pipeline);
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    public void enableLimeLight() {
+        pipeline = 1.0;
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setDouble(pipeline);
+
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setDouble(pipeline); 
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setDouble(pipeline);
+        CommandScheduler.getInstance().cancelAll();
+    }
+
+    public Command disableLimelightCommand() {
+        return Commands.runOnce(() -> disableLimelight());
+
+    }
+
+    public Command enableLimelightCommand() {
+        return Commands.runOnce(() -> enableLimeLight());
+    }
+
     public boolean getTurnToAngleMode() {
         return turnToAngleMode;
     }
@@ -975,6 +1018,27 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         setModuleStates(targetStates);
     }
 
+
+    
+    public void driveToCoral(String limelightName, double targetArea){
+        String[] labels = classLabels.getStringArray(new String[]{});
+        if (labels.length > 1) System.out.println("too many labels: " + labels.length);
+        if (LimelightHelpers.getTV(limelightName) && labels.length == 1 && labels[0].equals("coral")){
+            double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
+            double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
+
+            // PIDController rotationController = new PIDController(0.08, 0, 0.006);       // TODO: tune
+            double forwardSpeed = areaController.calculate(ta,targetArea);
+            double turnSpeed = -txController.calculate(tx,0);
+            if (areaController.atSetpoint()) forwardSpeed = 0.0;
+            drive(forwardSpeed, 0, turnSpeed);
+        }
+    }
+
+    public Command driveToCoralCommand(String limelightName, double targetArea) {
+        return Commands.run(() -> driveToCoral(limelightName, targetArea));
+    }
+
     //****************************** SETTERS ******************************/
 
     /**
@@ -1028,6 +1092,11 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public Command towCommand() {
         return Commands.runOnce(this::towModules, this);
     }
+
+    public Command setVisionEnabledCommand(boolean useVision) {
+        return Commands.runOnce(() -> this.useVision = useVision);
+    }
+    
 
     public void initShuffleboard(LOG_LEVEL level) {
         if (level == LOG_LEVEL.OFF)  {

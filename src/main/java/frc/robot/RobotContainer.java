@@ -29,6 +29,7 @@ import frc.robot.Constants.SuperSystemConstants.CoralPositions;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
 import frc.robot.commands.autos.PreloadTaxi;
+import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.Generic2Piece;
@@ -67,7 +68,7 @@ public class RobotContainer {
   public CANdi candi;
   public PositionMode positionMode;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort,false);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -125,6 +126,7 @@ public class RobotContainer {
     initAutoChoosers();
 
     SmartDashboard.putData("Swerve Drive", swerveDrive);
+    
     DriverStation.reportWarning("Initalization complete", false);
   }
 
@@ -191,8 +193,8 @@ public class RobotContainer {
     );
 
       swerveDrive.setDefaultCommand(swerveJoystickCommand);
-
-      double PIVOT_SPEED = 1;// Degrees per second
+      if (USE_SUBSYSTEMS) {
+        double PIVOT_SPEED = 1;// Degrees per second
         pivot.setDefaultCommand(Commands.run(() -> {
           double rightY = -operatorController.getRightY(); // Left Y (inverted for up = positive)
           if (Math.abs(rightY) > 0.05) {
@@ -200,8 +202,8 @@ public class RobotContainer {
               pivot.setTargetPosition(currentAngle + (rightY * PIVOT_SPEED * 0.02)); // 20ms loop
           }
       }, pivot));
-
-      double Wrist_SPEED = 2;// Degree  per second
+  
+        double Wrist_SPEED = 2;// Degree  per second
         wrist.setDefaultCommand(Commands.run(() -> {
           double leftX = operatorController.getLeftX(); // leftX (inverted for up = positive)
           if (Math.abs(leftX) > 0.3) {
@@ -209,18 +211,20 @@ public class RobotContainer {
               wrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
           }
       }, wrist));
-
       
-
-      double Elevator_SPEED = 3.0;// Meters per second // 0.3
-      double Elevator_OFFSET = 0.05;
-      elevator.setDefaultCommand(Commands.run(() -> {
-        double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
-        if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
-        double currentPos = elevator.getPosition();
-        elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
-        }
-      }, elevator));  
+        // double Elevator_SPEED = 3.0;// Meters per second // 0.3
+        // double Elevator_OFFSET = 0.05;
+        // SmartDashboard.putNumber("Left y axis", operatorController.getLeftY());
+        // elevator.setDefaultCommand(Commands.run(() -> {
+        //   double leftY = -operatorController.getLeftY(); // rightY Y (inverted for up = positive)8      get rid of negative
+        //   if (Math.abs(leftY) > 0.05 && pivot.getPosition() > (PositionEquivalents.Station.coralPos.pivotPosition - 0.02)) {
+        //   double currentPos = elevator.getPosition();
+        //   elevator.setTargetPosition((currentPos - Elevator_OFFSET) + (leftY * Elevator_SPEED * 0.02)); // 20ms loop
+        //   SmartDashboard.putNumber("Left joystick in the y axis movement", leftY);
+        //   }
+        // }, elevator));  
+      }
+    
 
   }
 
@@ -242,67 +246,75 @@ public class RobotContainer {
     // driverController.dpadUp().onTrue(
     //   superSystem.moveTo(NamedPositions.AlgaeL3)
     // );
+    if (USE_SUBSYSTEMS){
+      driverController.triggerLeft()
+        .onTrue(superSystem.outtake())
+        .onFalse(superSystem.stopRoller());
+        // Climb sequence
+      // driverController.buttonDown() // Prepare Position for Climb
+      //   .onTrue(Commands.sequence(
+      //     superSystem.climbCommandUp()));
 
-    driverController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
+      // driverController.buttonLeft() // Soft Clamp
+      //   .onTrue(Commands.sequence(
+      //     superSystem.climbSoftClamp()
+      //     ))
+      //   .onFalse(superSystem.stopClimb());
+        
+      // driverController.buttonUp() // Hard Clamp
+      //   .onTrue(Commands.sequence(
+      //     superSystem.climbHardClamp()
+      //   ));
 
-    // Climb sequence
-    driverController.buttonDown() // Prepare Position for Climb
-      .onTrue(Commands.sequence(
-        Commands.runOnce(() -> climbMotor.setEnabled(true)),
-        superSystem.climbCommandUp()));
-
-    driverController.buttonLeft() // Soft Clamp
-      .onTrue(Commands.sequence(
-        Commands.runOnce(() -> climbMotor.setEnabled(true)),
-        superSystem.climbSoftClamp()
-        ))
-      .onFalse(superSystem.stopClimb());
-      
-      driverController.buttonUp() // Hard Clamp
-        .onTrue(Commands.sequence(
-          Commands.runOnce(() -> climbMotor.setEnabled(true)), // TODO: Find real solution
-          superSystem.climbHardClamp()));
-
-    driverController.buttonRight() // Execute Climb
-    .onTrue(superSystem.climbCommandDown());
-
-  
-
-  
-    //////////////////////
-    // Operator bindings
-    //////////////////////
-
-
+      // driverController.buttonRight() // Execute Climb
+      // .onTrue(superSystem.climbCommandDown());
+      driverController.buttonDown()
+        .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
 
     
-    operatorController.dpadDown()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L1));
-    operatorController.dpadLeft()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L2));
-    operatorController.dpadUp()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L3));
-    operatorController.dpadRight()
-    .onTrue(superSystem.moveTo(PositionEquivalents.L4));
+
+    
+      //////////////////////
+      // Operator bindings
+      //////////////////////
 
 
-    operatorController.triggerRight()
-    .onTrue(superSystem.intake())
-    .onFalse(superSystem.holdPiece());
-    operatorController.triggerLeft()
-    .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-  
-    operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
-    operatorController.buttonRight()
+
+      
+      operatorController.dpadDown()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L1));
+      operatorController.dpadLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L2));
+      operatorController.dpadUp()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L3));
+      operatorController.dpadRight()
+      .onTrue(superSystem.moveTo(PositionEquivalents.L4));
+
+      operatorController.triggerRight()
+      .onTrue(superSystem.intakeUntilSensed())
+      .onFalse(superSystem.holdPiece());
+      operatorController.bumperRight()
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
+      operatorController.triggerLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
+      // operatorController.bumperLeft()
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
+
+      // operatorController.buttonUp()
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake2));
+      // operatorController.buttonLeft()
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake3));
+      operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
-    operatorController.buttonDown()
+      operatorController.buttonDown()
       .onTrue(superSystem.moveTo(PositionEquivalents.Stow)); 
-    operatorController.buttonLeft()
-    .onTrue(superSystem.togglePositionModeCommand());
 
+      operatorController.controllerLeft()
+      .onTrue(superSystem.setPositionModeCoral());
+      operatorController.controllerRight()
+      .onTrue(superSystem.setPositionModeAlgae());
+    }
 
     
     
@@ -332,8 +344,6 @@ public class RobotContainer {
     //   .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
     // operatorController.buttonDown()
     //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
-
-
   }
 
 
@@ -404,17 +414,18 @@ public class RobotContainer {
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
-    autoChooser.setDefaultOption("Do Nothing", Commands.none());
+    // autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
-    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+    autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
     autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
     autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
     autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
-    // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
     autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
+    autoChooser.addOption("2PieceGround", new TwoPiece(swerveDrive, "BottomTwoPieceGround", superSystem));
     // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
