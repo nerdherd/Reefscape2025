@@ -36,7 +36,7 @@ public class SuperSystem {
     public IntakeRoller intakeRoller;
     public Climb climbMotor;
 
-    public StatusSignal<S2StateValue> intakeSensor;
+    public StatusSignal<S1StateValue> intakeSensor;
     
     private PositionEquivalents currentPosition = PositionEquivalents.Stow;
     private PositionEquivalents lastPosition = PositionEquivalents.Stow;
@@ -74,7 +74,7 @@ public class SuperSystem {
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
-        this.intakeSensor = candi.getS2State(true);
+        this.intakeSensor = candi.getS1State(true);
         this.climbMotor = climbMotor;
 
         pivotAtPosition = () -> pivot.atPosition();
@@ -83,7 +83,7 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
-        intakeDetected = () -> (intakeSensor.getValue().value == 1);
+        intakeDetected = () -> (intakeSensor.getValue().value == 0);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -142,7 +142,7 @@ public class SuperSystem {
         return intakeRoller.intakeAlgae();
     }
     public Command intakeCoral() {
-        return intakeRoller.intakeAlgae();
+        return intakeRoller.intakeCoral();
     }
 
     // public Command repositionCoral() {
@@ -173,7 +173,7 @@ public class SuperSystem {
             intakeCoral(), 
             Commands.race(
                 Commands.waitUntil(intakeDetected),
-                Commands.waitSeconds(5))
+                Commands.waitSeconds(2))
         );
     }
 
@@ -187,7 +187,7 @@ public class SuperSystem {
 
     public Command holdPiece() {
         return Commands.runOnce(() ->
-            intakeRoller.setEnabledCommand(false)
+            stopRoller()
             // intakeRoller.holdAlgae(),
             // () -> (positionMode == PositionMode.Coral)
         );
@@ -204,9 +204,9 @@ public class SuperSystem {
     }
     
     public Command outtakeCoral() {
-        if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) {
-            return intakeRoller.outtakeL1();   
-        }
+        // if (currentPosition == PositionEquivalents.L1 && positionMode == PositionMode.Coral) {
+        //     return intakeRoller.outtakeL1();   
+        // }
         return intakeRoller.outtakeCoral();
     }
 

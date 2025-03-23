@@ -291,11 +291,18 @@ public class RobotContainer {
       operatorController.triggerRight()
       .onTrue(superSystem.intakeUntilSensed())
       .onFalse(superSystem.holdPiece());
+      operatorController.bumperRight()
+      .onTrue(superSystem.outtake())
+      .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
+      operatorController.bumperLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
 
       operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake2));
+      operatorController.buttonLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake3));
       operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
       operatorController.buttonDown()

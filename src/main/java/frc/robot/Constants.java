@@ -484,7 +484,7 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 56; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 65; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIElevatorPivot = 0;
     public static final double kDElevatorPivot = 0;
@@ -602,6 +602,9 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.03, 0.58, -0.711, -0.711      ), //0.02 0.39 -.783 -0.783
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.027, 0.58, -0.711, -0.711      ), 
+      GroundIntake2(        ExecutionOrder.ELV_WRT_PVT  , 0.022, 0.58, -0.711, -0.711      ), 
+      GroundIntake3(        ExecutionOrder.ELV_WRT_PVT  , 0.021, 0.58, -0.711, -0.711      ), 
       Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.35),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
@@ -644,6 +647,9 @@ public final class Constants {
       Stow(CoralPositions.Stow, CoralPositions.Stow),
       SemiStow(CoralPositions.SemiStow, CoralPositions.SemiStow),
       GroundIntake(CoralPositions.GroundIntake, AlgaePositions.GroundIntake),
+      GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
+      GroundIntake2(CoralPositions.GroundIntake2, AlgaePositions.GroundIntake),
+      GroundIntake3(CoralPositions.GroundIntake3, AlgaePositions.GroundIntake),
       L1(CoralPositions.L1, AlgaePositions.Processor),
       L2(CoralPositions.L2, AlgaePositions.AlgaeL2),
       L3(CoralPositions.L3, AlgaePositions.AlgaeL3),

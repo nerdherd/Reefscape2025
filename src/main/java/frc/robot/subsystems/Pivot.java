@@ -212,14 +212,14 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.007,
-        desiredPosition + 0.007);
+        desiredPosition - 0.001,
+        desiredPosition + 0.001);
     }
     
     public boolean atPositionWide() {
         return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.04,
-        desiredPosition + 0.04);
+        desiredPosition - 0.007,
+        desiredPosition + 0.007);
     }
 
     // private void setPositionDegrees(double positionDegrees) {
