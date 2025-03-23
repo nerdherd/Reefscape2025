@@ -544,7 +544,7 @@ public final class Constants {
     public enum CoralPositions { 
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.027, 0.54, -0.729, -0.729      ), //0.02 0.39 -.783 -0.783
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.03, 0.58, -0.711, -0.711      ), //0.02 0.39 -.783 -0.783
       Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.35),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
@@ -555,7 +555,7 @@ public final class Constants {
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.2, -0.4, -0.4     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.35, -0.729, -0.35      );
+      intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.35, -0.711, -0.35      );
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);

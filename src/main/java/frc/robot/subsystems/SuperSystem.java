@@ -142,7 +142,7 @@ public class SuperSystem {
         return intakeRoller.intakeAlgae();
     }
     public Command intakeCoral() {
-        return intakeRoller.intakeCoral();
+        return intakeRoller.intakeAlgae();
     }
 
     // public Command repositionCoral() {
@@ -186,10 +186,10 @@ public class SuperSystem {
     }
 
     public Command holdPiece() {
-        return Commands.either(
-            intakeRoller.setEnabledCommand(false),
-            intakeRoller.holdAlgae(),
-            () -> (positionMode == PositionMode.Coral)
+        return Commands.runOnce(() ->
+            intakeRoller.setEnabledCommand(false)
+            // intakeRoller.holdAlgae(),
+            // () -> (positionMode == PositionMode.Coral)
         );
     }
 
