@@ -116,8 +116,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
         // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontRightName, 1);
-        areaController = new PIDController(VisionConstants.PIDControllerAreaP, VisionConstants.PIDControllerAreaI, VisionConstants.PIDControllerAreaD);
-        txController = new PIDController(VisionConstants.PIDControllerTXP, VisionConstants.PIDControllerTXI, VisionConstants.PIDControllerTXD);
+        areaController = VisionConstants.PIDControllerArea;
+        txController = VisionConstants.PIDControllerTX;
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,

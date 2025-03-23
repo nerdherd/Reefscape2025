@@ -22,7 +22,7 @@ public class VisionSys {
     {
         vision.add(Constants.VisionConstants.kLimelightBackLeftName);
         vision.add(Constants.VisionConstants.kLimelightBackRightName);
-        vision.add(Constants.VisionConstants.kLimelightFrontLeftName);
+        // vision.add(Constants.VisionConstants.kLimelightFrontLeftName);
         vision.add(Constants.VisionConstants.kLimelightFrontRightName);
     }
 
