@@ -120,6 +120,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontRightName, 1);
         areaController = VisionConstants.PIDControllerArea;
+        areaController.setTolerance(0.5);
         txController = VisionConstants.PIDControllerTX;
         frontLeft = new SwerveModule(
             kFLDriveID,
@@ -997,7 +998,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
 
             // PIDController rotationController = new PIDController(0.08, 0, 0.006);       // TODO: tune
-            areaController.setTolerance(0.5);
             double forwardSpeed = areaController.calculate(ta,targetArea);
             double turnSpeed = -txController.calculate(tx,0);
             if (areaController.atSetpoint()) forwardSpeed = 0.0;
