@@ -83,7 +83,7 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
-        intakeDetected = () -> (intakeSensor.getValue().value == 0);
+        intakeDetected = () -> (candi.getS1State().getValue().value == 0);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -396,6 +396,10 @@ public class SuperSystem {
                 pivotSet = false;
                 elevatorSet = false;
             }
+
+            pivotAtPosition = () -> pivot.atPosition();
+            if(pivotAngle != PositionEquivalents.GroundIntake.coralPos.pivotPosition) 
+                pivotAtPosition = () -> pivot.atPositionWide();
 
             elevatorWithinRange = elevator.atPosition();
             

@@ -330,6 +330,7 @@ public class Pivot extends SubsystemBase implements Reportable{
                 tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
                 tab.addNumber("Pivot Current Position", () -> getPosition());
                 tab.addBoolean("Pivot At Position", () -> atPosition());
+                tab.addBoolean("Pivot At Position Wide", () -> atPositionWide());
             case MINIMAL:
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Pivot Temperature 1", () -> pivotMotor.getDeviceTemp().getValueAsDouble());

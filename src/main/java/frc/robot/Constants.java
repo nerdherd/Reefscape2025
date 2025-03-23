@@ -542,7 +542,7 @@ public final class Constants {
     public static final int kPigeonID = 2;
     public static final int kEncoderID = 0; // TODO change
   
-    public static final double kPMotor =  40;//40; 
+    public static final double kPMotor =  50;//40; 
     // kP * err_rotations = Max_Volt_Needed (A little higher than kG)
     //      err = 0.28 (10/360 degrees)
     public static final double kItMotor = 0;
@@ -601,16 +601,14 @@ public final class Constants {
     public enum CoralPositions { 
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.03, 0.58, -0.711, -0.711      ), //0.02 0.39 -.783 -0.783
-      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.027, 0.58, -0.711, -0.711      ), 
-      GroundIntake2(        ExecutionOrder.ELV_WRT_PVT  , 0.022, 0.58, -0.711, -0.711      ), 
-      GroundIntake3(        ExecutionOrder.ELV_WRT_PVT  , 0.021, 0.58, -0.711, -0.711      ), 
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.0285, 0.58, -0.711, -0.711      ), // Pivot .03 too high, .027 low
+      // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.027, 0.58, -0.711, -0.711      ), 
       Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.35),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.2, -0.102, -0.102     ),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.19, -0.102      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.270      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.102, -0.102     ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3, -0.270, -0.270      ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.2, -0.4, -0.4     ),
@@ -647,9 +645,9 @@ public final class Constants {
       Stow(CoralPositions.Stow, CoralPositions.Stow),
       SemiStow(CoralPositions.SemiStow, CoralPositions.SemiStow),
       GroundIntake(CoralPositions.GroundIntake, AlgaePositions.GroundIntake),
-      GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
-      GroundIntake2(CoralPositions.GroundIntake2, AlgaePositions.GroundIntake),
-      GroundIntake3(CoralPositions.GroundIntake3, AlgaePositions.GroundIntake),
+      // GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
+      // GroundIntake2(CoralPositions.GroundIntake2, AlgaePositions.GroundIntake),
+      // GroundIntake3(CoralPositions.GroundIntake3, AlgaePositions.GroundIntake),
       L1(CoralPositions.L1, AlgaePositions.Processor),
       L2(CoralPositions.L2, AlgaePositions.AlgaeL2),
       L3(CoralPositions.L3, AlgaePositions.AlgaeL3),
