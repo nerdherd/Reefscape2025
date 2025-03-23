@@ -343,14 +343,16 @@ public final class Constants {
 
   public static final class VisionConstants {
 
-    public static final String kLimelightFrontLeftName = "limelight-fl";
-    public static final String kLimelightFrontLeftIP = "10.6.87.15:5802";
+    // public static final String kLimelightFrontLeftName = "limelight-fl";
+    // public static final String kLimelightFrontLeftIP = "10.6.87.15:5802";
     public static final String kLimelightFrontRightName = "limelight-fr";
     public static final String kLimelightFrontRightIP = "10.6.87.17:5802";
     public static final String kLimelightBackLeftName = "limelight-bl";
     public static final String kLimelightBackLeftIP = "10.6.87.5:5802";
     public static final String kLimelightBackRightName = "limelight-br";
     public static final String kLimelightBackRightIP = "10.6.87.7:5802";
+    public static final String kLimelightCoralName = "limelight-coral";
+    public static final String kLimelightCoralIP = "10.6.87.15:5802";
 
     public static final double kFrontCameraHeightMeters = 0; // TODO change for new bot limelights
     public static final double kNoteHeightMeters = 0;
@@ -358,7 +360,9 @@ public final class Constants {
     public static final double kSunflowerP = 0.2;
     public static final double kSunflowerI = 0;
     public static final double kSunflowerD = 0;
-    
+    public static final PIDConstants PIDControllerArea = new PIDConstants(0.5, 0, 0.0);
+    public static final PIDConstants PIDControllerTX =  new PIDConstants(0.08, 0, 0.0); 
+
     public static final int kAprilTagPipeline = 4;
     public static final double fieldXOffset = 8.27; // Certified (Half field dimensions)
     public static final double fieldYOffset = 4.01; // Certified (Half as well)

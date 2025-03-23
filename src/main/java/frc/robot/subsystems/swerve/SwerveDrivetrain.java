@@ -94,6 +94,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     ArrayList<Pose2d> list21 = new ArrayList<>();
     ArrayList<Pose2d> list22 = new ArrayList<>();
 
+    PIDController areaController;     // TODO: tune
+    PIDController txController;
+
     private Field2d field;
     private VisionSys vision = new VisionSys();
     public boolean useVision = true;
@@ -111,9 +114,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
         // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
-        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
+        // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontRightName, 1);
-        
+        areaController = new PIDController(VisionConstants.PIDControllerAreaP, VisionConstants.PIDControllerAreaI, VisionConstants.PIDControllerAreaD);
+        txController = new PIDController(VisionConstants.PIDControllerTXP, VisionConstants.PIDControllerTXI, VisionConstants.PIDControllerTXD);
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,
@@ -328,7 +332,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             if (useVision){
                 visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
                 visionupdateOdometry(VisionConstants.kLimelightBackRightName);
-                visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
+                // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
                 visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
             }
         
@@ -981,8 +985,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
 
-    PIDController areaController = new PIDController(0.5, 0, 0.0);     // TODO: tune
-    PIDController txController = new PIDController(0.08, 0, 0.0);
+    
     public void driveToCoral(String limelightName, double targetArea){
         if (LimelightHelpers.getTV(limelightName)){
             double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
