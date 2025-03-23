@@ -607,8 +607,8 @@ public final class Constants {
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.18, -0.270, -0.270      ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.2, -0.4, -0.4     ),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
+      ClimbDown(           ExecutionOrder.ALL_TOGETHER,   -0.06, 0.00, -0.4, -0.4     ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.10,  0.05, -0.164, -0.164      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.35, -0.711, -0.35      );
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
