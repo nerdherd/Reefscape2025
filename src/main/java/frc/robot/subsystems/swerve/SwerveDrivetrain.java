@@ -338,7 +338,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
                 visionupdateOdometry(VisionConstants.kLimelightBackRightName);
                 // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
-                visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
+                // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
             }
         
             //todo try MegaTag2
@@ -347,7 +347,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //******************************  Vision ******************************/
 	private void visionupdateOdometry(String limelightName) {
         boolean useMegaTag2 = false; //set to false to use MegaTag1
-        boolean doRejectUpdate = false;
         if(useMegaTag2 == false)
         {
         LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
@@ -359,33 +358,28 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         {
             if(mt1.rawFiducials[0].ambiguity > .7)
             {
-            doRejectUpdate = true;
+                return;
             }
             if(mt1.rawFiducials[0].distToCamera > 3)
             {
-            doRejectUpdate = true;
+                return;
             }
         }
         if(mt1.tagCount == 0)
         {
-            doRejectUpdate = true;
+            return;
         }
 
-        if(!doRejectUpdate)
-        {
-            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
-            poseEstimator.addVisionMeasurement(
-                mt1.pose,
-                mt1.timestampSeconds);
-        }
-        }
-        else if (useMegaTag2 == true)
-        {
-        double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
-        LimelightHelpers.SetRobotOrientation(limelightName, currentPoseYaw, 0, 0, 0, 0, 0);
-        LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
-        if (mt2 == null){
-            return;
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+        poseEstimator.addVisionMeasurement(
+            mt1.pose,
+            mt1.timestampSeconds);
+        } else if (useMegaTag2 == true) {
+            double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+            LimelightHelpers.SetRobotOrientation(limelightName, currentPoseYaw, 0, 0, 0, 0, 0);
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+            if (mt2 == null){
+                return;
         }
         // if(Math.abs(gyro.) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         // {
@@ -393,15 +387,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // }
         if(mt2.tagCount == 0)
         {
-            doRejectUpdate = true;
+            return;
         }
-        if(!doRejectUpdate)
-        {
-            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-            poseEstimator.addVisionMeasurement(
-                mt2.pose,
-                mt2.timestampSeconds);
-        }
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        poseEstimator.addVisionMeasurement(
+            mt2.pose,
+            mt2.timestampSeconds);
         }
     }
 	
