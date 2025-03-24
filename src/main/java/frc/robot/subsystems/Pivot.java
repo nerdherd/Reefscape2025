@@ -74,16 +74,16 @@ public class Pivot extends SubsystemBase implements Reportable{
         pivotConfigurator.refresh(pivotConfiguration);
 
         pivotConfiguration.Slot0.kP = PivotConstants.kPElevatorPivot; 
-        pivotConfiguration.Slot0.kI = PivotConstants.kIElevatorPivot;
-        pivotConfiguration.Slot0.kD = PivotConstants.kDElevatorPivot;
-        pivotConfiguration.Slot0.kV = PivotConstants.kVElevatorPivot;
-        pivotConfiguration.Slot0.kS = PivotConstants.kSElevatorPivot;
-        pivotConfiguration.Slot0.kA = PivotConstants.kAElevatorPivot;
-        pivotConfiguration.Slot0.kG = PivotConstants.kGElevatorPivot;
+        pivotConfiguration.Slot0.kI = PivotConstants.kIPivot;
+        pivotConfiguration.Slot0.kD = PivotConstants.kDPivot;
+        pivotConfiguration.Slot0.kV = PivotConstants.kVPivot;
+        pivotConfiguration.Slot0.kS = PivotConstants.kSPivot;
+        pivotConfiguration.Slot0.kA = PivotConstants.kAPivot;
+        pivotConfiguration.Slot0.kG = PivotConstants.kGPivot;
         
-        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = PivotConstants.kEPivotCruiseVelocity;
-        pivotConfiguration.MotionMagic.MotionMagicAcceleration = PivotConstants.kElevatorPivotCruiseAcceleration;
-        pivotConfiguration.MotionMagic.MotionMagicJerk = PivotConstants.kElevatorPivotJerk;
+        pivotConfiguration.MotionMagic.MotionMagicCruiseVelocity = PivotConstants.kPivotCruiseVelocity;
+        pivotConfiguration.MotionMagic.MotionMagicAcceleration = PivotConstants.kPivotCruiseAcceleration;
+        pivotConfiguration.MotionMagic.MotionMagicJerk = PivotConstants.kPivotJerk;
         pivotConfiguration.MotionMagic.MotionMagicExpo_kV = 0;
         pivotConfiguration.MotionMagic.MotionMagicExpo_kA = 0;
         
@@ -92,15 +92,15 @@ public class Pivot extends SubsystemBase implements Reportable{
         pivotConfiguratorRight.refresh(pivotConfigurationRight);
 
         pivotConfigurationRight.Slot0.kP = PivotConstants.kPElevatorPivot; 
-        pivotConfigurationRight.Slot0.kI = PivotConstants.kIElevatorPivot;
-        pivotConfigurationRight.Slot0.kD = PivotConstants.kDElevatorPivot;
-        pivotConfigurationRight.Slot0.kV = PivotConstants.kVElevatorPivot;
-        pivotConfigurationRight.Slot0.kS = PivotConstants.kSElevatorPivot;
-        pivotConfigurationRight.Slot0.kA = PivotConstants.kAElevatorPivot;
-        pivotConfigurationRight.Slot0.kG = PivotConstants.kGElevatorPivot;
+        pivotConfigurationRight.Slot0.kI = PivotConstants.kIPivot;
+        pivotConfigurationRight.Slot0.kD = PivotConstants.kDPivot;
+        pivotConfigurationRight.Slot0.kV = PivotConstants.kVPivot;
+        pivotConfigurationRight.Slot0.kS = PivotConstants.kSPivot;
+        pivotConfigurationRight.Slot0.kA = PivotConstants.kAPivot;
+        pivotConfigurationRight.Slot0.kG = PivotConstants.kGPivot;
         
-        pivotConfigurationRight.MotionMagic.MotionMagicCruiseVelocity = PivotConstants.kEPivotCruiseVelocity;
-        pivotConfigurationRight.MotionMagic.MotionMagicAcceleration = PivotConstants.kElevatorPivotCruiseAcceleration;
+        pivotConfigurationRight.MotionMagic.MotionMagicCruiseVelocity = PivotConstants.kPivotCruiseVelocity;
+        pivotConfigurationRight.MotionMagic.MotionMagicAcceleration = PivotConstants.kPivotCruiseAcceleration;
         // pivotConfigurationRight.MotionMagic.MotionMagicJerk = V1ElevatorConstants.kElevatorPivotJerk; // TODO
         pivotConfigurationRight.MotionMagic.MotionMagicExpo_kV = 0;
         pivotConfigurationRight.MotionMagic.MotionMagicExpo_kA = 0;
@@ -123,7 +123,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         // pivotConfiguration.Feedback.FeedbackRemoteSensorID = FeedbackSensorSourceValue.RotorSensor;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
         // pivotConfiguration.Feedback.RotorToSensorRatio = ; // 0.1
-        pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kElevatorPivotGearRatio; 
+        pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
@@ -145,7 +145,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         // pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
         pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; //TODO change orientation later
         // pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
-        pivotConfigurationRight.Feedback.SensorToMechanismRatio = PivotConstants.kElevatorPivotGearRatio; 
+        pivotConfigurationRight.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; 
         pivotConfigurationRight.Voltage.PeakForwardVoltage = 11.5;
         pivotConfigurationRight.Voltage.PeakReverseVoltage = -11.5;
@@ -166,7 +166,7 @@ public class Pivot extends SubsystemBase implements Reportable{
     public void periodic() {
         // why do we change it? -Duan
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
-        ff =  PivotConstants.kFElevatorPivot * Math.cos(2 * Math.PI * getPosition());
+        ff =  PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
 
         if (enabled) {
             pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
@@ -212,14 +212,14 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.001,
-        desiredPosition + 0.001);
+        desiredPosition - PivotConstants.atPositionDeadband,
+        desiredPosition + PivotConstants.atPositionDeadband);
     }
     
     public boolean atPositionWide() {
         return NerdyMath.inRange(pivotMotor.getPosition().getValueAsDouble(), 
-        desiredPosition - 0.007,
-        desiredPosition + 0.007);
+        desiredPosition - PivotConstants.atPositionWideDeadband,
+        desiredPosition + PivotConstants.atPositionWideDeadband);
     }
 
     // private void setPositionDegrees(double positionDegrees) {

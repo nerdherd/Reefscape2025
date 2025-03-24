@@ -31,55 +31,39 @@ public class TwoPiece extends SequentialCommandGroup {
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             
             Commands.sequence(
-                Commands.sequence(
-                    superSystem.holdPiece(),
-                    superSystem.moveTo(PositionEquivalents.Stow),
-                    AutoBuilder.followPath(pathGroup.get(0)),
-                    Commands.sequence(
-                        // superSystem.moveToAuto(PositionEquivalents.L4)
-                        superSystem.moveToAuto(PositionEquivalents.L1),
-                        Commands.runOnce(() ->swerve.setAutoPathRun(1, -1)).withTimeout(2)
-                    )
-                ),
-                Commands.sequence(
-                    superSystem.outtake(),
-                    Commands.waitSeconds(2.0),
-                    superSystem.stopRoller()
-                ),
-                Commands.sequence(
-                    // superSystem.moveTo(PositionEquivalents.L5),
-                    // superSystem.moveTo(PositionEquivalents.L1),
-                    superSystem.moveTo(PositionEquivalents.SemiStow),
-                    Commands.parallel(
-                        AutoBuilder.followPath(pathGroup.get(1)),
-                        superSystem.moveToAuto(PositionEquivalents.GroundIntake)
-                        // superSystem.moveToAuto(PositionEquivalents.Stow),
-                        // Commands.waitSeconds(2.0)
-                    )
+                // superSystem.holdPiece(),
+                AutoBuilder.followPath(pathGroup.get(0)),
+                superSystem.moveToAuto(PositionEquivalents.L4),
+                Commands.runOnce(() ->swerve.setAutoPathRun(1, -1)).withTimeout(2),
+                
+                // superSystem.outtake(),
+                Commands.waitSeconds(2.0),
+                superSystem.moveTo(PositionEquivalents.L1)
+                // superSystem.stopRoller()
+/*
+                // superSystem.moveTo(PositionEquivalents.L5),
+                // superSystem.moveTo(PositionEquivalents.L1),
+                Commands.parallel(
+                    AutoBuilder.followPath(pathGroup.get(1)),
+                    superSystem.moveToAuto(PositionEquivalents.GroundIntake)
+                    // superSystem.moveToAuto(PositionEquivalents.Stow),
+                    // Commands.waitSeconds(2.0)
                 ),
                 Commands.race(
                     // superSystem.intake(),
                     superSystem.intakeUntilSensed(2),
-                    swerve.driveToCoralCommand("limelight-coral", 8)
+                    // swerve.driveToCoralCommand("limelight-coral", 8)
+                    AutoBuilder.followPath(pathGroup.get(2))
 
                     // Commands.waitSeconds(2)
                     // superSystem.holdPiece()
                 ),
-                swerve.driveToPose(pathGroup.get(3).getStartingDifferentialPose(), PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAngularAcceleration),
-                Commands.sequence(
-                    Commands.parallel(
-                        Commands.sequence(
-                            Commands.waitSeconds(0.3)
-                        ),
-                        AutoBuilder.followPath(pathGroup.get(3))
-                    ),
-                    Commands.sequence(
-                        superSystem.moveToAuto(PositionEquivalents.L1),
-                        Commands.runOnce(() ->swerve.setAutoPathRun(1, 1)).withTimeout(2)
 
-                        // superSystem.moveToAuto(PositionEquivalents.L1)
-                    )
-                ),
+                AutoBuilder.followPath(pathGroup.get(3)),
+                superSystem.moveToAuto(PositionEquivalents.L1),
+                Commands.runOnce(() ->swerve.setAutoPathRun(1, 1)).withTimeout(2),
+
+                // superSystem.moveToAuto(PositionEquivalents.L1)
                 Commands.sequence(
                     superSystem.outtake(),
                     Commands.waitSeconds(2),
@@ -91,7 +75,7 @@ public class TwoPiece extends SequentialCommandGroup {
                     // superSystem.moveTo(PositionEquivalents.L5),
                     superSystem.moveTo(PositionEquivalents.L1),
                     superSystem.moveTo(PositionEquivalents.Stow)
-                )
+                )*/
                 )
             );
     }

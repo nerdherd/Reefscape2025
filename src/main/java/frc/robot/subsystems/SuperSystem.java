@@ -41,7 +41,7 @@ public class SuperSystem {
     private PositionEquivalents currentPosition = PositionEquivalents.Stow;
     private PositionEquivalents lastPosition = PositionEquivalents.Stow;
     
-    boolean elevatorWithinRange;
+    boolean elevatorWithinRange, pivotWithinRange;
 
     private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition, pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected;
 
@@ -132,7 +132,7 @@ public class SuperSystem {
 
     public Command intake() {
         return Commands.either(
-            intakeCoral(), 
+            intakeUntilSensed(), 
             intakeAlgae(), 
             () -> (positionMode == PositionMode.Coral)
             );
@@ -169,19 +169,21 @@ public class SuperSystem {
     // }
 
     public Command intakeUntilSensed() {
-        return Commands.sequence(
-            intakeCoral(), 
+        return Commands.sequence(    
+            intakeCoral(),
             Commands.race(
                 Commands.waitUntil(intakeDetected),
-                Commands.waitSeconds(2))
-        );
+                Commands.waitUntil(() -> intakeRoller.desiredVoltageCoral != RollerConstants.kCoralIntakePower)
+            ),
+            // Commands.waitSeconds(2),
+            stopRoller()
+            );
     }
 
     public Command intakeUntilSensed(double timeout) {
-        return Commands.sequence(
-            intakeCoral(), 
-            Commands.race(Commands.waitUntil(intakeDetected),
-            Commands.waitSeconds(timeout))
+        return Commands.race(
+            intakeCoral().until(intakeDetected),
+            Commands.waitSeconds(timeout)
         );
     }
 
@@ -397,9 +399,9 @@ public class SuperSystem {
                 elevatorSet = false;
             }
 
-            pivotAtPosition = () -> pivot.atPosition();
-            if(pivotAngle != PositionEquivalents.GroundIntake.coralPos.pivotPosition) 
-                pivotAtPosition = () -> pivot.atPositionWide();
+            pivotWithinRange = pivot.atPositionWide();
+            if(pivotAngle == PositionEquivalents.GroundIntake.coralPos.pivotPosition) 
+                pivotWithinRange = pivot.atPosition();
 
             elevatorWithinRange = elevator.atPosition();
             
@@ -539,7 +541,7 @@ public class SuperSystem {
         }
         ).until(
             () -> (
-                (pivot.atPosition() && pivotSet
+                (pivotWithinRange && pivotSet
                 && elevatorWithinRange && elevatorSet
                 && wrist.atPosition() && wristSet)
                 || (Timer.getFPGATimestamp() - startTime >= timeout)

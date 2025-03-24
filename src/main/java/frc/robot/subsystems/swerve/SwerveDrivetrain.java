@@ -101,7 +101,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private Field2d field;
     private VisionSys vision = new VisionSys();
-    public boolean useVision = true;
+    public boolean useVision = false;
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
@@ -346,7 +346,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     //******************************  Vision ******************************/
 	private void visionupdateOdometry(String limelightName) {
-        boolean useMegaTag2 = true; //set to false to use MegaTag1
+        boolean useMegaTag2 = false; //set to false to use MegaTag1
         boolean doRejectUpdate = false;
         if(useMegaTag2 == false)
         {
@@ -1021,12 +1021,13 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     
     public void driveToCoral(String limelightName, double targetArea){
-        String[] labels = classLabels.getStringArray(new String[]{});
-        if (labels.length > 1) System.out.println("too many labels: " + labels.length);
-        if (LimelightHelpers.getTV(limelightName) && labels.length == 1 && labels[0].equals("coral")){
+        // String[] labels = classLabels.getStringArray(new String[]{});
+        // if (labels.length > 1) System.out.println("too many labels: " + labels.length);
+        if (LimelightHelpers.getTV(limelightName)){// && labels.length == 1 && labels[0].equals("coral")){
             double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
             double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
-
+ 
+            
             // PIDController rotationController = new PIDController(0.08, 0, 0.006);       // TODO: tune
             double forwardSpeed = areaController.calculate(ta,targetArea);
             double turnSpeed = -txController.calculate(tx,0);

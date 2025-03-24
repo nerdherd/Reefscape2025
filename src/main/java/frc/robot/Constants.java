@@ -72,7 +72,7 @@ public final class Constants {
     public static final double kDriveMotorDeadband = 0.02;
     public static final double kTurnMotorDeadband = 0.001;
 
-    public static final double kPTurning = 0.26; // 0.55
+    public static final double kPTurning = 0.55; // 0.55
     public static final double kITurning = 0.0;
     public static final double kDTurning = 0.0015;//0.02 
     public static final double kFTurning = 0.015;//0.015
@@ -326,7 +326,7 @@ public final class Constants {
     public static final double kPPMaxAngularVelocity = Math.PI * 2;
     public static final double kPPMaxAngularAcceleration = Math.PI * 2;
 
-    public static final double kPP_P = 6.0; //5
+    public static final double kPP_P = 5.0; //6
     public static final double kPP_I = 0.0;
     public static final double kPP_D = 0.0;
 
@@ -424,6 +424,9 @@ public final class Constants {
     public static final double kElevatorCruiseVelocity = 100; //16.333 //20
     public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
     public static final double kElevatorJerk = kElevatorCruiseAcceleration * 10;
+
+    public static final double atPositionDeadband = 0.07;
+    public static final double atPositionDeadbandWide = 0.125;
  }
  
 
@@ -434,30 +437,32 @@ public final class Constants {
     
     public static final double kPElevatorPivot = 65; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
-    public static final double kIElevatorPivot = 0;
-    public static final double kDElevatorPivot = 0;
-    public static final double kVElevatorPivot = 0; 
-    public static final double kSElevatorPivot = 0; 
-    public static final double kAElevatorPivot = 0.0; 
-    public static final double kGElevatorPivot = 0;
+    public static final double kIPivot = 0;
+    public static final double kDPivot = 0;
+    public static final double kVPivot = 0; 
+    public static final double kSPivot = 0; 
+    public static final double kAPivot = 0.0; 
+    public static final double kGPivot = 0;
 
-    public static final double kFElevatorPivot = 0.21; 
+    public static final double kFPivot = 0.21; 
 
-    public static final double kElevatorPivotStowPosition = 0.01; 
-    public static final double kElevatorPivotSemiStowPosition = 0.11; 
-    public static final double kElevatorPivotStationPosition = 0.1;//0.15 // .0833 //TODO change later
-    public static final double kElevatorPivotPositionVertical = 0.24;//0.1 // 0.25
+    public static final double kPivotStowPosition = 0.01; 
+    public static final double kPivotSemiStowPosition = 0.11; 
+    public static final double kPivotStationPosition = 0.1;//0.15 // .0833 //TODO change later
+    public static final double kPivotPositionVertical = 0.24;//0.1 // 0.25
 
-    public static final double kElevatorPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
-    public static final double kElevatorPivotMax = 0.23; // Vertical    // TODO change later   
+    public static final double kPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
+    public static final double kPivotMax = 0.23; // Vertical    // TODO change later   
 
-    public static final double kElevatorPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
-    public static final double kElevatorPivotDeadBand = 0;
-    public static final double kElevatorPivotOffSet = 0;
+    public static final double kPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
+    public static final double kPivotDeadBand = 0;
+    public static final double kPivotOffSet = 0;
 
-    public static final double kEPivotCruiseVelocity = 0.8;//0.25 // 0.4S
-    public static final double kElevatorPivotCruiseAcceleration = kEPivotCruiseVelocity * 5; // 0.5
-    public static final double kElevatorPivotJerk = kElevatorPivotCruiseAcceleration * 10; 
+    public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
+    public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
+    public static final double kPivotJerk = kPivotCruiseAcceleration * 10;
+    public static final double atPositionDeadband = 0.015; // 0.003; 
+    public static final double atPositionWideDeadband = 0.015; 
     
   }
 
@@ -475,7 +480,8 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kCoralIntakePower  = -2.8;
+    public static final double kCoralIntakePower = -3.6;
+    public static final double kCoralButAlgaeIntakePower  = -1.5;
     public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2.8;
     public static final double kAlgaeOuttakePower = 1.5;
@@ -508,6 +514,8 @@ public final class Constants {
     public static final double kMinPosition = 0;
 
     public static final double kSpeed = 0.5;
+    public static final double atPositionDeadband = 0.05;
+    public static final double atPositionDeadbandWide = 0.15;
     
   }
 
@@ -548,20 +556,21 @@ public final class Constants {
     
     public enum CoralPositions { 
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
-      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.0285, 0.58, -0.711, -0.711      ), // Pivot .03 too high, .027 low
-      // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.027, 0.58, -0.711, -0.711      ), 
-      Station(             ExecutionOrder.ALL_TOGETHER, 0.18,  1.12, -0.850, -0.35),
+      SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
+      // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.0285, 0.58, -0.711, -0.711      ),
+      Station(             ExecutionOrder.PVT_WRTELV, 0.1885,  1.54, -0.84, -0.35),
+      // Station(             ExecutionOrder.PVT_WRTELV, 0.19,  1.53, -0.76, -0.35),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.102, -0.102     ),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3, -0.197, -0.197      ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197      ),
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3, -0.270, -0.270      ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.2, -0.4, -0.4     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.35, -0.711, -0.35      );
+      intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);

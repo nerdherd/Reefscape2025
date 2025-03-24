@@ -153,14 +153,14 @@ public class Wrist extends SubsystemBase implements Reportable{
 
     public boolean atPosition() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-                                desiredPosition - 0.01,
-                                desiredPosition + 0.01);
+                                desiredPosition - WristConstants.atPositionDeadband,
+                                desiredPosition + WristConstants.atPositionDeadband);
     }
 
     public boolean atPositionWide() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
-                                desiredPosition - 0.15,
-                                desiredPosition + 0.15);
+                                desiredPosition - WristConstants.atPositionDeadbandWide,
+                                desiredPosition + WristConstants.atPositionDeadbandWide);
     }
 
     // ****************************** COMMAND METHODS ****************************** //

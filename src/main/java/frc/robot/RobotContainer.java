@@ -70,6 +70,7 @@ public class RobotContainer {
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
+  private final Controller testController = new Controller(ControllerConstants.kOperatorControllerPort,false);
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   // private Bottom2Piece bottom2Piece;
@@ -291,8 +292,8 @@ public class RobotContainer {
       .onTrue(superSystem.moveTo(PositionEquivalents.L4));
 
       operatorController.triggerRight()
-      .onTrue(superSystem.intakeUntilSensed())
-      .onFalse(superSystem.holdPiece());
+      .onTrue(superSystem.intake());
+      // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
       .onTrue(superSystem.outtake())
       .onFalse(superSystem.stopRoller());
@@ -301,8 +302,8 @@ public class RobotContainer {
       // operatorController.bumperLeft()
       // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
 
-      // operatorController.buttonUp()
-      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake2));
+      operatorController.buttonUp()
+      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
       // operatorController.buttonLeft()
       // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake3));
       operatorController.buttonRight()
@@ -353,7 +354,7 @@ public class RobotContainer {
 
     // //////////////////////////
     // /// DO NOT REMOVE IT
-    operatorController.controllerLeft()
+    testController.controllerLeft()
       .onTrue(superSystem.zeroEncoders());
     // ////////////////////////
     

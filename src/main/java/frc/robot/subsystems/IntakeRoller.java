@@ -33,7 +33,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     private boolean velocityControl = true;
 
     private double desiredVoltageAlgae = 0;
-    private double desiredVoltageCoral = 0;
+    public double desiredVoltageCoral = 0;
 
     public IntakeRoller() {
         algaeMotor = new TalonFX(RollerConstants.kAlgaeMotorID);
@@ -69,7 +69,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         motorConfigs.Voltage.PeakForwardVoltage = 11.5;
         motorConfigs.Voltage.PeakReverseVoltage = -11.5;
-        motorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        motorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         motorConfigs.MotorOutput.DutyCycleNeutralDeadband = RollerConstants.kNeutralDeadband;
         motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
         motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
