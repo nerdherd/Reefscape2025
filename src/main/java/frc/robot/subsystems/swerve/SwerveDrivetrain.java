@@ -73,7 +73,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
-    private double pipeline;
     
     ArrayList<Pose2d> list1 = new ArrayList<>();
     ArrayList<Pose2d> list2 = new ArrayList<>();
@@ -751,22 +750,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public void disableLimelight() {
-        pipeline = 0.0;
-         // Check Vision Sys setPipeline 
+        // Check Vision Sys setPipeline
+        vision.setPipelineIndex(0);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setDouble(pipeline);
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(0);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setDouble(pipeline); 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setDouble(pipeline);
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(0);
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(0);
         CommandScheduler.getInstance().cancelAll();
     }
 
     public void enableLimeLight() {
-        pipeline = 1.0;
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setDouble(pipeline);
+        vision.setPipelineIndex(1);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setDouble(pipeline); 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setDouble(pipeline);
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(1);
+
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(1);
+        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(1);
         CommandScheduler.getInstance().cancelAll();
     }
 
