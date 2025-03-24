@@ -568,7 +568,7 @@ public final class Constants {
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3, -0.270, -0.270      ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.034, 0.85, -0.787     ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 0.85, -0.787     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       public Position position;

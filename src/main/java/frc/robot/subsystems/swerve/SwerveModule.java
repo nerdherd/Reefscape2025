@@ -111,7 +111,7 @@ public class SwerveModule implements Reportable {
         driveMotorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         driveMotorConfigs.Voltage.PeakForwardVoltage = 11.5;
         driveMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
-        driveMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        driveMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         driveMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
         driveMotorConfigs.CurrentLimits.SupplyCurrentLimit = 10;
         driveMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false;
@@ -131,7 +131,7 @@ public class SwerveModule implements Reportable {
         turnMotorConfigs.ClosedLoopGeneral.ContinuousWrap = true;
         turnMotorConfigs.Voltage.PeakForwardVoltage = 11.5;
         turnMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
-        turnMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        turnMotorConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         turnMotorConfigs.MotorOutput.DutyCycleNeutralDeadband = ModuleConstants.kDriveMotorDeadband;
         turnMotorConfigs.CurrentLimits.SupplyCurrentLimit = 25;
         turnMotorConfigs.CurrentLimits.SupplyCurrentLimitEnable = true;

@@ -101,7 +101,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private Field2d field;
     private VisionSys vision = new VisionSys();
-    public boolean useVision = false;
+    public boolean useVision = true;
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
@@ -818,6 +818,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         return SwerveDriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
     }
 
+    double reefZoneRadiusSquared = 7.5;
     public int getCurrentZoneByPose()
     {
         Pose2d cPose2d = poseEstimator.getEstimatedPosition();
@@ -828,7 +829,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if(RobotContainer.IsRedSide())
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(13, 4, 7.5, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(13, 4, reefZoneRadiusSquared, xp, yp)) {
                 return 1;
             }
             // Station
@@ -850,7 +851,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         else
         {
             // Reef
-            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, 5.06, xp, yp)) {
+            if(NerdyMath.isPoseInsideCircleZone(4.5, 4, reefZoneRadiusSquared, xp, yp)) {
                 return 1;
             }
             // Bot and Top Station
