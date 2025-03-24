@@ -753,20 +753,20 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // Check Vision Sys setPipeline
         vision.setPipelineIndex(0);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(0);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(0);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(0);
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(0);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(0);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(0);
         CommandScheduler.getInstance().cancelAll();
     }
 
     public void enableLimeLight() {
         vision.setPipelineIndex(1);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(1);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(1);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(1);
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(1);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(1);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(1);
         CommandScheduler.getInstance().cancelAll();
     }
 
