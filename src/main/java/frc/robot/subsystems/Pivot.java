@@ -278,14 +278,7 @@ public class Pivot extends SubsystemBase implements Reportable{
     }
 
     public Command stopCommand() {
-        return Commands.sequence(
-            Commands.runOnce(() -> pivotMotor.setControl(brakeRequest)),
-            setEnabledCommand(false)
-        );
-    }
-
-    public Command stop() {
-        return stopCommand();
+        return setEnabledCommand(false);
     }
 
     // ****************************** LOGGING METHODS ****************************** //

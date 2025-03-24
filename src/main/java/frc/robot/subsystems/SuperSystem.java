@@ -120,7 +120,7 @@ public class SuperSystem {
 
     public Command stop() {
         return Commands.runOnce(() -> {
-            pivot.stop();
+            pivot.stopCommand();
             wrist.stopCommand();
             elevator.stopCommand();
         });

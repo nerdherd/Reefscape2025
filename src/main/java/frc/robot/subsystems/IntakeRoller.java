@@ -192,7 +192,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setVoltageAlgae(volt));
     }
 
-    private Command stopCommand() {
+    public Command stopCommand() {
         return Commands.sequence(
             setVoltageCommand(0),
             setEnabledCommand(false)

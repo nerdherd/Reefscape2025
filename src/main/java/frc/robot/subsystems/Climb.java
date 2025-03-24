@@ -156,7 +156,7 @@ public class Climb extends SubsystemBase implements Reportable{
         );
     }
 
-    private Command stopCommand() {
+    public Command stopCommand() {
         return Commands.sequence(
             setEnabledCommand(false),
             Commands.runOnce(() -> motor.setControl(neutralRequest))
@@ -176,10 +176,6 @@ public class Climb extends SubsystemBase implements Reportable{
 
     public Command close() {
         return setPositionCommand(ClimbConstants.kClosedPosition);
-    }
-
-    public Command stop() {
-        return stopCommand();
     }
 
     // ****************************** LOGGING METHODS ****************************** //
