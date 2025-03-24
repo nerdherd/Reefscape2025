@@ -70,7 +70,7 @@ public class RobotContainer {
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
-  private final Controller testController = new Controller(ControllerConstants.kOperatorControllerPort,false);
+  private final Controller testController = new Controller(3);
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   // private Bottom2Piece bottom2Piece;
