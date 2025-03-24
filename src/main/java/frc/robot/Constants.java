@@ -558,7 +558,7 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
-      // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.0285, 0.58, -0.711, -0.711      ),
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.0285, 0.58, -0.711, -0.711      ),
       Station(             ExecutionOrder.PVT_WRTELV, 0.1885,  1.54, -0.84, -0.35),
       // Station(             ExecutionOrder.PVT_WRTELV, 0.19,  1.53, -0.76, -0.35),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
@@ -583,9 +583,9 @@ public final class Constants {
     public enum AlgaePositions {
       GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.55, -0.780, -0.780      ),
       Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
-      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ), //not real
-      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.266, -0.570      ), 
-      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.266, -0.570      ),
+      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ), 
+      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.4      ), 
+      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.4      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
       intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
@@ -602,7 +602,7 @@ public final class Constants {
       Stow(CoralPositions.Stow, CoralPositions.Stow),
       SemiStow(CoralPositions.SemiStow, CoralPositions.SemiStow),
       GroundIntake(CoralPositions.GroundIntake, AlgaePositions.GroundIntake),
-      // GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
+      GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
       // GroundIntake2(CoralPositions.GroundIntake2, AlgaePositions.GroundIntake),
       // GroundIntake3(CoralPositions.GroundIntake3, AlgaePositions.GroundIntake),
       L1(CoralPositions.L1, AlgaePositions.Processor),

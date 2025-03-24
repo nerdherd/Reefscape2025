@@ -269,8 +269,9 @@ public class RobotContainer {
 
       driverController.buttonRight() // Execute Climb
         .onTrue(superSystem.climbCommandDown());
+
       // driverController.buttonDown()
-      //   .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
+        // .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
 
     
 
@@ -299,8 +300,8 @@ public class RobotContainer {
       .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-      // operatorController.bumperLeft()
-      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
+      operatorController.bumperLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
 
       operatorController.buttonUp()
       .onTrue(superSystem.moveTo(PositionEquivalents.Station));
