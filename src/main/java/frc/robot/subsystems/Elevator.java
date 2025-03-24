@@ -74,8 +74,8 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
         motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor;
-        // motorConfigs.Slot0.kG = ElevatorConstants.kGElevatorMotor;
-        // motorConfigs.Slot0.kS = ElevatorConstants.kSElevatorMotor;
+        motorConfigs.Slot0.kG = 0;
+        motorConfigs.Slot0.kS = 0;
 
         StatusCode response = motorConfigurator.apply(motorConfigs);
         if (!response.isOK()){
@@ -98,8 +98,8 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs2.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
         motorConfigs2.Slot0.kP = ElevatorConstants.kPElevatorMotor;
-        // motorConfigs2.Slot0.kG = ElevatorConstants.kGElevatorMotor;
-        // motorConfigs2.Slot0.kS = ElevatorConstants.kSElevatorMotor;
+        motorConfigs2.Slot0.kG = 0;
+        motorConfigs2.Slot0.kS = 0;
 
         StatusCode response2 = motorConfigurator2.apply(motorConfigs2);
         if (!response2.isOK()){
@@ -111,17 +111,11 @@ public class Elevator extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            elevatorMotor.setControl(neutralRequest);
             return;
         }
         
-        double a = 1; // horizontal elevator position of robot perimeter TODO update
-        double b = 3; // max elevator position TODO update
-        double c = 0; // min elevator position
-        // motionMagicRequest.Position = NerdyMath.clamp(desiredPosition, c, Math.min(a / Math.cos(pivotAngle * 2*Math.PI), b));
         motionMagicRequest.Position = desiredPosition;
 
-        elevatorMotor2.setControl(followRequest);
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
         elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
     }
@@ -130,6 +124,11 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        if(enabled) { 
+            elevatorMotor2.setControl(followRequest);
+        } else {
+            stopMotion();
+        }
     }
 
     public void setNeutralMode(NeutralModeValue neutralMode) {

@@ -164,18 +164,14 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     @Override
     public void periodic() {
-        // why do we change it? -Duan
+        if (!enabled) {
+            return;
+        }
+
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
-        ff =  PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
-
-        if (enabled) {
-            pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
-
-            pivotMotorRight.setControl(followRequest); 
-        }
-        else {
-            pivotMotor.setControl(brakeRequest);
-        }
+        
+        ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
+        pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
     }
 
     // ****************************** STATE METHODS ***************************** //
@@ -187,6 +183,11 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        if(enabled) {
+            pivotMotorRight.setControl(followRequest);
+        } else {
+            stopMotion();
+        }
     }
 
     public void setNeutralMode(NeutralModeValue neutralMode) {

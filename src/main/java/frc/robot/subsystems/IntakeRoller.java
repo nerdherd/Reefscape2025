@@ -116,22 +116,22 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
         if (!enabled) {
-            desiredVoltageAlgae = 0.0;
-            desiredVoltageCoral = 0.0;
-            algaeMotor.setControl(brakeRequest);
-            coralMotor.setControl(brakeRequest);
+            return;
         }
-        else {
-            algaeMotor.setVoltage(desiredVoltageAlgae);  
-            coralMotor.setVoltage(desiredVoltageCoral);
-        } 
-
+        algaeMotor.setVoltage(desiredVoltageAlgae);  
+        coralMotor.setVoltage(desiredVoltageCoral);
     }
  
     // ****************************** STATE METHODS ***************************** //
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        if (!enabled) {
+            desiredVoltageAlgae = 0.0;
+            desiredVoltageCoral = 0.0;
+            algaeMotor.setControl(brakeRequest);
+            coralMotor.setControl(brakeRequest);
+        }
     }
 
     private void setVelocity(double velocity) {
@@ -243,10 +243,6 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
             setVoltageCommandCoral(RollerConstants.kL1OuttakePower),
             setVoltageCommandAlgae(-RollerConstants.kL1OuttakePower)
         );
-    }
-
-    public Command stop() {
-        return stopCommand();
     }
  
     // ****************************** LOGGING METHODS ****************************** //

@@ -86,12 +86,10 @@ public class Climb extends SubsystemBase implements Reportable{
     @Override
     public void periodic() {
         if (!enabled) {
-            motor.setControl(neutralRequest);
             return;
-        } 
-        else {
-            motor.setVoltage(desiredVoltage);  
         }
+        
+        motor.setVoltage(desiredVoltage);  
     }
 
     // ****************************** STATE METHODS ****************************** //
@@ -101,6 +99,10 @@ public class Climb extends SubsystemBase implements Reportable{
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+        if (!enabled) {
+            motor.setControl(neutralRequest);
+            desiredVoltage = 0;
+        }
     }
 
     public void stopMotion() {

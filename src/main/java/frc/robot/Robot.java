@@ -76,11 +76,6 @@ public class Robot extends TimedRobot {
     // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
     // m_robotContainer.elevator.setTargetPosition(m_robotContainer.elevator.getPosition());
     // m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
-    if (RobotContainer.USE_SUBSYSTEMS){
-      m_robotContainer.elevator.stopMotion();
-      m_robotContainer.pivot.stopMotion();
-      m_robotContainer.wrist.stopMotion();
-    }
 
     // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
     //m_robotContainer.elevator.setTargetPosition(0);

@@ -96,7 +96,6 @@ public class Wrist extends SubsystemBase implements Reportable{
     @Override
     public void periodic() {
         if(!enabled) {
-            motor.setControl(brakeRequest);
             return;
         }
 
@@ -110,6 +109,9 @@ public class Wrist extends SubsystemBase implements Reportable{
 
     public void setEnabled(boolean e) {
         this.enabled = e;
+        if(!enabled) {
+            stopMotion();
+        }
     }
 
     public void stopMotion() {

@@ -127,7 +127,7 @@ public class SuperSystem {
     }
 
     public Command stopRoller() {
-        return intakeRoller.stop();
+        return intakeRoller.stopCommand();
     }
 
     public Command intake() {
