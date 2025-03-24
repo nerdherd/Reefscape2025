@@ -252,25 +252,25 @@ public class RobotContainer {
         .onTrue(superSystem.outtake())
         .onFalse(superSystem.stopRoller());
         // Climb sequence
-      // driverController.buttonDown() // Prepare Position for Climb
-      //   .onTrue(Commands.sequence(
-      //     superSystem.climbCommandUp()));
+      driverController.buttonDown() // Prepare Position for Climb
+        .onTrue(Commands.sequence(
+          superSystem.climbCommandUp()));
 
-      // driverController.buttonLeft() // Soft Clamp
-      //   .onTrue(Commands.sequence(
-      //     superSystem.climbSoftClamp()
-      //     ))
-      //   .onFalse(superSystem.stopClimb());
+      driverController.buttonLeft() // Soft Clamp
+        .onTrue(Commands.sequence(
+          superSystem.climbSoftClamp()
+          ))
+        .onFalse(superSystem.stopClimb());
         
-      // driverController.buttonUp() // Hard Clamp
-      //   .onTrue(Commands.sequence(
-      //     superSystem.climbHardClamp()
-      //   ));
+      driverController.buttonUp() // Hard Clamp
+        .onTrue(Commands.sequence(
+          superSystem.climbHardClamp()
+        ));
 
-      // driverController.buttonRight() // Execute Climb
-      // .onTrue(superSystem.climbCommandDown());
-      driverController.buttonDown()
-        .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
+      driverController.buttonRight() // Execute Climb
+        .onTrue(superSystem.climbCommandDown());
+      // driverController.buttonDown()
+      //   .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
 
     
 
