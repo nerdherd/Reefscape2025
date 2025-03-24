@@ -58,7 +58,7 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
       CommandScheduler.getInstance().cancelAll();
-      m_robotContainer.swerveDrive.disableLimelightCommand();
+      m_robotContainer.swerveDrive.disableLimelightCommand(); // To John pls fix
 
     
     if (RobotContainer.USE_SUBSYSTEMS){
@@ -88,7 +88,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.refreshAlliance();
     m_robotContainer.imu.zeroAll();
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setDouble(1.0);
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setDouble(1.0); // To John pls fix to use enable command similar to disable
     if (RobotContainer.USE_SUBSYSTEMS) {
       m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
       m_robotContainer.superSystem.initialize();
@@ -115,6 +115,8 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+
+    // Limelight re-enable To John pls fix to use enable command similar to disable
     
     // need them once it comes back from Test Mode
     if (RobotContainer.USE_SUBSYSTEMS) {
