@@ -421,10 +421,10 @@ public class SuperSystem {
                 case ELV_PVT_WRT:
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if (elevatorAtPosition.getAsBoolean()) {
+                    if (elevatorAtPositionWide.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if (pivotAtPosition.getAsBoolean()) {
+                        if (pivotAtPositionWide.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -434,10 +434,10 @@ public class SuperSystem {
                 case ELV_WRT_PVT:
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if (elevatorAtPosition.getAsBoolean()) {
+                    if (elevatorAtPositionWide.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if (wristAtPosition.getAsBoolean()) {
+                        if (wristAtPositionWide.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -447,10 +447,10 @@ public class SuperSystem {
                 case PVT_WRT_ELV:
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if (pivotAtPosition.getAsBoolean()) {
+                    if (pivotAtPositionWide.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
-                        if (wristAtPosition.getAsBoolean()) {
+                        if (wristAtPositionWide.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -460,10 +460,10 @@ public class SuperSystem {
                 case PVT_ELV_WRT:
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if (pivotAtPosition.getAsBoolean()) {
+                    if (pivotAtPositionWide.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if (elevatorAtPosition.getAsBoolean()) {
+                        if (elevatorAtPositionWide.getAsBoolean()) {
                             wrist.setTargetPosition(wristAngle);
                             wristSet = true;
                         }
@@ -473,10 +473,10 @@ public class SuperSystem {
                 case WRT_ELV_PVT:
                     wrist.setTargetPosition(wristAngle);
                     wristSet = true;
-                    if (wristAtPosition.getAsBoolean()) {
+                    if (wristAtPositionWide.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
-                        if (elevatorAtPosition.getAsBoolean()) {
+                        if (elevatorAtPositionWide.getAsBoolean()) {
                             pivot.setTargetPosition(pivotAngle);
                             pivotSet = true;
                         }
@@ -486,10 +486,10 @@ public class SuperSystem {
                 case WRT_PVT_ELV:
                     wrist.setTargetPosition(wristAngle);
                     wristSet = true;
-                    if (wristAtPosition.getAsBoolean()) {
+                    if (wristAtPositionWide.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
-                        if (pivotAtPosition.getAsBoolean()) {
+                        if (pivotAtPositionWide.getAsBoolean()) {
                             elevator.setTargetPosition(elevatorPosition);
                             elevatorSet = true;
                         }
@@ -501,7 +501,7 @@ public class SuperSystem {
                     wristSet = true;
                     elevator.setTargetPosition(elevatorPosition);
                     elevatorSet = true;
-                    if (wristAtPosition.getAsBoolean() && elevatorAtPosition.getAsBoolean()) {
+                    if (wristAtPositionWide.getAsBoolean() && elevatorAtPositionWide.getAsBoolean()) {
                         pivot.setTargetPosition(pivotAngle);
                         pivotSet = true;
                     }
@@ -512,7 +512,7 @@ public class SuperSystem {
                     wristSet = true;
                     pivot.setTargetPosition(pivotAngle);
                     pivotSet = true;
-                    if (wristAtPosition.getAsBoolean() && pivotAtPosition.getAsBoolean()) {
+                    if (wristAtPositionWide.getAsBoolean() && pivotAtPositionWide.getAsBoolean()) {
                         elevator.setTargetPosition(elevatorPosition);
                         elevatorSet = true;
                     }
@@ -521,7 +521,7 @@ public class SuperSystem {
                 case PVT_WRTELV:
                 pivot.setTargetPosition(pivotAngle);
                 pivotSet = true;
-                if (pivotAtPosition.getAsBoolean()) {
+                if (pivotAtPositionWide.getAsBoolean()) {
                         wrist.setTargetPosition(wristAngle);
                         wristSet = true;
                         elevator.setTargetPosition(elevatorPosition);
@@ -541,9 +541,9 @@ public class SuperSystem {
         }
         ).until(
             () -> (
-                (pivotWithinRange && pivotSet
-                && elevatorWithinRange && elevatorSet
-                && wrist.atPosition() && wristSet)
+                (pivot.atPositionWide() && pivotSet
+                && elevator.atPositionWide() && elevatorSet
+                && wrist.atPositionWide() && wristSet)
                 || (Timer.getFPGATimestamp() - startTime >= timeout)
             )
         );

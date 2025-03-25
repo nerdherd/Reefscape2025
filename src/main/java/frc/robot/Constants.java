@@ -426,7 +426,7 @@ public final class Constants {
     public static final double kElevatorJerk = kElevatorCruiseAcceleration * 10;
 
     public static final double atPositionDeadband = 0.07;
-    public static final double atPositionDeadbandWide = 0.125;
+    public static final double atPositionDeadbandWide = 0.3;
  }
  
 
@@ -435,7 +435,7 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 65; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIPivot = 0;
     public static final double kDPivot = 0;
@@ -462,7 +462,7 @@ public final class Constants {
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
     public static final double kPivotJerk = kPivotCruiseAcceleration * 10;
     public static final double atPositionDeadband = 0.015; // 0.003; 
-    public static final double atPositionWideDeadband = 0.015; 
+    public static final double atPositionWideDeadband = 0.03; 
     
   }
 
@@ -515,7 +515,7 @@ public final class Constants {
 
     public static final double kSpeed = 0.5;
     public static final double atPositionDeadband = 0.05;
-    public static final double atPositionDeadbandWide = 0.15;
+    public static final double atPositionDeadbandWide = 0.3;
     
   }
 
@@ -558,8 +558,8 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
-      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.0285, 0.58, -0.711, -0.711      ),
-      Station(             ExecutionOrder.PVT_WRTELV, 0.1885,  1.54, -0.84, -0.35),
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ),
+      Station(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84),
       // Station(             ExecutionOrder.PVT_WRTELV, 0.19,  1.53, -0.76, -0.35),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
@@ -585,7 +585,7 @@ public final class Constants {
       Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
       Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ), 
       AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.4      ), 
-      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.24,  1,    -0.4      ),
+      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.25,  2,    -0.4      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
       intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );

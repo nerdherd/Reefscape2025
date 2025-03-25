@@ -118,6 +118,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
         elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
+        elevatorMotor2.setControl(followRequest); 
     }
 
     // ****************************** STATE METHODS ****************************** //
