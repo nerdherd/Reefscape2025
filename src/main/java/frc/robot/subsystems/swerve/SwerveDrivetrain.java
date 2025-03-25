@@ -65,6 +65,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final Gyro gyro;
     // private final SwerveDriveOdometry odometer;
     private boolean isTest = false;
+    private boolean enabled = true;
     private final SwerveDrivePoseEstimator poseEstimator;
     private DRIVE_MODE driveMode = DRIVE_MODE.FIELD_ORIENTED;
 
@@ -339,6 +340,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
                 // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
             }
+    if (!enabled) {
+        return;
+    }        
         
             //todo try MegaTag2
     }
@@ -392,6 +396,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         poseEstimator.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);
+        }
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if(enabled) { 
+            return;
+        } else {
+            stopModules();
         }
     }
 	

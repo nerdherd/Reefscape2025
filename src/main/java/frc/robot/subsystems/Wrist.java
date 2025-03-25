@@ -56,7 +56,6 @@ public class Wrist extends SubsystemBase implements Reportable{
         configurePID(motorConfigs);
         
         zeroEncoder();
-        CommandScheduler.getInstance().registerSubsystem(this);
     }
 
     //****************************** SETUP METHODS ******************************//

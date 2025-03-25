@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
     DataLogManager.start("/media/sda1/logs");
     DataLogManager.logNetworkTables(true);
     m_robotContainer.swerveDrive.refreshModulePID();
+    m_robotContainer.swerveDrive.setEnabled(true);
   }
 
   /**
@@ -67,6 +68,7 @@ public class Robot extends TimedRobot {
       m_robotContainer.wrist.setEnabled(false);
       m_robotContainer.intakeRoller.setEnabled(false);
       m_robotContainer.climbMotor.setEnabled(false);
+      m_robotContainer.swerveDrive.setEnabled(false);
     }
 
   }
@@ -147,6 +149,8 @@ public class Robot extends TimedRobot {
     m_robotContainer.configureBindings_test();
 
     m_robotContainer.DisableAllMotors_Test();
+    m_robotContainer.swerveDrive.setEnabled(false);
+    
   }
 
   /** This function is called periodically during test mode. */
