@@ -302,8 +302,8 @@ public class RobotContainer {
       .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-      operatorController.bumperLeft() // 
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
+      // operatorController.bumperLeft() // 
+      // .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
       
       operatorController.buttonUp()
       .onTrue(superSystem.moveTo(PositionEquivalents.Station));

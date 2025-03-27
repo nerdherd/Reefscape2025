@@ -175,7 +175,8 @@ public class SuperSystem {
                 Commands.waitUntil(intakeDetected),
                 Commands.waitUntil(() -> intakeRoller.desiredVoltageCoral != RollerConstants.kCoralIntakePower)
             ),
-            // Commands.waitSeconds(2),
+            // 
+            Commands.waitSeconds(0.01),
             stopRoller()
             );
     }
