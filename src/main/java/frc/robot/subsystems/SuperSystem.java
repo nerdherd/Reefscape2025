@@ -220,8 +220,15 @@ public class SuperSystem {
         return climbMotor.setVoltageCommand(0.5);
     }
 
+    private double hardclampvoltage = 0.0;
     public Command climbHardClamp() {
-        return climbMotor.setVoltageCommand(-4.5);
+        return Commands.sequence(
+            Commands.runOnce(() -> {
+                hardclampvoltage -= 0.5 / 50;
+                hardclampvoltage = Math.max(hardclampvoltage, -4.5);
+            }),
+            climbMotor.setVoltageCommand(hardclampvoltage)
+        );
     }
 
     public Command climbSoftClamp() {
