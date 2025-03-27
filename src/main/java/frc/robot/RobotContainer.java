@@ -269,7 +269,7 @@ public class RobotContainer {
 
         driverController.buttonRight() // Execute Climb
         .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
-        .whileTrue(superSystem.climbHardClamp())
+        .whileTrue(superSystem.climbHardClamp());
 
 
       // driverController.buttonDown()
@@ -302,7 +302,7 @@ public class RobotContainer {
       .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-      operatorController.bumperLeft()
+      operatorController.bumperLeft() // 
       .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
       
       operatorController.buttonUp()
