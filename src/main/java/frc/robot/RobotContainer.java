@@ -68,7 +68,7 @@ public class RobotContainer {
   public CANdi candi;
   public PositionMode positionMode;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
   private final Controller testController = new Controller(3);
   
@@ -296,7 +296,7 @@ public class RobotContainer {
       .onTrue(superSystem.intake());
       // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
-      .onTrue(superSystem.outtake())
+      .onTrue(superSystem.intakeCoral())
       .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
@@ -305,8 +305,8 @@ public class RobotContainer {
       
       operatorController.buttonUp()
       .onTrue(superSystem.moveTo(PositionEquivalents.Station));
-      // operatorController.buttonLeft()
-      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake3));
+      operatorController.buttonLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.intermediateGround));
       operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
       operatorController.buttonDown()

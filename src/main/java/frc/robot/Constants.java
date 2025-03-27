@@ -452,7 +452,7 @@ public final class Constants {
     public static final double kPivotPositionVertical = 0.24;//0.1 // 0.25
 
     public static final double kPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
-    public static final double kPivotMax = 0.23; // Vertical    // TODO change later   
+    public static final double kPivotMax = 0.285; // Slightly past vertical    // TODO change later   
 
     public static final double kPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kPivotDeadBand = 0;
@@ -559,16 +559,16 @@ public final class Constants {
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
       GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ),
-      Station(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84),
-      // Station(             ExecutionOrder.PVT_WRTELV, 0.19,  1.53, -0.76, -0.35),
+      Station(             ExecutionOrder.PVT_ELV_WRT, 0.182,  1.254, -0.83),
+      // Station(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84),
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.102, -0.102     ),
       L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3, -0.270, -0.270      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197     ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 0.85, -0.787     ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       public Position position;
