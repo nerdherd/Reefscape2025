@@ -224,8 +224,8 @@ public class SuperSystem {
     public Command climbHardClamp() {
         return Commands.sequence(
             Commands.runOnce(() -> {
-                hardclampvoltage -= 0.5 / 50;
-                hardclampvoltage = Math.max(hardclampvoltage, -4.5);
+                hardclampvoltage -= 1 / 50;
+                hardclampvoltage = Math.max(hardclampvoltage, -3);
             }),
             climbMotor.setVoltageCommand(hardclampvoltage)
         );
