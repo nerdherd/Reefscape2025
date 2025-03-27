@@ -559,8 +559,8 @@ public final class Constants {
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
       GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ),
-      Station(             ExecutionOrder.PVT_ELV_WRT, 0.182,  1.254, -0.83),
-      // Station(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84),
+      Station(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
+      Station1(             ExecutionOrder.PVT_ELV_WRT, 0.195,  1.7, -0.8279), // adjusted warren
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.102, -0.102     ),
@@ -615,7 +615,8 @@ public final class Constants {
       ClimbUp(CoralPositions.ClimbUp, AlgaePositions.ClimbUp),
       ClimbDown(CoralPositions.ClimbDown, AlgaePositions.ClimbDown),
       intermediateGround(CoralPositions.intermediateGround, AlgaePositions.intermediateGround),
-      Station(CoralPositions.Station, CoralPositions.Station),
+      Station(CoralPositions.Station, CoralPositions.Station), // Changed 3/27
+      Station1(CoralPositions.Station1, CoralPositions.Station), // Changed 3/27
 
       ;
       
