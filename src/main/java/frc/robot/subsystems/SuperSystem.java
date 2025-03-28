@@ -222,7 +222,7 @@ public class SuperSystem {
     }
 
     private double hardclampvoltage = 0.0;
-    public Command climbHardClamp() {
+    public Command climbHardRamp() {
         return Commands.sequence(
             Commands.runOnce(() -> {
                 hardclampvoltage -= 1 / 50;
@@ -230,6 +230,10 @@ public class SuperSystem {
             }),
             climbMotor.setVoltageCommand(hardclampvoltage)
         );
+    }
+
+    public Command climbHardClamp() {
+        return climbMotor.setVoltageCommand(-3);
     }
 
     public Command climbSoftClamp() {
@@ -250,7 +254,7 @@ public class SuperSystem {
     
     public Command climbCommandDown() {
         return Commands.sequence(
-            climbHardClamp(), 
+            climbHardRamp(), 
             moveTo(PositionEquivalents.ClimbDown) 
         );
     }
@@ -265,13 +269,13 @@ public class SuperSystem {
     public Command moveTo(PositionEquivalents position) {
         return Commands.sequence(
             updatePositions(position),
-            Commands.waitSeconds(0.02),
             Commands.either(goTo(position.coralPos, lastPosition.coralPos), goTo(position.algaePos, lastPosition.algaePos), () -> (positionMode == PositionMode.Coral))
         );
     }
 
     // movement
     private Command goTo(Position position, Position previousPosition) {
+        System.out.println("Ran goTo");
         if (position == PositionEquivalents.GroundIntake.coralPos ||
             previousPosition == PositionEquivalents.GroundIntake.coralPos
         ) {
