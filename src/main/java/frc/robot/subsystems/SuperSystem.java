@@ -224,10 +224,14 @@ public class SuperSystem {
         );
     }
 
-    public Command climbHardClamp() {
+    public Command climbHardRamp() {
         return Commands.sequence(
             Commands.runOnce(() -> climbMotor.hard_ramp = true)
         );
+    }
+
+    public Command climbHardClamp() {
+        return climbMotor.setVoltageCommand(-3);
     }
 
     public Command climbSoftClamp() {
@@ -248,7 +252,7 @@ public class SuperSystem {
     
     public Command climbCommandDown() {
         return Commands.sequence(
-            climbHardClamp(), 
+            climbHardRamp(), 
             moveTo(PositionEquivalents.ClimbDown) 
         );
     }
@@ -263,7 +267,6 @@ public class SuperSystem {
     public Command moveTo(PositionEquivalents position) {
         return Commands.sequence(
             updatePositions(position),
-            Commands.waitSeconds(0.02),
             Commands.either(goTo(position.coralPos, lastPosition.coralPos), goTo(position.algaePos, lastPosition.algaePos), () -> (positionMode == PositionMode.Coral))
         );
     }

@@ -26,17 +26,16 @@ public class PreloadTaxi extends SequentialCommandGroup{
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.sequence(
                 superSystem.holdPiece(),
-                superSystem.moveToAuto(PositionEquivalents.Stow),
                 Commands.waitSeconds(1),
-                // AutoBuilder.followPath(pathGroup.get(0)), 
-                Commands.runOnce(() -> swerve.setAutoPathRun(1, 1)).raceWith(Commands.waitSeconds(2)), 
+                AutoBuilder.followPath(pathGroup.get(0)), 
+                // Commands.runOnce(() -> swerve.setAutoPathRun(1, 1)).raceWith(Commands.waitSeconds(2)), 
                 superSystem.moveToAuto(PositionEquivalents.L4),
-                // superSystem.moveToAuto(PositionE+++quivalents.SemiStow),
+                // superSystem.moveToAuto(PositionEquivalents.SemiStow),
                 Commands.waitSeconds(2),
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
-                superSystem.moveTo(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L1),
                 AutoBuilder.followPath(pathGroup.get(1))
 
             )
