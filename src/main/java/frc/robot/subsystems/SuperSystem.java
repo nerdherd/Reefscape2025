@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.SuperSystemConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
@@ -226,14 +227,14 @@ public class SuperSystem {
         return Commands.sequence(
             Commands.runOnce(() -> {
                 hardclampvoltage -= 1 / 50;
-                hardclampvoltage = Math.max(hardclampvoltage, -3);
+                hardclampvoltage = Math.max(hardclampvoltage, ClimbConstants.climbHardClampVoltage);
             }),
             climbMotor.setVoltageCommand(hardclampvoltage)
         );
     }
 
     public Command climbHardClamp() {
-        return climbMotor.setVoltageCommand(-3);
+        return climbMotor.setVoltageCommand(ClimbConstants.climbHardClampVoltage);
     }
 
     public Command climbSoftClamp() {
