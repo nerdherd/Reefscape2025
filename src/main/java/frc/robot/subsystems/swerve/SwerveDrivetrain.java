@@ -392,8 +392,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
         poseEstimator.addVisionMeasurement(
-            new Pose2d(mt1.pose.getX(), mt1.pose.getY(), gyro.getHeading()),
-            // mt1.pose,
+            // new Pose2d(mt1.pose.X, mt1.pose.Y, gyro.getHeading()),
+            mt1.pose,
             mt1.timestampSeconds);
         } else if (useMegaTag2 == true) {
             double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();

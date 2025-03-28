@@ -275,25 +275,8 @@ public class SuperSystem {
 
     // movement
     private Command goTo(Position position, Position previousPosition) {
-<<<<<<< HEAD
-        System.out.println("Ran goTo");
-        if (position == PositionEquivalents.GroundIntake.coralPos ||
-            previousPosition == PositionEquivalents.GroundIntake.coralPos
-        ) {
-            return Commands.sequence(
-                preExecute(),
-                execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
-                PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
-                wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
-                preExecute(),
-                execute(position.executionOrder, 10.0, 
-                position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
-            );
-        }
-=======
         System.out.println("goto IDAHOIDAHOIDAHOIDAHOIDAHOIDAHOIDAHO hi zach :>");
         Command gotoCommand;
->>>>>>> 0dda508772c04d40fa057fce9d7beaaea5c6575e
         if (position.intermediateWristPosition == position.finalWristPosition)
             gotoCommand = Commands.sequence(
                 preExecute(),
