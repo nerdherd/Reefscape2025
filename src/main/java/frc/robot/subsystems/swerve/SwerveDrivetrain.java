@@ -34,6 +34,7 @@ import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
 import frc.robot.Constants.SwerveDriveConstants.ReefOffsets;
 import frc.robot.Constants.SwerveDriveConstants.StationOffsets;
 import frc.robot.subsystems.imu.Gyro;
+import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.util.NerdyMath;
 import frc.robot.vision.LimelightHelpers;
 import frc.robot.vision.VisionSys;
@@ -49,6 +50,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -62,7 +64,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
-    private final Gyro gyro;
+    private final PigeonV2 gyro;
     // private final SwerveDriveOdometry odometer;
     private boolean isTest = false;
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -113,7 +115,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     /**
      * Construct a new {@link SwerveDrivetrain}
      */
-    public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
+    public SwerveDrivetrain(PigeonV2 gyro) throws IllegalArgumentException {
         
         // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
@@ -346,6 +348,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //******************************  Vision ******************************/
 	private void visionupdateOdometry(String limelightName) {
         boolean useMegaTag2 = false; //set to false to use MegaTag1
+        double xyStds = 0.5;
+        double degStds = 30;
+
         if(useMegaTag2 == false)
         {
         LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
@@ -368,9 +373,26 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         {
             return;
         }
+        if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            return;
+        }
+        if (mt1.avgTagArea > 0.8 && mt1.rawFiducials[0].distToCamera < 0.5) {
+            xyStds = 1.0;
+            degStds = 12;
+        }
+        // 1 target farther away and estimated pose is close
+        else if (mt1.avgTagArea > 0.1 && mt1.rawFiducials[0].distToCamera < 0.3) {
+            xyStds = 2.0;
+            degStds = 30;
+        } else if (mt1.tagCount >= 2) {
+            xyStds = 0.5;
+            degStds = 6;
+        }
 
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
         poseEstimator.addVisionMeasurement(
+            // new Pose2d(mt1.pose.getX(), mt1.pose.getY(), gyro.getHeading()),
             mt1.pose,
             mt1.timestampSeconds);
         } else if (useMegaTag2 == true) {
@@ -380,15 +402,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             if (mt2 == null){
                 return;
         }
-        // if(Math.abs(gyro.) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        // {
-        //     doRejectUpdate = true;
-        // }
+        if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            return;
+        }
         if(mt2.tagCount == 0)
         {
             return;
         }
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.3,.3,10));
         poseEstimator.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);

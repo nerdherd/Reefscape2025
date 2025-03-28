@@ -51,7 +51,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public Gyro imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
+  public PigeonV2 imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
