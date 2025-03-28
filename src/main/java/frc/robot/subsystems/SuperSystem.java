@@ -275,6 +275,7 @@ public class SuperSystem {
 
     // movement
     private Command goTo(Position position, Position previousPosition) {
+<<<<<<< HEAD
         System.out.println("Ran goTo");
         if (position == PositionEquivalents.GroundIntake.coralPos ||
             previousPosition == PositionEquivalents.GroundIntake.coralPos
@@ -289,20 +290,39 @@ public class SuperSystem {
                 position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
             );
         }
+=======
+        System.out.println("goto IDAHOIDAHOIDAHOIDAHOIDAHOIDAHOIDAHO hi zach :>");
+        Command gotoCommand;
+>>>>>>> 0dda508772c04d40fa057fce9d7beaaea5c6575e
         if (position.intermediateWristPosition == position.finalWristPosition)
-            return Commands.sequence(
+            gotoCommand = Commands.sequence(
                 preExecute(),
                 execute(position.executionOrder, 10.0, 
                 position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
                               
             );
-        return Commands.sequence(
-            preExecute(),
-            execute(position.executionOrder, 10.0, 
-            position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
-            wrist.setPositionCommand(position.finalWristPosition)
-            
-        );
+        else
+            gotoCommand = Commands.sequence(
+                preExecute(),
+                execute(position.executionOrder, 10.0, 
+                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
+                wrist.setPositionCommand(position.finalWristPosition)
+                
+            );
+        return 
+            Commands.either(
+                Commands.sequence(
+                    preExecute(),
+                    execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
+                    PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
+                    wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
+                    preExecute(),
+                    execute(position.executionOrder, 10.0, 
+                    position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
+                ), 
+                gotoCommand,
+                () -> (position == PositionEquivalents.GroundIntake.coralPos ||
+                previousPosition == PositionEquivalents.GroundIntake.coralPos));
     }
 
     public Command moveToAuto(PositionEquivalents position) {
@@ -313,14 +333,12 @@ public class SuperSystem {
     }
 
     public Command goToAuto(Position position) {
-        // currentPosition = position;
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
                 execute(position.executionOrder, 5.0, 
-                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
-                              
-            );
+                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)             
+        );
         return Commands.sequence(
             preExecute(),
             execute(position.executionOrder, 5.0, 

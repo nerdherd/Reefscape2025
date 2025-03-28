@@ -364,7 +364,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             {
                 return;
             }
-            if(mt1.rawFiducials[0].distToCamera > 3)
+            if(mt1.rawFiducials[0].distToCamera > 1.5)
             {
                 return;
             }
