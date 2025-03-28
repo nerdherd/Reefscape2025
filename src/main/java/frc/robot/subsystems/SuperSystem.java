@@ -218,17 +218,15 @@ public class SuperSystem {
     } 
     
     public Command climbPrep() {
-        return climbMotor.setVoltageCommand(0.5);
+        return Commands.sequence(
+            Commands.runOnce(() -> climbMotor.hard_ramp = false),
+            climbMotor.setVoltageCommand(0.5)
+        );
     }
 
-    private double hardclampvoltage = 0.0;
     public Command climbHardClamp() {
         return Commands.sequence(
-            Commands.runOnce(() -> {
-                hardclampvoltage -= 1 / 50;
-                hardclampvoltage = Math.max(hardclampvoltage, -3);
-            }),
-            climbMotor.setVoltageCommand(hardclampvoltage)
+            Commands.runOnce(() -> climbMotor.hard_ramp = true)
         );
     }
 

@@ -83,12 +83,17 @@ public class Climb extends SubsystemBase implements Reportable{
         }
     }
 
+    public boolean hard_ramp = false;
+    private double hard_clamp_voltage = 0.0;
     @Override
     public void periodic() {
         if (!enabled) {
             return;
         }
-        
+        if (hard_ramp) {
+            hard_clamp_voltage -= 1.0 / 50.0;
+            desiredVoltage = hard_clamp_voltage;
+        } else hard_clamp_voltage = 0.0;
         motor.setVoltage(desiredVoltage);  
     }
 
@@ -102,6 +107,7 @@ public class Climb extends SubsystemBase implements Reportable{
         if (!enabled) {
             motor.setControl(neutralRequest);
             desiredVoltage = 0;
+            hard_ramp = false;
         }
     }
 
