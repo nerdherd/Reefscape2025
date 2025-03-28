@@ -263,8 +263,8 @@ public class RobotContainer {
         .onFalse(superSystem.stopClimb());
         
       driverController.buttonUp() // Hard Clamp
-      .whileTrue(Commands.sequence(
-          superSystem.climbHardRamp()
+      .onTrue(Commands.sequence(
+          superSystem.climbHardClamp()
         ));
 
         driverController.buttonRight() // Execute Climb

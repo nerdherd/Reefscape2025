@@ -83,7 +83,7 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
-        intakeDetected = () -> (candi.getS1State().getValue().value == 0);
+        intakeDetected = () -> (candi.getS1State().getValue().value == 1);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");

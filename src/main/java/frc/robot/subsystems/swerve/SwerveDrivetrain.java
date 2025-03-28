@@ -337,7 +337,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
             if (useVision){
                 visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
-                visionupdateOdometry(VisionConstants.kLimelightBackRightName);
+                // visionupdateOdometry(VisionConstants.kLimelightBackRightName);
                 // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
                 // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
             }
@@ -392,7 +392,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
         poseEstimator.addVisionMeasurement(
-            // new Pose2d(mt1.pose.X, mt1.pose.Y, gyro.getHeading()),
+            // new Pose2d(mt1.pose.getX().getValueAsDouble(), mt1.pose.getY().getValueAsDouble(), 0, gyro.getHeading()),
             mt1.pose,
             mt1.timestampSeconds);
         } else if (useMegaTag2 == true) {
