@@ -581,7 +581,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
             
     private int getMostClosedApriltagIdInReefZone(int zoneId) {
-        if(zoneId == 1) {
+        SmartDashboard.putNumber("Current Zone ID", zoneId);
+        if(zoneId != 1) {
             int startIndex = RobotContainer.IsRedSide() ? 6 : 17;
             int indexToGet = -1;
             double distance = getDistanceFromTag(false, startIndex);
@@ -708,7 +709,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public void stopAutoPath() {
+        SmartDashboard.putBoolean("Stop ran", true);
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
+            SmartDashboard.putBoolean("Stop ran again", true);
             pathfindingCommand.cancel();
             CommandScheduler.getInstance().cancel(pathfindingCommand);
             stopModules();
