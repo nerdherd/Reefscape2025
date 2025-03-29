@@ -461,8 +461,8 @@ public final class Constants {
     public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
     public static final double kPivotJerk = kPivotCruiseAcceleration * 10;
-    public static final double atPositionDeadband = 0.015; // 0.003; 
-    public static final double atPositionWideDeadband = 0.03; 
+    public static final double atPositionDeadband = 1.08; // 0.003; 
+    public static final double atPositionWideDeadband = 10.8; 
     
   }
 
