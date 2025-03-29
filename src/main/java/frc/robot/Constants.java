@@ -433,7 +433,7 @@ public final class Constants {
  public static final class PivotConstants {
     public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
-    public static final int kPivotPigeonID = 2; // TODO change later
+    public static final int kPivotPigeonID = 4; // TODO change later
     
     public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high

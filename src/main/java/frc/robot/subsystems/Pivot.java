@@ -120,10 +120,11 @@ public class Pivot extends SubsystemBase implements Reportable{
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
-        // pivotConfiguration.Feedback.FeedbackRemoteSensorID = FeedbackSensorSourceValue.RotorSensor;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
-        // pivotConfiguration.Feedback.RotorToSensorRatio = ; // 0.1
-        pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
+        pivotConfiguration.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotPigeonID;
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; 
+        pivotConfiguration.Feedback.RotorToSensorRatio = 360;
+        pivotConfiguration.Feedback.SensorToMechanismRatio = -1; 
+        // pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
         pivotConfiguration.Voltage.PeakReverseVoltage = -11.5;
