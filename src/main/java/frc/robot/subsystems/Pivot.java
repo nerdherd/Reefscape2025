@@ -121,7 +121,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         
         pivotConfigurator.refresh(pivotConfiguration);
         // pivotConfiguration.Feedback.FeedbackRemoteSensorID = FeedbackSensorSourceValue.RotorSensor;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Yaw; 
         // pivotConfiguration.Feedback.RotorToSensorRatio = ; // 0.1
         pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
@@ -170,7 +170,7 @@ public class Pivot extends SubsystemBase implements Reportable{
 
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
         
-        ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
+        ff = PivotConstants.kFPivot * Math.cos(getPosition() * (Math.PI / 180.0));
         pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
         pivotMotorRight.setControl(followRequest); 
     }

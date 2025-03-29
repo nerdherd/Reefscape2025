@@ -101,7 +101,7 @@ public class Wrist extends SubsystemBase implements Reportable{
 
         // desiredPosition + pivot * constantToChangeUnit
         // ff = (-3.2787 * desiredPosition) - 1.5475; Harder method
-        ff = WristConstants.kFMotor * Math.cos((getPosition() + WristConstants.kFOffset + pivotAngle) * 2 * Math.PI); // 0.5437 is wrist horizontal 
+        ff = WristConstants.kFMotor * Math.cos((getPosition() + WristConstants.kFOffset + (pivotAngle / 360.0)) * 2 * Math.PI); // 0.5437 is wrist horizontal 
         motor.setControl(motionMagicRequest.withFeedForward(ff));
     }
 

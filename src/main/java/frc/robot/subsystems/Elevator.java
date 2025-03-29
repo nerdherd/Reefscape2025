@@ -116,7 +116,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         
         motionMagicRequest.Position = desiredPosition;
 
-        ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
+        ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * (Math.PI / 180.0));
         elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
         elevatorMotor2.setControl(followRequest); 
     }

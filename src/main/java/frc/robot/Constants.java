@@ -435,7 +435,7 @@ public final class Constants {
     public static final int kRightPivotMotorID = 18;
     public static final int kPivotPigeonID = 2; // TODO change later
     
-    public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 0.2778; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIPivot = 0;
     public static final double kDPivot = 0;
@@ -555,24 +555,24 @@ public final class Constants {
     }
     
     public enum CoralPositions { 
-      Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
-      SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
-      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ),
-      // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
-      Station1(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // adjusted warren     wrist: -0.8279
-      Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // adjusted warren     wrist: -0.8279
-      // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.25, -0.8), // adjusted warren     wrist: -0.8279
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.102, -0.102     ),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197     ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.1, -0.096     ),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
-      intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
+      Stow(                ExecutionOrder.ELV_WRT_PVT , 3.6,  0.125,    -0.096, -0.096),
+      SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 32.4,  0.05, -0.21, -0.21      ),
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 12.24, 0.85, -0.787      ), // ep: 0.732
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 14.4, 0.58, -0.711, -0.711      ),
+      // Station1(             ExecutionOrder.PVT_ELV_WRT, 67.86,  1.54, -0.84), // warren
+      Station1(             ExecutionOrder.PVT_ELV_WRT, 71.28,  1.275, -0.8), // adjusted warren     wrist: -0.8279
+      Station(             ExecutionOrder.PVT_ELV_WRT, 71.28,  1.275, -0.8), // adjusted warren     wrist: -0.8279
+      // Station1(             ExecutionOrder.PVT_ELV_WRT, 71.28,  1.25, -0.8), // adjusted warren     wrist: -0.8279
+      L1(                  ExecutionOrder.WRTELV_PVT  , 90,  0.0,    -0.102, -0.102      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 90,  0.0,  -0.102, -0.102      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 90,  1.5, -0.102, -0.102     ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 90,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 90,  3.2, -0.197, -0.197     ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 91.8,  0.0, -0.570, -0.57      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 91.8,  1.12, -0.570, -0.570      ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -21.6, 1.1, -0.096     ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 50.4,  0.05, -0.57, -0.57      ),
+      intermediateGround(  ExecutionOrder.PVT_WRTELV , 36,   0.4, -0.787, -0.35      );
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);
@@ -583,14 +583,14 @@ public final class Constants {
     }
     
     public enum AlgaePositions {
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.55, -0.780, -0.780      ),
-      Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),
-      Net(                 ExecutionOrder.WRTELV_PVT  , 0.24,  0.05, -0.100, -0.100      ), 
-      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 0.247, 0,  -0.4      ), 
-      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 0.25,  2,    -0.4      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -0.06, 1.2, -0.4, -0.4      ),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.164, -0.164      ),
-      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 0.1,   0.18, -0.760, -0.760      );
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 7.2, 0.55, -0.780, -0.780      ),
+      Processor(           ExecutionOrder.WRTELV_PVT  , 16.92, 0.53, -0.790, -0.4),
+      Net(                 ExecutionOrder.WRTELV_PVT  , 86.4,  0.05, -0.100, -0.100      ), 
+      AlgaeL2(             ExecutionOrder.WRTPVT_ELV  , 88.92, 0,  -0.4      ), 
+      AlgaeL3(             ExecutionOrder.WRTPVT_ELV  , 90,  2,    -0.4      ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT ,   -21.6, 1.2, -0.4, -0.4      ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 50.4,  0.05, -0.164, -0.164      ),
+      intermediateGround(  ExecutionOrder.PVT_ELV_WRT , 36,   0.18, -0.760, -0.760      );
 
       public Position position;
       AlgaePositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
