@@ -100,6 +100,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     PIDController areaController;     // TODO: tune
     PIDController txController;
 
+    private int zoneId = -1;
+
     private Field2d field;
     private VisionSys vision = new VisionSys();
     public boolean useVision = true;
@@ -604,8 +606,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private Pose2d calcuTargetPoseByReq(int zoneId, int poseId)
     {
+        this.zoneId = zoneId;
         Pose2d targetPose = poseEstimator.getEstimatedPosition();
-        if(zoneId == 1) // own reef
+        if(zoneId != -1) // own reef
         {
             // obtain the closed apriltag id from two low-back cameras.
             int targetApriltagId = getMostClosedApriltagIdInReefZone(zoneId); 
@@ -707,6 +710,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public void stopAutoPath() {
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
             pathfindingCommand.cancel();
+            CommandScheduler.getInstance().cancel(pathfindingCommand);
             stopModules();
         }
     }
@@ -1142,6 +1146,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 // Might be negative because our swerveDriveKinematics is flipped across the Y axis
             case MEDIUM:
                 tab.add("Field Position", field).withSize(6, 3);
+                tab.add("Zone Id", zoneId);
+                // tab.add("Zone")
+                // tab.add(zone)
             case MINIMAL:
                 tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
                 tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());

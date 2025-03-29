@@ -141,7 +141,6 @@ public class SwerveJoystickCommand extends Command {
 
     @Override
     public void execute() {
-
         if (towSupplier.get()) {
             swerveDrive.setModuleStates(SwerveDriveConstants.towModuleStates);
             return;
@@ -157,6 +156,7 @@ public class SwerveJoystickCommand extends Command {
         double filteredYSpeed = yFilter.calculate(ySpeed);
 
         // let's not pass the driver's speed into the autopath...
+        SmartDashboard.putNumber("Swerve Zone Id", zoneId.get());
         if(zoneId.get() != 0)
         { 
             // // If both buttons held
