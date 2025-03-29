@@ -123,7 +123,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         pivotConfiguration.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotPigeonID;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemotePigeon2_Pitch; 
         pivotConfiguration.Feedback.RotorToSensorRatio = 360;
-        pivotConfiguration.Feedback.SensorToMechanismRatio = -1; 
+        pivotConfiguration.Feedback.SensorToMechanismRatio = -1.068376; 
         // pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
@@ -203,7 +203,7 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     public void setTargetPosition(double position) {
         desiredPosition = Math.min(position, PivotConstants.kPivotMax);
-        motionMagicRequest.Position = desiredPosition;
+        motionMagicRequest.Position = desiredPosition - PivotConstants.kPigeonOffset; // Only for use with pigeon
     }
 
     public void setPivotVoltage(double voltage) {
@@ -254,7 +254,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         ///////////////////
         /// TODO: we do need the offset for pivot. because current "reset 0" is not the real horizontal zero
         /// ????
-        return pivotMotor.getPosition().getValueAsDouble(); 
+        return (pivotMotor.getPosition().getValueAsDouble() + PivotConstants.kPigeonOffset); 
     }
 
     
