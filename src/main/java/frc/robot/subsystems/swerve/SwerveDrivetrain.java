@@ -49,6 +49,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -697,11 +698,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         maxVelocityMps, maxAccelerationMpsSq, 
         Units.degreesToRadians(360), Units.degreesToRadians(720)
     );
-    public Command setAutoPathRun(int poseId)
+    public Command setAutoPathRun(int poseId, BooleanSupplier buttonPressed)
     {
         return Commands.sequence(
             Commands.parallel(
                 Commands.run(() -> {
+                    // stopAutoPath();
                     SmartDashboard.putNumber("Pose ID", poseId);
                     int zoneId = getCurrentZoneByPose();
                     if(zoneId == 0) {
@@ -716,7 +718,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                     }
                     SmartDashboard.putString("destination pose", destPoseInBlue.toString());
                 }),
-                AutoBuilder.pathfindToPose(destPoseInBlue, pathcons)
+                AutoBuilder.pathfindToPose(destPoseInBlue, pathcons).onlyWhile(buttonPressed)
             )
         );
     }

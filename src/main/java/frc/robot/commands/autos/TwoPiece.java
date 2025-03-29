@@ -34,7 +34,7 @@ public class TwoPiece extends SequentialCommandGroup {
                 // superSystem.holdPiece(),
                 AutoBuilder.followPath(pathGroup.get(0)),
                 superSystem.moveToAuto(PositionEquivalents.L4),
-                Commands.runOnce(() ->swerve.setAutoPathRun(1, -1)).withTimeout(2),
+                // Commands.runOnce(() ->swerve.setAutoPathRun(1, -1)).withTimeout(2),
                 
                 // superSystem.outtake(),
                 Commands.waitSeconds(2.0),

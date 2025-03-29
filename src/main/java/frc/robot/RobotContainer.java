@@ -244,12 +244,11 @@ public class RobotContainer {
     );
 
     driverController.bumperLeft().onTrue(
-      Commands.either(swerveDrive.setAutoPathRun(0, () -> !driverController.bumperLeft().getAsBoolean()), swerveDrive.setAutoPathRun(-1, () -> !driverController.bumperLeft().getAsBoolean()), rightBumper)
+      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperLeft().getAsBoolean()), swerveDrive.setAutoPathRun(-1, () -> driverController.bumperLeft().getAsBoolean()), rightBumper)
     ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
-
     
     driverController.bumperRight().onTrue(
-      Commands.either(swerveDrive.setAutoPathRun(0, () -> !driverController.bumperRight().getAsBoolean()), swerveDrive.setAutoPathRun(1, () -> !driverController.bumperRight().getAsBoolean()), leftBumper)
+      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperRight().getAsBoolean()), swerveDrive.setAutoPathRun(1, () -> driverController.bumperRight().getAsBoolean()), leftBumper)
     ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
     
     // driverController.dpadDown().onTrue(
