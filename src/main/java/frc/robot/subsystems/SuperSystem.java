@@ -276,7 +276,6 @@ public class SuperSystem {
 
     // movement
     private Command goTo(Position position, Position previousPosition) {
-        System.out.println("goto IDAHOIDAHOIDAHOIDAHOIDAHOIDAHOIDAHO hi zach :>");
         Command gotoCommand;
         if (position.intermediateWristPosition == position.finalWristPosition)
             gotoCommand = Commands.sequence(
@@ -293,20 +292,21 @@ public class SuperSystem {
                 wrist.setPositionCommand(position.finalWristPosition)
                 
             );
-        return 
-            Commands.either(
-                Commands.sequence(
-                    preExecute(),
-                    execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
-                    PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
-                    wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
-                    preExecute(),
-                    execute(position.executionOrder, 10.0, 
-                    position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
-                ), 
-                gotoCommand,
-                () -> (position == PositionEquivalents.GroundIntake.coralPos ||
-                previousPosition == PositionEquivalents.GroundIntake.coralPos));
+        return gotoCommand;
+        // return
+            // Commands.either(
+            //     Commands.sequence(
+            //         preExecute(),
+            //         execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
+            //         PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
+            //         wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
+            //         preExecute(),
+            //         execute(position.executionOrder, 10.0, 
+            //         position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
+            //     ), 
+            //     gotoCommand,
+            //     () -> (position == PositionEquivalents.GroundIntake.coralPos ||
+            //     previousPosition == PositionEquivalents.GroundIntake.coralPos));
     }
 
     public Command moveToAuto(PositionEquivalents position) {

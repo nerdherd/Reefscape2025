@@ -313,10 +313,10 @@ public class RobotContainer {
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
       operatorController.bumperLeft() // 
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
+      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
       
       operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
+      .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
       operatorController.buttonLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.intermediateGround));
       operatorController.buttonRight()

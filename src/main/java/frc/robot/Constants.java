@@ -483,7 +483,7 @@ public final class Constants {
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
     public static final double kCoralIntakePower = -3.6;
-    public static final double kCoralButAlgaeIntakePower  = -1.5;
+    public static final double kCoralButAlgaeIntakePower  = -3;
     public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2.8;
     public static final double kAlgaeOuttakePower = 1.5;
@@ -561,11 +561,12 @@ public final class Constants {
     public enum CoralPositions { 
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
-      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ),
+      // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ), // Ground level
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.032, 0.831, -0.772, -0.772      ), // Ground level Idaho Adjusted
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
-      Station1(             ExecutionOrder.PVT_ELV_WRT, 0.205,  1.275, -0.8), // adjusted warren     wrist: -0.8279
-      Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // adjusted warren     wrist: -0.8279
+      Station1(             ExecutionOrder.PVT_ELV_WRT, 0.205,  1.275, -0.8), // Adjusted Idaho - better
+      Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // Adjusted Idaho
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.25, -0.8), // adjusted warren     wrist: -0.8279
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
