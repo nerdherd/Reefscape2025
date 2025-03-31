@@ -151,10 +151,10 @@ public class RobotContainer {
       // () -> driverController.getControllerRight(), // robot oriented variable (false = field oriented)
       () -> false, // Robot oriented variable (false = field oriented)
       () -> false, // Tow supplier
-      () -> driverController.getBumperLeft(), // Move left of (unused)
-      () -> driverController.getBumperRight(), // Move right of (unused)
+      // () -> driverController.getBumperLeft(), // Move left of (unused)
+      // () -> driverController.getBumperRight(), // Move right of (unused)
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
-      () -> swerveDrive.getCurrentZoneByPose(),
+      // () -> swerveDrive.getCurrentZoneByPose(), // Zone
       () -> false,
       // () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn to angle direction | TODO WIP
