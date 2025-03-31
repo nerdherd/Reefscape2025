@@ -25,6 +25,7 @@ import frc.robot.util.filters.DeadbandFilter;
 import frc.robot.util.filters.Filter;
 import frc.robot.util.filters.FilterSeries;
 import frc.robot.util.filters.ScaleFilter;
+
 public class SwerveJoystickCommand extends Command {
     private final SwerveDrivetrain swerveDrive;
     private final Supplier<Double> xSpdFunction, ySpdFunction, turningSpdFunction;
@@ -47,8 +48,8 @@ public class SwerveJoystickCommand extends Command {
         NONE
     }
 
-    private boolean wasLeftPressed = false; 
-    private boolean wasRightPressed = false;
+    // private boolean wasLeftPressed = false; 
+    // private boolean wasRightPressed = false;
 
     /**
      * Construct a new SwerveJoystickCommand
@@ -61,7 +62,8 @@ public class SwerveJoystickCommand extends Command {
      * @param towSupplier           A boolean supplier that toggles the tow mode.
      * @param precisionSupplier     A boolean supplier that toggles the precision mode.
      */
-    public SwerveJoystickCommand(SwerveDrivetrain swerveDrive,
+    public SwerveJoystickCommand(
+            SwerveDrivetrain swerveDrive,
             Supplier<Double> xSpdFunction, Supplier<Double> ySpdFunction, 
             Supplier<Double> turningSpdFunction,
             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> towSupplier, 
@@ -91,7 +93,6 @@ public class SwerveJoystickCommand extends Command {
 
         this.dPadSupplier = dPadSupplier;
         this.dPadDirectionalSupplier = dPadDirectionalSupplier;
-        
 
 
         this.xFilter = new OldDriverFilter2(
@@ -100,25 +101,27 @@ public class SwerveJoystickCommand extends Command {
             kTeleDriveMaxSpeedMetersPerSecond, 
             kDriveAlpha, 
             kTeleMaxAcceleration, 
-            kTeleMaxDeceleration);
+            kTeleMaxDeceleration
+        );
         this.yFilter = new OldDriverFilter2(
             ControllerConstants.kDeadband, 
             kMinimumMotorOutput,
             kTeleDriveMaxSpeedMetersPerSecond, 
             kDriveAlpha, 
             kTeleMaxAcceleration, 
-            kTeleMaxDeceleration);
+            kTeleMaxDeceleration
+        );
         this.turningFilter = new FilterSeries(
             new DeadbandFilter(ControllerConstants.kRotationDeadband),
             new ScaleFilter(kTeleDriveMaxAngularSpeedRadiansPerSecond)
-            );
-        
+        );
 
+        
         this.turnToAngleController = new PIDController(
             SwerveDriveConstants.kPThetaTeleop,
             SwerveDriveConstants.kIThetaTeleop,
             SwerveDriveConstants.kDThetaTeleop
-            );
+        );
 
         // this.turnToAngleController = new PIDController(
         //     SwerveAutoConstants.kPTurnToAngle, 
@@ -128,8 +131,8 @@ public class SwerveJoystickCommand extends Command {
         
         this.turnToAngleController.setTolerance(
             SwerveDriveConstants.kTurnToAnglePositionToleranceAngle, 
-            SwerveDriveConstants.kTurnToAngleVelocityToleranceAnglesPerSec * 0.02);
-    
+            SwerveDriveConstants.kTurnToAngleVelocityToleranceAnglesPerSec * 0.02
+        );
 
         this.turnToAngleController.enableContinuousInput(0, 360);
 
@@ -156,34 +159,6 @@ public class SwerveJoystickCommand extends Command {
         double filteredXSpeed = xFilter.calculate(xSpeed);
         double filteredYSpeed = yFilter.calculate(ySpeed);
 
-        // let's not pass the driver's speed into the autopath...
-        if(zoneId.get() != 0)
-        { 
-            // // If both buttons held
-            // if(moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed) {
-            //     checkButtonStates((moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed), 0);
-            //     wasLeftPressed = moveLeft.get();
-            //     wasRightPressed = moveRight.get();
-            //     return;
-            // }
-
-            Boolean leftStatus = moveLeft.get();
-            Boolean rightStatus = moveRight.get();
-
-            // Check moveLeft states
-            checkButtonStates(leftStatus, wasLeftPressed, -1); // autopaths called in here
-            wasLeftPressed = leftStatus; // Update previous state
-
-            // Check moveRight states
-            checkButtonStates(rightStatus, wasRightPressed, 1); // autopaths called in here
-            wasRightPressed = rightStatus; // Update previous state
-
-            if(leftStatus || rightStatus)
-            {
-                return; // jump to autopath 
-            }
-        }
-
         if (turnToAngleSupplier.get()) {
             double tempAngle = desiredAngle.get();
             if ((Math.abs(tempAngle - 1000.0) > 0.01)) {
@@ -197,6 +172,7 @@ public class SwerveJoystickCommand extends Command {
                 // turnToAngleController.setI(SwerveDriveConstants.kIThetaTeleop.get());
                 // turnToAngleController.setD(SwerveDriveConstants.kDThetaTeleop.get());
             }
+
             // todo, since we use field ori control, better to turn to field 0,90, 180,270
             turningSpeed = turnToAngleController.calculate(swerveDrive.getImu().getHeading(), targetAngle);
             SmartDashboard.putNumber("Turning Speed Initial", turningSpeed);
@@ -218,7 +194,6 @@ public class SwerveJoystickCommand extends Command {
             filteredTurningSpeed = turningFilter.calculate(turningSpeed);
         }
 
-
         if (precisionSupplier.get()) {
             filteredXSpeed /= 4;
             filteredYSpeed /= 4;
@@ -239,9 +214,8 @@ public class SwerveJoystickCommand extends Command {
             chassisSpeeds = new ChassisSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed);
         }
-
         
-        if(dPadDirectionalSupplier.get() == -1.0) {
+        if (dPadDirectionalSupplier.get() == -1.0) {
                 swerveDrive.setDriveMode(DRIVE_MODE.FIELD_ORIENTED);
             chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 filteredXSpeed, filteredYSpeed, filteredTurningSpeed, 
@@ -260,47 +234,74 @@ public class SwerveJoystickCommand extends Command {
                 swerveDrive.setDriveMode(DRIVE_MODE.ROBOT_ORIENTED);
                 chassisSpeeds = new ChassisSpeeds(0, 0.75, 0);
             } 
+
+        // // let's not pass the driver's speed into the autopath...
+        // if (zoneId.get() != 0)
+        // { 
+        //     // // If both buttons held
+        //     // if(moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed) {
+        //     //     checkButtonStates((moveLeft.get() && wasLeftPressed && moveRight.get() && wasRightPressed), 0);
+        //     //     wasLeftPressed = moveLeft.get();
+        //     //     wasRightPressed = moveRight.get();
+        //     //     return;
+        //     // }
+
+        //     Boolean leftStatus = moveLeft.get();
+        //     Boolean rightStatus = moveRight.get();
+
+        //     // Check moveLeft states
+        //     checkButtonStates(leftStatus, wasLeftPressed, -1); // autopaths called in here
+        //     wasLeftPressed = leftStatus; // Update previous state
+
+        //     // Check moveRight states
+        //     checkButtonStates(rightStatus, wasRightPressed, 1); // autopaths called in here
+        //     wasRightPressed = rightStatus; // Update previous state
+
+        //     if (leftStatus || rightStatus)
+        //     {
+        //         return; // jump to autopath 
+        //     }
+        // }
             
         SwerveModuleState[] moduleStates;
-
         moduleStates = kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
         
         // Calculate swerve module states
         swerveDrive.setModuleStates(moduleStates);
-    } 
-
-    private void checkButtonStates(boolean isPressed, boolean wasPressed, int direction) {
-        // Pressed: Transition from not pressed to pressed
-        if (isPressed && !wasPressed) {
-            swerveDrive.setAutoPathRun(zoneId.get(), direction);
-        }
-
-        // Held: Button is currently pressed
-        if (isPressed) {
-            // do nothing for now
-        }
-
-        // Released: Transition from pressed to not pressed
-        if (!isPressed && wasPressed) {
-            swerveDrive.stopAutoPath();
-        }
     }
-
-    private void checkButtonStates(boolean bothHeld, int direction) {
-        // Held
-        if (bothHeld) {
-            swerveDrive.stopAutoPath(); // cancel the previous autopath
-            swerveDrive.setAutoPathRun(zoneId.get(), direction);
-        }
-
-        // Released
-        if (!bothHeld) {
-            swerveDrive.stopAutoPath();
-        }
-    }
-    
 
     public double getTargetAngle() {
         return targetAngle;
     }
+
+    // public void checkButtonStates(boolean isPressed, boolean wasPressed, int direction) {
+    //     // Pressed: Transition from not pressed to pressed
+    //     if (isPressed && !wasPressed) {
+    //         swerveDrive.setAutoPathRun(zoneId.get(), direction);
+    //     }
+
+    //     // Held: Button is currently pressed
+    //     if (isPressed) {
+    //         // do nothing for now
+    //     }
+
+    //     // Released: Transition from pressed to not pressed
+    //     if (!isPressed && wasPressed) {
+    //        swerveDrive.stopAutoPath();
+    //     }
+    // }
+
+    // public void checkButtonStates(boolean bothHeld, int direction) {
+    //     // Held
+    //     if (bothHeld) {
+    //         swerveDrive.stopAutoPath(); // cancel the previous autopath
+    //         swerveDrive.setAutoPathRun(zoneId.get(), direction);
+    //     }
+
+    //     // Released
+    //     if (!bothHeld) {
+    //         swerveDrive.stopAutoPath();
+    //     }
+    // }
+    
 }

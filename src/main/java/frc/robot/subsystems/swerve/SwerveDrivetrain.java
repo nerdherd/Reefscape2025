@@ -179,17 +179,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // initCagePoses();
         // initProcesPoses();
         // initStationsPoses();
-
         
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         //ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
         RobotConfig robotConfig = null;
-        try {
-                robotConfig = RobotConfig.fromGUISettings();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        try { robotConfig = RobotConfig.fromGUISettings(); }
+        catch (Exception e) { e.printStackTrace(); }
 
         AutoBuilder.configure(
             this::getPose,
@@ -374,26 +369,22 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     @Override
     public void periodic() {
 	
-	if (!isTest) {
-            runModules();
-        }
+	if (!isTest) { runModules(); }
         
-        poseEstimator.update(gyro.getRotation2d(), getModulePositions());
+    poseEstimator.update(gyro.getRotation2d(), getModulePositions());
+    field.setRobotPose(poseEstimator.getEstimatedPosition());
+        
+    double robotRotation = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+    SmartDashboard.putNumber("Robot Rotation", robotRotation);
 
-        field.setRobotPose(poseEstimator.getEstimatedPosition());
-            
-            double robotRotation = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
-    
-            SmartDashboard.putNumber("Robot Rotation", robotRotation);
-    
-            if (useVision){
-                visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
-                visionupdateOdometry(VisionConstants.kLimelightBackRightName);
-                // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
-                // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
-            }
-        
-            //todo try MegaTag2
+    if (useVision){
+        visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
+        visionupdateOdometry(VisionConstants.kLimelightBackRightName);
+        // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
+        // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
+    }
+
+    //TODO try MegaTag2
     }
 
     //******************************  Vision ******************************/
@@ -468,22 +459,16 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         boolean receivedValidData = LimelightHelpers.getTV(limelightName);
         PoseEstimate estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
 
-        if (estimate == null){
-            doRejectUpdate = true;
-        }
-        
-        if(!receivedValidData)
-            doRejectUpdate = true;
+        if (estimate == null) doRejectUpdate = true;
+        if (!receivedValidData) doRejectUpdate = true;
         // else if(botPose1.getZ() > 0.3 || botPose1.getZ() < -0.3)
         //     doRejectUpdate = true;
         // else if(Math.abs(m_gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
         // {
         //     doRejectUpdate = true;
         // }
-        else if(megaTag2.tagCount == 0)
-        {
+        else if (megaTag2.tagCount == 0)
             doRejectUpdate = true;
-        }
 
         // SmartDashboard.putBoolean(limelightName+" Valid Data", !doRejectUpdate);
         log+="Valid Data: "+ Boolean.toString(!doRejectUpdate)+"\n";
@@ -494,8 +479,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         // SmartDashboard.putString(limelightName + "Info", log);
 
-        if(!doRejectUpdate)
-        {
+        if (!doRejectUpdate) {
             Pose2d botPose1 = estimate.pose;
 
             // SmartDashboard.putNumber(limelightName + " X Position", botPose1.getX());
@@ -531,7 +515,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     /**
      * Resets the odometry to given pose 
-     * @param pose  A Pose2D representing the pose of the robot
+     * @param pose A Pose2D representing the pose of the robot
      */
     public void resetOdometry(Pose2d pose) {
         poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
@@ -596,27 +580,25 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             //todo
             // return vision.getLargerApriltagByTa(VisionConstants.??);
         }
-        if(zoneId == 2)
-        {
-            if(poseEstimator.getEstimatedPosition().getY() > 4) {
+        if (zoneId == 2) {
+            if (poseEstimator.getEstimatedPosition().getY() > 4)
                 return RobotContainer.IsRedSide() ? 2 : 13;
-            } else if (poseEstimator.getEstimatedPosition().getY() < 4) {
+            else if (poseEstimator.getEstimatedPosition().getY() < 4)
                 return RobotContainer.IsRedSide() ? 1 : 12;
-            }
-        } else if(zoneId == 4) {
+        } else if (zoneId == 4) {
             return RobotContainer.IsRedSide() ? 3 : 16;
         }
         return -1;
     }
             
     private int getMostClosedApriltagIdInReefZone(int zoneId) {
-        if(zoneId == 1) {
+        if (zoneId == 1) {
             int startIndex = RobotContainer.IsRedSide() ? 6 : 17;
             int indexToGet = -1;
             double distance = getDistanceFromTag(false, startIndex);
             for (int index = startIndex; index <= startIndex + 5; index++) {
                 double distance2 = getDistanceFromTag(false, index);
-                if(distance2 < distance) {
+                if (distance2 < distance) {
                     distance = distance2;
                     indexToGet = index;
                 }
@@ -628,10 +610,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         return -1; 
     }
 
-    private Map<Integer, ArrayList<Pose2d>> myReefMap = new HashMap<>();
-    private Map<Integer, ArrayList<Pose2d>> myProsMap = new HashMap<>();
-    private Map<Integer, ArrayList<Pose2d>> myStationMap = new HashMap<>();
-    private Map<Integer, ArrayList<Pose2d>> myCageMap = new HashMap<>();
+    // private Map<Integer, ArrayList<Pose2d>> myReefMap = new HashMap<>();
+    // private Map<Integer, ArrayList<Pose2d>> myProsMap = new HashMap<>();
+    // private Map<Integer, ArrayList<Pose2d>> myStationMap = new HashMap<>();
+    // private Map<Integer, ArrayList<Pose2d>> myCageMap = new HashMap<>();
 
     private Pose2d calcuTargetPoseByReq(int zoneId, int poseId) {
         Pose2d targetPose = poseEstimator.getEstimatedPosition();
@@ -733,7 +715,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     {
         Pose2d destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId); // base on (poseid and zoneid and apriltag id)
         
-        if(destPoseInBlue == null) return;
+        if (destPoseInBlue == null) return;
 
         PathConstraints pathcons = new PathConstraints(
             maxVelocityMps, maxAccelerationMpsSq, 
@@ -767,22 +749,20 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         return poseEstimator.getEstimatedPosition();
     }
 
-    public Pose2d getTagPose2D(int tagID)
-    {
+    public Pose2d getTagPose2D(int tagID) {
         return getTagPose3D(tagID).toPose2d();
     }
 
-    public Pose3d getTagPose3D(int tagID)
-    {
+    public Pose3d getTagPose3D(int tagID) {
         Optional<Pose3d> tagPose = layout.getTagPose(tagID);
-        if(tagPose.isEmpty()) return null;
+        if (tagPose.isEmpty()) return null;
         return tagPose.get();
     }
 
     public double getDistanceFromTag(boolean preserveOldValue, int tagID)
     {
         Pose2d tagPose = getTagPose2D(tagID);
-        if(tagPose == null) return (preserveOldValue ? lastDistance : 0.01);
+        if (tagPose == null) return (preserveOldValue ? lastDistance : 0.01);
 
         Pose2d robotPose = getPose();
         lastDistance = robotPose.getTranslation().getDistance(tagPose.getTranslation());
@@ -800,9 +780,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         double allianceOffset = 90;
         double angle = NerdyMath.posMod(-Math.toDegrees(Math.atan2(xOffset, yOffset)) + allianceOffset, 360);
-        if(RobotContainer.IsRedSide()) {
-            return angle; //TODO: test if works since this is a bit different than original code
-        }
+        if (RobotContainer.IsRedSide())
+            return angle; // TODO: test if works since this is a bit different than original code
         return (180 + angle) % 360;
     }
 
