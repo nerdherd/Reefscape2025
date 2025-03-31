@@ -107,6 +107,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
+    private int timesStopped = 0;
+
     public enum DRIVE_MODE {
         FIELD_ORIENTED, // always use it
         ROBOT_ORIENTED, // most likely it's for testing
@@ -711,26 +713,37 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     double maxVelocityMps = 1;
     double maxAccelerationMpsSq = 1;
     private Command pathfindingCommand; // Store the command reference
-    public void setAutoPathRun(int zoneId, int poseId)
-    {
-        Pose2d destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId); // base on (poseid and zoneid and apriltag id)
-        
-        if (destPoseInBlue == null) return;
-
-        PathConstraints pathcons = new PathConstraints(
+    Pose2d destPoseInBlue = new Pose2d();
+    PathConstraints pathcons = new PathConstraints(
             maxVelocityMps, maxAccelerationMpsSq, 
             Units.degreesToRadians(360), Units.degreesToRadians(720)
         );
+    public Command setAutoPathRun(int poseId)
+    {
+        return Commands.sequence(
+            Commands.runOnce(() -> {
+                SmartDashboard.putNumber("Pose ID", poseId);
+                int zoneId = getCurrentZoneByPose();
+                if(zoneId == 0) {
+                    pathfindingCommand = Commands.none();
+                }
+                destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId);
+                SmartDashboard.putNumber("zone id", zoneId);
 
-        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);
-
-        pathfindingCommand.schedule();
+                if(destPoseInBlue == null) {
+                    pathfindingCommand = Commands.none();
+                }
+                SmartDashboard.putString("destination pose", destPoseInBlue.toString());
+            }),
+            AutoBuilder.pathfindToPose(destPoseInBlue, pathcons)
+        );
     }
 
     public void stopAutoPath() {
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
             pathfindingCommand.cancel();
             stopModules();
+            timesStopped++;
         }
     }
 
@@ -948,31 +961,30 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //Equation used found by Zachary Martinez
     //https://www.desmos.com/calculator/q70q2ekunm
 
-    public Command moveLeftOf(int tagID) {
-        Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
-        Rotation2d tagRotation = tagPose.getRotation();
-        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
-        Double theta_0 = tagRotationInverse.getRadians();
-        Double moveBy = 0.5; //TODO: Change Later
-        // D_x = R_x + M cos (theta_0)
-        // D_y = R_y + M sin (theta_0)
-        Transform2d transformer = new Transform2d((tagPose.getX() + moveBy * Math.cos(theta_0)), (tagPose.getY() + moveBy * Math.sin(theta_0)), tagRotation);
-        // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
-        return driveToRelativePose(1,1, transformer); //only for testing
-    }
+    // public Command moveLeftOf(int tagID) {
+    //     Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
+    //     Rotation2d tagRotation = tagPose.getRotation();
+    //     Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
+    //     Double theta_0 = tagRotationInverse.getRadians();
+    //     Double moveBy = 0.5; //TODO: Change Later
+    //     // D_x = R_x + M cos (theta_0)
+    //     // D_y = R_y + M sin (theta_0)
+    //     Transform2d transformer = new Transform2d((tagPose.getX() + moveBy * Math.cos(theta_0)), (tagPose.getY() + moveBy * Math.sin(theta_0)), tagRotation);
+    //     // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
+    //     return driveToRelativePose(1,1, transformer); //only for testing
+    // }
 
-    public Command moveRightOf(int tagID) {
-        Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
-        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
-        Double theta_0 = tagRotationInverse.getRadians();
-        Double moveBy = -0.5; //TODO: Change Later
-        // D_x = R_x + M cos (theta_0)
-        // D_y = R_y + M sin (theta_0)
-        Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
-        // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
-        return driveToRelativePose(1,1, transformer); //only for testing
-
-    }
+    // public Command moveRightOf(int tagID) {
+    //     Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
+    //     Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
+    //     Double theta_0 = tagRotationInverse.getRadians();
+    //     Double moveBy = -0.5; //TODO: Change Later
+    //     // D_x = R_x + M cos (theta_0)
+    //     // D_y = R_y + M sin (theta_0)
+    //     Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
+    //     // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
+    //     return driveToRelativePose(1,1, transformer); //only for testing
+    // }
 
     /**
      * Calculate position to move to based on Reef side AprilTags
@@ -1051,8 +1063,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         SwerveModuleState[] targetStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
         setModuleStates(targetStates);
     }
-
-
     
     public void driveToCoral(String limelightName, double targetArea){
         // String[] labels = classLabels.getStringArray(new String[]{});
@@ -1166,11 +1176,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
                 tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
                 tab.addNumber("Odometry Angle", () -> poseEstimator.getEstimatedPosition().getRotation().getDegrees());
-                // tab.add("Pose Estimator Pose", poseEstimator.getEstimatedPosition());
-                tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
                 tab.addString("Drive Mode", () -> this.driveMode.toString());
 
-                tab.add("Detected Zone by Pose", Commands.runOnce(() -> swerveDrive.getCurrentZoneByPose())); // TODO Does this update
+                tab.addNumber("Detected Zone by Pose", () -> this.getCurrentZoneByPose()); // TODO Does this update
+                tab.addNumber("Times Stopped", () -> this.timesStopped);
                 break;
         }
     }

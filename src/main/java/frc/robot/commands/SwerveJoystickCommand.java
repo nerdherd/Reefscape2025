@@ -32,7 +32,7 @@ public class SwerveJoystickCommand extends Command {
     private final Supplier<Boolean> fieldOrientedFunction;
     private final Supplier<Boolean> towSupplier, precisionSupplier;
     // private final Supplier<Boolean> moveLeft, moveRight;
-    private final Supplier<Integer> zoneId;
+    // private final Supplier<Integer> zoneId;
     private final Supplier<Double> desiredAngle;
     private final Supplier<Boolean> turnToAngleSupplier;
     private final PIDController turnToAngleController;
@@ -69,7 +69,7 @@ public class SwerveJoystickCommand extends Command {
             Supplier<Boolean> fieldOrientedFunction, Supplier<Boolean> towSupplier, 
             // Supplier<Boolean> moveLeftSupplier, Supplier<Boolean> moveRightSupplier,
             Supplier<Boolean> precisionSupplier,
-            Supplier<Integer> insideZoneId,
+            // Supplier<Integer> insideZoneId,
             Supplier<Boolean> turnToAngleSupplier,
             Supplier<Double> desiredAngleSupplier,
             Supplier<Boolean> dPadSupplier, 
@@ -83,7 +83,7 @@ public class SwerveJoystickCommand extends Command {
         this.towSupplier = towSupplier;
         this.precisionSupplier = precisionSupplier;
 
-        this.zoneId = insideZoneId;
+        // this.zoneId = insideZoneId;
         
         this.turnToAngleSupplier = turnToAngleSupplier;
         this.desiredAngle = desiredAngleSupplier;

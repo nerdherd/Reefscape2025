@@ -244,12 +244,14 @@ public class RobotContainer {
       // Move to reef side
       driverController.bumperLeft()
         .whileTrue(Commands.runOnce(() ->
-          swerveDrive.setAutoPathRun(swerveDrive.getCurrentZoneByPose(), -1)
-        ));
+          swerveDrive.setAutoPathRun(-1)
+        ))
+        .onFalse(Commands.runOnce(() -> swerveDrive.stopAutoPath()));
       driverController.bumperRight()
         .whileTrue(Commands.runOnce(() ->
-        swerveDrive.setAutoPathRun(swerveDrive.getCurrentZoneByPose(), 1)
-      ));
+        swerveDrive.setAutoPathRun(1)
+      ))
+      .onFalse(Commands.runOnce(() -> swerveDrive.stopAutoPath()));
 
       // Climb sequence
       driverController.buttonDown() // Prepare Position for Climb
