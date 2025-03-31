@@ -305,14 +305,14 @@ public final class Constants {
 
     public static final class ReefOffsets {
 
-      public static final double frontOffset = 0.554; // calculated from two reef sides on spreadsheet
-      public static final double sideOffset = 0.197; // calculated from two reef sides on spreadsheet
+      public static final double frontOffset = 0.591; // calculated from two reef sides on spreadsheet
+      public static final double sideOffset = 0.194; // calculated from two reef sides on spreadsheet
 
     }
 
     public static final class StationOffsets {
 
-      public static final double frontOffset = 0; // TODO need date to calculate
+      public static final double frontOffset = 0; // TODO need data to calculate
       public static final double sideOffset = 0; // TODO need data to calculate
 
     }

@@ -73,27 +73,30 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
+    private double pipeline;
+
+    private Pose2d[][] tagPoses = new Pose2d[22][3];
     
-    ArrayList<Pose2d> list1 = new ArrayList<>();
-    ArrayList<Pose2d> list2 = new ArrayList<>();
-    ArrayList<Pose2d> list3 = new ArrayList<>();
-    ArrayList<Pose2d> list4 = new ArrayList<>();
-    ArrayList<Pose2d> list6 = new ArrayList<>();
-    ArrayList<Pose2d> list7 = new ArrayList<>();
-    ArrayList<Pose2d> list8 = new ArrayList<>();
-    ArrayList<Pose2d> list9 = new ArrayList<>();
-    ArrayList<Pose2d> list10 = new ArrayList<>();
-    ArrayList<Pose2d> list11 = new ArrayList<>();
-    ArrayList<Pose2d> list12 = new ArrayList<>();
-    ArrayList<Pose2d> list13 = new ArrayList<>();
-    ArrayList<Pose2d> list15 = new ArrayList<>();
-    ArrayList<Pose2d> list16 = new ArrayList<>();
-    ArrayList<Pose2d> list17 = new ArrayList<>();
-    ArrayList<Pose2d> list18 = new ArrayList<>();
-    ArrayList<Pose2d> list19 = new ArrayList<>();
-    ArrayList<Pose2d> list20 = new ArrayList<>();
-    ArrayList<Pose2d> list21 = new ArrayList<>();
-    ArrayList<Pose2d> list22 = new ArrayList<>();
+    // ArrayList<Pose2d> list1 = new ArrayList<>();
+    // ArrayList<Pose2d> list2 = new ArrayList<>();
+    // ArrayList<Pose2d> list3 = new ArrayList<>();
+    // ArrayList<Pose2d> list4 = new ArrayList<>();
+    // ArrayList<Pose2d> list6 = new ArrayList<>();
+    // ArrayList<Pose2d> list7 = new ArrayList<>();
+    // ArrayList<Pose2d> list8 = new ArrayList<>();
+    // ArrayList<Pose2d> list9 = new ArrayList<>();
+    // ArrayList<Pose2d> list10 = new ArrayList<>();
+    // ArrayList<Pose2d> list11 = new ArrayList<>();
+    // ArrayList<Pose2d> list12 = new ArrayList<>();
+    // ArrayList<Pose2d> list13 = new ArrayList<>();
+    // ArrayList<Pose2d> list15 = new ArrayList<>();
+    // ArrayList<Pose2d> list16 = new ArrayList<>();
+    // ArrayList<Pose2d> list17 = new ArrayList<>();
+    // ArrayList<Pose2d> list18 = new ArrayList<>();
+    // ArrayList<Pose2d> list19 = new ArrayList<>();
+    // ArrayList<Pose2d> list20 = new ArrayList<>();
+    // ArrayList<Pose2d> list21 = new ArrayList<>();
+    // ArrayList<Pose2d> list22 = new ArrayList<>();
 
     PIDController areaController;     // TODO: tune
     PIDController txController;
@@ -170,10 +173,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
-        initReefSidePoses();
-        initCagePoses();
-        initProcesPoses();
-        initStationsPoses();
+
+        initTagPoses();
+        // initReefSidePoses();
+        // initCagePoses();
+        // initProcesPoses();
+        // initStationsPoses();
 
         
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
@@ -209,109 +214,157 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
-    private void initCagePoses() {
-        list4.add(SwerveDriveConstants.MapPoses.tag4LeftBlueOnRed);
-        list4.add(SwerveDriveConstants.MapPoses.tag4RightBlueOnRed); // they are for blue side
-        list4.add(SwerveDriveConstants.MapPoses.tag4MidBlueOnRed);
-        myCageMap.put(4, list4);
+    private void initTagPoses() {
+        // Red station
+        for (int i = 1; i <= 2; i++) {
+            tagPoses[i-1][0] = this.calcStationSidePose(i, -1);
+            tagPoses[i-1][1] = this.calcStationSidePose(i, 0);
+            tagPoses[i-1][2] = this.calcStationSidePose(i, 1);
+        }
+        
+        // Red reef
+        for (int i = 6; i <= 11; i++) {
+            tagPoses[i-1][0] = this.calcReefSidePose(i, -1);
+            tagPoses[i-1][1] = this.calcReefSidePose(i, 0);
+            tagPoses[i-1][2] = this.calcReefSidePose(i, 1);
+        }
 
-        list15.add(SwerveDriveConstants.MapPoses.tag15LeftRedOnBlue); // they are for red side
-        list15.add(SwerveDriveConstants.MapPoses.tag15RightRedOnBlue);
-        list15.add(SwerveDriveConstants.MapPoses.tag15MidRedOnBlue);
-        myCageMap.put(15, list15);
+        // Red barge
+        tagPoses[5-1][0] = null;
+        tagPoses[5-1][1] = null;
+        tagPoses[5-1][2] = null;
+        
+        tagPoses[15-1][0] = new Pose2d(8.03, 0.802, new Rotation2d(Math.toRadians(180))); // cage btm
+        tagPoses[15-1][1] = new Pose2d(8.024, 1.944, new Rotation2d(Math.toRadians(180))); // cage mid
+        tagPoses[15-1][2] = new Pose2d(8.024, 2.996, new Rotation2d(Math.toRadians(180))); // cage top
+
+        // Blue station
+        for (int i = 12; i <= 13; i++) {
+            tagPoses[i-1][0] = this.calcStationSidePose(i, -1);
+            tagPoses[i-1][1] = this.calcStationSidePose(i, 0);
+            tagPoses[i-1][2] = this.calcStationSidePose(i, 1);
+        }
+
+        // Blue reef
+        for (int i = 17; i <= 22; i++) {
+            tagPoses[i-1][0] = this.calcReefSidePose(i, -1);
+            tagPoses[i-1][1] = this.calcReefSidePose(i, 0);
+            tagPoses[i-1][2] = this.calcReefSidePose(i, 1);
+        }
+
+        // Blue barge
+        tagPoses[4-1][0] = new Pose2d(9.496, 7.233, new Rotation2d(Math.toRadians(0))); // cage top
+        tagPoses[4-1][1] = new Pose2d(9.511, 6.151, new Rotation2d(Math.toRadians(0))); // cage mid
+        tagPoses[4-1][2] = new Pose2d(9.51, 5.054, new Rotation2d(Math.toRadians(0))); // cage btm
+        
+        tagPoses[14-1][0] = null;
+        tagPoses[14-1][1] = null;
+        tagPoses[14-1][2] = null;
     }
 
-    private void initProcesPoses(){
-        list3.add(SwerveDriveConstants.MapPoses.tag3Mid);
-        myProsMap.put(3, list3);
+    // private void initCagePoses() {
+    //     list4.add(SwerveDriveConstants.MapPoses.tag4LeftBlueOnRed);
+    //     list4.add(SwerveDriveConstants.MapPoses.tag4RightBlueOnRed); // they are for blue side
+    //     list4.add(SwerveDriveConstants.MapPoses.tag4MidBlueOnRed);
+    //     myCageMap.put(4, list4);
 
-        list16.add(SwerveDriveConstants.MapPoses.tag16Mid);
-        myProsMap.put(16, list16);
-    } 
+    //     list15.add(SwerveDriveConstants.MapPoses.tag15LeftRedOnBlue); // they are for red side
+    //     list15.add(SwerveDriveConstants.MapPoses.tag15RightRedOnBlue);
+    //     list15.add(SwerveDriveConstants.MapPoses.tag15MidRedOnBlue);
+    //     myCageMap.put(15, list15);
+    // }
 
-    private void initStationsPoses() {
-        list12.add(SwerveDriveConstants.MapPoses.tag12Left);
-        list12.add(SwerveDriveConstants.MapPoses.tag12Right);
-        list12.add(SwerveDriveConstants.MapPoses.tag12Mid);
-        myStationMap.put(12, list12);
+    // private void initProcesPoses(){
+    //     list3.add(SwerveDriveConstants.MapPoses.tag3Mid);
+    //     myProsMap.put(3, list3);
 
-        list13.add(SwerveDriveConstants.MapPoses.tag13Left);
-        list13.add(SwerveDriveConstants.MapPoses.tag13Right);
-        list13.add(SwerveDriveConstants.MapPoses.tag13Mid);
-        myStationMap.put(13, list13);
+    //     list16.add(SwerveDriveConstants.MapPoses.tag16Mid);
+    //     myProsMap.put(16, list16);
+    // } 
 
-        list1.add(SwerveDriveConstants.MapPoses.tag1Left);
-        list1.add(SwerveDriveConstants.MapPoses.tag1Right);
-        list1.add(SwerveDriveConstants.MapPoses.tag1Mid);
-        myStationMap.put(1, list1);
+    // private void initStationsPoses() {
+    //     list12.add(SwerveDriveConstants.MapPoses.tag12Left);
+    //     list12.add(SwerveDriveConstants.MapPoses.tag12Right);
+    //     list12.add(SwerveDriveConstants.MapPoses.tag12Mid);
+    //     myStationMap.put(12, list12);
 
-        list2.add(SwerveDriveConstants.MapPoses.tag2Left);
-        list2.add(SwerveDriveConstants.MapPoses.tag2Right);
-        list2.add(SwerveDriveConstants.MapPoses.tag2Mid);
-        myStationMap.put(2, list2);
-    } 
+    //     list13.add(SwerveDriveConstants.MapPoses.tag13Left);
+    //     list13.add(SwerveDriveConstants.MapPoses.tag13Right);
+    //     list13.add(SwerveDriveConstants.MapPoses.tag13Mid);
+    //     myStationMap.put(13, list13);
 
-    private void initReefSidePoses() {
-        list17.add(SwerveDriveConstants.MapPoses.tag17Left);
-        list17.add(SwerveDriveConstants.MapPoses.tag17Right);
-        list17.add(SwerveDriveConstants.MapPoses.tag17Mid);
-        myReefMap.put(17, list17);
+    //     list1.add(SwerveDriveConstants.MapPoses.tag1Left);
+    //     list1.add(SwerveDriveConstants.MapPoses.tag1Right);
+    //     list1.add(SwerveDriveConstants.MapPoses.tag1Mid);
+    //     myStationMap.put(1, list1);
 
-        list18.add(SwerveDriveConstants.MapPoses.tag18Left);
-        list18.add(SwerveDriveConstants.MapPoses.tag18Right);
-        list18.add(SwerveDriveConstants.MapPoses.tag18Mid);
-        myReefMap.put(18, list18);
+    //     list2.add(SwerveDriveConstants.MapPoses.tag2Left);
+    //     list2.add(SwerveDriveConstants.MapPoses.tag2Right);
+    //     list2.add(SwerveDriveConstants.MapPoses.tag2Mid);
+    //     myStationMap.put(2, list2);
+    // } 
 
-        list19.add(SwerveDriveConstants.MapPoses.tag19Left);
-        list19.add(SwerveDriveConstants.MapPoses.tag19Right);
-        list19.add(SwerveDriveConstants.MapPoses.tag19Mid);
-        myReefMap.put(19, list19);
+    // private void initReefSidePoses() {
+    //     list17.add(SwerveDriveConstants.MapPoses.tag17Left);
+    //     list17.add(SwerveDriveConstants.MapPoses.tag17Right);
+    //     list17.add(SwerveDriveConstants.MapPoses.tag17Mid);
+    //     myReefMap.put(17, list17);
 
-        list20.add(SwerveDriveConstants.MapPoses.tag20Left);
-        list20.add(SwerveDriveConstants.MapPoses.tag20Right);
-        list20.add(SwerveDriveConstants.MapPoses.tag20Mid);
-        myReefMap.put(20, list20);
+    //     list18.add(SwerveDriveConstants.MapPoses.tag18Left);
+    //     list18.add(SwerveDriveConstants.MapPoses.tag18Right);
+    //     list18.add(SwerveDriveConstants.MapPoses.tag18Mid);
+    //     myReefMap.put(18, list18);
 
-        list21.add(SwerveDriveConstants.MapPoses.tag21Left);
-        list21.add(SwerveDriveConstants.MapPoses.tag21Right);
-        list21.add(SwerveDriveConstants.MapPoses.tag21Mid);
-        myReefMap.put(21, list21);
+    //     list19.add(SwerveDriveConstants.MapPoses.tag19Left);
+    //     list19.add(SwerveDriveConstants.MapPoses.tag19Right);
+    //     list19.add(SwerveDriveConstants.MapPoses.tag19Mid);
+    //     myReefMap.put(19, list19);
 
-        list22.add(SwerveDriveConstants.MapPoses.tag22Left);
-        list22.add(SwerveDriveConstants.MapPoses.tag22Right);
-        list22.add(SwerveDriveConstants.MapPoses.tag22Mid);
-        myReefMap.put(22, list22);
+    //     list20.add(SwerveDriveConstants.MapPoses.tag20Left);
+    //     list20.add(SwerveDriveConstants.MapPoses.tag20Right);
+    //     list20.add(SwerveDriveConstants.MapPoses.tag20Mid);
+    //     myReefMap.put(20, list20);
 
-        list6.add(SwerveDriveConstants.MapPoses.tag6Left);
-        list6.add(SwerveDriveConstants.MapPoses.tag6Right);
-        list6.add(SwerveDriveConstants.MapPoses.tag6Mid);
-        myReefMap.put(6, list6);
+    //     list21.add(SwerveDriveConstants.MapPoses.tag21Left);
+    //     list21.add(SwerveDriveConstants.MapPoses.tag21Right);
+    //     list21.add(SwerveDriveConstants.MapPoses.tag21Mid);
+    //     myReefMap.put(21, list21);
 
-        list7.add(SwerveDriveConstants.MapPoses.tag7Left);
-        list7.add(SwerveDriveConstants.MapPoses.tag7Right);
-        list7.add(SwerveDriveConstants.MapPoses.tag7Mid);
-        myReefMap.put(7, list7);
+    //     list22.add(SwerveDriveConstants.MapPoses.tag22Left);
+    //     list22.add(SwerveDriveConstants.MapPoses.tag22Right);
+    //     list22.add(SwerveDriveConstants.MapPoses.tag22Mid);
+    //     myReefMap.put(22, list22);
 
-        list8.add(SwerveDriveConstants.MapPoses.tag8Left);
-        list8.add(SwerveDriveConstants.MapPoses.tag8Right);
-        list8.add(SwerveDriveConstants.MapPoses.tag8Mid);
-        myReefMap.put(8, list8);
+    //     list6.add(SwerveDriveConstants.MapPoses.tag6Left);
+    //     list6.add(SwerveDriveConstants.MapPoses.tag6Right);
+    //     list6.add(SwerveDriveConstants.MapPoses.tag6Mid);
+    //     myReefMap.put(6, list6);
 
-        list9.add(SwerveDriveConstants.MapPoses.tag9Left);
-        list9.add(SwerveDriveConstants.MapPoses.tag9Right);
-        list9.add(SwerveDriveConstants.MapPoses.tag9Mid);
-        myReefMap.put(9, list9);
+    //     list7.add(SwerveDriveConstants.MapPoses.tag7Left);
+    //     list7.add(SwerveDriveConstants.MapPoses.tag7Right);
+    //     list7.add(SwerveDriveConstants.MapPoses.tag7Mid);
+    //     myReefMap.put(7, list7);
 
-        list10.add(SwerveDriveConstants.MapPoses.tag10Left);
-        list10.add(SwerveDriveConstants.MapPoses.tag10Right);
-        list10.add(SwerveDriveConstants.MapPoses.tag10Mid);
-        myReefMap.put(10, list10);
+    //     list8.add(SwerveDriveConstants.MapPoses.tag8Left);
+    //     list8.add(SwerveDriveConstants.MapPoses.tag8Right);
+    //     list8.add(SwerveDriveConstants.MapPoses.tag8Mid);
+    //     myReefMap.put(8, list8);
 
-        list11.add(SwerveDriveConstants.MapPoses.tag11Left);
-        list11.add(SwerveDriveConstants.MapPoses.tag11Right);
-        list11.add(SwerveDriveConstants.MapPoses.tag11Mid);
-        myReefMap.put(11, list11);
-    }
+    //     list9.add(SwerveDriveConstants.MapPoses.tag9Left);
+    //     list9.add(SwerveDriveConstants.MapPoses.tag9Right);
+    //     list9.add(SwerveDriveConstants.MapPoses.tag9Mid);
+    //     myReefMap.put(9, list9);
+
+    //     list10.add(SwerveDriveConstants.MapPoses.tag10Left);
+    //     list10.add(SwerveDriveConstants.MapPoses.tag10Right);
+    //     list10.add(SwerveDriveConstants.MapPoses.tag10Mid);
+    //     myReefMap.put(10, list10);
+
+    //     list11.add(SwerveDriveConstants.MapPoses.tag11Left);
+    //     list11.add(SwerveDriveConstants.MapPoses.tag11Right);
+    //     list11.add(SwerveDriveConstants.MapPoses.tag11Mid);
+    //     myReefMap.put(11, list11);
+    // }
 
     boolean initPoseByVisionDone = false;
 
@@ -580,84 +633,94 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private Map<Integer, ArrayList<Pose2d>> myStationMap = new HashMap<>();
     private Map<Integer, ArrayList<Pose2d>> myCageMap = new HashMap<>();
 
-    private Pose2d calcuTargetPoseByReq(int zoneId, int poseId)
-    {
+    private Pose2d calcuTargetPoseByReq(int zoneId, int poseId) {
         Pose2d targetPose = poseEstimator.getEstimatedPosition();
-        if(zoneId == 1) // own reef
-        {
+
+        if (zoneId == 1) {  // own reef
             // obtain the closed apriltag id from two low-back cameras.
             int targetApriltagId = getMostClosedApriltagIdInReefZone(zoneId); 
-            if(myReefMap.containsKey(targetApriltagId))
-            {
-                if(poseId == -1)
-                {
-                    return myReefMap.get(targetApriltagId).get(0); // the left side of one apriltag on reef
-                }
-                else if(poseId == 1)
-                {
-                    return myReefMap.get(targetApriltagId).get(1);// the right side of one apriltag on reef
-                }
-                else if(poseId == 0) 
-                {
-                    return myReefMap.get(targetApriltagId).get(2); // Middle of apriltag 
-                }
-            }
-        }
-        // todo other zone
-        else if (zoneId == 2)
-        {
+            
+            if (tagPoses[targetApriltagId-1][poseId] != null)
+                return tagPoses[targetApriltagId-1][poseId];
+            
+            // if(myReefMap.containsKey(targetApriltagId))
+            // {
+            //     if(poseId == -1)
+            //     {
+            //         return myReefMap.get(targetApriltagId).get(0); // the left side of one apriltag on reef
+            //     }
+            //     else if(poseId == 1)
+            //     {
+            //         return myReefMap.get(targetApriltagId).get(1);// the right side of one apriltag on reef
+            //     }
+            //     else if(poseId == 0) 
+            //     {
+            //         return myReefMap.get(targetApriltagId).get(2); // Middle of apriltag 
+            //     }
+            // }
+        
+        } else if (zoneId == 2) { // TODO other zone
             // stations
             int aid = getFrontCameraApriltagID(zoneId);
-            if(myStationMap.containsKey(aid))
-            {
-                if(poseId == -1 )
-                {
-                    return myStationMap.get(aid).get(0);
-                }
-                else if(poseId == 1)
-                {
-                    return myStationMap.get(aid).get(1);
-                }
-                else if(poseId == 0)
-                {
-                    return myStationMap.get(aid).get(2);
-                }
-            }
 
-        }else if (zoneId == 3)
-        {
+            if (tagPoses[aid-1][poseId] != null)
+                return tagPoses[aid-1][poseId];
+            
+            // if(myStationMap.containsKey(aid))
+            // {
+            //     if(poseId == -1 )
+            //     {
+            //         return myStationMap.get(aid).get(0);
+            //     }
+            //     else if(poseId == 1)
+            //     {
+            //         return myStationMap.get(aid).get(1);
+            //     }
+            //     else if(poseId == 0)
+            //     {
+            //         return myStationMap.get(aid).get(2);
+            //     }
+            // }
+
+        } else if (zoneId == 3) {
             // cage: need to consider the pose is too close to reef!!
             // only enable it druing last 25 seconds
-            // todo
+            // TODO
             int aid = RobotContainer.IsRedSide() ? 15 : 4;;
             
-            if(myCageMap.containsKey(aid))
-            {
-                if(poseId == -1 )
-                {
-                    return myCageMap.get(aid).get(0); //  cage left
-                }
-                else if( poseId == 1)
-                {
-                    return myCageMap.get(aid).get(1); //  cage right
-                }
-                else if( poseId == 0)
-                {
-                    return myCageMap.get(aid).get(2); //  cage center
-                }
-            }
+            if (tagPoses[aid-1][poseId] != null)
+                return tagPoses[aid-1][poseId];
+
+            // if(myCageMap.containsKey(aid))
+            // {
+            //     if(poseId == -1 )
+            //     {
+            //         return myCageMap.get(aid).get(0); //  cage left
+            //     }
+            //     else if( poseId == 1)
+            //     {
+            //         return myCageMap.get(aid).get(1); //  cage right
+            //     }
+            //     else if( poseId == 0)
+            //     {
+            //         return myCageMap.get(aid).get(2); //  cage center
+            //     }
+            // }
             
-        }else if (zoneId == 4)
-        {
+        } else if (zoneId == 4) {
             // processor
             int aid = getFrontCameraApriltagID(zoneId);
-            if(myProsMap.containsKey(aid))
-            {
-                if(poseId == -1 || poseId == 0 || poseId == 1)
-                {
-                    return myProsMap.get(aid).get(0);
-                }
-            }
+
+            if (tagPoses[aid-1][poseId] != null)
+                return tagPoses[aid-1][poseId];
+            
+            // if(myProsMap.containsKey(aid))
+            // {
+            //     if(poseId == -1 || poseId == 0 || poseId == 1)
+            //     {
+            //         return myProsMap.get(aid).get(0);
+            //     }
+            // }
         }
         
         return targetPose;
