@@ -563,7 +563,8 @@ public final class Constants {
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ), // Ground level
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.032, 0.831, -0.772, -0.772      ), // Ground level Idaho Adjusted
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.035, 0.831, -0.772, -0.772      ), // Ground level Idaho Adjusted
+      // 0.032
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
       Station1(             ExecutionOrder.PVT_ELV_WRT, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // Adjusted Idaho
