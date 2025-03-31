@@ -482,10 +482,10 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kCoralIntakePower = -3.6;
-    public static final double kCoralButAlgaeIntakePower  = -3;
+    public static final double kCoralIntakePower = -2.5;
+    public static final double kCoralButAlgaeIntakePower  = -2.5;
     public static final double kCoralOuttakePower = 1.5;
-    public static final double kAlgaeIntakePower  = -2.8;
+    public static final double kAlgaeIntakePower  = -2;
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
     public static final double kAlgaeHoldPower = 1;
@@ -562,8 +562,8 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
-      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ), // Ground level
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.032, 0.831, -0.772, -0.772      ), // Ground level Idaho Adjusted
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.043, 0.82, -0.77, -0.77     ), // Ground level Idaho Adjusted
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
       Station1(             ExecutionOrder.PVT_ELV_WRT, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // Adjusted Idaho
