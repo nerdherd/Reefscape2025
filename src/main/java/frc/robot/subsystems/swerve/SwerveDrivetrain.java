@@ -1154,6 +1154,21 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             case OFF:
                 break;
             case ALL:
+            NetworkTable tableBackLeft = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.kLimelightBackLeftName);
+            NetworkTable tableBackRight = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.kLimelightBackRightName);
+
+            // Display Limelight data on SmartDashboard
+            tab.addNumber("Limelight Left X",   LimelightHelpers.getTX("limelights-bl"));
+            tab.addNumber("Limelight Left Y", LimelightHelpers.getTY("limelights-bl"));
+            tab.addNumber("Limelight Left Area", LimelightHelpers.getTA("limelight-bl"));
+
+            tab.addNumber("Limelight Right X", LimelightHelpers.getTX("limelights-br"));
+            tab.addNumber("Limelight Right Y", LImelighthelpers.getTY("limelights-br"));
+            tab.addNumber("Limelight Right Area", LImelighthelpers.getTA("limelight-br"));
+
+            // Optionally display the camera feed URLs (adjust for your Limelight IPs)
+            tab.addCamera("LeftLimeLight", "limelights-bl", "http://10.6.87.5:5800")
+            tab.addString("RightLimeLight", "limelights-br", "http://10.6.87.7:5800");
             // tab.addString(("Current Command"), () -> {
                 //     Command currCommand = this.getCurrentCommand();
                 //     if (currCommand == null) {
