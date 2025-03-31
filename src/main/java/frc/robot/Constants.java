@@ -483,7 +483,7 @@ public final class Constants {
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
     public static final double kCoralIntakePower = -2.5;
-    public static final double kCoralButAlgaeIntakePower  = -2.5;
+    public static final double kCoralButAlgaeIntakePower  = -2.8;
     public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2;
     public static final double kAlgaeOuttakePower = 1.5;
@@ -562,19 +562,19 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
-      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.043, 0.82, -0.77, -0.77     ), // Ground level Idaho Adjusted
+      // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.046, 0.82, -0.8, -0.75     ), // Ground level CAMS Tuned
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
       Station1(             ExecutionOrder.PVT_ELV_WRT, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // Adjusted Idaho
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.25, -0.8), // adjusted warren     wrist: -0.8279
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.102, -0.102     ),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.253,  3.2, -0.197, -0.197     ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.275,  0.0,    -0.102, -0.102      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.275,  0.0,  -0.102, -0.102      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.275,  1.5, -0.102, -0.102     ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.275,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.27,  3.2, -0.197, -0.197     ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.27,  0.0, -0.570, -0.57      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
@@ -609,7 +609,7 @@ public final class Constants {
       Stow(CoralPositions.Stow, CoralPositions.Stow),
       SemiStow(CoralPositions.SemiStow, CoralPositions.SemiStow),
       GroundIntake(CoralPositions.GroundIntake, AlgaePositions.GroundIntake),
-      GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
+      // GroundIntake1(CoralPositions.GroundIntake1, AlgaePositions.GroundIntake),
       // GroundIntake2(CoralPositions.GroundIntake2, AlgaePositions.GroundIntake),
       // GroundIntake3(CoralPositions.GroundIntake3, AlgaePositions.GroundIntake),
       L1(CoralPositions.L1, AlgaePositions.Processor),

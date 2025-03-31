@@ -81,7 +81,7 @@ public class RobotContainer {
   public Generic3Piece bottom3Piece;
   public Generic4Piece bottom4Piece;
 
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MEDIUM;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   
   static boolean isRedSide = false;
   
@@ -312,8 +312,8 @@ public class RobotContainer {
       .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-      operatorController.bumperLeft() // 
-      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
+      // operatorController.bumperLeft() // 
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
       
       operatorController.buttonUp()
       .onTrue(superSystem.moveTo(PositionEquivalents.Station1));

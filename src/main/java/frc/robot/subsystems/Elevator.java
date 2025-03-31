@@ -204,11 +204,11 @@ public class Elevator extends SubsystemBase implements Reportable {
                 break;
             case ALL:
             case MEDIUM:
+            SmartDashboard.putNumber("Elevator Desired Position", desiredPosition);
+            SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
             case MINIMAL:
-                SmartDashboard.putNumber("Elevator Desired Position", desiredPosition);
                 SmartDashboard.putNumber("Elevator Current Position", elevatorMotor.getPosition().getValueAsDouble());
                 SmartDashboard.putNumber("Elevator Current Velocity", elevatorMotor.getVelocity().getValueAsDouble());
-                SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
         }
     }
 

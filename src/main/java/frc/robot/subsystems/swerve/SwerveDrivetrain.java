@@ -104,7 +104,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private int zoneId = -1;
 
     private Field2d field;
-    private VisionSys vision = new VisionSys();
+    // private VisionSys vision = new VisionSys();
     public boolean useVision = true;
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
@@ -339,8 +339,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             SmartDashboard.putNumber("Robot Rotation", robotRotation);
     
             if (useVision) {
-                visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
-                visionupdateOdometry(VisionConstants.kLimelightBackRightName);
+                // visionupdateOdometry(VisionConstants.kLimelightBackLeftName); TODO: Temp fix change later
+                // visionupdateOdometry(VisionConstants.kLimelightBackRightName); TODO: Temp fix change later
                 // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
                 // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
             }
@@ -582,7 +582,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
             
     private int getMostClosedApriltagIdInReefZone(int zoneId) {
-        SmartDashboard.putNumber("Current Zone ID", zoneId);
+        // SmartDashboard.putNumber("Current Zone ID", zoneId);
         if(zoneId != 1) {
             int startIndex = RobotContainer.IsRedSide() ? 6 : 17;
             int indexToGet = -1;
@@ -704,19 +704,19 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             Commands.parallel(
                 Commands.run(() -> {
                     // stopAutoPath();
-                    SmartDashboard.putNumber("Pose ID", poseId);
+                    // SmartDashboard.putNumber("Pose ID", poseId);
                     int zoneId = getCurrentZoneByPose();
                     if(zoneId == 0) {
                         pathfindingCommand = Commands.none();
                         return;
                     }
                     destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId);
-                    SmartDashboard.putNumber("zone id", zoneId);
+                    // SmartDashboard.putNumber("zone id", zoneId);
     
                     if(destPoseInBlue == null) {
                         pathfindingCommand = Commands.none();
                     }
-                    SmartDashboard.putString("destination pose", destPoseInBlue.toString());
+                    // SmartDashboard.putString("destination pose", destPoseInBlue.toString());
                 }),
                 AutoBuilder.pathfindToPose(destPoseInBlue, pathcons).onlyWhile(buttonPressed)
             )
@@ -725,16 +725,16 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     int counterpathfindingStop = 0;
     int counterpathfindingStopFailed = 0;
     public void stopAutoPath() {
-        SmartDashboard.putBoolean("Stop ran", true);
+        // SmartDashboard.putBoolean("Stop ran", true);
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
             SmartDashboard.putBoolean("Stop ran again", true);
             pathfindingCommand.cancel();
             CommandScheduler.getInstance().cancel(pathfindingCommand);
             stopModules();
-            counter += 1;
-            SmartDashboard.putNumber("Counter Path Finding Value", counterpathfindingStop);
+            // counter += 1;
+            // SmartDashboard.putNumber("Counter Path Finding Value", counterpathfindingStop);
         }
-        SmartDashboard.putNumber("Counter failed stop", counterpathfindingStopFailed);
+        // SmartDashboard.putNumber("Counter failed stop", counterpathfindingStopFailed);
     }
 
     //****************************** GETTERS ******************************/
@@ -799,7 +799,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public void disableLimelight() {
         // Check Vision Sys setPipeline
-        vision.setPipelineIndex(0);
+        // vision.setPipelineIndex(0);
 
         NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(0);
 
@@ -809,7 +809,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public void enableLimeLight() {
-        vision.setPipelineIndex(1);
+        // vision.setPipelineIndex(1);
 
         NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(1);
 
