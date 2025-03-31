@@ -1169,6 +1169,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 // tab.add("Pose Estimator Pose", poseEstimator.getEstimatedPosition());
                 tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
                 tab.addString("Drive Mode", () -> this.driveMode.toString());
+
+                tab.add("Detected Zone by Pose", Commands.runOnce(() -> swerveDrive.getCurrentZoneByPose())); // TODO Does this update
                 break;
         }
     }
