@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import org.json.simple.parser.ParseException;
 
@@ -51,7 +52,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public Gyro imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
+  public PigeonV2 imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
@@ -67,8 +68,10 @@ public class RobotContainer {
   public Climb climbMotor;
   public CANdi candi;
   public PositionMode positionMode;
+  BooleanSupplier leftBumper;
+  BooleanSupplier rightBumper;
 
-  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort);
+  private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
   private final Controller testController = new Controller(3);
   
@@ -156,10 +159,7 @@ public class RobotContainer {
       // () -> driverController.getControllerRight(), // robot oriented variable (false = field oriented)
       () -> false, // robot oriented variable (false = field oriented)
       () -> false, // tow supplier
-      () -> driverController.getBumperLeft(), //move left of 
-      () -> driverController.getBumperRight(), // move right of
       () -> driverController.getTriggerRight(), // Precision/"Sniper Button"
-      () -> swerveDrive.getCurrentZoneByPose(),
       () -> false,
       // () -> { return driverController.getButtonRight() || driverController.getButtonDown() || driverController.getButtonUp(); },
       () -> { // Turn To angle Direction | TODO WIP
@@ -225,7 +225,9 @@ public class RobotContainer {
         //   }
         // }, elevator));  
       }
-    
+    leftBumper = (() -> driverController.bumperLeft().getAsBoolean());
+    rightBumper = (() -> driverController.bumperRight().getAsBoolean());
+
 
   }
 
@@ -239,7 +241,15 @@ public class RobotContainer {
     //////////////////////
     driverController.controllerLeft().onTrue(
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
-      );
+    );
+
+    driverController.bumperLeft().onTrue(
+      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperLeft().getAsBoolean()), swerveDrive.setAutoPathRun(-1, () -> driverController.bumperLeft().getAsBoolean()), rightBumper)
+    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
+    
+    driverController.bumperRight().onTrue(
+      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperRight().getAsBoolean()), swerveDrive.setAutoPathRun(1, () -> driverController.bumperRight().getAsBoolean()), leftBumper)
+    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
     
     // driverController.dpadDown().onTrue(
     //   superSystem.moveTo(NamedPositions.AlgaeL2)
@@ -268,7 +278,9 @@ public class RobotContainer {
         ));
 
         driverController.buttonRight() // Execute Climb
-        .onTrue(superSystem.climbCommandDown());
+        .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
+        .onTrue(superSystem.climbHardClamp());
+
 
       // driverController.buttonDown()
         // .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
@@ -296,17 +308,17 @@ public class RobotContainer {
       .onTrue(superSystem.intake());
       // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
-      .onTrue(superSystem.outtake())
+      .onTrue(superSystem.intakeCoral())
       .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-      operatorController.bumperLeft()
+      operatorController.bumperLeft() // 
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
       
       operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
-      // operatorController.buttonLeft()
-      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake3));
+      .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
+      operatorController.buttonLeft()
+      .onTrue(superSystem.moveTo(PositionEquivalents.intermediateGround));
       operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
       operatorController.buttonDown()

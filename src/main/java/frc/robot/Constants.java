@@ -433,8 +433,10 @@ public final class Constants {
  public static final class PivotConstants {
     public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
-    public static final int kPivotPigeonID = 2; // TODO change later
     
+    public static final int kPivotPigeonID = 4; // TODO change later
+    // public static final double kPigeonOffset = 0.231445;
+
     public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIPivot = 0;
@@ -452,7 +454,7 @@ public final class Constants {
     public static final double kPivotPositionVertical = 0.24;//0.1 // 0.25
 
     public static final double kPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
-    public static final double kPivotMax = 0.23; // Vertical    // TODO change later   
+    public static final double kPivotMax = 0.285; // Slightly past vertical    // TODO change later   
 
     public static final double kPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kPivotDeadBand = 0;
@@ -461,7 +463,7 @@ public final class Constants {
     public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
     public static final double kPivotJerk = kPivotCruiseAcceleration * 10;
-    public static final double atPositionDeadband = 0.015; // 0.003; 
+    public static final double atPositionDeadband = 0.003; // 0.003; //0.015
     public static final double atPositionWideDeadband = 0.03; 
     
   }
@@ -481,7 +483,7 @@ public final class Constants {
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
     public static final double kCoralIntakePower = -3.6;
-    public static final double kCoralButAlgaeIntakePower  = -1.5;
+    public static final double kCoralButAlgaeIntakePower  = -3;
     public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2.8;
     public static final double kAlgaeOuttakePower = 1.5;
@@ -537,6 +539,8 @@ public final class Constants {
     public static final double kOpenPosition = 0;
     public static final double kClosedPosition = 0;
 
+    public static final double climbHardClampVoltage = -3;
+
   }
   
 
@@ -557,18 +561,21 @@ public final class Constants {
     public enum CoralPositions { 
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // ep: 0.732
-      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ),
-      Station(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84),
-      // Station(             ExecutionOrder.PVT_WRTELV, 0.19,  1.53, -0.76, -0.35),
+      // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
+      GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.58, -0.711, -0.711      ), // Ground level
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.032, 0.831, -0.772, -0.772      ), // Ground level Idaho Adjusted
+      // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
+      Station1(             ExecutionOrder.PVT_ELV_WRT, 0.205,  1.275, -0.8), // Adjusted Idaho - better
+      Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // Adjusted Idaho
+      // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.25, -0.8), // adjusted warren     wrist: -0.8279
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,    -0.102, -0.102      ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.102, -0.102      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.102, -0.102     ),
       L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3, -0.270, -0.270      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.253,  3.2, -0.197, -0.197     ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.255,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 0.85, -0.787     ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.06, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       public Position position;
@@ -615,7 +622,8 @@ public final class Constants {
       ClimbUp(CoralPositions.ClimbUp, AlgaePositions.ClimbUp),
       ClimbDown(CoralPositions.ClimbDown, AlgaePositions.ClimbDown),
       intermediateGround(CoralPositions.intermediateGround, AlgaePositions.intermediateGround),
-      Station(CoralPositions.Station, CoralPositions.Station),
+      Station(CoralPositions.Station, CoralPositions.Station), // Changed 3/27
+      Station1(CoralPositions.Station1, CoralPositions.Station), // Changed 3/27
 
       ;
       

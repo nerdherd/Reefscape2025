@@ -120,9 +120,10 @@ public class Pivot extends SubsystemBase implements Reportable{
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
-        // pivotConfiguration.Feedback.FeedbackRemoteSensorID = FeedbackSensorSourceValue.RotorSensor;
+        // pivotConfiguration.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotPigeonID;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
-        // pivotConfiguration.Feedback.RotorToSensorRatio = ; // 0.1
+        // pivotConfiguration.Feedback.RotorToSensorRatio = 360;
+        // pivotConfiguration.Feedback.SensorToMechanismRatio = -1.068376; 
         pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
@@ -143,10 +144,12 @@ public class Pivot extends SubsystemBase implements Reportable{
 
         pivotConfiguratorRight.refresh(pivotConfigurationRight);
         // pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
+        pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = 1;
         pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; //TODO change orientation later
+        pivotConfigurationRight.Feedback.RotorToSensorRatio = 1;
         // pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
         pivotConfigurationRight.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
-        pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.Clockwise_Positive; 
+        pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
         pivotConfigurationRight.Voltage.PeakForwardVoltage = 11.5;
         pivotConfigurationRight.Voltage.PeakReverseVoltage = -11.5;
         pivotConfigurationRight.CurrentLimits.SupplyCurrentLimit = 40;
@@ -201,9 +204,9 @@ public class Pivot extends SubsystemBase implements Reportable{
     }
 
     public void setTargetPosition(double position) {
-        //TODO NerdyMath.clamp(
-        desiredPosition = position;
-        motionMagicRequest.Position = desiredPosition;
+        desiredPosition = Math.min(position, PivotConstants.kPivotMax);
+        motionMagicRequest.Position = desiredPosition; 
+        // motionMagicRequest.Position = desiredPosition - PivotConstants.kPigeonOffset; // Only for use with pigeon
     }
 
     public void setPivotVoltage(double voltage) {
@@ -254,7 +257,8 @@ public class Pivot extends SubsystemBase implements Reportable{
         ///////////////////
         /// TODO: we do need the offset for pivot. because current "reset 0" is not the real horizontal zero
         /// ????
-        return pivotMotor.getPosition().getValueAsDouble(); 
+        // return (pivotMotor.getPosition().getValueAsDouble() + PivotConstants.kPigeonOffset); 
+        return (pivotMotor.getPosition().getValueAsDouble()); 
     }
 
     
@@ -320,12 +324,12 @@ public class Pivot extends SubsystemBase implements Reportable{
                 tab.addNumber("Pivot MM Position", () -> motionMagicRequest.Position);
                 tab.addNumber("Pivot FF", () -> motionMagicRequest.FeedForward);
                 tab.addNumber("Pivot Supply Current", () -> pivotMotor.getSupplyCurrent().getValueAsDouble());
+                tab.addBoolean("Pivot At Position", () -> atPosition());
+                tab.addBoolean("Pivot At Position Wide", () -> atPositionWide());
             case MEDIUM:
                 tab.addBoolean("Pivot Enabled", () -> enabled);
                 tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
                 tab.addNumber("Pivot Current Position", () -> getPosition());
-                tab.addBoolean("Pivot At Position", () -> atPosition());
-                tab.addBoolean("Pivot At Position Wide", () -> atPositionWide());
             case MINIMAL:
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Pivot Temperature 1", () -> pivotMotor.getDeviceTemp().getValueAsDouble());

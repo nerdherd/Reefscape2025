@@ -34,6 +34,7 @@ import frc.robot.Constants.SwerveDriveConstants.CANCoderConstants;
 import frc.robot.Constants.SwerveDriveConstants.ReefOffsets;
 import frc.robot.Constants.SwerveDriveConstants.StationOffsets;
 import frc.robot.subsystems.imu.Gyro;
+import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.util.NerdyMath;
 import frc.robot.vision.LimelightHelpers;
 import frc.robot.vision.VisionSys;
@@ -48,7 +49,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.BooleanSupplier;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -62,7 +65,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
-    private final Gyro gyro;
+    private final PigeonV2 gyro;
     // private final SwerveDriveOdometry odometer;
     private boolean isTest = false;
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -98,6 +101,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     PIDController areaController;     // TODO: tune
     PIDController txController;
 
+    private int zoneId = -1;
+
     private Field2d field;
     private VisionSys vision = new VisionSys();
     public boolean useVision = true;
@@ -113,7 +118,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     /**
      * Construct a new {@link SwerveDrivetrain}
      */
-    public SwerveDrivetrain(Gyro gyro) throws IllegalArgumentException {
+    public SwerveDrivetrain(PigeonV2 gyro) throws IllegalArgumentException {
         
         // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
@@ -333,7 +338,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
             SmartDashboard.putNumber("Robot Rotation", robotRotation);
     
-            if (useVision){
+            if (useVision) {
                 visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
                 visionupdateOdometry(VisionConstants.kLimelightBackRightName);
                 // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
@@ -346,6 +351,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //******************************  Vision ******************************/
 	private void visionupdateOdometry(String limelightName) {
         boolean useMegaTag2 = false; //set to false to use MegaTag1
+        double xyStds = 0.5;
+        double degStds = 30;
+
         if(useMegaTag2 == false)
         {
         LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
@@ -359,7 +367,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             {
                 return;
             }
-            if(mt1.rawFiducials[0].distToCamera > 3)
+            if(mt1.rawFiducials[0].distToCamera > 1.5)
             {
                 return;
             }
@@ -368,9 +376,26 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         {
             return;
         }
+        if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            return;
+        }
+        if (mt1.avgTagArea > 0.8 && mt1.rawFiducials[0].distToCamera < 0.5) {
+            xyStds = 1.0;
+            degStds = 12;
+        }
+        // 1 target farther away and estimated pose is close
+        else if (mt1.avgTagArea > 0.1 && mt1.rawFiducials[0].distToCamera < 0.3) {
+            xyStds = 2.0;
+            degStds = 30;
+        } else if (mt1.tagCount >= 2) {
+            xyStds = 0.5;
+            degStds = 6;
+        }
 
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.5,.5,9999999));
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
         poseEstimator.addVisionMeasurement(
+            // new Pose2d(mt1.pose.getX().getValueAsDouble(), mt1.pose.getY().getValueAsDouble(), 0, gyro.getHeading()),
             mt1.pose,
             mt1.timestampSeconds);
         } else if (useMegaTag2 == true) {
@@ -380,15 +405,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             if (mt2 == null){
                 return;
         }
-        // if(Math.abs(gyro.) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        // {
-        //     doRejectUpdate = true;
-        // }
+        if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+        {
+            return;
+        }
         if(mt2.tagCount == 0)
         {
             return;
         }
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.3,.3,10));
         poseEstimator.addVisionMeasurement(
             mt2.pose,
             mt2.timestampSeconds);
@@ -557,7 +582,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
             
     private int getMostClosedApriltagIdInReefZone(int zoneId) {
-        if(zoneId == 1) {
+        SmartDashboard.putNumber("Current Zone ID", zoneId);
+        if(zoneId != 1) {
             int startIndex = RobotContainer.IsRedSide() ? 6 : 17;
             int indexToGet = -1;
             double distance = getDistanceFromTag(false, startIndex);
@@ -582,8 +608,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private Pose2d calcuTargetPoseByReq(int zoneId, int poseId)
     {
+        this.zoneId = zoneId;
         Pose2d targetPose = poseEstimator.getEstimatedPosition();
-        if(zoneId == 1) // own reef
+        if(zoneId != -1) // own reef
         {
             // obtain the closed apriltag id from two low-back cameras.
             int targetApriltagId = getMostClosedApriltagIdInReefZone(zoneId); 
@@ -665,28 +692,49 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             
     double maxVelocityMps = 1;
     double maxAccelerationMpsSq = 1;
-    private Command pathfindingCommand; // Store the command reference
-    public void setAutoPathRun(int zoneId, int poseId)
+    private Command pathfindingCommand = Commands.none(); // Store the command reference
+    private Pose2d destPoseInBlue = new Pose2d();
+    private PathConstraints pathcons = new PathConstraints(
+        maxVelocityMps, maxAccelerationMpsSq, 
+        Units.degreesToRadians(360), Units.degreesToRadians(720)
+    );
+    public Command setAutoPathRun(int poseId, BooleanSupplier buttonPressed)
     {
-        Pose2d destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId); // base on (poseid and zoneid and apriltag id)
-        
-        if(destPoseInBlue == null) return;
-
-        PathConstraints pathcons = new PathConstraints(
-            maxVelocityMps, maxAccelerationMpsSq, 
-            Units.degreesToRadians(360), Units.degreesToRadians(720)
+        return Commands.sequence(
+            Commands.parallel(
+                Commands.run(() -> {
+                    // stopAutoPath();
+                    SmartDashboard.putNumber("Pose ID", poseId);
+                    int zoneId = getCurrentZoneByPose();
+                    if(zoneId == 0) {
+                        pathfindingCommand = Commands.none();
+                        return;
+                    }
+                    destPoseInBlue = calcuTargetPoseByReq(zoneId, poseId);
+                    SmartDashboard.putNumber("zone id", zoneId);
+    
+                    if(destPoseInBlue == null) {
+                        pathfindingCommand = Commands.none();
+                    }
+                    SmartDashboard.putString("destination pose", destPoseInBlue.toString());
+                }),
+                AutoBuilder.pathfindToPose(destPoseInBlue, pathcons).onlyWhile(buttonPressed)
+            )
         );
-
-        pathfindingCommand = AutoBuilder.pathfindToPose(destPoseInBlue, pathcons);
-
-        pathfindingCommand.schedule();
     }
-
+    int counterpathfindingStop = 0;
+    int counterpathfindingStopFailed = 0;
     public void stopAutoPath() {
+        SmartDashboard.putBoolean("Stop ran", true);
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
+            SmartDashboard.putBoolean("Stop ran again", true);
             pathfindingCommand.cancel();
+            CommandScheduler.getInstance().cancel(pathfindingCommand);
             stopModules();
+            counter += 1;
+            SmartDashboard.putNumber("Counter Path Finding Value", counterpathfindingStop);
         }
+        SmartDashboard.putNumber("Counter failed stop", counterpathfindingStopFailed);
     }
 
     //****************************** GETTERS ******************************/
@@ -1120,6 +1168,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 // Might be negative because our swerveDriveKinematics is flipped across the Y axis
             case MEDIUM:
                 tab.add("Field Position", field).withSize(6, 3);
+                tab.add("Zone Id", zoneId);
+                // tab.add("Zone")
+                // tab.add(zone)
             case MINIMAL:
                 tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
                 tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());

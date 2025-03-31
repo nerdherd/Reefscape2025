@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
+import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.SuperSystemConstants;
 import frc.robot.Constants.PivotConstants;
 import frc.robot.Constants.WristConstants;
@@ -83,7 +84,7 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
-        intakeDetected = () -> (candi.getS1State().getValue().value == 0);
+        intakeDetected = () -> (candi.getS1State().getValue().value == 1);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -175,7 +176,8 @@ public class SuperSystem {
                 Commands.waitUntil(intakeDetected),
                 Commands.waitUntil(() -> intakeRoller.desiredVoltageCoral != RollerConstants.kCoralIntakePower)
             ),
-            // Commands.waitSeconds(2),
+            // 
+            Commands.waitSeconds(0.01),
             stopRoller()
             );
     }
@@ -220,8 +222,19 @@ public class SuperSystem {
         return climbMotor.setVoltageCommand(0.5);
     }
 
+    private double hardclampvoltage = 0.0;
+    public Command climbHardRamp() {
+        return Commands.sequence(
+            Commands.run(() -> {
+                hardclampvoltage -= 1 / 50;
+                hardclampvoltage = Math.max(hardclampvoltage, ClimbConstants.climbHardClampVoltage);
+            }),
+            climbMotor.setVoltageCommand(hardclampvoltage)
+        );
+    }
+
     public Command climbHardClamp() {
-        return climbMotor.setVoltageCommand(-4.5);
+        return climbMotor.setVoltageCommand(ClimbConstants.climbHardClampVoltage);
     }
 
     public Command climbSoftClamp() {
@@ -242,7 +255,7 @@ public class SuperSystem {
     
     public Command climbCommandDown() {
         return Commands.sequence(
-            climbHardClamp(), 
+            climbHardRamp(), 
             moveTo(PositionEquivalents.ClimbDown) 
         );
     }
@@ -257,40 +270,43 @@ public class SuperSystem {
     public Command moveTo(PositionEquivalents position) {
         return Commands.sequence(
             updatePositions(position),
-            Commands.waitSeconds(0.02),
             Commands.either(goTo(position.coralPos, lastPosition.coralPos), goTo(position.algaePos, lastPosition.algaePos), () -> (positionMode == PositionMode.Coral))
         );
     }
 
     // movement
     private Command goTo(Position position, Position previousPosition) {
-        if (position == PositionEquivalents.GroundIntake.coralPos ||
-            previousPosition == PositionEquivalents.GroundIntake.coralPos
-        ) {
-            return Commands.sequence(
-                preExecute(),
-                execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
-                PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
-                wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
-                preExecute(),
-                execute(position.executionOrder, 10.0, 
-                position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
-            );
-        }
+        Command gotoCommand;
         if (position.intermediateWristPosition == position.finalWristPosition)
-            return Commands.sequence(
+            gotoCommand = Commands.sequence(
                 preExecute(),
                 execute(position.executionOrder, 10.0, 
                 position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
                               
             );
-        return Commands.sequence(
-            preExecute(),
-            execute(position.executionOrder, 10.0, 
-            position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
-            wrist.setPositionCommand(position.finalWristPosition)
-            
-        );
+        else
+            gotoCommand = Commands.sequence(
+                preExecute(),
+                execute(position.executionOrder, 10.0, 
+                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition),
+                wrist.setPositionCommand(position.finalWristPosition)
+                
+            );
+        return gotoCommand;
+        // return
+            // Commands.either(
+            //     Commands.sequence(
+            //         preExecute(),
+            //         execute(PositionEquivalents.intermediateGround.coralPos.executionOrder, 10.0, 
+            //         PositionEquivalents.intermediateGround.coralPos.pivotPosition, PositionEquivalents.intermediateGround.coralPos.elevatorPosition, PositionEquivalents.intermediateGround.coralPos.intermediateWristPosition),
+            //         wrist.setPositionCommand(PositionEquivalents.intermediateGround.coralPos.finalWristPosition),
+            //         preExecute(),
+            //         execute(position.executionOrder, 10.0, 
+            //         position.pivotPosition, position.elevatorPosition, position.finalWristPosition)
+            //     ), 
+            //     gotoCommand,
+            //     () -> (position == PositionEquivalents.GroundIntake.coralPos ||
+            //     previousPosition == PositionEquivalents.GroundIntake.coralPos));
     }
 
     public Command moveToAuto(PositionEquivalents position) {
@@ -301,14 +317,12 @@ public class SuperSystem {
     }
 
     public Command goToAuto(Position position) {
-        // currentPosition = position;
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
                 preExecute(),
                 execute(position.executionOrder, 5.0, 
-                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)
-                              
-            );
+                position.pivotPosition, position.elevatorPosition, position.intermediateWristPosition)             
+        );
         return Commands.sequence(
             preExecute(),
             execute(position.executionOrder, 5.0, 

@@ -22,23 +22,20 @@ public class PreloadTaxi extends SequentialCommandGroup{
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
-            // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
-            // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.sequence(
-                // superSystem.holdPiece(),
-                // superSystem.moveToAuto(PositionEquivalents.Stow),
+                superSystem.holdPiece(),
                 Commands.waitSeconds(1),
-                // AutoBuilder.followPath(pathGroup.get(0)), 
-                Commands.runOnce(() -> swerve.setAutoPathRun(1, 1)).raceWith(Commands.waitSeconds(2)), 
-                // superSystem.moveToAuto(PositionEquivalents.L4Auto)
-                // superSystem.moveToAuto(PositionEquivalents.L1),
+                AutoBuilder.followPath(pathGroup.get(0)), 
+                // Commands.runOnce(() -> swerve.setAutoPathRun(1, 1)).raceWith(Commands.waitSeconds(2)), 
+                superSystem.moveToAuto(PositionEquivalents.L4Auto),
+                // superSystem.moveToAuto(PositionEquivalents.SemiStow),
                 Commands.waitSeconds(2),
-                // superSystem.outtake(),
+                superSystem.outtake(),
                 Commands.waitSeconds(1),
-                // superSystem.stopRoller(),
-                // superSystem.moveTo(PositionEquivalents.L1),
+                superSystem.stopRoller(),
+                superSystem.moveToAuto(PositionEquivalents.L1),
                 AutoBuilder.followPath(pathGroup.get(1))
 
             )
