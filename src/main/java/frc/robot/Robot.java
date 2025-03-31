@@ -6,8 +6,12 @@ package frc.robot;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -23,18 +27,20 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer;
 
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   public Robot() {
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // Instantiate our RobotContainer. This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     DataLogManager.start("/media/sda1/logs");
     DataLogManager.logNetworkTables(true);
     m_robotContainer.swerveDrive.refreshModulePID();
+
+    // Start CameraServer for video streaming
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -46,31 +52,53 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // Runs the Scheduler. This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
-    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // and running subsystem periodic() methods. This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     // m_robotContainer.superSystemCommand.updateDependencies();
+    // Access Limelight data from NetworkTables
+    NetworkTable tableBackLeft = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.kLimelightBackLeftName);
+    NetworkTable tableBackRight = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.kLimelightBackRightName);
+
+    double txLeft = tableBackLeft.getEntry("tx").getDouble(0.0);
+    double tyLeft = tableBackLeft.getEntry("ty").getDouble(0.0);
+    double taLeft = tableBackLeft.getEntry("ta").getDouble(0.0);
+
+    double txRight = tableBackRight.getEntry("tx").getDouble(0.0);
+    double tyRight = tableBackRight.getEntry("ty").getDouble(0.0);
+    double taRight = tableBackRight.getEntry("ta").getDouble(0.0);
+
+    // Display Limelight data on SmartDashboard
+    SmartDashboard.putNumber("Limelight Left X", txLeft);
+    SmartDashboard.putNumber("Limelight Left Y", tyLeft);
+    SmartDashboard.putNumber("Limelight Left Area", taLeft);
+
+    SmartDashboard.putNumber("Limelight Right X", txRight);
+    SmartDashboard.putNumber("Limelight Right Y", tyRight);
+    SmartDashboard.putNumber("Limelight Right Area", taRight);
+
+    // Optionally display the camera feed URLs (adjust for your Limelight IPs)
+    SmartDashboard.putString("Limelight Left Feed URL", "http://10.6.87.5:5800");
+    SmartDashboard.putString("Limelight Right Feed URL", "http://10.6.87.7:5800");
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-      CommandScheduler.getInstance().cancelAll();
-      m_robotContainer.swerveDrive.disableLimelightCommand();
+    CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.swerveDrive.disableLimelightCommand();
 
-    
-    if (RobotContainer.USE_SUBSYSTEMS){
+    if (RobotContainer.USE_SUBSYSTEMS) {
       m_robotContainer.pivot.setEnabled(false);
       m_robotContainer.elevator.setEnabled(false);
       m_robotContainer.wrist.setEnabled(false);
       m_robotContainer.intakeRoller.setEnabled(false);
       m_robotContainer.climbMotor.setEnabled(false);
     }
-
   }
-  
+
   @Override
   public void disabledPeriodic() {
     // m_robotContainer.elevatorPivot.setTargetPosition(m_robotContainer.elevatorPivot.getPosition());
@@ -82,6 +110,7 @@ public class Robot extends TimedRobot {
     //m_robotContainer.intakeWrist.setTargetPosition(m_robotContainer.intakeWrist.getPosition());
 
   }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -89,13 +118,13 @@ public class Robot extends TimedRobot {
     RobotContainer.refreshAlliance();
     m_robotContainer.imu.zeroAll();
     m_robotContainer.swerveDrive.enableLimeLight();
+
     if (RobotContainer.USE_SUBSYSTEMS) {
       m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
       m_robotContainer.superSystem.initialize();
     }
+  // schedule the autonomous command (example)
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
@@ -117,7 +146,6 @@ public class Robot extends TimedRobot {
     }
 
     m_robotContainer.swerveDrive.enableLimeLight();
-    
     // need them once it comes back from Test Mode
     if (RobotContainer.USE_SUBSYSTEMS) {
       m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
@@ -132,7 +160,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+
   }
+
 
   @Override
   public void testInit() {
@@ -141,17 +171,18 @@ public class Robot extends TimedRobot {
     if (RobotContainer.USE_SUBSYSTEMS) {
       m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Coast);
     }
-    
     // m_robotContainer.superSystem.initialize();
     m_robotContainer.initDefaultCommands_test();
     m_robotContainer.configureBindings_test();
 
     m_robotContainer.DisableAllMotors_Test();
+
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+
   }
 
   /** This function is called once when the robot is first started up. */
