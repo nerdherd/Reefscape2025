@@ -175,6 +175,10 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     }
 
+    public double getTargetPosition() {
+        return desiredPosition;
+    }
+
     // ****************************** COMMAND METHODS ***************************** //
 
     public Command setEnabledCommand(boolean enabled) {

@@ -153,6 +153,10 @@ public class Wrist extends SubsystemBase implements Reportable{
         return motor.getPosition().getValueAsDouble();
     }
 
+    public double getTargetPosition() {
+        return desiredPosition;
+    }
+
     public boolean atPosition() {
         return NerdyMath.inRange(motor.getPosition().getValueAsDouble(), 
                                 desiredPosition - WristConstants.atPositionDeadband,
