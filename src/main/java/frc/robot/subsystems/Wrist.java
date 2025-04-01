@@ -141,8 +141,8 @@ public class Wrist extends SubsystemBase implements Reportable{
     // }
 
     public void zeroEncoder() {
-        motor.setPosition(0);
-        desiredPosition = 0;
+        desiredPosition = 0.008333;
+        motor.setPosition(desiredPosition);
     }
 
     public void setPivotAngle(double pivotAngle) {
