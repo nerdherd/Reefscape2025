@@ -101,6 +101,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     PIDController areaController;     // TODO: tune
     PIDController txController;
+    PIDController tyController;
 
     private int zoneId = -1;
 
@@ -128,6 +129,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         areaController = VisionConstants.PIDControllerArea;
         areaController.setTolerance(0.5);
         txController = VisionConstants.PIDControllerTX;
+        txController.setTolerance(0.01);
+        tyController = VisionConstants.PIDControllerTY;
+        tyController.setTolerance(0.01);
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,
@@ -1079,6 +1083,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public Command driveToCoralCommand(String limelightName, double targetArea) {
         return Commands.run(() -> driveToCoral(limelightName, targetArea));
+    }
+
+    public void driveToTag(String limelightName) {
+        if (LimelightHelpers.getTV(limelightName)){// && labels.length == 1 && labels[0].equals("coral")){
+            double tx = LimelightHelpers.getTX(limelightName);
+            double ty = LimelightHelpers.getTY(limelightName); 
+            
+            double forwardSpeed = tyController.calculate(ty, 0);
+            double sideSpeed = -txController.calculate(tx,0);
+            if (tyController.atSetpoint()) forwardSpeed = 0.0;
+            if (txController.atSetpoint()) sideSpeed = 0.0;
+            drive(forwardSpeed, sideSpeed, 0);
+        }
+    }
+
+    public Command driveToTagCommand(String limelightName) {
+        return Commands.run(() -> driveToTag(limelightName));
     }
 
     //****************************** SETTERS ******************************/

@@ -362,7 +362,8 @@ public final class Constants {
     public static final double kSunflowerI = 0;
     public static final double kSunflowerD = 0;
     public static final PIDController PIDControllerArea = new PIDController(0.5, 0, 0.05);
-    public static final PIDController PIDControllerTX =  new PIDController(0.08, 0, 0.0); 
+    public static final PIDController PIDControllerTX =  new PIDController(0.15, 0, 0.0); 
+    public static final PIDController PIDControllerTY = new PIDController(0.15, 0, 0.0);
 
     public static final int kAprilTagPipeline = 4;
     public static final double fieldXOffset = 8.27; // Certified (Half field dimensions)
