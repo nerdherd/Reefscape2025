@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SuperSystemConstants.CoralPositions;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
@@ -69,8 +70,6 @@ public class RobotContainer {
   public Climb climbMotor;
   public CANdi candi;
   public PositionMode positionMode;
-  BooleanSupplier leftBumper;
-  BooleanSupplier rightBumper;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
@@ -82,12 +81,11 @@ public class RobotContainer {
   public Generic3Piece bottom3Piece;
   public Generic4Piece bottom4Piece;
 
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
-  
   static boolean isRedSide = false;
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
@@ -226,11 +224,6 @@ public class RobotContainer {
         //   }
         // }, elevator));  
       }
-    Trigger lb = driverController.bumperLeft(), rb = driverController.bumperRight();
-    leftBumper = (() -> lb.getAsBoolean());
-    rightBumper = (() -> rb.getAsBoolean());
-
-
   }
 
   public void initDefaultCommands_test() {
@@ -245,25 +238,22 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
-    driverController.bumperLeft().onTrue(
-      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperLeft().getAsBoolean()), swerveDrive.setAutoPathRun(-1, () -> driverController.bumperLeft().getAsBoolean()), rightBumper)
-    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
-    
-    driverController.bumperRight().onTrue(
-      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperRight().getAsBoolean()), swerveDrive.setAutoPathRun(1, () -> driverController.bumperRight().getAsBoolean()), leftBumper)
-    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
-    
-    // driverController.dpadDown().onTrue(
-    //   superSystem.moveTo(NamedPositions.AlgaeL2)
-    // );
-    // driverController.dpadUp().onTrue(
-    //   superSystem.moveTo(NamedPositions.AlgaeL3)
-    // );
+    // Move to reef side
+    driverController.bumperLeft()
+      .whileTrue(
+        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
+      );
+    driverController.bumperRight()
+      .whileTrue(
+        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
+      );
+
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()
-      .onTrue(superSystem.outtake())
-      .onFalse(superSystem.stopRoller());
-        // Climb sequence
+        .onTrue(superSystem.outtake())
+        .onFalse(superSystem.stopRoller());
+
+      // Climb sequence
       driverController.buttonDown() // Prepare Position for Climb
         .onTrue(Commands.sequence(
           superSystem.climbCommandUp()));
@@ -286,17 +276,10 @@ public class RobotContainer {
 
       driverController.buttonDown()
         .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
-
-    
-
     
       //////////////////////
       // Operator bindings
       //////////////////////
-      
-
-      
-      
       operatorController.dpadDown()
       .onTrue(superSystem.moveTo(PositionEquivalents.L1));
       operatorController.dpadLeft()
@@ -310,8 +293,8 @@ public class RobotContainer {
       .onTrue(superSystem.intake());
       // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
-      .onTrue(superSystem.intakeCoral())
-      .onFalse(superSystem.stopRoller());
+        .onTrue(superSystem.intakeCoral())
+        .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
       // operatorController.bumperLeft() // 
@@ -368,11 +351,11 @@ public class RobotContainer {
     // driverController.buttonDown()
     // .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
 
-    // //////////////////////////
-    // /// DO NOT REMOVE IT
-    testController.controllerLeft()
-      .onTrue(superSystem.zeroEncoders());
-      // ////////////////////////
+    //////////////////////////
+    /// DO NOT REMOVE IT
+    operatorController.controllerLeft()
+    .onTrue(superSystem.zeroEncoders());
+    ////////////////////////
     
     // operatorController.controllerRight()
     // .onTrue(superSystem.moveTo(NamedPositions.Processor));    

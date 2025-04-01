@@ -89,8 +89,6 @@ public class SuperSystem {
         wristAtPositionWide = () -> wrist.atPositionWide();
         intakeDetected = () -> (candi.getS1State().getValue().value == 1);
 
-        
-
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
         tab.addBoolean("isStarted", () -> isStarted);
         //(after power on, during Disable mode, motors disabled and not applying brake)
