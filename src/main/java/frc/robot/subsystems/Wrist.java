@@ -141,7 +141,7 @@ public class Wrist extends SubsystemBase implements Reportable{
     // }
 
     public void zeroEncoder() {
-        desiredPosition = 0.008333;
+        desiredPosition = WristConstants.kWristOffset;
         motor.setPosition(desiredPosition);
     }
 

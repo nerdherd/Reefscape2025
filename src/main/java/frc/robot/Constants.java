@@ -520,6 +520,7 @@ public final class Constants {
     public static final double atPositionDeadband = 0.05;
     public static final double atPositionDeadbandWide = 0.3;
     
+    public static final double kWristOffset = 0.008333;
   }
 
   public static final class ClimbConstants { // TODO change
@@ -560,9 +561,9 @@ public final class Constants {
     }
     
     public enum CoralPositions { 
-      Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
+      Stow(                ExecutionOrder.ELV_WRT_PVT , PivotConstants.kPivotOffSet,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
       // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.77, -0.75, -0.4     ), // warren testing
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
@@ -577,7 +578,7 @@ public final class Constants {
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197     ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.265,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.0, 1.1, -0.096     ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.015, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       public Position position;
