@@ -1093,7 +1093,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             double tx = LimelightHelpers.getTX(limelightName);
             double ty = LimelightHelpers.getTY(limelightName); 
             
-            double forwardSpeed = tyController.calculate(ty, 0);
+            double forwardSpeed = -tyController.calculate(ty, 0);
             double sideSpeed = -txController.calculate(tx,0);
             if (tyController.atSetpoint()) forwardSpeed = 0.0;
             if (txController.atSetpoint()) sideSpeed = 0.0;

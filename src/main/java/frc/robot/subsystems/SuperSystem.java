@@ -83,7 +83,7 @@ public class SuperSystem {
         elevatorAtPositionWide = () -> elevator.atPositionWide();
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
-        intakeDetected = () -> (candi.getS1State().getValue().value == 0);
+        intakeDetected = () -> (candi.getS1State().getValue().value == 1);
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -561,9 +561,9 @@ public class SuperSystem {
                 tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
                 tab.addString("Super System Current Position", () -> currentPosition.toString());
-                tab.addBoolean("Intake Detected", intakeDetected);
-            case MINIMAL:
                 tab.addString("Super System Mode", () -> positionMode.toString()); 
+                case MINIMAL:
+                tab.addBoolean("Intake Detected", intakeDetected);
                 break;
         }
     }

@@ -81,7 +81,7 @@ public class RobotContainer {
 
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MEDIUM;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   public static boolean USE_SUBSYSTEMS = true;
   static boolean isRedSide = false;
   
@@ -245,11 +245,11 @@ public class RobotContainer {
       // Move to reef side
       driverController.bumperLeft()
         .whileTrue(
-          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
+          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
         );
       driverController.bumperRight()
         .whileTrue(
-          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
+          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
         );
 
       // Climb sequence
@@ -287,7 +287,7 @@ public class RobotContainer {
         .onTrue(superSystem.intake());
       // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
-        .onTrue(superSystem.outtake())
+        .onTrue(superSystem.intakeCoral())
         .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
         .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
