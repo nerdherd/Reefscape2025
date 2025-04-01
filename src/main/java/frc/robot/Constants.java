@@ -459,7 +459,7 @@ public final class Constants {
 
     public static final double kPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kPivotDeadBand = 0;
-    public static final double kPivotOffSet = 0;
+    public static final double kPivotOffSet = 0.03051758;
 
     public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5

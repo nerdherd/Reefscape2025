@@ -180,7 +180,7 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     // ****************************** STATE METHODS ***************************** //
     public void zeroEncoder() {
-        desiredPosition = 0.017333984; 
+        desiredPosition = PivotConstants.kPivotOffSet; 
         pivotMotor.setPosition(desiredPosition); // Start position is based off of difference between flat starting pose and hard-stopped starting pose
         pivotMotorRight.setPosition(desiredPosition);
     }
