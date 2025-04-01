@@ -97,6 +97,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     PIDController areaController;     // TODO: tune
     PIDController txController;
     PIDController tyController;
+    PIDController angleController;
 
     private int zoneId = -1;
 
@@ -127,6 +128,17 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         txController.setTolerance(0.01);
         tyController = VisionConstants.PIDControllerTY;
         tyController.setTolerance(0.01);
+        angleController = new PIDController(
+            SwerveDriveConstants.kPThetaTeleop,
+            SwerveDriveConstants.kIThetaTeleop,
+            SwerveDriveConstants.kDThetaTeleop
+        );
+        angleController.setTolerance(
+            SwerveDriveConstants.kTurnToAnglePositionToleranceAngle, 
+            SwerveDriveConstants.kTurnToAngleVelocityToleranceAnglesPerSec * 0.02
+        );
+        angleController.enableContinuousInput(0, 360);
+            
         frontLeft = new SwerveModule(
             kFLDriveID,
             kFLTurningID,
@@ -561,6 +573,20 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             return RobotContainer.IsRedSide() ? 3 : 16;
         }
         return -1;
+    }
+
+    private int getClosestReefTagId() {
+        int startIndex = RobotContainer.IsRedSide() ? 6 : 17;
+            int indexToGet = -1;
+            double distance = getDistanceFromTag(false, startIndex);
+            for (int index = startIndex; index <= startIndex + 5; index++) {
+                double distance2 = getDistanceFromTag(false, index);
+                if(distance2 < distance) {
+                    distance = distance2;
+                    indexToGet = index;
+                }
+            }
+            return indexToGet;
     }
             
     private int getMostClosedApriltagIdInReefZone(int zoneId) {
@@ -1031,12 +1057,20 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if (LimelightHelpers.getTV(limelightName)){// && labels.length == 1 && labels[0].equals("coral")){
             double tx = LimelightHelpers.getTX(limelightName);
             double ty = LimelightHelpers.getTY(limelightName); 
-            
+            double targetRotation = getImu().getHeading();
+            int tagId = getClosestReefTagId();
+            if(tagId != -1) {
+                Pose3d tagPose = layout.getTagPose(tagId).get();
+                if(tagPose != null) targetRotation = tagPose.getRotation().getAngle();
+            }
+
             double forwardSpeed = -tyController.calculate(ty, 0);
             double sideSpeed = -txController.calculate(tx,0);
+            double turnSpeed = angleController.calculate(getImu().getHeading(), targetRotation);
             if (tyController.atSetpoint()) forwardSpeed = 0.0;
             if (txController.atSetpoint()) sideSpeed = 0.0;
-            drive(forwardSpeed, sideSpeed, 0);
+            if (angleController.atSetpoint()) turnSpeed = 0.0;
+            drive(forwardSpeed, sideSpeed, turnSpeed);
         }
     }
 
