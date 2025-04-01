@@ -175,7 +175,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         
         ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
         pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
-        pivotMotorRight.setControl(followRequest); 
+        // pivotMotorRight.setControl(followRequest); 
     }
 
     // ****************************** STATE METHODS ***************************** //

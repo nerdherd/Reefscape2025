@@ -392,9 +392,6 @@ public class SuperSystem {
     public Command preExecute()
     {
         return Commands.runOnce(()-> {
-            pivot.stopMotion();
-            elevator.stopMotion();
-            wrist.stopMotion();
             pivot.setTargetPosition(pivot.getPosition());
             elevator.setTargetPosition(elevator.getPosition());
             wrist.setTargetPosition(wrist.getPosition());
@@ -575,9 +572,9 @@ public class SuperSystem {
                 tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
                 tab.addString("Super System Current Position", () -> currentPosition.toString());
-                tab.addBoolean("Intake Detected", intakeDetected);
-            case MINIMAL:
                 tab.addString("Super System Mode", () -> positionMode.toString()); 
+                case MINIMAL:
+                tab.addBoolean("Intake Detected", intakeDetected);
                 break;
         }
     }

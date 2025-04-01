@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SuperSystemConstants.CoralPositions;
@@ -225,8 +226,9 @@ public class RobotContainer {
         //   }
         // }, elevator));  
       }
-    leftBumper = (() -> driverController.bumperLeft().getAsBoolean());
-    rightBumper = (() -> driverController.bumperRight().getAsBoolean());
+    Trigger lb = driverController.bumperLeft(), rb = driverController.bumperRight();
+    leftBumper = (() -> lb.getAsBoolean());
+    rightBumper = (() -> rb.getAsBoolean());
 
 
   }

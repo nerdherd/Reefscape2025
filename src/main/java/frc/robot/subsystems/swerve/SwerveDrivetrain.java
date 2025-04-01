@@ -339,8 +339,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             SmartDashboard.putNumber("Robot Rotation", robotRotation);
     
             if (useVision) {
-                // visionupdateOdometry(VisionConstants.kLimelightBackLeftName); TODO: Temp fix change later
-                // visionupdateOdometry(VisionConstants.kLimelightBackRightName); TODO: Temp fix change later
+                visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
+                visionupdateOdometry(VisionConstants.kLimelightBackRightName); 
                 // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
                 // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
             }
