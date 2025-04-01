@@ -69,8 +69,6 @@ public class RobotContainer {
   public Climb climbMotor;
   public CANdi candi;
   public PositionMode positionMode;
-  BooleanSupplier leftBumper;
-  BooleanSupplier rightBumper;
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
@@ -225,10 +223,6 @@ public class RobotContainer {
         //   }
         // }, elevator));  
       }
-    leftBumper = (() -> driverController.bumperLeft().getAsBoolean());
-    rightBumper = (() -> driverController.bumperRight().getAsBoolean());
-
-
   }
 
   public void initDefaultCommands_test() {
@@ -243,34 +237,20 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
-    driverController.bumperLeft().onTrue(
-      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperLeft().getAsBoolean()), swerveDrive.setAutoPathRun(-1, () -> driverController.bumperLeft().getAsBoolean()), rightBumper)
-    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
-    
-    driverController.bumperRight().onTrue(
-      Commands.either(swerveDrive.setAutoPathRun(0, () -> driverController.bumperRight().getAsBoolean()), swerveDrive.setAutoPathRun(1, () -> driverController.bumperRight().getAsBoolean()), leftBumper)
-    ).onFalse(Commands.runOnce(()-> swerveDrive.stopAutoPath()));
-    
-    // driverController.dpadDown().onTrue(
-    //   superSystem.moveTo(NamedPositions.AlgaeL2)
-    // );
-    // driverController.dpadUp().onTrue(
-    //   superSystem.moveTo(NamedPositions.AlgaeL3)
-    // );
+    // Move to reef side
+    driverController.bumperLeft()
+      .whileTrue(
+        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
+      );
+    driverController.bumperRight()
+      .whileTrue(
+        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
+      );
+
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()
         .onTrue(superSystem.outtake())
         .onFalse(superSystem.stopRoller());
-
-      // Move to reef side
-      driverController.bumperLeft()
-        .whileTrue(
-          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
-        );
-      driverController.bumperRight()
-        .whileTrue(
-          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
-        );
 
       // Climb sequence
       driverController.buttonDown() // Prepare Position for Climb
@@ -295,17 +275,10 @@ public class RobotContainer {
 
       driverController.buttonDown()
         .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
-
-    
-
     
       //////////////////////
       // Operator bindings
       //////////////////////
-      
-
-      
-      
       operatorController.dpadDown()
       .onTrue(superSystem.moveTo(PositionEquivalents.L1));
       operatorController.dpadLeft()

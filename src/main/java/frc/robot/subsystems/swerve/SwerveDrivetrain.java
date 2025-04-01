@@ -12,12 +12,9 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-//import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.vision.VisionRunner;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -52,7 +49,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
 
-import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
@@ -73,8 +69,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private DRIVE_MODE driveMode = DRIVE_MODE.FIELD_ORIENTED;
 
     //Vision
-    private int counter = 0;
-    private int visionFrequency = 1;
     private AprilTagFieldLayout layout;
     private double lastDistance;
     
@@ -339,18 +333,14 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         field.setRobotPose(poseEstimator.getEstimatedPosition());
             
-            double robotRotation = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        if (useVision) {
+            visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
+            visionupdateOdometry(VisionConstants.kLimelightBackRightName);
+            // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
+            // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
+        }
     
-            SmartDashboard.putNumber("Robot Rotation", robotRotation);
-    
-            if (useVision) {
-                visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
-                visionupdateOdometry(VisionConstants.kLimelightBackRightName);
-                // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
-                // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
-            }
-        
-            //todo try MegaTag2
+        //todo try MegaTag2
     }
 
     //******************************  Vision ******************************/
@@ -727,19 +717,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             )
         );
     }
-    int counterpathfindingStop = 0;
-    int counterpathfindingStopFailed = 0;
     public void stopAutoPath() {
-        SmartDashboard.putBoolean("Stop ran", true);
         if (pathfindingCommand != null && !pathfindingCommand.isFinished()) {
-            SmartDashboard.putBoolean("Stop ran again", true);
             pathfindingCommand.cancel();
             CommandScheduler.getInstance().cancel(pathfindingCommand);
             stopModules();
-            counter += 1;
-            SmartDashboard.putNumber("Counter Path Finding Value", counterpathfindingStop);
         }
-        SmartDashboard.putNumber("Counter failed stop", counterpathfindingStopFailed);
     }
 
     //****************************** GETTERS ******************************/
@@ -956,34 +939,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
-    //Equation used found by Zachary Martinez
-    //https://www.desmos.com/calculator/q70q2ekunm
-
-    public Command moveLeftOf(int tagID) {
-        Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
-        Rotation2d tagRotation = tagPose.getRotation();
-        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
-        Double theta_0 = tagRotationInverse.getRadians();
-        Double moveBy = 0.5; //TODO: Change Later
-        // D_x = R_x + M cos (theta_0)
-        // D_y = R_y + M sin (theta_0)
-        Transform2d transformer = new Transform2d((tagPose.getX() + moveBy * Math.cos(theta_0)), (tagPose.getY() + moveBy * Math.sin(theta_0)), tagRotation);
-        // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
-        return driveToRelativePose(1,1, transformer); //only for testing
-    }
-
-    public Command moveRightOf(int tagID) {
-        Rotation2d tagRotation = layout.getTagPose(tagID).get().toPose2d().getRotation();
-        Rotation2d tagRotationInverse = new Rotation2d(-tagRotation.getRadians());
-        Double theta_0 = tagRotationInverse.getRadians();
-        Double moveBy = -0.5; //TODO: Change Later
-        // D_x = R_x + M cos (theta_0)
-        // D_y = R_y + M sin (theta_0)
-        Transform2d transformer = new Transform2d((moveBy * Math.cos(theta_0)), (moveBy * Math.sin(theta_0)), tagRotation);
-        // return driveToRelativePose(PathPlannerConstants.kPPMaxVelocity, PathPlannerConstants.kPPMaxAcceleration, transformer);
-        return driveToRelativePose(1,1, transformer); //only for testing
-
-    }
 
     /**
      * Calculate position to move to based on Reef side AprilTags
