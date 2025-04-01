@@ -30,12 +30,14 @@ import frc.robot.Constants.SuperSystemConstants.CoralPositions;
 import frc.robot.Constants.SuperSystemConstants.Position;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
 public class SuperSystem {
     public Elevator elevator;
     public Pivot pivot;
     public Wrist wrist;
     public IntakeRoller intakeRoller;
     public Climb climbMotor;
+    public SwerveDrivetrain swerveDrivetrain;
 
     public StatusSignal<S1StateValue> intakeSensor;
     
@@ -70,13 +72,14 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(Elevator elevator, Pivot pivot, Wrist wrist, IntakeRoller intakeRoller, CANdi candi, Climb climbMotor) {
+    public SuperSystem(SwerveDrivetrain swerveDrivetrain, Elevator elevator, Pivot pivot, Wrist wrist, IntakeRoller intakeRoller, CANdi candi, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
         this.intakeRoller = intakeRoller;
         this.intakeSensor = candi.getS1State(true);
         this.climbMotor = climbMotor;
+        this.swerveDrivetrain = swerveDrivetrain;
 
         pivotAtPosition = () -> pivot.atPosition();
         pivotAtPositionWide = () -> pivot.atPositionWide();
@@ -85,6 +88,7 @@ public class SuperSystem {
         wristAtPosition = () -> wrist.atPosition();
         wristAtPositionWide = () -> wrist.atPositionWide();
         intakeDetected = () -> (candi.getS1State().getValue().value == 1);
+
         
 
         ShuffleboardTab tab = Shuffleboard.getTab("Supersystem");
@@ -130,7 +134,12 @@ public class SuperSystem {
     public Command stopRoller() {
         return intakeRoller.stopCommand();
     }
-
+    public Command driveToCoralWithIntake(){
+        return Commands.race(
+                swerveDrivetrain.driveToCoralCommand("limelight-coral", 8),//change later
+                intakeUntilSensed()
+        );
+    }
     public Command intake() {
         return Commands.either(
             intakeUntilSensed(), 

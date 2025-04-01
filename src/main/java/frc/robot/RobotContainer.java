@@ -115,7 +115,7 @@ public class RobotContainer {
       intakeRoller = new IntakeRoller();
       candi = new CANdi(6);
       climbMotor = new Climb();
-      superSystem = new SuperSystem(elevator, pivot, wrist, intakeRoller, candi, climbMotor);
+      superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -284,8 +284,8 @@ public class RobotContainer {
         .onTrue(superSystem.climbHardClamp());
 
 
-      // driverController.buttonDown()
-        // .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
+      driverController.buttonDown()
+        .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
 
     
 
