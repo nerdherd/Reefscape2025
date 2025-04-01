@@ -344,7 +344,7 @@ public class RobotContainer {
 
     //////////////////////////
     /// DO NOT REMOVE IT
-    testController.controllerLeft()
+    operatorController.controllerLeft()
     .onTrue(superSystem.zeroEncoders());
     ////////////////////////
     
