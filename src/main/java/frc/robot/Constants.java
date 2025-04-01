@@ -561,7 +561,7 @@ public final class Constants {
     public enum CoralPositions { 
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.01,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.82, -0.8, -0.4     ), // Ground level CAMS Tuned
+      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , 0.04, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
       Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // Adjusted Idaho

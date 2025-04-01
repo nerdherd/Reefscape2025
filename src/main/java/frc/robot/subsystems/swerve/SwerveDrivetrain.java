@@ -39,6 +39,7 @@ import frc.robot.util.NerdyMath;
 import frc.robot.vision.LimelightHelpers;
 import frc.robot.vision.VisionSys;
 import frc.robot.vision.LimelightHelpers.PoseEstimate;
+import frc.robot.vision.LimelightHelpers.RawFiducial;
 import frc.robot.subsystems.Reportable;
 
 import static frc.robot.Constants.SwerveDriveConstants.*;
@@ -334,89 +335,75 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         field.setRobotPose(poseEstimator.getEstimatedPosition());
             
-            double robotRotation = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+        double robotRotation = poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+
+        SmartDashboard.putNumber("Robot Rotation", robotRotation);
+
+        if (useVision) {
+            visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
+            visionupdateOdometry(VisionConstants.kLimelightBackRightName); 
+            // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
+            // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
+        }
     
-            SmartDashboard.putNumber("Robot Rotation", robotRotation);
-    
-            if (useVision) {
-                visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
-                visionupdateOdometry(VisionConstants.kLimelightBackRightName); 
-                // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
-                // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
-            }
-        
-            //todo try MegaTag2
+        //todo try MegaTag2
     }
 
     //******************************  Vision ******************************/
+    double xyStds = 0.5;
+    double degStds = 30;
+    LimelightHelpers.PoseEstimate mt; // thats me :OO
+    RawFiducial fiducial;
 	private void visionupdateOdometry(String limelightName) {
         boolean useMegaTag2 = false; //set to false to use MegaTag1
-        double xyStds = 0.5;
-        double degStds = 30;
+        xyStds = 0.5;
+        degStds = 30;
 
-        if(useMegaTag2 == false)
-        {
-        LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
-        
-        if (mt1 == null){
-            return;
-        }
-        if(mt1.tagCount == 1 && mt1.rawFiducials.length == 1)
-        {
-            if(mt1.rawFiducials[0].ambiguity > .7)
-            {
+        if(!useMegaTag2) {
+            mt = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+            if (mt == null) {
                 return;
             }
-            if(mt1.rawFiducials[0].distToCamera > 1.5)
-            {
+            if (mt.tagCount == 0) {
                 return;
             }
-        }
-        if(mt1.tagCount == 0)
-        {
-            return;
-        }
-        if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
-            return;
-        }
-        if (mt1.avgTagArea > 0.8 && mt1.rawFiducials[0].distToCamera < 0.5) {
-            xyStds = 1.0;
-            degStds = 12;
-        }
-        // 1 target farther away and estimated pose is close
-        else if (mt1.avgTagArea > 0.1 && mt1.rawFiducials[0].distToCamera < 0.3) {
-            xyStds = 2.0;
-            degStds = 30;
-        } else if (mt1.tagCount >= 2) {
-            xyStds = 0.5;
-            degStds = 6;
-        }
+            fiducial = mt.rawFiducials[0];
+            if (mt.tagCount == 1 && mt.rawFiducials.length == 1 && (fiducial.ambiguity > .7 || fiducial.distToCamera > 1.5)) {
+                return;
+            }
+            if(Math.abs(gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+                return;
+            }
+            if (mt.avgTagArea > 0.8 && fiducial.distToCamera < 0.5) {
+                xyStds = 1.0;
+                degStds = 12;
+            }
+            // 1 target farther away and estimated pose is close
+            else if (mt.avgTagArea > 0.1 && fiducial.distToCamera < 0.3) {
+                xyStds = 2.0;
+                degStds = 30;
+            } else if (mt.tagCount >= 2) {
+                xyStds = 0.5;
+                degStds = 6;
+            }
 
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
-        poseEstimator.addVisionMeasurement(
-            // new Pose2d(mt1.pose.getX().getValueAsDouble(), mt1.pose.getY().getValueAsDouble(), 0, gyro.getHeading()),
-            mt1.pose,
-            mt1.timestampSeconds);
-        } else if (useMegaTag2 == true) {
+            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
+            poseEstimator.addVisionMeasurement(
+                // new Pose2d(mt1.pose.getX().getValueAsDouble(), mt1.pose.getY().getValueAsDouble(), 0, gyro.getHeading()),
+                mt.pose,
+                mt.timestampSeconds);
+        } else {
             double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
             LimelightHelpers.SetRobotOrientation(limelightName, currentPoseYaw, 0, 0, 0, 0, 0);
-            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
-            if (mt2 == null){
+            mt = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
+            if(mt == null || Math.abs(gyro.getRate()) > 720 || mt.tagCount == 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+            {
                 return;
-        }
-        if(Math.abs(gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-        {
-            return;
-        }
-        if(mt2.tagCount == 0)
-        {
-            return;
-        }
-        poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.3,.3,10));
-        poseEstimator.addVisionMeasurement(
-            mt2.pose,
-            mt2.timestampSeconds);
+            }
+            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.3,.3,10));
+            poseEstimator.addVisionMeasurement(
+                mt.pose,
+                mt.timestampSeconds);
         }
     }
 	
