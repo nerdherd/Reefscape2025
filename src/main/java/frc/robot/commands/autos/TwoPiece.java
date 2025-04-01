@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.PathPlannerConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
@@ -34,7 +35,7 @@ public class TwoPiece extends SequentialCommandGroup {
                 // superSystem.holdPiece(),
                 AutoBuilder.followPath(pathGroup.get(0)),
                 superSystem.moveToAuto(PositionEquivalents.L4),
-                Commands.runOnce(() ->swerve.setAutoPathRun(1, -1)).withTimeout(2),
+                swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
                 
                 // superSystem.outtake(),
                 Commands.waitSeconds(2.0),

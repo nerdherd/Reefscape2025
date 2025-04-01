@@ -38,9 +38,6 @@ public class Robot extends TimedRobot {
     DataLogManager.start("/media/sda1/logs");
     DataLogManager.logNetworkTables(true);
     m_robotContainer.swerveDrive.refreshModulePID();
-
-    // Start CameraServer for video streaming
-    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -59,29 +56,6 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     // m_robotContainer.superSystemCommand.updateDependencies();
     // Access Limelight data from NetworkTables
-    NetworkTable tableBackLeft = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.kLimelightBackLeftName);
-    NetworkTable tableBackRight = NetworkTableInstance.getDefault().getTable(Constants.VisionConstants.kLimelightBackRightName);
-
-    double txLeft = tableBackLeft.getEntry("tx").getDouble(0.0);
-    double tyLeft = tableBackLeft.getEntry("ty").getDouble(0.0);
-    double taLeft = tableBackLeft.getEntry("ta").getDouble(0.0);
-
-    double txRight = tableBackRight.getEntry("tx").getDouble(0.0);
-    double tyRight = tableBackRight.getEntry("ty").getDouble(0.0);
-    double taRight = tableBackRight.getEntry("ta").getDouble(0.0);
-
-    // Display Limelight data on SmartDashboard
-    SmartDashboard.putNumber("Limelight Left X", txLeft);
-    SmartDashboard.putNumber("Limelight Left Y", tyLeft);
-    SmartDashboard.putNumber("Limelight Left Area", taLeft);
-
-    SmartDashboard.putNumber("Limelight Right X", txRight);
-    SmartDashboard.putNumber("Limelight Right Y", tyRight);
-    SmartDashboard.putNumber("Limelight Right Area", taRight);
-
-    // Optionally display the camera feed URLs (adjust for your Limelight IPs)
-    SmartDashboard.putString("Limelight Left Feed URL", "http://10.6.87.5:5800");
-    SmartDashboard.putString("Limelight Right Feed URL", "http://10.6.87.7:5800");
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

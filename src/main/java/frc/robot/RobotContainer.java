@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SuperSystemConstants.CoralPositions;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
@@ -243,15 +244,13 @@ public class RobotContainer {
 
       // Move to reef side
       driverController.bumperLeft()
-        .whileTrue(Commands.runOnce(() ->
-          swerveDrive.setAutoPathRun(-1)
-        ))
-        .onFalse(Commands.runOnce(() -> swerveDrive.stopAutoPath()));
+        .whileTrue(
+          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
+        );
       driverController.bumperRight()
-        .whileTrue(Commands.runOnce(() ->
-        swerveDrive.setAutoPathRun(1)
-      ))
-      .onFalse(Commands.runOnce(() -> swerveDrive.stopAutoPath()));
+        .whileTrue(
+          swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
+        );
 
       // Climb sequence
       driverController.buttonDown() // Prepare Position for Climb
