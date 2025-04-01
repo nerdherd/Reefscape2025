@@ -108,9 +108,9 @@ public class SwerveJoystickCommand extends Command {
         
 
         this.turnToAngleController = new PIDController(
-            SwerveDriveConstants.kPThetaTeleop,
-            SwerveDriveConstants.kIThetaTeleop,
-            SwerveDriveConstants.kDThetaTeleop
+            SwerveDriveConstants.kPThetaAuto,
+            SwerveDriveConstants.kIThetaAuto,
+            SwerveDriveConstants.kDThetaAuto
             );
 
         // this.turnToAngleController = new PIDController(

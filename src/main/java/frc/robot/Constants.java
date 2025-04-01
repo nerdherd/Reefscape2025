@@ -97,9 +97,9 @@ public final class Constants {
                                                               kVisionSTDy,
                                                               kVisionSTDtheta);
     // VecBuilder.fill(kVisionSTDx, kVisionSTDy, kVisionSTDtheta);
-    public static final double kPThetaTeleop = 0;
-    public static final double kIThetaTeleop = 0;
-    public static final double kDThetaTeleop = 0;
+    public static final double kPThetaAuto = 0.18;
+    public static final double kIThetaAuto = 0;
+    public static final double kDThetaAuto = 0.01;
 
     // Distance between right and left wheels
     public static final double kTrackWidth = Units.inchesToMeters(24.125);
@@ -176,7 +176,7 @@ public final class Constants {
 
     public static final double kGravityMPS = 9.80665; 
 
-    public static final double kTurnToAnglePositionToleranceAngle = 5;
+    public static final double kTurnToAnglePositionToleranceAngle = 2;
     public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
 
     public static enum FieldPositions {
@@ -346,14 +346,14 @@ public final class Constants {
 
     // public static final String kLimelightFrontLeftName = "limelight-fl";
     // public static final String kLimelightFrontLeftIP = "10.6.87.15:5802";
-    public static final String kLimelightFrontRightName = "limelight-fr";
-    public static final String kLimelightFrontRightIP = "10.6.87.17:5802";
+    // public static final String kLimelightFrontRightName = "limelight-fr";
+    // public static final String kLimelightFrontRightIP = "10.6.87.17:5802";
     public static final String kLimelightBackLeftName = "limelight-bl";
-    public static final String kLimelightBackLeftIP = "10.6.87.5:5802";
+    public static final String kLimelightBackLeftIP = "10.6.87.15:5802";
     public static final String kLimelightBackRightName = "limelight-br";
-    public static final String kLimelightBackRightIP = "10.6.87.7:5802";
+    public static final String kLimelightBackRightIP = "10.6.87.17:5802";
     public static final String kLimelightCoralName = "limelight-coral";
-    public static final String kLimelightCoralIP = "10.6.87.15:5802";
+    public static final String kLimelightCoralIP = "10.6.87.11:5802";
 
     public static final double kFrontCameraHeightMeters = 0; // TODO change for new bot limelights
     public static final double kNoteHeightMeters = 0;
@@ -362,7 +362,7 @@ public final class Constants {
     public static final double kSunflowerI = 0;
     public static final double kSunflowerD = 0;
     public static final PIDController PIDControllerArea = new PIDController(0.5, 0, 0.05);
-    public static final PIDController PIDControllerTX =  new PIDController(0.1, 0, 0.0); //0.15
+    public static final PIDController PIDControllerTX =  new PIDController(0.05, 0, 0.0025); //0.15
     public static final PIDController PIDControllerTY = new PIDController(0.15, 0, 0.0);
 
     public static final int kAprilTagPipeline = 4;
@@ -422,7 +422,7 @@ public final class Constants {
     public static final double kGElevatorMotor = 0.17;
     public static final double kSElevatorMotor = 0.11;
 
-    public static final double kElevatorCruiseVelocity = 100; //16.333 //20
+    public static final double kElevatorCruiseVelocity = 150; //16.333 //20
     public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
     public static final double kElevatorJerk = kElevatorCruiseAcceleration * 10;
 
@@ -564,7 +564,7 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , PivotConstants.kPivotOffSet,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
-      GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.77, -0.77, -0.4     ), // warren testing
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , PivotConstants.kPivotOffSet, 0.77, -0.77), // warren testing
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
       Station(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.275, -0.8), // Adjusted Idaho

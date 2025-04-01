@@ -117,21 +117,20 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      * Construct a new {@link SwerveDrivetrain}
      */
     public SwerveDrivetrain(PigeonV2 gyro) throws IllegalArgumentException {
-        
-        // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
         LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
         // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontLeftName, 1);
-        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontRightName, 1);
+        // LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightFrontRightName, 1);
         areaController = VisionConstants.PIDControllerArea;
         areaController.setTolerance(0.5);
         txController = VisionConstants.PIDControllerTX;
-        txController.setTolerance(0.01);
+        txController.setTolerance(0.005);
         tyController = VisionConstants.PIDControllerTY;
-        tyController.setTolerance(0.01);
+        tyController.setTolerance(0.005);
         angleController = new PIDController(
-            SwerveDriveConstants.kPThetaTeleop,
-            SwerveDriveConstants.kIThetaTeleop,
-            SwerveDriveConstants.kDThetaTeleop
+            SwerveDriveConstants.kPThetaAuto,
+            SwerveDriveConstants.kIThetaAuto,
+            SwerveDriveConstants.kDThetaAuto
         );
         angleController.setTolerance(
             SwerveDriveConstants.kTurnToAnglePositionToleranceAngle, 
@@ -802,20 +801,18 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // Check Vision Sys setPipeline
         // vision.setPipelineIndex(0);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(0);
-
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(0);
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(0);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 0);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 0);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(0);
         CommandScheduler.getInstance().cancelAll();
     }
 
     public void enableLimeLight() {
         // vision.setPipelineIndex(1);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackRightName, 1);
+        LimelightHelpers.setPipelineIndex(VisionConstants.kLimelightBackLeftName, 1);
 
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackRightName).getEntry("limelight-br").setInteger(1);
-
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightBackLeftName).getEntry("limelight-bl").setInteger(1);
-        NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(1);
+        // NetworkTableInstance.getDefault().getTable(VisionConstants.kLimelightFrontRightName).getEntry("ligelight-fr").setInteger(1);
         CommandScheduler.getInstance().cancelAll();
     }
 
@@ -1015,11 +1012,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         Pose2d targetPose = getPose().plus(translation);
         return driveToPose(targetPose, maxVelocityMps, maxAccelerationMpsSq);
     }
-
-     public int getReefTagID(String limelightName) {
-        long id = NetworkTableInstance.getDefault().getTable(limelightName).getEntry("tid").getInteger(-1);
-        return (int) id;
-    }
     
     public void setChassisSpeeds(ChassisSpeeds speeds) {
         SwerveModuleState[] targetStates = SwerveDriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
@@ -1039,7 +1031,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if (LimelightHelpers.getTV(limelightName)){// && labels.length == 1 && labels[0].equals("coral")){
             double tx = LimelightHelpers.getTX(limelightName);  // Horizontal offset from crosshair to target in degrees
             double ta = LimelightHelpers.getTA(limelightName);  // Target area (0% to 100% of image)
- 
             
             // PIDController rotationController = new PIDController(0.08, 0, 0.006);       // TODO: tune
             double forwardSpeed = areaController.calculate(ta,targetArea);
@@ -1058,15 +1049,18 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             double tx = LimelightHelpers.getTX(limelightName);
             double ty = LimelightHelpers.getTY(limelightName); 
             double targetRotation = getImu().getHeading();
-            int tagId = getClosestReefTagId();
+            int tagId = (int)LimelightHelpers.getFiducialID(limelightName);
             if(tagId != -1) {
                 Pose3d tagPose = layout.getTagPose(tagId).get();
-                if(tagPose != null) targetRotation = tagPose.getRotation().getAngle();
+                SmartDashboard.putString("DriveTag TagPose", tagPose.toString());
+                if(tagPose != null) targetRotation = Math.toDegrees(tagPose.getRotation().getAngle());
             }
 
             double forwardSpeed = -tyController.calculate(ty, 0);
             double sideSpeed = -txController.calculate(tx,0);
             double turnSpeed = angleController.calculate(getImu().getHeading(), targetRotation);
+            SmartDashboard.putNumber("DriveTag Target Rot", targetRotation);
+            SmartDashboard.putNumber("DriveTag TagID", tagId);
             if (tyController.atSetpoint()) forwardSpeed = 0.0;
             if (txController.atSetpoint()) sideSpeed = 0.0;
             if (angleController.atSetpoint()) turnSpeed = 0.0;

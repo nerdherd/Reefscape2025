@@ -63,7 +63,6 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().getDefaultButtonLoop().clear();
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.disableLimelight();
-
     
     if (RobotContainer.USE_SUBSYSTEMS){
       m_robotContainer.pivot.setEnabled(false);

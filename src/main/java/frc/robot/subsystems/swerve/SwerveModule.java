@@ -328,6 +328,9 @@ public class SwerveModule implements Reportable {
             case ALL:
                 tab.addNumber("Module " + moduleId + " Turn percent (motor controller)", () -> turnMotor.getDutyCycle().getValue());
                 tab.addNumber("Module " + moduleId + " Turn percent (current)", () -> this.currentTurnPercent);
+                tab.addNumber("Module " + moduleId + " Drive Stator Current", () -> driveMotor.getStatorCurrent().getValueAsDouble());
+                tab.addNumber("Module " + moduleId + " Desired Velocity", () -> this.desiredVelocity);
+                tab.addBoolean("Module " + moduleId + " Velocity Control", () -> this.velocityControl);
             case MEDIUM:
                 tab.addNumber("Module " + moduleId + " Turn Motor Current", () -> turnMotor.getStatorCurrent().getValueAsDouble());
                 tab.addNumber("Module " + moduleId + " Drive Motor Voltage", () -> (driveMotor.getDutyCycle().getValue() * driveMotor.getSupplyVoltage().getValueAsDouble()));
@@ -338,16 +341,11 @@ public class SwerveModule implements Reportable {
                 tab.addNumber("Module " + moduleId + " Drive ticks", this::getDrivePositionTicks);
                 tab.addNumber("Module " + moduleId + " Turn angle percent", () -> turnMotor.getDutyCycle().getValue());
                 tab.addNumber("Module " + moduleId + " Angle Difference", () -> desiredAngle - currentAngle);
+                tab.addNumber("Module " + moduleId + " Desired Angle", () -> desiredAngle);
+                tab.addNumber("Module " + moduleId + " Velocity RPS", this::getDriveVelocityRPS);
             case MINIMAL:
                 tab.addNumber("Module " + moduleId + " Turn angle", this::getTurningPositionDegrees);
-                tab.addNumber("Module " + moduleId + " Desired Angle", () -> desiredAngle);
                 tab.addNumber("Module " + moduleId + " Drive Supply Current", () -> driveMotor.getSupplyCurrent().getValueAsDouble());
-                // tab.addNumber("Module Velocity", this::getDriveVelocity);
-                tab.addNumber("Module " + moduleId + " Velocity RPS", this::getDriveVelocityRPS);
-                tab.addNumber("Module " + moduleId + " Desired Velocity", () -> this.desiredVelocity);
-                tab.addBoolean("Module " + moduleId + " Velocity Control", () -> this.velocityControl);
-                // tab.addString("Error Status", () -> driveMotor.getFaultField().getName());
-                tab.addNumber("Module " + moduleId + " Drive Stator Current", () -> driveMotor.getStatorCurrent().getValueAsDouble());
                 tab.addNumber("Module " + moduleId + " Drive Temperature", () -> driveMotor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Module " + moduleId + " Turn Temperature", () -> turnMotor.getDeviceTemp().getValueAsDouble());
                 break;
