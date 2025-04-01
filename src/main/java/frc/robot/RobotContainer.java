@@ -378,11 +378,11 @@ public class RobotContainer {
     // driverController.buttonDown()
     // .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
 
-    // //////////////////////////
-    // /// DO NOT REMOVE IT
-    testController.controllerLeft()
-      .onTrue(superSystem.zeroEncoders());
-      // ////////////////////////
+    //////////////////////////
+    /// DO NOT REMOVE IT
+    operatorController.controllerLeft()
+    .onTrue(superSystem.zeroEncoders());
+    ////////////////////////
     
     // operatorController.controllerRight()
     // .onTrue(superSystem.moveTo(NamedPositions.Processor));    
