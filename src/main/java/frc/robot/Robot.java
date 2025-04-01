@@ -55,7 +55,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     // m_robotContainer.superSystemCommand.updateDependencies();
-    // Access Limelight data from NetworkTables
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -65,7 +64,8 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().cancelAll();
     m_robotContainer.swerveDrive.disableLimelight();
 
-    if (RobotContainer.USE_SUBSYSTEMS) {
+    
+    if (RobotContainer.USE_SUBSYSTEMS){
       m_robotContainer.pivot.setEnabled(false);
       m_robotContainer.elevator.setEnabled(false);
       m_robotContainer.wrist.setEnabled(false);

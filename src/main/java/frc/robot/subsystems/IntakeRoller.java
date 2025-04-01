@@ -218,7 +218,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         return Commands.sequence(
             setEnabledCommand(true),
             setVoltageCommandCoral(RollerConstants.kCoralIntakePower),
-            setVoltageCommandAlgae(RollerConstants.kCoralIntakePower)
+            setVoltageCommandAlgae(RollerConstants.kCoralButAlgaeIntakePower)
         );
     }
 

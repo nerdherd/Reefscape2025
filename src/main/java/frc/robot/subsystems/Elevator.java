@@ -118,7 +118,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
         elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
-        elevatorMotor2.setControl(followRequest); 
+        // elevatorMotor2.setControl(followRequest); 
     }
 
     // ****************************** STATE METHODS ****************************** //
@@ -204,11 +204,11 @@ public class Elevator extends SubsystemBase implements Reportable {
                 break;
             case ALL:
             case MEDIUM:
+            SmartDashboard.putNumber("Elevator Desired Position", desiredPosition);
+            SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
             case MINIMAL:
-                SmartDashboard.putNumber("Elevator Desired Position", desiredPosition);
                 SmartDashboard.putNumber("Elevator Current Position", elevatorMotor.getPosition().getValueAsDouble());
                 SmartDashboard.putNumber("Elevator Current Velocity", elevatorMotor.getVelocity().getValueAsDouble());
-                SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
         }
     }
 
@@ -228,10 +228,10 @@ public class Elevator extends SubsystemBase implements Reportable {
                 tab.addNumber("Elevator Current Position", () -> elevatorMotor2.getPosition().getValueAsDouble());
             case MEDIUM:
                 tab.addNumber("Elevator Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
+                tab.addNumber("Elevator Desired Position", ()-> desiredPosition);
             case MINIMAL:
                 tab.addNumber("Elevator Temperature 1", () -> elevatorMotor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Elevator Temperature 2", () -> elevatorMotor2.getDeviceTemp().getValueAsDouble());
-                tab.addNumber("Elevator Desired Position", ()-> desiredPosition);
                 tab.addNumber("Elevator Current Position", () -> getPosition());
                 tab.addNumber("Elevator Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());    
                 

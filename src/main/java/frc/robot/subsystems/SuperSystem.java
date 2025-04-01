@@ -399,9 +399,6 @@ public class SuperSystem {
     public Command preExecute()
     {
         return Commands.runOnce(()-> {
-            pivot.stopMotion();
-            elevator.stopMotion();
-            wrist.stopMotion();
             pivot.setTargetPosition(pivot.getPosition());
             elevator.setTargetPosition(elevator.getPosition());
             wrist.setTargetPosition(wrist.getPosition());

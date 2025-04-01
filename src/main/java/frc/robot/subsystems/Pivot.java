@@ -175,14 +175,14 @@ public class Pivot extends SubsystemBase implements Reportable{
         
         ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
         pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
-        pivotMotorRight.setControl(followRequest); 
+        // pivotMotorRight.setControl(followRequest); 
     }
 
     // ****************************** STATE METHODS ***************************** //
     public void zeroEncoder() {
-        pivotMotor.setPosition(0);
-        pivotMotorRight.setPosition(0);
-        desiredPosition = 0.0;
+        desiredPosition = 0.017333984; 
+        pivotMotor.setPosition(desiredPosition); // Start position is based off of difference between flat starting pose and hard-stopped starting pose
+        pivotMotorRight.setPosition(desiredPosition);
     }
 
     public void setEnabled(boolean enabled) {
@@ -329,8 +329,8 @@ public class Pivot extends SubsystemBase implements Reportable{
             case MEDIUM:
                 tab.addBoolean("Pivot Enabled", () -> enabled);
                 tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
+                case MINIMAL:
                 tab.addNumber("Pivot Current Position", () -> getPosition());
-            case MINIMAL:
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Pivot Temperature 1", () -> pivotMotor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Pivot Temperature 2", () -> pivotMotorRight.getDeviceTemp().getValueAsDouble());

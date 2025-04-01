@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.VisionConstants;
@@ -296,8 +297,8 @@ public class RobotContainer {
         .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));
-      operatorController.bumperLeft() // 
-      .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
+      // operatorController.bumperLeft() // 
+      // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
       
       operatorController.buttonUp()
       .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
@@ -439,7 +440,7 @@ public class RobotContainer {
   public void initShuffleboard() {
     // imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MEDIUM);  
     if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);

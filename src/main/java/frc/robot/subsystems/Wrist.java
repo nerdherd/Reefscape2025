@@ -215,13 +215,13 @@ public class Wrist extends SubsystemBase implements Reportable{
             case ALL:
                 tab.addString("Wrist Control Mode", motor.getControlMode()::toString);
                 tab.addBoolean("Wrist At Position", () -> atPosition());
+                tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
                 case MEDIUM:
                 tab.addNumber("Wrist Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
-                tab.addNumber("Wrist FF", () -> motionMagicRequest.FeedForward);
-                case MINIMAL:
-                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Wrist Desired Position", () -> desiredPosition);
+                case MINIMAL:
                 tab.addNumber("Wrist Current Position", () -> motor.getPosition().getValueAsDouble());
+                tab.addNumber("Wrist Temperature", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Wrist Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 break;
         }
