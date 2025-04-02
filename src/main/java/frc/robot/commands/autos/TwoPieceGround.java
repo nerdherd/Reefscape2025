@@ -41,9 +41,9 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
+                superSystem.moveToAuto(PositionEquivalents.L1),
 
                 // Move to A3O
-                superSystem.moveToAuto(PositionEquivalents.L1),
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(1)),
                     superSystem.moveToAuto(PositionEquivalents.SemiStow)
