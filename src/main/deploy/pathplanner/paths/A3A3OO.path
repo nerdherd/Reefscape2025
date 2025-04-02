@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.27391456886574,
-        "y": 2.1962803819444434
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 1.2429719459149204,
-        "y": 2.196280381944444
-      },
-      "isLocked": false,
-      "linkedName": "A3O"
-    },
-    {
-      "anchor": {
         "x": 0.8631147540983605,
         "y": 2.172899590163934
       },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.89405737704918,
+        "y": 2.172899590163934
+      },
+      "isLocked": false,
+      "linkedName": "A3"
+    },
+    {
+      "anchor": {
+        "x": 3.225178997613364,
+        "y": 2.1820405727923604
+      },
       "prevControl": {
-        "x": 1.5580114774799139,
-        "y": 2.184880568153271
+        "x": 2.530178997613364,
+        "y": 2.1820405727923604
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "A3"
+      "linkedName": "A3OO"
     }
   ],
   "rotationTargets": [],
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -119.99999999999999
   },
   "reversed": false,
   "folder": "Bottom Half Paths",
