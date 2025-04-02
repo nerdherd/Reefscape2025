@@ -1,7 +1,6 @@
 package frc.robot.commands.autos;
 
 import java.io.IOException;
-import java.nio.file.attribute.PosixFilePermission;
 import java.util.List;
 
 import org.json.simple.parser.ParseException;
@@ -35,13 +34,13 @@ public class TwoPieceGround extends SequentialCommandGroup {
                     AutoBuilder.followPath(pathGroup.get(0)), // swerve.driveToTagCommand(VisionConstants.kLimelightBackLeftName).withTimeout(2),
                     superSystem.moveToAuto(PositionEquivalents.L1)
                 ),
-                superSystem.moveToAuto(PositionEquivalents.L2), // superSystem.moveToAuto(PositionEquivalents.L4),
+                superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
                 Commands.waitSeconds(0.25),
-                // superSystem.outtake(),
+                superSystem.outtake(),
                 Commands.waitSeconds(1),
-                // superSystem.stopRoller(),
+                superSystem.stopRoller(),
 
                 // Move to A3O
                 superSystem.moveToAuto(PositionEquivalents.L1),
@@ -49,7 +48,7 @@ public class TwoPieceGround extends SequentialCommandGroup {
                     AutoBuilder.followPath(pathGroup.get(1)),
                     superSystem.moveToAuto(PositionEquivalents.SemiStow)
                 ),
-                superSystem.moveTo(PositionEquivalents.Stow), // superSystem.moveTo(PositionEquivalents.GroundIntake)
+                superSystem.moveTo(PositionEquivalents.GroundIntake),
 
                 // Move to and intake ground coral
                 Commands.parallel(
@@ -57,18 +56,22 @@ public class TwoPieceGround extends SequentialCommandGroup {
                     superSystem.intakeUntilSensed(2)
                 ),
 
-                // Move to A3OO
+                // Move to Reef
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(3)),
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
+                    Commands.sequence(
+                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
+                        Commands.waitSeconds(0.5),
+                        superSystem.moveToAuto(PositionEquivalents.L1)
+                    )
                 ),
                 
                 // Move to L4
-                Commands.parallel(
-                    swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
-                    superSystem.moveToAuto(PositionEquivalents.L1)
-                ),
-                superSystem.moveToAuto(PositionEquivalents.L2), // superSystem.moveToAuto(PositionEquivalents.L4),
+                // Commands.parallel(
+                //     // swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
+                //     superSystem.moveToAuto(PositionEquivalents.L1)
+                // ),
+                superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
                 Commands.waitSeconds(0.25),

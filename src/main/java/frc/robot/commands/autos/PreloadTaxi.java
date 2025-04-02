@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.json.simple.parser.ParseException;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -27,18 +28,17 @@ public class PreloadTaxi extends SequentialCommandGroup{
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.sequence(
-                // superSystem.holdPiece(),
-                // superSystem.moveToAuto(PositionEquivalents.Stow),
+                superSystem.moveToAuto(PositionEquivalents.Stow),
                 Commands.waitSeconds(1),
-                // AutoBuilder.followPath(pathGroup.get(0)), 
-                // Commands.runOnce(() -> swerve.setAutoPathRun(1, 1)).raceWith(Commands.waitSeconds(2)), 
-                // superSystem.moveToAuto(PositionEquivalents.L4Auto)
+                AutoBuilder.followPath(pathGroup.get(0)),
+                // swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName), 
+                superSystem.moveTo(PositionEquivalents.L4),
                 // superSystem.moveToAuto(PositionEquivalents.L1),
                 Commands.waitSeconds(2),
-                // superSystem.outtake(),
+                superSystem.outtake(),
                 Commands.waitSeconds(1),
-                // superSystem.stopRoller(),
-                // superSystem.moveTo(PositionEquivalents.L1),
+                superSystem.stopRoller(),
+                superSystem.moveTo(PositionEquivalents.L1),
                 AutoBuilder.followPath(pathGroup.get(1))
 
             )

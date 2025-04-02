@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.7401639344262296,
-        "y": 2.5565061475409836
+        "x": 3.88,
+        "y": 2.745
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.531048975603288,
-        "y": 2.41949908934149
+        "x": 3.6708850411770584,
+        "y": 2.6079929418005063
       },
       "isLocked": false,
       "linkedName": "R7"
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 106.90515809863565
+    "rotation": 106.90515809863567
   },
   "reversed": false,
   "folder": "Bottom Half Paths",

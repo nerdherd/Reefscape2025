@@ -567,10 +567,8 @@ public final class Constants {
       GroundIntake(        ExecutionOrder.WRTELV_PVT  , PivotConstants.kPivotOffSet, 0.77, -0.755), // warren testing
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
-      Station(             ExecutionOrder.PVT_WRTELV, 0.198,  1.275, -0.8), // Adjusted Idaho
-      // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
-      Station1(             ExecutionOrder.PVT_WRTELV, 0.205,  1.275, -0.8), // Adjusted Idaho - better
-      // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.25, -0.8), // adjusted warren     wrist: -0.8279
+      Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
+      // Station1(             ExecutionOrder.PVT_WRTELV, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,    -0.102     ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,  -0.148      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  1.5, -0.148),
@@ -626,8 +624,7 @@ public final class Constants {
       ClimbDown(CoralPositions.ClimbDown, AlgaePositions.ClimbDown),
       intermediateGround(CoralPositions.intermediateGround, AlgaePositions.intermediateGround),
       Station(CoralPositions.Station, CoralPositions.Station), // Changed 3/27
-      Station1(CoralPositions.Station1, CoralPositions.Station), // Changed 3/27
-
+      // Station1(CoralPositions.Station1, CoralPositions.Station), // Changed 3/27
       ;
       
       public Position coralPos;

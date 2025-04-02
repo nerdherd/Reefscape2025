@@ -33,6 +33,7 @@ import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.Constants.SuperSystemConstants.AlgaePositions;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.TwoPiece;
+import frc.robot.commands.autos.TwoPieceGround;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.Generic2Piece;
@@ -301,7 +302,7 @@ public class RobotContainer {
       // .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake1));
       
       operatorController.buttonUp()
-      .onTrue(superSystem.moveTo(PositionEquivalents.Station1));
+      .onTrue(superSystem.moveTo(PositionEquivalents.Station));
       operatorController.buttonLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.intermediateGround));
       operatorController.buttonRight()
@@ -425,7 +426,7 @@ public class RobotContainer {
     autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
     autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
     autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
-    autoChooser.addOption("2PieceGround", new TwoPiece(swerveDrive, "BottomTwoPieceGround", superSystem));
+    autoChooser.addOption("2PieceGround", new TwoPieceGround(swerveDrive, "BottomTwoPieceGround", superSystem));
     // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
@@ -440,7 +441,7 @@ public class RobotContainer {
   public void initShuffleboard() {
     // imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MEDIUM);  
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
     if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);
