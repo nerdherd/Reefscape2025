@@ -97,7 +97,7 @@ public final class Constants {
                                                               kVisionSTDy,
                                                               kVisionSTDtheta);
     // VecBuilder.fill(kVisionSTDx, kVisionSTDy, kVisionSTDtheta);
-    public static final double kPThetaAuto = 0.18;
+    public static final double kPThetaAuto = 0.3;
     public static final double kIThetaAuto = 0;
     public static final double kDThetaAuto = 0.01;
 
@@ -483,7 +483,7 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kCoralIntakePower = -2.5;
+    public static final double kCoralIntakePower = -2.8;
     public static final double kCoralButAlgaeIntakePower  = -2.8;
     public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2;
@@ -571,12 +571,12 @@ public final class Constants {
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.1885,  1.54, -0.84), // warren
       Station1(             ExecutionOrder.PVT_ELV_WRT, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       // Station1(             ExecutionOrder.PVT_ELV_WRT, 0.198,  1.25, -0.8), // adjusted warren     wrist: -0.8279
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,    -0.102, -0.102      ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,  -0.102, -0.102      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  1.5, -0.102, -0.102     ),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197     ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.265,  0.0, -0.570, -0.57      ),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.255,  0.0,    -0.102, -0.102      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.255,  0.0,  -0.102, -0.102      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  1.5, -0.102, -0.102     ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.255,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.255,  3.2, -0.197, -0.197     ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.255,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.015, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
