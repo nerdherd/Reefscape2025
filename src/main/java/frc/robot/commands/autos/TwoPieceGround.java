@@ -30,57 +30,52 @@ public class TwoPieceGround extends SequentialCommandGroup {
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             
             Commands.sequence(
-                // Move to preload
-                // superSystem.holdPiece(),
-                AutoBuilder.followPath(pathGroup.get(0)),
+                // Move to L4
                 Commands.parallel(
-                    swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
+                    AutoBuilder.followPath(pathGroup.get(0)), // swerve.driveToTagCommand(VisionConstants.kLimelightBackLeftName).withTimeout(2),
                     superSystem.moveToAuto(PositionEquivalents.L1)
                 ),
+                superSystem.moveToAuto(PositionEquivalents.L2), // superSystem.moveToAuto(PositionEquivalents.L4),
 
-                // Place preload L4
-                // superSystem.moveToAuto(PositionEquivalents.L4),
-                superSystem.moveToAuto(PositionEquivalents.L1),
-                Commands.waitSeconds(0.5),
+                // Outtake
+                Commands.waitSeconds(0.25),
                 // superSystem.outtake(),
-                Commands.waitSeconds(1.5),
+                Commands.waitSeconds(1),
                 // superSystem.stopRoller(),
 
-                // Move to ground coral
+                // Move to A3O
                 superSystem.moveToAuto(PositionEquivalents.L1),
-                
-                AutoBuilder.followPath(pathGroup.get(1)),
-
-                // Intake ground coral
-                superSystem.moveTo(PositionEquivalents.GroundIntake),
-                superSystem.moveTo(PositionEquivalents.Stow),
-                Commands.race(
-                    // swerve.driveToCoralCommand("limelight-coral", 8),
-                    AutoBuilder.followPath(pathGroup.get(2))
-                    // superSystem.intake(),
-                    // superSystem.intakeUntilSensed(2)
+                Commands.parallel(
+                    AutoBuilder.followPath(pathGroup.get(1)),
+                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
                 ),
-                // superSystem.holdPiece()
+                superSystem.moveTo(PositionEquivalents.Stow), // superSystem.moveTo(PositionEquivalents.GroundIntake)
+
+                // Move to and intake ground coral
+                Commands.parallel(
+                    AutoBuilder.followPath(pathGroup.get(2)),
+                    superSystem.intakeUntilSensed(2)
+                ),
 
                 // Move to A3OO
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(3)),
-                    superSystem.moveToAuto(PositionEquivalents.L1)
+                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
                 ),
                 
                 // Move to L4
-                swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
-                superSystem.moveToAuto(PositionEquivalents.L1),
-                // superSystem.moveToAuto(PositionEquivalents.L4),
-                // Commands.runOnce(() -> swerve.setAutoPathRun(1, () -> true)).withTimeout(2),
+                Commands.parallel(
+                    swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
+                    superSystem.moveToAuto(PositionEquivalents.L1)
+                ),
+                superSystem.moveToAuto(PositionEquivalents.L2), // superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
-                Commands.sequence(
-                    // superSystem.outtake(),
-                    Commands.waitSeconds(2)
-                    // superSystem.stopRoller()
-                )
-                )
-            );
+                Commands.waitSeconds(0.25),
+                // superSystem.outtake(),
+                Commands.waitSeconds(1)
+                // superSystem.stopRoller()
+            )
+        );
     }
 }
