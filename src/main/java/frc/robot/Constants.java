@@ -176,8 +176,8 @@ public final class Constants {
 
     public static final double kGravityMPS = 9.80665; 
 
-    public static final double kTurnToAnglePositionToleranceAngle = 2;
-    public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 2;
+    public static final double kTurnToAnglePositionToleranceAngle = 0.5;
+    public static final double kTurnToAngleVelocityToleranceAnglesPerSec = 1;
 
     public static enum FieldPositions {
 
