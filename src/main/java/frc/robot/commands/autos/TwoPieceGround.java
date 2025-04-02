@@ -42,9 +42,9 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 // superSystem.outtake(),
                 Commands.waitSeconds(1),
                 // superSystem.stopRoller(),
+                superSystem.moveToAuto(PositionEquivalents.L1),
 
                 // Move to A3O
-                superSystem.moveToAuto(PositionEquivalents.L1),
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(1)),
                     superSystem.moveToAuto(PositionEquivalents.SemiStow)
@@ -57,17 +57,21 @@ public class TwoPieceGround extends SequentialCommandGroup {
                     superSystem.intakeUntilSensed(2)
                 ),
 
-                // Move to A3OO
+                // Move to Reef
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(3)),
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
+                    Commands.sequence(
+                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
+                        Commands.waitSeconds(0.5),
+                        superSystem.moveToAuto(PositionEquivalents.L1)
+                    )
                 ),
                 
                 // Move to L4
-                Commands.parallel(
-                    swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
-                    superSystem.moveToAuto(PositionEquivalents.L1)
-                ),
+                // Commands.parallel(
+                //     // swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
+                //     superSystem.moveToAuto(PositionEquivalents.L1)
+                // ),
                 superSystem.moveToAuto(PositionEquivalents.L2), // superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
