@@ -50,12 +50,17 @@ public class TwoPieceGround extends SequentialCommandGroup {
                         superSystem.moveToAuto(PositionEquivalents.GroundIntake)
                     )
                 ),
+                Commands.waitSeconds(0.2),
 
                 // Move to and intake ground coral
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(2)),
-                    superSystem.intakeUntilSensed(2)
+                    Commands.race(
+                        superSystem.intakeUntilSensed(),
+                        Commands.waitSeconds(2)
+                    )
                 ),
+                superSystem.holdPiece(),
 
                 // Move to Reef
                 Commands.parallel(
@@ -76,9 +81,9 @@ public class TwoPieceGround extends SequentialCommandGroup {
 
                 // Outtake
                 Commands.waitSeconds(0.25),
-                // superSystem.outtake(),
-                Commands.waitSeconds(1)
-                // superSystem.stopRoller()
+                superSystem.outtake(),
+                Commands.waitSeconds(1),
+                superSystem.stopRoller()
             )
         );
     }

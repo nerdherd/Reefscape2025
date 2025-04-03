@@ -564,7 +564,7 @@ public final class Constants {
       Stow(                ExecutionOrder.WRTELV_PVT , PivotConstants.kPivotOffSet,  0,    0, 0),
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       GroundIntake(        ExecutionOrder.ALL_TOGETHER  , PivotConstants.kPivotOffSet, 0.77, -0.755), // warren testing
-      Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
+      Station(             ExecutionOrder.ALL_TOGETHER, 0.195,  1.275, -0.8), // Adjusted Idaho
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,    -0.102     ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,  -0.148      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  1.5, -0.148),
