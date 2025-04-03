@@ -271,8 +271,8 @@ public class RobotContainer {
         ));
 
         driverController.buttonRight() // Execute Climb
-        .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
-        .onTrue(superSystem.climbHardClamp());
+        .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown));
+        // .onTrue(superSystem.climbHardClamp());
 
 
       // driverController.buttonDown()

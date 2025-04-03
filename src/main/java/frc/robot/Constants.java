@@ -422,7 +422,7 @@ public final class Constants {
     public static final double kGElevatorMotor = 0.17;
     public static final double kSElevatorMotor = 0.11;
 
-    public static final double kElevatorCruiseVelocity = 150; //16.333 //20
+    public static final double kElevatorCruiseVelocity = 150; // 16.333 // 20
     public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
     public static final double kElevatorJerk = kElevatorCruiseAcceleration * 10;
 
@@ -432,14 +432,15 @@ public final class Constants {
  
 
  public static final class PivotConstants {
-    public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
+  // ************************************** PIVOT CONSTANTS *************************************** //
+    public static final int kLeftPivotMotorID = 17; // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
     
     public static final int kPivotPigeonID = 4; // TODO change later
     // public static final double kPigeonOffset = 0.231445;
 
     public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
-    // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
+    // 0.22V = kP * 0.01       max kP = 100 .01 error is pretty high
     public static final double kIPivot = 0;
     public static final double kDPivot = 0;
     public static final double kVPivot = 0; 
@@ -451,17 +452,17 @@ public final class Constants {
 
     public static final double kPivotStowPosition = 0.01; 
     public static final double kPivotSemiStowPosition = 0.11; 
-    public static final double kPivotStationPosition = 0.1;//0.15 // .0833 //TODO change later
-    public static final double kPivotPositionVertical = 0.24;//0.1 // 0.25
+    public static final double kPivotStationPosition = 0.1; // 0.15 // .0833 //TODO change later
+    public static final double kPivotPositionVertical = 0.24; // 0.1 // 0.25
 
     public static final double kPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
-    public static final double kPivotMax = 0.285; // Slightly past vertical    // TODO change later   
+    public static final double kPivotMax = 0.285; // Slightly past vertical // TODO change later   
 
     public static final double kPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kPivotDeadBand = 0;
-    public static final double kPivotOffSet = 0.03051758;
+    public static final double kPivotOffSet = 0.02124; // 0.03051758;
 
-    public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
+    public static final double kPivotCruiseVelocity = 0.8; // 0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
     public static final double kPivotJerk = kPivotCruiseAcceleration * 10;
     public static final double atPositionDeadband = 0.003; // 0.003; //0.015
@@ -470,7 +471,7 @@ public final class Constants {
   }
 
   public static final class RollerConstants {
-
+    // ************************************** ROLLER CONSTANTS *************************************** //
     public static final int kAlgaeMotorID = 61; 
     public static final int kCoralMotorID = 62; 
     public static final double kPMotor = 0.05;
@@ -494,7 +495,7 @@ public final class Constants {
   }
 
   public static final class WristConstants {
-
+    // ************************************** WRIST CONSTANTS *************************************** //
     public static final int kMotorID = 54;
     public static final int kPigeonID = 2;
     public static final int kEncoderID = 0; // TODO change
@@ -524,7 +525,7 @@ public final class Constants {
   }
 
   public static final class ClimbConstants { // TODO change
-
+    // ************************************** CLIMB CONSTANTS *************************************** //
     public static final int kMotorID = 49;
 
     public static final double kPMotor = 0;
@@ -544,10 +545,8 @@ public final class Constants {
     public static final double climbHardClampVoltage = -3;
 
   }
-  
 
   public static final class SuperSystemConstants {
-
     public static final class Position {
       public double intermediateWristPosition, finalWristPosition, elevatorPosition, pivotPosition; 
       public ExecutionOrder executionOrder;
@@ -560,15 +559,12 @@ public final class Constants {
       }
     }
     
+    // ************************************** CORAL POSITIONS *************************************** //
     public enum CoralPositions { 
-      Stow(                ExecutionOrder.ELV_WRT_PVT , PivotConstants.kPivotOffSet,  0.125,    -0.096, -0.096),
-      SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
-      // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , PivotConstants.kPivotOffSet, 0.77, -0.755), // warren testing
-      // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
-      // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
+      Stow(                ExecutionOrder.WRTELV_PVT , PivotConstants.kPivotOffSet,  0,    0, 0),
+      SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
+      GroundIntake(        ExecutionOrder.ALL_TOGETHER  , PivotConstants.kPivotOffSet, 0.77, -0.755), // warren testing
       Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
-      // Station1(             ExecutionOrder.PVT_WRTELV, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,    -0.102     ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,  -0.148      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  1.5, -0.148),
@@ -576,9 +572,10 @@ public final class Constants {
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197     ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.265,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.015, 1.1, -0.096     ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.005, 1.3, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
+      
       public Position position;
       CoralPositions(ExecutionOrder eo, double pp, double ep, double fwp, double iwp) {
         position = new Position(eo, pp, ep, fwp, iwp);
@@ -588,6 +585,7 @@ public final class Constants {
       }
     }
     
+    // ************************************** ALGAE POSITIONS *************************************** //
     public enum AlgaePositions {
       GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.02, 0.55, -0.780, -0.780      ),
       Processor(           ExecutionOrder.WRTELV_PVT  , 0.047, 0.53, -0.790, -0.4),

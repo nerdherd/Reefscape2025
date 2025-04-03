@@ -19,7 +19,6 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 public class TwoPieceGround extends SequentialCommandGroup {
     public TwoPieceGround(SwerveDrivetrain swerve, String autoname, SuperSystem superSystem) throws IOException, ParseException {
-        
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
 

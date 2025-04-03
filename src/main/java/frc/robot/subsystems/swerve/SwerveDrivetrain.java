@@ -100,6 +100,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     PIDController angleController;
 
     private int zoneId = -1;
+    double targetRotationOffset = 0;
 
     private Field2d field;
     // private VisionSys vision = new VisionSys();
@@ -190,7 +191,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         initCagePoses();
         initProcesPoses();
         initStationsPoses();
-
         
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         //ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
@@ -1045,15 +1045,17 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public void driveToTag(String limelightName) {
-        if (LimelightHelpers.getTV(limelightName)){// && labels.length == 1 && labels[0].equals("coral")){
+        if (LimelightHelpers.getTV(limelightName)) { // && labels.length == 1 && labels[0].equals("coral")){
             double tx = LimelightHelpers.getTX(limelightName);
             double ty = LimelightHelpers.getTY(limelightName); 
             double targetRotation = getImu().getHeading();
             int tagId = (int)LimelightHelpers.getFiducialID(limelightName);
+            if (RobotContainer.IsRedSide()) targetRotationOffset = 180;
+            else targetRotationOffset = 0;
             if(tagId != -1) {
                 Pose3d tagPose = layout.getTagPose(tagId).get();
                 SmartDashboard.putString("DriveTag TagPose", tagPose.toString());
-                if(tagPose != null) targetRotation = Math.toDegrees(tagPose.getRotation().getAngle());
+                if(tagPose != null) targetRotation = Math.toDegrees(tagPose.getRotation().getAngle() + targetRotationOffset);
             }
 
             double forwardSpeed = -tyController.calculate(ty, 0);
