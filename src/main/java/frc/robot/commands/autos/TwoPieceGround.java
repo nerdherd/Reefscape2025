@@ -45,9 +45,11 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 // Move to A3O
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(1)),
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
+                    Commands.sequence(
+                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
+                        superSystem.moveToAuto(PositionEquivalents.GroundIntake)
+                    )
                 ),
-                superSystem.moveTo(PositionEquivalents.GroundIntake),
 
                 // Move to and intake ground coral
                 Commands.parallel(

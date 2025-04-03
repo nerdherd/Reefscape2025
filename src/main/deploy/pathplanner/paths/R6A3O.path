@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.142725409836065,
-        "y": 2.5325307377049184
+        "x": 5.2,
+        "y": 2.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.1625397698532955,
-        "y": 2.0950431760135255
+        "x": 4.219814360017231,
+        "y": 2.312512438308607
       },
       "isLocked": false,
-      "linkedName": "R6O"
+      "linkedName": "R6"
     },
     {
       "anchor": {

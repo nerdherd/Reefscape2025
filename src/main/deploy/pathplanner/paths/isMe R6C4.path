@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.1,
-        "y": 2.725
+        "x": 5.2,
+        "y": 2.75
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.731241803278688,
-        "y": 2.3776782786885238
+        "x": 4.831241803278688,
+        "y": 2.4026782786885237
       },
       "isLocked": false,
       "linkedName": "R6"
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 106.90515809863565
+    "rotation": 106.90515809863567
   },
   "reversed": false,
   "folder": "Bottom Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -60.07578977529488
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }
