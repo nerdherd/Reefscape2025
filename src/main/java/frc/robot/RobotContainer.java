@@ -115,15 +115,15 @@ public class RobotContainer {
       candi = new CANdi(6);
       climbMotor = new Climb();
       superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbMotor);
-      try { // ide displayed error fix
-        bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
-        bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
-        bottom4Piece = new Generic4Piece(swerveDrive, superSystem, "Bottom4Piece", 2, 2, 2, 2);
-      } catch (IOException e) {
-        DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
-      } catch (ParseException e) {
-        DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
-      }
+      // try { // ide displayed error fix
+      //   bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
+      //   bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
+      //   bottom4Piece = new Generic4Piece(swerveDrive, superSystem, "Bottom4Piece", 2, 2, 2, 2);
+      // } catch (IOException e) {
+      //   DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
+      // } catch (ParseException e) {
+      //   DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
+      // }
     }
 
     initShuffleboard();
@@ -210,7 +210,6 @@ public class RobotContainer {
           if (Math.abs(leftX) > 0.3) {
               double currentRot = wrist.getPosition();
               wrist.setTargetPosition(currentRot + (leftX * Wrist_SPEED * 0.02)); // 20ms loop
-              System.out.println("wrist: " + wrist.getTargetPosition());
           }
       }, wrist));
       
