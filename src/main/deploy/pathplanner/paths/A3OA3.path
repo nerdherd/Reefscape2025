@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.0,
-        "y": 2.1962803819444434
+        "x": 2.2057377049180324,
+        "y": 2.7303278688524597
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0002642151420051,
-        "y": 2.173294288879958
+        "x": 1.9779713114754096,
+        "y": 2.586475409836065
       },
       "isLocked": false,
       "linkedName": "A3O"
@@ -20,8 +20,8 @@
         "y": 2.172899590163934
       },
       "prevControl": {
-        "x": 1.5299628501372493,
-        "y": 2.177209294476645
+        "x": 1.5224385245901637,
+        "y": 2.3347336065573767
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
+    "maxVelocity": 0.75,
     "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -150.0
   },
   "reversed": false,
   "folder": "Bottom Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": -150.0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

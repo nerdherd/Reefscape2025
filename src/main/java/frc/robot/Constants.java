@@ -484,8 +484,10 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kCoralIntakePower = -2.8;
+    public static final double kCoralIntakePower = -3.5;
     public static final double kCoralButAlgaeIntakePower  = -2.8;
+    // public static final PrefDouble kCoralIntakePower = new PrefDouble("CoralIntakePower", -3);
+    // public static final PrefDouble kCoralButAlgaeIntakePower  = new PrefDouble("Algae Power", -2.8);
     public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2;
     public static final double kAlgaeOuttakePower = 1.5;
