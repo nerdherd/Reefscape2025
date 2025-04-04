@@ -1055,7 +1055,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             if(tagId != -1) {
                 Pose3d tagPose = layout.getTagPose(tagId).get();
                 SmartDashboard.putString("DriveTag TagPose", tagPose.toString());
-                if(tagPose != null) targetRotation = Math.toDegrees(tagPose.getRotation().getAngle() + targetRotationOffset);
+                if(tagPose != null) targetRotation = Math.toDegrees(tagPose.getRotation().getAngle()) + targetRotationOffset;
             }
 
             double forwardSpeed = -tyController.calculate(ty, 0);

@@ -24,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.SuperSystem.ExecutionOrder;
+import frc.robot.util.preferences.PrefDouble;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -567,14 +568,14 @@ public final class Constants {
       SemiStow(            ExecutionOrder.WRTELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       GroundIntake(        ExecutionOrder.ALL_TOGETHER  , PivotConstants.kPivotOffSet, 0.77, -0.755), // warren testing
       Station(             ExecutionOrder.ALL_TOGETHER, 0.195,  1.275, -0.8), // Adjusted Idaho
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,    -0.102     ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,  -0.148      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  1.5, -0.148),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197     ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.265,  0.0, -0.570, -0.57      ),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.27,  0.0,    -0.102     ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.27,  0.0,  -0.148      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.27,  1.5, -0.148),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.27,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.27,  3.2, -0.197, -0.197     ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.27,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.005, 1.3, -0.096     ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.0, 1.3, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       
