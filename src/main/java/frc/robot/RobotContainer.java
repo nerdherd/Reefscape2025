@@ -303,8 +303,8 @@ public class RobotContainer {
       
       operatorController.buttonUp()
       .onTrue(superSystem.moveTo(PositionEquivalents.Station));
-      operatorController.buttonLeft()
-      .onTrue(superSystem.moveTo(PositionEquivalents.intermediateGround));
+      // operatorController.buttonLeft()
+      // .onTrue(superSystem.moveTo(PositionEquivalents.intermediateGround));
       operatorController.buttonRight()
       .onTrue(superSystem.moveTo(PositionEquivalents.SemiStow));
       operatorController.buttonDown()
