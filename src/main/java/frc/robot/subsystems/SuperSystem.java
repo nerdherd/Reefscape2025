@@ -579,9 +579,9 @@ public class SuperSystem {
             case ALL:
                 tab.addString("Super System Last Position", () -> lastPosition.toString());
             case MEDIUM:
-                tab.addString("Super System Current Position", () -> currentPosition.toString());
                 tab.addString("Super System Mode", () -> positionMode.toString()); 
-                case MINIMAL:
+            case MINIMAL:
+                tab.addString("Super System Current Position", () -> currentPosition.toString());
                 tab.addBoolean("Intake Detected", intakeDetected);
                 tab.add("Reconfig Motors", new InstantCommand(() -> reConfigureMotors()));
                 tab.add("Reinitialize", new InstantCommand(() -> initialize()));
