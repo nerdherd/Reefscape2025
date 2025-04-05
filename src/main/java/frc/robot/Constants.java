@@ -571,12 +571,14 @@ public final class Constants {
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.27,  0.0,    -0.102     ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.27,  0.0,  -0.148      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.27,  1.5, -0.148),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.27,  3.2, -0.197, -0.197      ),
+      // L4(                  ExecutionOrder.WRTPVT_ELV  , 0.27,  3.2, -0.197, -0.197      ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.2775,  3.2, -0.197, -0.197      ),
       L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.27,  3.2, -0.197, -0.197     ),
       L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.27,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.0, 1.3, -0.096     ),
-      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
+      // ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
+      ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.18,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       
       public Position position;
