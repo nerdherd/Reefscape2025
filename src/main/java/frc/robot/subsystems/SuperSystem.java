@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.RollerConstants;
 import frc.robot.Constants.ClimbConstants;
@@ -97,11 +98,11 @@ public class SuperSystem {
 
     // subsystems
     public void reConfigureMotors() {
-        pivot.configureMotorV1();
-        elevator.setMotorConfigs();
-        wrist.configurePID(wrist.motorConfigs);
+        pivot.configureMotor();
+        elevator.configureMotor();
+        wrist.configureMotor(wrist.motorConfigs);
         intakeRoller.configureMotor(intakeRoller.motorConfigs);
-        climbMotor.configurePID(climbMotor.motorConfigs);
+        climbMotor.configureMotor(climbMotor.motorConfigs);
     }
 
     public void setNeutralMode(NeutralModeValue neutralMode) {
@@ -582,6 +583,8 @@ public class SuperSystem {
                 tab.addString("Super System Mode", () -> positionMode.toString()); 
                 case MINIMAL:
                 tab.addBoolean("Intake Detected", intakeDetected);
+                tab.add("Reconfig Motors", new InstantCommand(() -> reConfigureMotors()));
+                tab.add("Reinitialize", new InstantCommand(() -> initialize()));
                 break;
         }
     }

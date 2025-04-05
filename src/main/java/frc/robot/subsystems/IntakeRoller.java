@@ -59,7 +59,6 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
  
         motorConfigs = new TalonFXConfiguration();
         configureMotor(motorConfigs);
-        configurePID(motorConfigs);
     }
 
     //****************************** SETUP METHODS ******************************//
@@ -87,6 +86,7 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         if (!responseRight.isOK())
         DriverStation.reportError("Could not apply motor configs, error code:" + responseRight.toString(), new Error().getStackTrace());
 
+        configurePID(motorConfigs); 
     }
  
     private void configurePID(TalonFXConfiguration motorConfigs) {

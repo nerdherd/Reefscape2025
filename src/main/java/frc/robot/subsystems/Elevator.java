@@ -49,7 +49,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigurator = elevatorMotor.getConfigurator();
         motorConfigurator2 = elevatorMotor2.getConfigurator();
 
-        setMotorConfigs();
+        configureMotor();
 
         followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
         motionMagicRequest.withSlot(0);
@@ -57,7 +57,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         CommandScheduler.getInstance().registerSubsystem(this);
     }
     
-    public void setMotorConfigs() {
+    public void configureMotor() {
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         motorConfigurator.refresh(motorConfigs);
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;

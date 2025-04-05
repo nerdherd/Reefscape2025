@@ -53,22 +53,20 @@ public class Pivot extends SubsystemBase implements Reportable{
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
 
         pivotMotor = new TalonFX(PivotConstants.kLeftPivotMotorID);
-        pivotConfigurator = pivotMotor.getConfigurator();
 
         pivotMotorRight = new TalonFX(PivotConstants.kRightPivotMotorID);
         // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
 
         pivotConfiguratorRight = pivotMotorRight.getConfigurator();
 
-        configureMotorV1();
-        configurePIDV1();
+        configureMotor();
         
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
     }
     
     // ******************************** SETUP METHODS *************************************** //
-    private void configurePIDV1() {
+    void configurePIDV1() {
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
@@ -116,7 +114,8 @@ public class Pivot extends SubsystemBase implements Reportable{
         }
     }
 
-    public void configureMotorV1() {
+    public void configureMotor() {
+        pivotConfigurator = pivotMotor.getConfigurator();
         TalonFXConfiguration pivotConfiguration = new TalonFXConfiguration();
         
         pivotConfigurator.refresh(pivotConfiguration);
@@ -163,6 +162,8 @@ public class Pivot extends SubsystemBase implements Reportable{
         if (!RightstatusCode.isOK()){
             DriverStation.reportError("Could not apply Elevator configs, fix code??? =(", true);
         }
+
+        configurePIDV1();
     }
 
     @Override

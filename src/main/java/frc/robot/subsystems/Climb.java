@@ -44,7 +44,7 @@ public class Climb extends SubsystemBase implements Reportable{
 
         // configure motor
         motorConfigs = new TalonFXConfiguration();
-        configurePID(motorConfigs);
+        configureMotor(motorConfigs);
         
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
@@ -52,7 +52,7 @@ public class Climb extends SubsystemBase implements Reportable{
 
     //****************************** SETUP METHODS ******************************//
 
-    public void configurePID(TalonFXConfiguration motorConfigs) {
+    public void configureMotor(TalonFXConfiguration motorConfigs) {
         motorConfigurator.refresh(motorConfigs);
 
         // motorConfigs.Feedback.FeedbackRemoteSensorID = V1IntakeConstants.kPigeonID;
