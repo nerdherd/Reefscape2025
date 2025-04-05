@@ -69,7 +69,7 @@ public class Robot extends TimedRobot {
       m_robotContainer.elevator.setEnabled(false);
       m_robotContainer.wrist.setEnabled(false);
       m_robotContainer.intakeRoller.setEnabled(false);
-      m_robotContainer.climbMotor.setEnabled(false);
+      m_robotContainer.climb.setEnabled(false);
     }
   }
 
@@ -94,7 +94,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.swerveDrive.enableLimeLight();
 
     if (RobotContainer.USE_SUBSYSTEMS) {
-      m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
+      // m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake); UNCOMMENT LATER
       m_robotContainer.superSystem.initialize();
     }
   // schedule the autonomous command (example)
@@ -123,7 +123,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.swerveDrive.enableLimeLight();
     // need them once it comes back from Test Mode
     if (RobotContainer.USE_SUBSYSTEMS) {
-      m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
+      // m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake); UNCOMMENT LATER
       m_robotContainer.superSystem.initialize();
     }
 

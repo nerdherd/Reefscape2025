@@ -68,7 +68,7 @@ public class RobotContainer {
   public Wrist wrist;
   public BannerSensor floorSensor;
   public SuperSystem superSystem;
-  public Climb climbMotor;
+  public Climb climb;
   public CANdi candi;
   public PositionMode positionMode;
 
@@ -86,7 +86,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MEDIUM;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
@@ -113,8 +113,8 @@ public class RobotContainer {
       pivot = new Pivot();
       intakeRoller = new IntakeRoller();
       candi = new CANdi(6);
-      climbMotor = new Climb();
-      superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbMotor);
+      climb = new Climb();
+      superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climb);
       // try { // ide displayed error fix
       //   bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
       //   bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -446,7 +446,7 @@ public class RobotContainer {
       elevator.initShuffleboard(loggingLevel);
       wrist.initShuffleboard(loggingLevel);
       pivot.initShuffleboard(loggingLevel);
-      climbMotor.initShuffleboard(loggingLevel);
+      climb.initShuffleboard(loggingLevel);
       superSystem.initShuffleboard(loggingLevel);
     }
   }
@@ -473,7 +473,7 @@ public class RobotContainer {
     elevator.setEnabled(false);
     wrist.setEnabled(false);
     intakeRoller.setEnabled(false);
-    climbMotor.setEnabled(false);
+    climb.setEnabled(false);
     swerveDrive.setBreak(true);
   }
   
