@@ -264,9 +264,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
                 tab.addNumber("Intake Supply Current", () -> this.algaeMotor.getSupplyCurrent().getValueAsDouble());
                 tab.addBoolean("Intake Enabled", () -> this.enabled);
             case MINIMAL:
-                tab.addNumber("Intake Applied Voltage Right", () -> this.coralMotor.getMotorVoltage().getValueAsDouble());    
-                tab.addNumber("Intake Applied Voltage Left", () -> this.algaeMotor.getMotorVoltage().getValueAsDouble());    
-                tab.addNumber("Intake Temperature", () -> this.algaeMotor.getDeviceTemp().getValueAsDouble());    
+                tab.addNumber("Intake Applied Voltage Coral", () -> this.coralMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Intake Applied Voltage Algae", () -> this.algaeMotor.getMotorVoltage().getValueAsDouble());    
+                tab.addNumber("Intake Temperature Coral", () -> this.coralMotor.getDeviceTemp().getValueAsDouble());    
+                tab.addNumber("Intake Temperature Algae", () -> this.algaeMotor.getDeviceTemp().getValueAsDouble());    
                 break;
             default:
                 break;
