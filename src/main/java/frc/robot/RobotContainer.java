@@ -311,8 +311,6 @@ public class RobotContainer {
       
       operatorController.controllerLeft()
       .onTrue(superSystem.setPositionModeCoral());
-      operatorController.controllerRight()
-      .onTrue(superSystem.setPositionModeAlgae());
     }
     
     

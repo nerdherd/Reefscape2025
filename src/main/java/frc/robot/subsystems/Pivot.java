@@ -205,7 +205,8 @@ public class Pivot extends SubsystemBase implements Reportable{
     }
 
     public void setTargetPosition(double position) {
-        desiredPosition = Math.min(position, PivotConstants.kPivotMax);
+        // desiredPosition = Math.min(position, PivotConstants.kPivotMax);
+        desiredPosition = position;
         motionMagicRequest.Position = desiredPosition; 
         // motionMagicRequest.Position = desiredPosition - PivotConstants.kPigeonOffset; // Only for use with pigeon
     }
