@@ -10,7 +10,21 @@ or download and unzip the [latest release](https://github.com/nerdherd/Reefscape
 open it in VSCode, and press shift + F5 to deploy it to the robot. 
 Then use Driver Station to enable the robot.
 
-This program uses two PS4 Controllers, with alternatives for operator input. For compatibility purposes, a wrapper class `Controller.java` is used to translate button inputs to generic inputs.
+The robot is controlled using two PS4 Controllers, with alternatives for operator input. For compatibility purposes, a wrapper class `Controller.java` is used to translate button inputs to generic inputs.
+
+## Structure
+
+src/main/java/frc/robot/ — Main robot code
+
+subsystems/ — Contains subsystem classes like Drivetrain, Shooter, Arm, etc.
+
+commands/ — Autonomous and teleop commands
+
+Constants.java — Robot-wide constants
+
+RobotContainer.java — Central place for binding subsystems and commands
+
+Controller.java — Wrapper for gamepad input
 
 ## Contributing
 
