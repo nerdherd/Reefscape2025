@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.sims.simulations.ElevatorSimulation;
 import frc.robot.util.NerdyMath;
 
 public class Elevator extends SubsystemBase implements Reportable {
@@ -28,7 +29,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // private final PIDController elevatorPID;
     private double desiredPosition = 0.0;
-    private boolean enabled = false;
+    private boolean enabled = true;
     private TalonFXConfigurator motorConfigurator;
     private TalonFXConfigurator motorConfigurator2;
     private MotionMagicVoltage motionMagicRequest;
@@ -39,6 +40,8 @@ public class Elevator extends SubsystemBase implements Reportable {
     
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
+    private ElevatorSimulation elevatorSimulation;
+
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
@@ -48,9 +51,10 @@ public class Elevator extends SubsystemBase implements Reportable {
 
         motorConfigurator = elevatorMotor.getConfigurator();
         motorConfigurator2 = elevatorMotor2.getConfigurator();
-
+        
+        elevatorSimulation = new ElevatorSimulation(elevatorMotor, 10.0, 0.5, 0.0508, 0, 1, 0);
         setMotorConfigs();
-
+        
         followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
         motionMagicRequest.withSlot(0);
         zeroEncoder();
@@ -73,7 +77,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
-        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor;
+        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor * 10;
         motorConfigs.Slot0.kG = 0;
         motorConfigs.Slot0.kS = 0;
 
@@ -117,7 +121,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motionMagicRequest.Position = desiredPosition;
 
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
-        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
+        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff).withPosition(0.05));
         // elevatorMotor2.setControl(followRequest); 
     }
 
@@ -227,18 +231,16 @@ public class Elevator extends SubsystemBase implements Reportable {
                 break;
             case ALL:
                 tab.addString("Elevator Control Mode", elevatorMotor.getControlMode()::toString);
-                tab.addNumber("Elevator FF", () -> motionMagicRequest.FeedForward);
                 tab.addBoolean("Elevator At Position", () -> atPosition());
-                tab.addNumber("Elevator Current Position", () -> elevatorMotor2.getPosition().getValueAsDouble());
+                tab.addNumber("Elevator FF", () -> motionMagicRequest.FeedForward);
             case MEDIUM:
                 tab.addNumber("Elevator Supply Current", () -> elevatorMotor.getSupplyCurrent().getValueAsDouble());
-                tab.addNumber("Elevator Desired Position", ()-> desiredPosition);
+                tab.addNumber("Elevator Desired Position", ()-> motionMagicRequest.Position);
             case MINIMAL:
                 tab.addNumber("Elevator Temperature 1", () -> elevatorMotor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Elevator Temperature 2", () -> elevatorMotor2.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Elevator Current Position", () -> getPosition());
-                tab.addNumber("Elevator Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());    
-                
+                tab.addNumber("Elevator Voltage", () -> elevatorMotor.getMotorVoltage().getValueAsDouble());
                 break;
             }        
     }

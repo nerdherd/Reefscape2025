@@ -45,6 +45,8 @@ public final class Constants {
 
   public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
 
+  public final boolean simMode = true;
+
   public static class ControllerConstants {
 
     public static final double kDeadband = 0.05;
