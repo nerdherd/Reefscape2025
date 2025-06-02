@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.sims.simulations.ArmSimulation;
 import frc.robot.util.NerdyMath;
 
 public class Pivot extends SubsystemBase implements Reportable{
@@ -48,7 +49,9 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     private double commandedVoltage = 0.0;
 
-    public Pivot () {
+    private ArmSimulation armSimulation;
+
+    public Pivot() {
         desiredPosition = 0.0;
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
 
@@ -65,6 +68,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
+        armSimulation = new ArmSimulation(pivotMotor, 1, 0.05, 0.4, 0, Math.PI * 1.5, 0);
     }
     
     // ******************************** SETUP METHODS *************************************** //
@@ -122,7 +126,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         pivotConfigurator.refresh(pivotConfiguration);
         // pivotConfiguration.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotPigeonID;
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
-        // pivotConfiguration.Feedback.RotorToSensorRatio = 360;
+        pivotConfiguration.Feedback.RotorToSensorRatio = 1;
         // pivotConfiguration.Feedback.SensorToMechanismRatio = -1.068376; 
         pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
@@ -174,7 +178,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
         
         ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
-        pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
+        pivotMotor.setControl(motionMagicRequest.withFeedForward(ff).withPosition(0.033)); 
         // pivotMotorRight.setControl(followRequest); 
     }
 
@@ -328,7 +332,7 @@ public class Pivot extends SubsystemBase implements Reportable{
                 tab.addBoolean("Pivot At Position Wide", () -> atPositionWide());
             case MEDIUM:
                 tab.addBoolean("Pivot Enabled", () -> enabled);
-                tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
+                tab.addNumber("Pivot Desired Position", ()-> motionMagicRequest.Position);
                 case MINIMAL:
                 tab.addNumber("Pivot Current Position", () -> getPosition());
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    

@@ -52,13 +52,13 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigurator = elevatorMotor.getConfigurator();
         motorConfigurator2 = elevatorMotor2.getConfigurator();
         
-        elevatorSimulation = new ElevatorSimulation(elevatorMotor, 10.0, 0.5, 0.0508, 0, 1, 0);
         setMotorConfigs();
         
         followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
         motionMagicRequest.withSlot(0);
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
+        elevatorSimulation = new ElevatorSimulation(elevatorMotor, 10.0, 0.5, 0.0508, 0, 1, 0);
     }
     
     public void setMotorConfigs() {
@@ -77,7 +77,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
-        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor * 10;
+        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor;
         motorConfigs.Slot0.kG = 0;
         motorConfigs.Slot0.kS = 0;
 
@@ -121,7 +121,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motionMagicRequest.Position = desiredPosition;
 
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
-        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff).withPosition(0.05));
+        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
         // elevatorMotor2.setControl(followRequest); 
     }
 
