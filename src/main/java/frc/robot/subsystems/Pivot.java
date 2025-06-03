@@ -16,6 +16,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.sims.mechanisms.Mechanator;
 import frc.robot.sims.simulations.ArmSimulation;
 import frc.robot.util.NerdyMath;
 
@@ -68,7 +70,9 @@ public class Pivot extends SubsystemBase implements Reportable{
         
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
-        armSimulation = new ArmSimulation(pivotMotor, 1, 0.05, 0.4, 0, Math.PI * 1.5, 0);
+
+        MechanismLigament2d ligament = Mechanator.getInstance().getLigament("elevator", 1.5, 1.5, 0.8, 90.0);
+        armSimulation = new ArmSimulation(pivotMotor, ligament, 1, 0.05, 0.4, 0, Math.PI * 1.5, 0);
     }
     
     // ******************************** SETUP METHODS *************************************** //
@@ -77,9 +81,9 @@ public class Pivot extends SubsystemBase implements Reportable{
         
         pivotConfigurator.refresh(pivotConfiguration);
 
-        pivotConfiguration.Slot0.kP = PivotConstants.kPElevatorPivot; 
+        pivotConfiguration.Slot0.kP = PivotConstants.kPElevatorPivot * 100.0; 
         pivotConfiguration.Slot0.kI = PivotConstants.kIPivot;
-        pivotConfiguration.Slot0.kD = PivotConstants.kDPivot;
+        pivotConfiguration.Slot0.kD = PivotConstants.kDPivot + 2000.0;
         pivotConfiguration.Slot0.kV = PivotConstants.kVPivot;
         pivotConfiguration.Slot0.kS = PivotConstants.kSPivot;
         pivotConfiguration.Slot0.kA = PivotConstants.kAPivot;

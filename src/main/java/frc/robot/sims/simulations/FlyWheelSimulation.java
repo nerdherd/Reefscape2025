@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 /** Add your docs here. */
 public class FlyWheelSimulation extends GenericSimulation {
-    private static final double kMotorResistance = 0.002; // Assume 2mOhm resistance for voltage drop calculation
     private final TalonFXSimState _talonFXSim;
 
     private final DCMotorSim _motorSim;

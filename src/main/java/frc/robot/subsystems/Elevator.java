@@ -14,12 +14,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.sims.mechanisms.Mechanator;
 import frc.robot.sims.simulations.ElevatorSimulation;
 import frc.robot.util.NerdyMath;
 
@@ -58,7 +60,8 @@ public class Elevator extends SubsystemBase implements Reportable {
         motionMagicRequest.withSlot(0);
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
-        elevatorSimulation = new ElevatorSimulation(elevatorMotor, 10.0, 0.5, 0.0508, 0, 1, 0);
+        MechanismLigament2d ligament = Mechanator.getInstance().getLigament("elevator", 1.5, 1.5, 0.8, 90.0);
+        elevatorSimulation = new ElevatorSimulation(elevatorMotor, ligament, 10.0, 0.5, 0.0508, 0, 1, 0);
     }
     
     public void setMotorConfigs() {
@@ -77,7 +80,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
         motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
-        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor;
+        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor * 2;
         motorConfigs.Slot0.kG = 0;
         motorConfigs.Slot0.kS = 0;
 
@@ -121,7 +124,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         motionMagicRequest.Position = desiredPosition;
 
         ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
-        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff));
+        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff).withPosition(0.3));
         // elevatorMotor2.setControl(followRequest); 
     }
 
