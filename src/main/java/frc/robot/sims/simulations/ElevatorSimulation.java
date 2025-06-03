@@ -10,6 +10,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.sim.ChassisReference;
 import com.ctre.phoenix6.sim.TalonFXSimState;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.ElevatorSim;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
@@ -18,7 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 public class ElevatorSimulation extends GenericSimulation {
     private final TalonFXSimState _talonFXSim;
 
-    private final ElevatorSim _motorSim;
+    private final DynamicElevatorSim _motorSim;
     
     private final MechanismLigament2d _ligament;
     /**
@@ -39,7 +40,7 @@ public class ElevatorSimulation extends GenericSimulation {
         talonFX.getConfigurator().refresh(config);
         _talonFXSim.Orientation = (config.MotorOutput.Inverted == InvertedValue.Clockwise_Positive) ? ChassisReference.Clockwise_Positive : ChassisReference.CounterClockwise_Positive;
         var gearbox = DCMotor.getKrakenX60Foc(1);
-        this._motorSim = new ElevatorSim(gearbox, gearing, weight, drumRadius, minHeight, maxHeight, true, startingHeight);
+        this._motorSim = new DynamicElevatorSim(gearbox, () -> Units.degreesToRadians(ligament.getAngle()), gearing, weight, drumRadius, minHeight, maxHeight, true, startingHeight);
     }
 
     public void run() {
