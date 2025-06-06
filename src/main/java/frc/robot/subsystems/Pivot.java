@@ -72,7 +72,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         CommandScheduler.getInstance().registerSubsystem(this);
 
         MechanismLigament2d ligament = Mechanator.getInstance().getLigament("elevator", 1.5, 1.5, 0.8, 90.0);
-        armSimulation = new ArmSimulation(pivotMotor, ligament, 1, 0.05, 0.4, 0, Math.PI * 1.5, 0);
+        armSimulation = new ArmSimulation(pivotMotor, ligament, 1, 0.05, 0.4, 0, Math.PI, 0);
     }
     
     // ******************************** SETUP METHODS *************************************** //

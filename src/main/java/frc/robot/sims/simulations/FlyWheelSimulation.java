@@ -17,12 +17,12 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.simulation.DCMotorSim;
 
 /** Add your docs here. */
-public class FlyWheelSimulation extends GenericSimulation {
+public class FlywheelSimulation extends GenericSimulation {
     private final TalonFXSimState _talonFXSim;
 
     private final DCMotorSim _motorSim;
 
-    public FlyWheelSimulation(final TalonFX talonFX, final double rotorInertia) {
+    public FlywheelSimulation(final TalonFX talonFX, final double rotorInertia) {
         super();
         this._talonFXSim = talonFX.getSimState();
         TalonFXConfiguration config = new TalonFXConfiguration();

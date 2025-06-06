@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-/** Add your docs here. */
 public class Mechanator {
     private final static Mechanator rex = new Mechanator();
 
