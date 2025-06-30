@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 
-public class BannerSensor implements Reportable {
+public class BannerSensor {
     private final DigitalInput bannerSensorBlack;
     private final DigitalInput bannerSensorWhite;
 
@@ -48,8 +48,8 @@ public class BannerSensor implements Reportable {
         return detected;
     }
 
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {}
+    // @Override
+    // public void reportToSmartDashboard(LOG_LEVEL priority) {}
 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {

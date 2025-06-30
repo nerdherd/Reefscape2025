@@ -15,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -57,7 +58,7 @@ import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.FlippingUtil;
 
-public class SwerveDrivetrain extends SubsystemBase implements Reportable {
+public class SwerveDrivetrain extends SubsystemBase {
     private final SwerveModule frontLeft;
     private final SwerveModule frontRight;
     private final SwerveModule backLeft;
@@ -330,14 +331,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     boolean initPoseByVisionDone = false;
+    private final StructPublisher<Pose3d> publisher = NetworkTableInstance.getDefault().getStructTopic("RobotPosition", Pose3d.struct).publish();
 
     /**
      * Have modules move towards states and update odometry
      */
     @Override
     public void periodic() {
-	
-	if (!isTest) {
+        publisher.set(new Pose3d(poseEstimator.getEstimatedPosition()));
+	    if (!isTest) {
             runModules();
         }
         
@@ -1129,7 +1131,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public Command setVisionEnabledCommand(boolean useVision) {
         return Commands.runOnce(() -> this.useVision = useVision);
     }
-    
 
     public void initShuffleboard(LOG_LEVEL level) {
         if (level == LOG_LEVEL.OFF)  {
@@ -1196,7 +1197,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     /**
      * Report values to smartdashboard.
      */
-     public void reportToSmartDashboard(LOG_LEVEL level) {
+     // public void reportToSmartDashboard(LOG_LEVEL level) {
     //     switch (level) {
     //         case OFF:
     //             break;
@@ -1209,7 +1210,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //             SmartDashboard.putString("Drive Mode", this.driveMode.toString());
     //             break;
     //     }
-     }
+    //  }
 
     // public void reportModulesToSmartDashboard(LOG_LEVEL level) {
     //     frontRight.reportToSmartDashboard(level);

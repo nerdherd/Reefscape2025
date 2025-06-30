@@ -39,7 +39,7 @@ import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.Generic3Piece;
 import frc.robot.commands.autos.Generic4Piece;
-import frc.robot.subsystems.Reportable.LOG_LEVEL;
+import frc.robot.subsystems.Subsystem.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem.PositionMode;
 import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.imu.Gyro;

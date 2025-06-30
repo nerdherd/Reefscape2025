@@ -28,7 +28,7 @@ import frc.robot.sims.mechanisms.Mechanator;
 import frc.robot.sims.simulations.ArmSimulation;
 import frc.robot.util.NerdyMath;
 
-public class Pivot extends SubsystemBase implements Reportable{
+public class Pivot extends SubsystemBase{
     private TalonFX pivotMotor;
     private TalonFX pivotMotorRight;
 
@@ -296,14 +296,14 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     // ****************************** LOGGING METHODS ****************************** //
 
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {
-        SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
+    // @Override
+    // public void reportToSmartDashboard(LOG_LEVEL priority) {
+        // SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
+        // SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
 
-        SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
+        // SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
         // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Target Rotations", desiredPosition);
+        // SmartDashboard.putNumber("Pivot Target Rotations", desiredPosition);
         // SmartDashboard.putNumber("Error Left (Rotations)", error);
         
 
@@ -312,11 +312,11 @@ public class Pivot extends SubsystemBase implements Reportable{
         // SmartDashboard.putNumber("Commanded kP Pivot Voltage", commandedVoltage);
 
         // SmartDashboard.putNumber("Applied feedforward", ff);
-        SmartDashboard.putNumber("Feedforward inverse", ffInverse);
+        // SmartDashboard.putNumber("Feedforward inverse", ffInverse);
 
         // SmartDashboard.putNumber("Error Right (Rotations)", errorRight);
 
-    }
+    // }
     
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {

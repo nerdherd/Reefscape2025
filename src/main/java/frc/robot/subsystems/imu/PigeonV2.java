@@ -131,7 +131,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
         return -1*pigeon.getAngularVelocityZWorld().getValueAsDouble();
     }
     
-    public void reportToSmartDashboard(LOG_LEVEL level) {
+    // public void reportToSmartDashboard(LOG_LEVEL level) {
         switch (level) {
             case OFF:
                 break;

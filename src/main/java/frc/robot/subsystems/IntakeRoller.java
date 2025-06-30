@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RollerConstants;
  
-public class IntakeRoller extends SubsystemBase implements Reportable {
+public class IntakeRoller extends SubsystemBase {
     private final TalonFX algaeMotor;
     private final TalonFX coralMotor;
     private final TalonFXConfigurator rollerConfigurator;
@@ -247,8 +247,8 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
  
     // ****************************** LOGGING METHODS ****************************** //
  
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {}
+    // @Override
+    // public void reportToSmartDashboard(LOG_LEVEL priority) {}
  
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {

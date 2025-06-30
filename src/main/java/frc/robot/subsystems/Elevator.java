@@ -25,7 +25,7 @@ import frc.robot.sims.mechanisms.Mechanator;
 import frc.robot.sims.simulations.ElevatorSimulation;
 import frc.robot.util.NerdyMath;
 
-public class Elevator extends SubsystemBase implements Reportable {
+public class Elevator extends SubsystemBase {
     private final TalonFX elevatorMotor;
     private final TalonFX elevatorMotor2;
 
@@ -61,7 +61,7 @@ public class Elevator extends SubsystemBase implements Reportable {
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
         MechanismLigament2d ligament = Mechanator.getInstance().getLigament("elevator", 1.5, 1.5, 0.8, 90.0);
-        elevatorSimulation = new ElevatorSimulation(elevatorMotor, ligament, 10.0, 0.5, 0.0508, 0, 1, 0);
+        elevatorSimulation = new ElevatorSimulation(elevatorMotor, ligament, 10.0, 0.5, 0.0508, 0.1, 1, 0);
     }
     
     public void setMotorConfigs() {
@@ -208,20 +208,20 @@ public class Elevator extends SubsystemBase implements Reportable {
 
     // ****************************** LOGGING METHODS ****************************** //
 
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL level) {
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-            case MEDIUM:
-            SmartDashboard.putNumber("Elevator Desired Position", desiredPosition);
-            SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
-            case MINIMAL:
-                SmartDashboard.putNumber("Elevator Current Position", elevatorMotor.getPosition().getValueAsDouble());
-                SmartDashboard.putNumber("Elevator Current Velocity", elevatorMotor.getVelocity().getValueAsDouble());
-        }
-    }
+    // @Override
+    // public void reportToSmartDashboard(LOG_LEVEL level) {
+    //     switch (level) {
+    //         case OFF:
+    //             break;
+    //         case ALL:
+    //         case MEDIUM:
+    //         SmartDashboard.putNumber("Elevator Desired Position", desiredPosition);
+    //         SmartDashboard.putBoolean("Elevator Enabled", this.enabled);
+    //         case MINIMAL:
+    //             SmartDashboard.putNumber("Elevator Current Position", elevatorMotor.getPosition().getValueAsDouble());
+    //             SmartDashboard.putNumber("Elevator Current Velocity", elevatorMotor.getVelocity().getValueAsDouble());
+    //     }
+    // }
 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {

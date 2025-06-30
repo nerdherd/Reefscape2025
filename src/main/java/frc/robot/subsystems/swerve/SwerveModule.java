@@ -24,7 +24,7 @@ import com.ctre.phoenix6.hardware.CANcoder;
 /**
  * Swerve module that uses CANCoder for the absolute position
  */
-public class SwerveModule implements Reportable {
+public class SwerveModule {
     private final TalonFX driveMotor;
     private final TalonFX turnMotor;
     private final CANcoder canCoder;
@@ -353,7 +353,7 @@ public class SwerveModule implements Reportable {
             
     }
 
-     public void reportToSmartDashboard(LOG_LEVEL level) {
+     // public void reportToSmartDashboard(LOG_LEVEL level) {
     //     currentAngle = Math.toDegrees(getTurningPosition());
     //     switch (level) {
     //         case OFF:
@@ -373,7 +373,7 @@ public class SwerveModule implements Reportable {
     //             break;
     //     }
 
-     }
+    //  }
 
     /**
      * Enable or disable the break mode on the motors

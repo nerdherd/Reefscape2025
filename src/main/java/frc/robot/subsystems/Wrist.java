@@ -24,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WristConstants;
 import frc.robot.util.NerdyMath;;
 
-public class Wrist extends SubsystemBase implements Reportable{
+public class Wrist extends SubsystemBase{
     private final TalonFX motor;
     private final TalonFXConfigurator motorConfigurator;
     private Pigeon2 pigeon;
@@ -193,19 +193,19 @@ public class Wrist extends SubsystemBase implements Reportable{
 
     // ****************************** LOGGING METHODS ****************************** //
 
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL level) {
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-                SmartDashboard.putNumber("Coral Wrist Position", motor.getPosition().getValueAsDouble());
-            case MEDIUM:
-                SmartDashboard.putNumber("Coral Wrist Current", motor.getStatorCurrent().getValueAsDouble());
-            case MINIMAL:
-                break;
-        }
-    }
+    // @Override
+    // public void reportToSmartDashboard(LOG_LEVEL level) {
+    //     switch (level) {
+    //         case OFF:
+    //             break;
+    //         case ALL:
+    //             SmartDashboard.putNumber("Coral Wrist Position", motor.getPosition().getValueAsDouble());
+    //         case MEDIUM:
+    //             SmartDashboard.putNumber("Coral Wrist Current", motor.getStatorCurrent().getValueAsDouble());
+    //         case MINIMAL:
+    //             break;
+    //     }
+    // }
     
     @Override
     public void initShuffleboard(LOG_LEVEL priority) { 

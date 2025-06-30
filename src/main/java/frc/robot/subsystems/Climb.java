@@ -11,17 +11,14 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.util.NerdyMath;
 
-public class Climb extends SubsystemBase implements Reportable{
+public class Climb extends Subsystem {
     private final TalonFX motor;
     private final TalonFXConfigurator motorConfigurator;
 
@@ -180,44 +177,39 @@ public class Climb extends SubsystemBase implements Reportable{
 
     // ****************************** LOGGING METHODS ****************************** //
 
+    // @Override
+    // public void reportToSmartDashboard(LOG_LEVEL level) {
+    //     switch (level) {
+    //         case OFF:
+    //             break;
+    //         case ALL:
+    //             SmartDashboard.putNumber("Climb Position", motor.getPosition().getValueAsDouble());
+    //             SmartDashboard.putNumber("Climb Current", motor.getStatorCurrent().getValueAsDouble());
+    //         case MEDIUM:
+    //         case MINIMAL:
+    //             break;
+    //     }
+    // }
+
     @Override
-    public void reportToSmartDashboard(LOG_LEVEL level) {
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-                SmartDashboard.putNumber("Climb Position", motor.getPosition().getValueAsDouble());
-                SmartDashboard.putNumber("Climb Current", motor.getStatorCurrent().getValueAsDouble());
-            case MEDIUM:
-            case MINIMAL:
-                break;
-        }
-    }
-    
-    @Override
-    public void initShuffleboard(LOG_LEVEL level) { 
-        if (level == LOG_LEVEL.OFF || level == LOG_LEVEL.MINIMAL) {
-            return;
-        }
-        ShuffleboardTab tab = Shuffleboard.getTab("Climb");
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-                tab.addString("Control Mode", motor.getControlMode()::toString);
-                tab.addNumber("Climb FF", () -> motionMagicRequest.FeedForward);
-                tab.addDouble("MM Position", () -> motionMagicRequest.Position);
-                tab.addDouble("Desired Position", () -> desiredPosition);
-                tab.addBoolean("At position", () -> atPosition());
-                tab.addNumber("Current Climb Angle", () -> motor.getPosition().getValueAsDouble());
-                tab.addBoolean("Enabled", () -> enabled);
-            case MEDIUM:
-                tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
-            case MINIMAL:
-                tab.addDouble("Motor Temp", () -> motor.getDeviceTemp().getValueAsDouble());
-                tab.addNumber("Climb Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
-                break;
-        }
+    public void initShuffleboardALL(ShuffleboardTab tab) {
+        tab.addString("Control Mode", motor.getControlMode()::toString);
+        tab.addNumber("Climb FF", () -> motionMagicRequest.FeedForward);
+        tab.addDouble("MM Position", () -> motionMagicRequest.Position);
+        tab.addDouble("Desired Position", () -> desiredPosition);
+        tab.addBoolean("At position", () -> atPosition());
+        tab.addNumber("Current Climb Angle", () -> motor.getPosition().getValueAsDouble());
+        tab.addBoolean("Enabled", () -> enabled);
     }
 
+    @Override
+    public void initShuffleboardMEDIUM(ShuffleboardTab tab) {
+        tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
+    }
+
+    @Override
+    public void initShuffleboardMINIMAL(ShuffleboardTab tab) {
+        tab.addDouble("Motor Temp", () -> motor.getDeviceTemp().getValueAsDouble());
+        tab.addNumber("Climb Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
+    }
 }
