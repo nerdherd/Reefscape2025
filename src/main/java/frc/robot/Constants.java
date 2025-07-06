@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.pathplanner.lib.config.PIDConstants;
 
 import edu.wpi.first.math.MatBuilder;
@@ -24,6 +25,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.subsystems.SuperSystem.ExecutionOrder;
+import frc.robot.util.MotorConfigs;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -423,6 +425,19 @@ public final class Constants {
     public static final double kVElevatorMotor = 0;
     public static final double kGElevatorMotor = 0.17;
     public static final double kSElevatorMotor = 0.11;
+
+    public static final MotorConfigs kMotorConfigs = 
+      new MotorConfigs(
+        8.0, 
+        0.0, 
+        0.0, 
+        InvertedValue.Clockwise_Positive,
+        16.0,
+        150,
+        1500,
+        15000)
+        .withkG(0.17
+      );
 
     public static final double kElevatorCruiseVelocity = 150; //16.333 //20
     public static final double kElevatorCruiseAcceleration = kElevatorCruiseVelocity * 10;
