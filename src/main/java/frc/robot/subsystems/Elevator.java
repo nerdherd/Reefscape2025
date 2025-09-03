@@ -6,7 +6,6 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -28,37 +27,36 @@ import frc.robot.util.NerdyMath;
 
 public class Elevator extends SubsystemBase {
     private final TalonFX elevatorMotor;
-    // private final TalonFX elevatorMotor2;
+    private final TalonFX elevatorMotor2;
 
     // private final PIDController elevatorPID;
-    private double desiredPosition = 0.0; // speed
+    private double desiredPosition = 0.0;
     private boolean enabled = true;
-    // private TalonFXConfigurator motorConfigurator;
-    // private TalonFXConfigurator motorConfigurator2;
-    private MotionMagicVoltage motionMagicRequest; // velocityvoltage
-    private VelocityVoltage velocityVoltage = new VelocityVoltage(0);
-    // private final Follower followRequest;
+    private TalonFXConfigurator motorConfigurator;
+    private TalonFXConfigurator motorConfigurator2;
+    private MotionMagicVoltage motionMagicRequest;
+    private final Follower followRequest;
     private final NeutralOut neutralRequest = new NeutralOut();
-    // private double ff = 0.0; 
-    // private double pivotAngle = 0.0; // TODO: Change this to 0 when supersystem tuned
+    private double ff = 0.0; 
+    private double pivotAngle = 0.0; // TODO: Change this to 0 when supersystem tuned
     
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
     private ElevatorSimulation elevatorSimulation;
 
     public Elevator() {
-        elevatorMotor = new TalonFX(0);
-        // elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
-        motionMagicRequest = new MotionMagicVoltage(0); // velocityvoltage
+        elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
+        elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
+        motionMagicRequest = new MotionMagicVoltage(0);
         
         elevatorMotor.setPosition(0.0);
 
-        // motorConfigurator = elevatorMotor.getConfigurator(); // moved to setmotorconfigs
-        // motorConfigurator2 = elevatorMotor2.getConfigurator();
+        motorConfigurator = elevatorMotor.getConfigurator();
+        motorConfigurator2 = elevatorMotor2.getConfigurator();
         
         setMotorConfigs();
         
-        // followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
+        followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
         motionMagicRequest.withSlot(0);
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
@@ -68,52 +66,28 @@ public class Elevator extends SubsystemBase {
     
     public void setMotorConfigs() {
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
+        motorConfigurator.refresh(motorConfigs);
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         motorConfigs.Feedback.SensorToMechanismRatio = 16; 
         motorConfigs.Feedback.RotorToSensorRatio = 1;
-
+        motorConfigs.CurrentLimits.SupplyCurrentLimit = 40;
+        motorConfigs.CurrentLimits.SupplyCurrentLimitEnable = false; // TODO: change
         motorConfigs.CurrentLimits.SupplyCurrentLowerLimit = 45;
         motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0.1;
-
         motorConfigs.MotorOutput.NeutralMode = neutralMode;
         motorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        // motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ElevatorConstants.kElevatorCruiseVelocity;
-        // motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
-        // motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
+        motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ElevatorConstants.kElevatorCruiseVelocity;
+        motorConfigs.MotionMagic.MotionMagicAcceleration = ElevatorConstants.kElevatorCruiseAcceleration;
+        motorConfigs.MotionMagic.MotionMagicJerk = ElevatorConstants.kElevatorJerk;
 
-        // motorConfigs.Slot0.kP = 0;
-        // motorConfigs.Slot0.kG = 0;
-        // motorConfigs.Slot0.kS = 0;
+        motorConfigs.Slot0.kP = ElevatorConstants.kPElevatorMotor * 2;
+        motorConfigs.Slot0.kG = 0;
+        motorConfigs.Slot0.kS = 0;
 
-        StatusCode response = elevatorMotor.getConfigurator().apply(motorConfigs);
+        StatusCode response = motorConfigurator.apply(motorConfigs);
         if (!response.isOK()){
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         TalonFXConfiguration motorConfigs2 = new TalonFXConfiguration();
         motorConfigurator2.refresh(motorConfigs2);
@@ -147,11 +121,10 @@ public class Elevator extends SubsystemBase {
             return;
         }
         
-        // motionMagicRequest.Position = desiredPosition;
-        velocityVoltage.Velocity = desiredPosition; // but with speed
+        motionMagicRequest.Position = desiredPosition;
 
-        // ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
-        elevatorMotor.setControl(motionMagicRequest);
+        ff = ElevatorConstants.kGElevatorMotor * Math.sin(pivotAngle * 2 * Math.PI);
+        elevatorMotor.setControl(motionMagicRequest.withFeedForward(ff).withPosition(0.3));
         // elevatorMotor2.setControl(followRequest); 
     }
 
@@ -159,53 +132,57 @@ public class Elevator extends SubsystemBase {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        if(!enabled) { 
-            elevatorMotor.setControl(neutralRequest);
+        if(enabled) { 
+            elevatorMotor2.setControl(followRequest);
+        } else {
+            stopMotion();
         }
     }
 
-    // public void setNeutralMode(NeutralModeValue neutralMode) {
-    //     this.neutralMode = neutralMode;
-    // }
+    public void setNeutralMode(NeutralModeValue neutralMode) {
+        this.neutralMode = neutralMode;
+    }
 
-    // public void stopMotion() {
-    //     elevatorMotor.setControl(neutralRequest);
-    //     elevatorMotor2.setControl(neutralRequest);
-    // }
+    public void stopMotion() {
+        elevatorMotor.setControl(neutralRequest);
+        elevatorMotor2.setControl(neutralRequest);
+    }
     
-    public void setTargetPosition(double position) { // but speed
+    public void setTargetPosition(double position) {
         //TODO NerdyMath.clamp(
         desiredPosition = position;
     }
 
-    // public void setPivotAngle(double pivotAngle) {
-    //     this.pivotAngle = pivotAngle;
-    // }
+    public void setPivotAngle(double pivotAngle) {
+        this.pivotAngle = pivotAngle;
+    }
 
-    // public void zeroEncoder() {
-    //     elevatorMotor.setPosition(0.0);
-    //     elevatorMotor2.setPosition(0.0);
-    //     desiredPosition = 0.0;
-    // }
+    public void zeroEncoder() {
+        elevatorMotor.setPosition(0.0);
+        elevatorMotor2.setPosition(0.0);
+        desiredPosition = 0.0;
+    }
 
     // ****************************** GET METHODS ***************************** //
 
-    public double getPosition() { // but speed
+    public double getPosition() {
         return elevatorMotor.getPosition().getValueAsDouble();
     }
 
-    public boolean atPosition() { // but speed
-        return elevatorMotor.getPosition().getValueAsDouble() > desiredPosition;
+    public boolean atPosition() {
+        return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
+        desiredPosition - 0.07,
+        desiredPosition + 0.07);
     }
 
-    // public boolean atPositionWide() {
-    //     return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
-    //     desiredPosition - 0.125,
-    //     desiredPosition + 0.125);
+    public boolean atPositionWide() {
+        return NerdyMath.inRange(elevatorMotor.getPosition().getValueAsDouble(), 
+        desiredPosition - 0.125,
+        desiredPosition + 0.125);
 
-    // }
+    }
 
-    public double getTargetPosition() { // but speed
+    public double getTargetPosition() {
         return desiredPosition;
     }
 
