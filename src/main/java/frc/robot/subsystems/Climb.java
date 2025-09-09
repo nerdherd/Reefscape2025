@@ -70,7 +70,6 @@ public class Climb extends SubsystemBase implements Reportable{
         motorConfigs.Slot0.kD = ClimbConstants.kDMotor;
         motorConfigs.Slot0.kV = ClimbConstants.kVMotor;
         motorConfigs.Slot0.kS = ClimbConstants.kSMotor;
-        motorConfigs.Slot0.kG = ClimbConstants.kGMotor;
 
         motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ClimbConstants.kCruiseVelocity;
         motorConfigs.MotionMagic.MotionMagicAcceleration = ClimbConstants.kAcceleration;

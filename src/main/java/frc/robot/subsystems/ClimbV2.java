@@ -1,9 +1,8 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.configs.TalonFXConfigurator;
-import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -22,32 +21,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimbConstants;
 
 public class ClimbV2 extends SubsystemBase implements Reportable {
-    private final TalonFX motorLeft = new TalonFX(ClimbConstants.kLeftMotorID);
-    private final TalonFX motorRight = new TalonFX(ClimbConstants.kRightMotorID);
-    private final Follower followerRight = new Follower(ClimbConstants.kLeftMotorID, true);
+    private final TalonFX motor = new TalonFX(ClimbConstants.kMotorID);
     
     private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
     private final NeutralOut neutralRequest = new NeutralOut();
-    private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
-    private double desiredSpeed = 0;
-    private boolean enabled;
+    private double desiredSpeed = 0.0;
+    private boolean enabled = false;
 
     public ClimbV2() {
-        motorRight.setControl(followerRight);
+        motor.setControl(neutralRequest);
         configurePID();
-        zeroEncoders();
-
-        setEnabled(true);
         CommandScheduler.getInstance().registerSubsystem(this);
     }
 
     //****************************** SETUP METHODS ******************************//
 
     public void configurePID() {
-        TalonFXConfigurator configuratorLeft = motorLeft.getConfigurator();
         TalonFXConfiguration configs = new TalonFXConfiguration();
-        configuratorLeft.refresh(configs);
 
         configs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         configs.Feedback.SensorToMechanismRatio = 0.5; 
@@ -61,14 +52,13 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
         configs.Slot0.kD = ClimbConstants.kDMotor;
         configs.Slot0.kV = ClimbConstants.kVMotor;
         configs.Slot0.kS = ClimbConstants.kSMotor;
-        configs.Slot0.kG = ClimbConstants.kGMotor;
 
         configs.MotionMagic.MotionMagicCruiseVelocity =  ClimbConstants.kCruiseVelocity;
         configs.MotionMagic.MotionMagicAcceleration = ClimbConstants.kAcceleration;
         configs.MotionMagic.MotionMagicJerk = ClimbConstants.kJerk;
-        configs.MotorOutput.NeutralMode = neutralMode;
+        configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     
-        StatusCode response = configuratorLeft.apply(configs);
+        StatusCode response = motor.getConfigurator().apply(configs);
         if (!response.isOK()){
             DriverStation.reportError("Could not apply left motor configs, error code: " + response.toString(), true);
         }
@@ -76,7 +66,12 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
 
     @Override
     public void periodic() {
+        if (!enabled) {
+            stopMotion();
+            return;
+        }
         
+        motor.setControl(velocityRequest.withVelocity(desiredSpeed));  
     }
 
     // ****************************** STATE METHODS ****************************** //
@@ -84,20 +79,13 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (!enabled) {
-            desiredSpeed = 0;
-            motorLeft.setControl(neutralRequest);
-        } else {
-            motorLeft.setControl(velocityRequest);
+            desiredSpeed = 0.0;
+            motor.setControl(neutralRequest);
         }
     }
-    
-    public void zeroEncoders() {
-        motorLeft.setPosition(0);
-        motorRight.setPosition(0);
-    }
-    
-    public void setNeutralMode(NeutralModeValue neutralMode) {
-        this.neutralMode = neutralMode;
+
+    public void stopMotion() {
+        motor.setControl(neutralRequest);
     }
 
     private void setSpeed(double speed) {
@@ -106,7 +94,7 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
     }
 
     public double getSpeed() {
-        return motorLeft.getVelocity().getValueAsDouble();
+        return motor.getVelocity().getValueAsDouble();
     }
 
     public boolean atSpeed() {
@@ -125,16 +113,16 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
 
     // ****************************** NAMED COMMANDS ****************************** //
 
-    public TalonFX getMotorLeft() {
-        return motorLeft;
+    public TalonFX getMotor() {
+        return motor;
     }
 
     public Command startClimb() {
-        return setSpeedCommand(10); // TODO find climb speed
+        return setSpeedCommand(ClimbConstants.kCloseSpeed); // TODO find climb speed
     }
 
     public Command stopClimb() {
-        return setSpeedCommand(0);
+        return setSpeedCommand(ClimbConstants.kCloseSpeed);
     }
 
     // ****************************** LOGGING METHODS ****************************** //
@@ -145,8 +133,8 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
             case OFF:
                 break;
             case ALL:
-                SmartDashboard.putNumber("Climb Velocity", motorLeft.getVelocity().getValueAsDouble());
-                SmartDashboard.putNumber("Climb Current", motorLeft.getStatorCurrent().getValueAsDouble());
+                SmartDashboard.putNumber("Climb Velocity", motor.getVelocity().getValueAsDouble());
+                SmartDashboard.putNumber("Climb Current", motor.getStatorCurrent().getValueAsDouble());
             case MEDIUM:
             case MINIMAL:
                 break;
@@ -156,20 +144,19 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
     @Override
     public void initShuffleboard(LOG_LEVEL level) { 
         ShuffleboardTab tab = Shuffleboard.getTab("Climb");
-
         switch (level) {
             case OFF:
                 break;
             case ALL:
-                tab.addString("Control Mode", motorLeft.getControlMode()::toString);
+                tab.addString("Control Mode", motor.getControlMode()::toString);
+                tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
                 tab.addDouble("Desired Speed", () -> desiredSpeed);
-                tab.addBoolean("At Speed", () -> atSpeed());
                 tab.addBoolean("Enabled", () -> enabled);
             case MEDIUM:
-                tab.addDouble("Supply Current", () -> motorLeft.getSupplyCurrent().getValueAsDouble());
+                tab.addBoolean("At Speed", () -> atSpeed());
             case MINIMAL:
-                tab.addDouble("Motor Temp", () -> motorLeft.getDeviceTemp().getValueAsDouble());
-                tab.addNumber("Motor Voltage", () -> motorLeft.getMotorVoltage().getValueAsDouble());
+                tab.addDouble("Motor Temp", () -> motor.getDeviceTemp().getValueAsDouble());
+                tab.addNumber("Motor Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
                 break;
         }
     }
