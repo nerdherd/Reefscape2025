@@ -49,9 +49,6 @@ public class BannerSensor implements Reportable {
     }
 
     @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {}
-
-    @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab(name);
         tab.addBoolean("Detected", this::sensorDetected);

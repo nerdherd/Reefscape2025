@@ -192,20 +192,6 @@ public class Wrist extends SubsystemBase implements Reportable{
     }
 
     // ****************************** LOGGING METHODS ****************************** //
-
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL level) {
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-                SmartDashboard.putNumber("Coral Wrist Position", motor.getPosition().getValueAsDouble());
-            case MEDIUM:
-                SmartDashboard.putNumber("Coral Wrist Current", motor.getStatorCurrent().getValueAsDouble());
-            case MINIMAL:
-                break;
-        }
-    }
     
     @Override
     public void initShuffleboard(LOG_LEVEL priority) { 

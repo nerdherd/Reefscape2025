@@ -178,20 +178,6 @@ public class Climb extends SubsystemBase implements Reportable{
     }
 
     // ****************************** LOGGING METHODS ****************************** //
-
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL level) {
-        switch (level) {
-            case OFF:
-                break;
-            case ALL:
-                SmartDashboard.putNumber("Climb Position", motor.getPosition().getValueAsDouble());
-                SmartDashboard.putNumber("Climb Current", motor.getStatorCurrent().getValueAsDouble());
-            case MEDIUM:
-            case MINIMAL:
-                break;
-        }
-    }
     
     @Override
     public void initShuffleboard(LOG_LEVEL level) { 
