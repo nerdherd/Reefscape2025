@@ -287,28 +287,6 @@ public class Pivot extends SubsystemBase implements Reportable{
     }
 
     // ****************************** LOGGING METHODS ****************************** //
-
-    @Override
-    public void reportToSmartDashboard(LOG_LEVEL priority) {
-        SmartDashboard.putNumber("Pivot Voltage (ID 17)", pivotMotor.getMotorVoltage().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Voltage (ID 18)", pivotMotorRight.getMotorVoltage().getValueAsDouble());
-
-        SmartDashboard.putNumber("Pivot Current Rotations (ID 17)", pivotMotor.getPosition().getValueAsDouble());
-        // SmartDashboard.putNumber("Pivot Current Rotations (ID 18)", pivotMotorRight.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("Pivot Target Rotations", desiredPosition);
-        // SmartDashboard.putNumber("Error Left (Rotations)", error);
-        
-
-        // SmartDashboard.putNumber("Adjusted Offset Pivot Current Rotations (ID 17)", getPositionRev());
-        // SmartDashboard.putNumber("Adjusted Offset Pivot Commanded Rotations (ID 17)", desiredPosition - pivotPositionOffset);
-        // SmartDashboard.putNumber("Commanded kP Pivot Voltage", commandedVoltage);
-
-        // SmartDashboard.putNumber("Applied feedforward", ff);
-        SmartDashboard.putNumber("Feedforward inverse", ffInverse);
-
-        // SmartDashboard.putNumber("Error Right (Rotations)", errorRight);
-
-    }
     
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
