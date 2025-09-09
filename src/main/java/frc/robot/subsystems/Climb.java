@@ -105,9 +105,9 @@ public class Climb extends SubsystemBase implements Reportable{
         }
     }
 
-    public void stopMotion() {
-        motor.setControl(neutralRequest);
-    }
+    // public void stopMotion() {
+    //     motor.setControl(neutralRequest);
+    // }
 
     public void setNeutralMode(NeutralModeValue neutralMode) {
         this.neutralMode = neutralMode;

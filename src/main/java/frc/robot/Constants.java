@@ -523,9 +523,11 @@ public final class Constants {
     public static final double kWristOffset = 0.008333;
   }
 
-  public static final class ClimbConstants { // TODO change
+  public static final class ClimbConstants {
 
     public static final int kMotorID = 49;
+    public static final int kLeftMotorID = 0; // TODO change
+    public static final int kRightMotorID = 0; // TODO change
 
     public static final double kPMotor = 0;
     public static final double kIMotor = 0;
