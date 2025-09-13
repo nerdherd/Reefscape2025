@@ -434,7 +434,7 @@ public final class Constants {
     public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
     
-    public static final int kPivotPigeonID = 4; // TODO change later
+    public static final int kPivotCandiID = 7; // TODO change later
     // public static final double kPigeonOffset = 0.231445;
 
     public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
