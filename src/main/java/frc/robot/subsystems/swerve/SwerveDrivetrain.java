@@ -1008,8 +1008,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public Command driveToRelativePose(double maxVelocityMps, double maxAccelerationMpsSq, Transform2d translation) {
-        Pose2d targetPose = getPose().plus(translation);
-        return driveToPose(targetPose, maxVelocityMps, maxAccelerationMpsSq);
+        return driveToPose(getPose().plus(translation), maxVelocityMps, maxAccelerationMpsSq);
     }
     
     public void setChassisSpeeds(ChassisSpeeds speeds) {

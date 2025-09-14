@@ -31,6 +31,7 @@ import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.autos.TwoPieceGround;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.driveToRelativePos;
 import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.Generic3Piece;
@@ -244,7 +245,7 @@ public class RobotContainer {
         swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
       );
 
-    driverController.dpadDown().onTrue(swerveDrive.driveToRelativePose(1.0, 1.0, new Transform2d(0.0, 0.5, new Rotation2d())));
+    driverController.dpadDown().onTrue(new driveToRelativePos((transform, maxV, maxA) -> swerveDrive.driveToRelativePose(maxV, maxA, transform), new Transform2d(0.0, 0.5, new Rotation2d()), 2.0, 4.0));
 
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()
