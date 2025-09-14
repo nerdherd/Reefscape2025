@@ -949,7 +949,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
-
     /**
      * Calculate position to move to based on Reef side AprilTags
      * @param tagID ID of tag to move to

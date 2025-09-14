@@ -12,6 +12,8 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -166,7 +168,7 @@ public class RobotContainer {
         //   return 0.0;
         return swerveDrive.getImu().getHeading();
       }, 
-      () -> driverController.getDpadDown() || driverController.getDpadUp() || driverController.getDpadLeft() || driverController.getDpadRight(),
+      () -> driverController.getDpadUp() || driverController.getDpadLeft() || driverController.getDpadRight(),
       () -> {
 
         if (driverController.getDpadDown()) {
@@ -241,6 +243,8 @@ public class RobotContainer {
       .whileTrue(
         swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
       );
+
+    driverController.dpadDown().onTrue(swerveDrive.driveToRelativePose(1.0, 1.0, new Transform2d(0.0, 0.5, new Rotation2d())));
 
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()
