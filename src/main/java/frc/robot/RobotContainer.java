@@ -169,7 +169,7 @@ public class RobotContainer {
         //   return 0.0;
         return swerveDrive.getImu().getHeading();
       }, 
-      () -> driverController.getDpadUp() || driverController.getDpadLeft() || driverController.getDpadRight(),
+      () -> driverController.getDpadLeft() || driverController.getDpadRight(),
       () -> {
 
         if (driverController.getDpadDown()) {
@@ -245,6 +245,7 @@ public class RobotContainer {
         swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
       );
 
+    driverController.dpadUp().onTrue(new driveToRelativePos((transform, maxV, maxA) -> swerveDrive.driveToRelativePose(maxV, maxA, transform), new Transform2d(0.0, -0.5, new Rotation2d()), 2.0, 4.0));
     driverController.dpadDown().onTrue(new driveToRelativePos((transform, maxV, maxA) -> swerveDrive.driveToRelativePose(maxV, maxA, transform), new Transform2d(0.0, 0.5, new Rotation2d()), 2.0, 4.0));
 
     if (USE_SUBSYSTEMS){
