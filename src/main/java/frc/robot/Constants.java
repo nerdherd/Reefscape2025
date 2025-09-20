@@ -456,7 +456,7 @@ public final class Constants {
     public static final double kPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kPivotMax = 0.285; // Slightly past vertical    // TODO change later   
 
-    public static final double kPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
+    public static final double kPivotGearRatio = 1.0; //187.5 / 1.0 original  16:1 for Gearbox, 5:1 for Chain
     public static final double kPivotDeadBand = 0;
     public static final double kPivotOffSet = 0.03051758;
 

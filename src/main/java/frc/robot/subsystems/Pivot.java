@@ -2,11 +2,14 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.StatusCode;
+import com.ctre.phoenix6.configs.CANdiConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.NeutralOut;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.CANdi;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -30,6 +33,7 @@ import frc.robot.util.NerdyMath;
 public class Pivot extends SubsystemBase implements Reportable{
     private TalonFX pivotMotor;
     private TalonFX pivotMotorRight;
+    private final CANdi candi;
 
     private TalonFXConfigurator pivotConfigurator;
     private TalonFXConfigurator pivotConfiguratorRight; 
@@ -41,7 +45,6 @@ public class Pivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest;  
     private final NeutralOut brakeRequest = new NeutralOut();
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
-    private final DutyCycleEncoder encoder;
 
     private final Follower followRequest = new Follower(PivotConstants.kLeftPivotMotorID, true);
     // public final VoltageOut voltageRequest = new VoltageOut(0);
@@ -54,6 +57,7 @@ public class Pivot extends SubsystemBase implements Reportable{
     public Pivot () {
         desiredPosition = 0.0;
         motionMagicRequest = new MotionMagicVoltage(desiredPosition);
+        candi = new CANdi(PivotConstants.kPivotCandiID);
 
         pivotMotor = new TalonFX(PivotConstants.kLeftPivotMotorID);
         pivotConfigurator = pivotMotor.getConfigurator();
@@ -62,8 +66,6 @@ public class Pivot extends SubsystemBase implements Reportable{
         // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
 
         pivotConfiguratorRight = pivotMotorRight.getConfigurator();
-
-        encoder = new DutyCycleEncoder(1, 1.0, 0.0);
 
         configureMotorV1();
         configurePIDV1();
@@ -126,7 +128,8 @@ public class Pivot extends SubsystemBase implements Reportable{
         
         pivotConfigurator.refresh(pivotConfiguration);
         // pivotConfiguration.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotPigeonID;
-        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; 
+        pivotConfiguration.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotCandiID;
+        pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANdiPWM1; 
         // pivotConfiguration.Feedback.RotorToSensorRatio = 360;
         // pivotConfiguration.Feedback.SensorToMechanismRatio = -1.068376; 
         pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
@@ -168,6 +171,9 @@ public class Pivot extends SubsystemBase implements Reportable{
         if (!RightstatusCode.isOK()){
             DriverStation.reportError("Could not apply Elevator configs, fix code??? =(", true);
         }
+        CANdiConfiguration candiConfiguration = new CANdiConfiguration();
+        candiConfiguration.PWM1.AbsoluteSensorOffset = PivotConstants.kPivotOffSet;
+        candi.getConfigurator().apply(candiConfiguration);
     }
 
     @Override
