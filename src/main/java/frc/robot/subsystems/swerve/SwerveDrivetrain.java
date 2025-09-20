@@ -949,7 +949,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
-
     /**
      * Calculate position to move to based on Reef side AprilTags
      * @param tagID ID of tag to move to
@@ -1009,8 +1008,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public Command driveToRelativePose(double maxVelocityMps, double maxAccelerationMpsSq, Transform2d translation) {
-        Pose2d targetPose = getPose().plus(translation);
-        return driveToPose(targetPose, maxVelocityMps, maxAccelerationMpsSq);
+        return driveToPose(getPose().plus(translation), maxVelocityMps, maxAccelerationMpsSq);
     }
     
     public void setChassisSpeeds(ChassisSpeeds speeds) {

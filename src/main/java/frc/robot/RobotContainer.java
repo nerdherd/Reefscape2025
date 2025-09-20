@@ -12,6 +12,8 @@ import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.pathplanner.lib.auto.AutoBuilder;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -29,6 +31,7 @@ import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.autos.TwoPieceGround;
 import frc.robot.commands.SwerveJoystickCommand;
+import frc.robot.commands.driveToRelativePos;
 import frc.robot.commands.autos.TwoPieceOffset;
 import frc.robot.commands.autos.Generic2Piece;
 import frc.robot.commands.autos.Generic3Piece;
@@ -168,7 +171,7 @@ public class RobotContainer {
         //   return 0.0;
         return swerveDrive.getImu().getHeading();
       }, 
-      () -> driverController.getDpadDown() || driverController.getDpadUp() || driverController.getDpadLeft() || driverController.getDpadRight(),
+      () -> driverController.getDpadLeft() || driverController.getDpadRight(),
       () -> {
 
         if (driverController.getDpadDown()) {
@@ -243,6 +246,9 @@ public class RobotContainer {
       .whileTrue(
         swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
       );
+
+    driverController.dpadUp().onTrue(new driveToRelativePos((transform, maxV, maxA) -> swerveDrive.driveToRelativePose(maxV, maxA, transform), new Transform2d(0.0, -0.5, new Rotation2d()), 2.0, 4.0));
+    driverController.dpadDown().onTrue(new driveToRelativePos((transform, maxV, maxA) -> swerveDrive.driveToRelativePose(maxV, maxA, transform), new Transform2d(0.0, 0.5, new Rotation2d()), 2.0, 4.0));
 
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()
