@@ -36,7 +36,7 @@ public class SuperSystem {
     public Pivot pivot;
     public Wrist wrist;
     public IntakeRoller intakeRoller;
-    public ClimbV2 climbMotor;
+    public Climb climbMotor;
     public SwerveDrivetrain swerveDrivetrain;
 
     public StatusSignal<S1StateValue> intakeSensor;
@@ -72,7 +72,7 @@ public class SuperSystem {
     private boolean wristSet = false, elevatorSet = false, pivotSet = false;
     private double startTime = 0;
 
-    public SuperSystem(SwerveDrivetrain swerveDrivetrain, Elevator elevator, Pivot pivot, Wrist wrist, IntakeRoller intakeRoller, CANdi candi, ClimbV2 climbMotor) {
+    public SuperSystem(SwerveDrivetrain swerveDrivetrain, Elevator elevator, Pivot pivot, Wrist wrist, IntakeRoller intakeRoller, CANdi candi, Climb climbMotor) {
         this.elevator = elevator;
         this.pivot = pivot;
         this.wrist = wrist;
@@ -101,12 +101,15 @@ public class SuperSystem {
         elevator.setMotorConfigs();
         wrist.configurePID(wrist.motorConfigs);
         intakeRoller.configureMotor(intakeRoller.motorConfigs);
+        climbMotor.configurePID(climbMotor.motorConfigs);
     }
 
     public void setNeutralMode(NeutralModeValue neutralMode) {
         elevator.setNeutralMode(neutralMode);
         pivot.setNeutralMode(neutralMode);
         wrist.setNeutralMode(neutralMode);
+        climbMotor.setNeutralMode(neutralMode);
+
         reConfigureMotors();
     }
 
@@ -222,55 +225,47 @@ public class SuperSystem {
         return intakeRoller.setVoltageCommand(4.25);
     } 
     
-    // public Command climbPrep() {
-    //     return climbMotor.setVoltageCommand(0.5);
-    // }
-
-    public Command climbstart() {
-        return climbMotor.startClimb();
+    public Command climbPrep() {
+        return climbMotor.setVoltageCommand(0.5);
     }
 
-    public Command climbstop() {
-        return climbMotor.stopClimb();
+    private double hardclampvoltage = 0.0;
+    public Command climbHardRamp() {
+        return Commands.sequence(
+            Commands.run(() -> {
+                hardclampvoltage -= 1 / 50;
+                hardclampvoltage = Math.max(hardclampvoltage, ClimbConstants.climbHardClampVoltage);
+            }),
+            climbMotor.setVoltageCommand(hardclampvoltage)
+        );
     }
 
-    // private double hardclampvoltage = 0.0;
-    // public Command climbHardRamp() {
-    //     return Commands.sequence(
-    //         Commands.run(() -> {
-    //             hardclampvoltage -= 1 / 50;
-    //             hardclampvoltage = Math.max(hardclampvoltage, ClimbConstants.climbHardClampVoltage);
-    //         }),
-    //         climbMotor.setVoltageCommand(hardclampvoltage)
-    //     );
-    // }
+    public Command climbHardClamp() {
+        return climbMotor.setVoltageCommand(ClimbConstants.climbHardClampVoltage);
+    }
 
-    // public Command climbHardClamp() {
-    //     return climbMotor.setVoltageCommand(ClimbConstants.climbHardClampVoltage);
-    // }
+    public Command climbSoftClamp() {
+        return climbMotor.setVoltageCommand(-0.4);
+    }
 
-    // public Command climbSoftClamp() {
-    //     return climbMotor.setVoltageCommand(-0.4);
-    // }
+    public Command stopClimb() {
+        return climbMotor.setVoltageCommand(0.0);
+    }
 
-    // public Command stopClimb() {
-    //     return climbMotor.setVoltageCommand(0.0);
-    // }
-
-    // public Command climbCommandUp() {
-    //     return Commands.sequence(
-    //         climbPrep(), 
-    //         moveTo(PositionEquivalents.ClimbUp) 
-    //     );
-    // }
+    public Command climbCommandUp() {
+        return Commands.sequence(
+            climbPrep(), 
+            moveTo(PositionEquivalents.ClimbUp) 
+        );
+    }
 
     
-    // public Command climbCommandDown() {
-    //     return Commands.sequence(
-    //         climbHardRamp(), 
-    //         moveTo(PositionEquivalents.ClimbDown) 
-    //     );
-    // }
+    public Command climbCommandDown() {
+        return Commands.sequence(
+            climbHardRamp(), 
+            moveTo(PositionEquivalents.ClimbDown) 
+        );
+    }
 
     public Command updatePositions(PositionEquivalents position) {
         return Commands.runOnce(() -> {
@@ -390,7 +385,7 @@ public class SuperSystem {
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(WristConstants.kWristOffset);
         intakeRoller.setVoltageCommand(0.0);
-            // climbMotor.setVoltageCommand(0.0);
+        climbMotor.setVoltageCommand(0.0);
         isStarted = false;
     }
 
