@@ -14,6 +14,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,6 +41,7 @@ public class Pivot extends SubsystemBase implements Reportable{
     private final MotionMagicVoltage motionMagicRequest;  
     private final NeutralOut brakeRequest = new NeutralOut();
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
+    private final DutyCycleEncoder encoder;
 
     private final Follower followRequest = new Follower(PivotConstants.kLeftPivotMotorID, true);
     // public final VoltageOut voltageRequest = new VoltageOut(0);
@@ -59,6 +62,8 @@ public class Pivot extends SubsystemBase implements Reportable{
         // pigeon = new Pigeon2(V1ElevatorConstants.kPivotPigeonID); // Not using Pigeon as of 2/23
 
         pivotConfiguratorRight = pivotMotorRight.getConfigurator();
+
+        encoder = new DutyCycleEncoder(1, 1.0, 0.0);
 
         configureMotorV1();
         configurePIDV1();
@@ -144,8 +149,8 @@ public class Pivot extends SubsystemBase implements Reportable{
 
         pivotConfiguratorRight.refresh(pivotConfigurationRight);
         // pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
-        pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = 1;
-        pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor; //TODO change orientation later
+        pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotCandiID;
+        pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANdiPWM1; //TODO change orientation later
         pivotConfigurationRight.Feedback.RotorToSensorRatio = 1;
         // pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
         pivotConfigurationRight.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
