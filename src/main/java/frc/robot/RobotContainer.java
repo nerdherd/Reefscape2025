@@ -41,6 +41,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.BannerSensor;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.ClimbV2;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
 import frc.robot.subsystems.Wrist;
@@ -61,7 +62,8 @@ public class RobotContainer {
   public Wrist wrist;
   public BannerSensor floorSensor;
   public SuperSystem superSystem;
-  public Climb climbMotor;
+  // public Climb climbMotor;
+  public ClimbV2 climbmotor;
   public CANdi candi;
   public PositionMode positionMode;
 
@@ -106,8 +108,8 @@ public class RobotContainer {
       pivot = new Pivot();
       intakeRoller = new IntakeRoller();
       candi = new CANdi(6);
-      climbMotor = new Climb();
-      superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbMotor);
+      climbmotor = new ClimbV2();      
+      superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbmotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -248,24 +250,26 @@ public class RobotContainer {
         .onFalse(superSystem.stopRoller());
 
       // Climb sequence
-      driverController.buttonDown() // Prepare Position for Climb
-        .onTrue(Commands.sequence(
-          superSystem.climbCommandUp()));
+      // driverController.buttonDown() // Prepare Position for Climb
+      //   .onTrue(Commands.sequence(
+      //     superSystem.climbCommandUp()));
           
-          driverController.buttonLeft() // Soft Clamp
-        .onTrue(Commands.sequence(
-          superSystem.climbSoftClamp()
-          ))
-        .onFalse(superSystem.stopClimb());
+      //     driverController.buttonLeft() // Soft Clamp
+      //   .onTrue(Commands.sequence(
+      //     superSystem.climbSoftClamp()
+      //     ))
+      //   .onFalse(superSystem.stopClimb());
         
-      driverController.buttonUp() // Hard Clamp
-      .onTrue(Commands.sequence(
-          superSystem.climbHardClamp()
-        ));
+      // driverController.buttonUp() // Hard Clamp
+      // .onTrue(Commands.sequence(
+      //     superSystem.climbHardClamp()
+      //   ));
 
-        driverController.buttonRight() // Execute Climb
-        .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
-        .onTrue(superSystem.climbHardClamp());
+      //   driverController.buttonRight() // Execute Climb
+      //   .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
+      //   .onTrue(superSystem.climbHardClamp());
+
+      driverController.buttonDown().onTrue(superSystem.climbstart()).onFalse(superSystem.climbstop());
 
 
       // driverController.buttonDown()
@@ -440,7 +444,7 @@ public class RobotContainer {
       elevator.initShuffleboard(loggingLevel);
       wrist.initShuffleboard(loggingLevel);
       pivot.initShuffleboard(loggingLevel);
-      climbMotor.initShuffleboard(loggingLevel);
+      climbmotor.initShuffleboard(loggingLevel);
       superSystem.initShuffleboard(loggingLevel);
     }
   }
@@ -467,7 +471,7 @@ public class RobotContainer {
     elevator.setEnabled(false);
     wrist.setEnabled(false);
     intakeRoller.setEnabled(false);
-    climbMotor.setEnabled(false);
+    climbmotor.setEnabled(false);
     swerveDrive.setBreak(true);
   }
   
