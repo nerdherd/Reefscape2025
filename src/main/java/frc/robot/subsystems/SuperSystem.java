@@ -381,7 +381,7 @@ public class SuperSystem {
         intakeRoller.setEnabled(true);
         climbMotor.setEnabled(true);
         
-        pivot.setTargetPosition(PivotConstants.kPivotOffSet);
+        pivot.setTargetPosition(PositionEquivalents.Stow.coralPos.pivotPosition);
         elevator.setTargetPosition(0.0);
         wrist.setTargetPosition(WristConstants.kWristOffset);
         intakeRoller.setVoltageCommand(0.0);
