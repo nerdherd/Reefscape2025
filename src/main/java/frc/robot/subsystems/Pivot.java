@@ -28,6 +28,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.PivotConstants;
+import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.util.NerdyMath;
 
 public class Pivot extends SubsystemBase implements Reportable{
@@ -132,6 +133,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         pivotConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANdiPWM1; 
         // pivotConfiguration.Feedback.RotorToSensorRatio = 360;
         // pivotConfiguration.Feedback.SensorToMechanismRatio = -1.068376; 
+        pivotConfiguration.Feedback.RotorToSensorRatio = 1.0;
         pivotConfiguration.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
         pivotConfiguration.Voltage.PeakForwardVoltage = 11.5;
@@ -154,7 +156,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         // pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = V1ElevatorConstants.kPivotPigeonID;
         pivotConfigurationRight.Feedback.FeedbackRemoteSensorID = PivotConstants.kPivotCandiID;
         pivotConfigurationRight.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANdiPWM1; //TODO change orientation later
-        pivotConfigurationRight.Feedback.RotorToSensorRatio = 1;
+        pivotConfigurationRight.Feedback.RotorToSensorRatio = 1.0;
         // pivotConfigurationRight.Feedback.RotorToSensorRatio = V1ElevatorConstants.kElevatorPivotGearRatio;
         pivotConfigurationRight.Feedback.SensorToMechanismRatio = PivotConstants.kPivotGearRatio; 
         pivotConfigurationRight.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive; 
@@ -172,7 +174,7 @@ public class Pivot extends SubsystemBase implements Reportable{
             DriverStation.reportError("Could not apply Elevator configs, fix code??? =(", true);
         }
         CANdiConfiguration candiConfiguration = new CANdiConfiguration();
-        candiConfiguration.PWM1.AbsoluteSensorOffset = PivotConstants.kPivotOffSet;
+        candiConfiguration.PWM1.AbsoluteSensorOffset = PivotConstants.kPivotOffset;
         candiConfiguration.PWM1.SensorDirection = false;
         candiConfiguration.PWM1.AbsoluteSensorDiscontinuityPoint = 1.0;
         candi.getConfigurator().apply(candiConfiguration);
@@ -193,7 +195,7 @@ public class Pivot extends SubsystemBase implements Reportable{
 
     // ****************************** STATE METHODS ***************************** //
     public void zeroEncoder() {
-        desiredPosition = PivotConstants.kPivotOffSet; 
+        desiredPosition = PositionEquivalents.Stow.coralPos.pivotPosition;//PivotConstants.kPivotOffset; 
         pivotMotor.setPosition(desiredPosition); // Start position is based off of difference between flat starting pose and hard-stopped starting pose
         pivotMotorRight.setPosition(desiredPosition);
     }

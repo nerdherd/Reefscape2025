@@ -458,7 +458,9 @@ public final class Constants {
 
     public static final double kPivotGearRatio = 1.0; //187.5 / 1.0 original  16:1 for Gearbox, 5:1 for Chain
     public static final double kPivotDeadBand = 0;
-    public static final double kPivotOffSet = 0.03051758;
+    // position 0 is horizontal, use base offset to make it so,
+    // then regular offset if the robot doesnt usually start from 0
+    public static final double kPivotOffset = -0.75; // use to zero encoder
 
     public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
@@ -562,10 +564,10 @@ public final class Constants {
     }
     
     public enum CoralPositions { 
-      Stow(                ExecutionOrder.ELV_WRT_PVT , PivotConstants.kPivotOffSet,  0.125,    -0.096, -0.096),
+      Stow(                ExecutionOrder.ELV_WRT_PVT , 0.04,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , PivotConstants.kPivotOffSet, 0.77, -0.755), // warren testing
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.04, 0.77, -0.755), // warren testing
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
       Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
