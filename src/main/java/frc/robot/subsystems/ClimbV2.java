@@ -23,10 +23,9 @@ import frc.robot.Constants.ClimbConstants;
 public class ClimbV2 extends SubsystemBase implements Reportable {
     private final TalonFX motor = new TalonFX(ClimbConstants.kMotorID);
     
-    private final VelocityVoltage velocityRequest = new VelocityVoltage(0);
     private final NeutralOut neutralRequest = new NeutralOut();
 
-    private double desiredSpeed = 0.0;
+    private double desiredVoltage = 0.0;
     private boolean enabled = false;
 
     public ClimbV2() {
@@ -47,15 +46,15 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
         configs.CurrentLimits.SupplyCurrentLowerTime = 0;
         configs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     
-        configs.Slot0.kP = ClimbConstants.kPMotor;
-        configs.Slot0.kI = ClimbConstants.kIMotor;
-        configs.Slot0.kD = ClimbConstants.kDMotor;
-        configs.Slot0.kV = ClimbConstants.kVMotor;
-        configs.Slot0.kS = ClimbConstants.kSMotor;
+        // configs.Slot0.kP = ClimbConstants.kPMotor;
+        // configs.Slot0.kI = ClimbConstants.kIMotor;
+        // configs.Slot0.kD = ClimbConstants.kDMotor;
+        // configs.Slot0.kV = ClimbConstants.kVMotor;
+        // configs.Slot0.kS = ClimbConstants.kSMotor;
 
-        configs.MotionMagic.MotionMagicCruiseVelocity =  ClimbConstants.kCruiseVelocity;
-        configs.MotionMagic.MotionMagicAcceleration = ClimbConstants.kAcceleration;
-        configs.MotionMagic.MotionMagicJerk = ClimbConstants.kJerk;
+        // configs.MotionMagic.MotionMagicCruiseVelocity =  ClimbConstants.kCruiseVelocity;
+        // configs.MotionMagic.MotionMagicAcceleration = ClimbConstants.kAcceleration;
+        // configs.MotionMagic.MotionMagicJerk = ClimbConstants.kJerk;
         configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
     
         StatusCode response = motor.getConfigurator().apply(configs);
@@ -71,7 +70,7 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
             return;
         }
         
-        motor.setControl(velocityRequest.withVelocity(desiredSpeed));  
+        motor.setVoltage(desiredVoltage);  
     }
 
     // ****************************** STATE METHODS ****************************** //
@@ -79,18 +78,19 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (!enabled) {
-            desiredSpeed = 0.0;
+            desiredVoltage = 0.0;
             motor.setControl(neutralRequest);
+            motor.setVoltage(0.0);
         }
     }
 
     public void stopMotion() {
         motor.setControl(neutralRequest);
+        motor.setVoltage(0.0);
     }
 
-    private void setSpeed(double speed) {
-        desiredSpeed = speed;
-        velocityRequest.Velocity = desiredSpeed;
+    private void setVoltage(double voltage) {
+        desiredVoltage = voltage;
     }
 
     public double getSpeed() {
@@ -98,7 +98,7 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
     }
 
     public boolean atSpeed() {
-        return getSpeed() > desiredSpeed;
+        return getSpeed() > desiredVoltage;
     }
 
     // ****************************** COMMAND METHODS ****************************** //
@@ -107,8 +107,8 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
 
-    public Command setSpeedCommand(double speed) {
-        return Commands.runOnce(() -> setSpeed(speed));
+    public Command setVoltageCommand(double speed) {
+        return Commands.runOnce(() -> setVoltage(speed));
     }
 
     // ****************************** NAMED COMMANDS ****************************** //
@@ -118,11 +118,11 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
     }
 
     public Command startClimb() {
-        return setSpeedCommand(ClimbConstants.kCloseSpeed); // TODO find climb speed
+        return setVoltageCommand(ClimbConstants.kOpenSpeed); // TODO find climb speed
     }
 
     public Command stopClimb() {
-        return setSpeedCommand(ClimbConstants.kCloseSpeed);
+        return setVoltageCommand(ClimbConstants.kCloseSpeed);
     }
 
     // ****************************** LOGGING METHODS ****************************** //
@@ -136,7 +136,7 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
             case ALL:
                 tab.addString("Control Mode", motor.getControlMode()::toString);
                 tab.addDouble("Supply Current", () -> motor.getSupplyCurrent().getValueAsDouble());
-                tab.addDouble("Desired Speed", () -> desiredSpeed);
+                tab.addDouble("Desired Speed", () -> desiredVoltage);
                 tab.addBoolean("Enabled", () -> enabled);
             case MEDIUM:
                 tab.addBoolean("At Speed", () -> atSpeed());

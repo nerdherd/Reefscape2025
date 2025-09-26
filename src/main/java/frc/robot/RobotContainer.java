@@ -63,7 +63,7 @@ public class RobotContainer {
   public BannerSensor floorSensor;
   public SuperSystem superSystem;
   // public Climb climbMotor;
-  public ClimbV2 climbmotor;
+  public ClimbV2 climbMotor;
   public CANdi candi;
   public PositionMode positionMode;
 
@@ -108,8 +108,8 @@ public class RobotContainer {
       pivot = new Pivot();
       intakeRoller = new IntakeRoller();
       candi = new CANdi(6);
-      climbmotor = new ClimbV2();      
-      superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbmotor);
+      climbMotor = new ClimbV2();      
+      superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbMotor);
       try { // ide displayed error fix
         bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
         bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
@@ -444,7 +444,7 @@ public class RobotContainer {
       elevator.initShuffleboard(loggingLevel);
       wrist.initShuffleboard(loggingLevel);
       pivot.initShuffleboard(loggingLevel);
-      climbmotor.initShuffleboard(loggingLevel);
+      climbMotor.initShuffleboard(loggingLevel);
       superSystem.initShuffleboard(loggingLevel);
     }
   }
@@ -471,7 +471,7 @@ public class RobotContainer {
     elevator.setEnabled(false);
     wrist.setEnabled(false);
     intakeRoller.setEnabled(false);
-    climbmotor.setEnabled(false);
+    climbMotor.setEnabled(false);
     swerveDrive.setBreak(true);
   }
   

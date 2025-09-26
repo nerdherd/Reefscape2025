@@ -528,20 +528,10 @@ public final class Constants {
 
     public static final int kMotorID = 49;
 
-    public static final double kPMotor = 0;
-    public static final double kIMotor = 0;
-    public static final double kDMotor = 0;
-    public static final double kVMotor = 0;
-    public static final double kSMotor = 0;
-
-    public static final double kCruiseVelocity = 0;
-    public static final double kAcceleration = 0;
-    public static final double kJerk = 0;
-
     public static final double kOpenPosition = 0;
     public static final double kClosedPosition = 0;
     
-    public static final double kOpenSpeed = 0;
+    public static final double kOpenSpeed = 2;
     public static final double kCloseSpeed = 0;
 
     public static final double climbHardClampVoltage = -3;
