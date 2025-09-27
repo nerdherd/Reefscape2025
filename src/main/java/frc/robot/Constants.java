@@ -531,7 +531,7 @@ public final class Constants {
     public static final double kOpenPosition = 0;
     public static final double kClosedPosition = 0;
     
-    public static final double kOpenSpeed = 2;
+    public static final double kOpenSpeed = -3;
     public static final double kCloseSpeed = 0;
 
     public static final double climbHardClampVoltage = -3;
