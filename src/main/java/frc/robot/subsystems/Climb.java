@@ -65,15 +65,15 @@ public class Climb extends SubsystemBase implements Reportable{
         motorConfigs.CurrentLimits.SupplyCurrentLowerTime = 0;
         motorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     
-        motorConfigs.Slot0.kP = ClimbConstants.kPMotor;
-        motorConfigs.Slot0.kI = ClimbConstants.kIMotor;
-        motorConfigs.Slot0.kD = ClimbConstants.kDMotor;
-        motorConfigs.Slot0.kV = ClimbConstants.kVMotor;
-        motorConfigs.Slot0.kS = ClimbConstants.kSMotor;
+        // motorConfigs.Slot0.kP = ClimbConstants.kPMotor;
+        // motorConfigs.Slot0.kI = ClimbConstants.kIMotor;
+        // motorConfigs.Slot0.kD = ClimbConstants.kDMotor;
+        // motorConfigs.Slot0.kV = ClimbConstants.kVMotor;
+        // motorConfigs.Slot0.kS = ClimbConstants.kSMotor;
 
-        motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ClimbConstants.kCruiseVelocity;
-        motorConfigs.MotionMagic.MotionMagicAcceleration = ClimbConstants.kAcceleration;
-        motorConfigs.MotionMagic.MotionMagicJerk = ClimbConstants.kJerk;
+        // motorConfigs.MotionMagic.MotionMagicCruiseVelocity =  ClimbConstants.kCruiseVelocity;
+        // motorConfigs.MotionMagic.MotionMagicAcceleration = ClimbConstants.kAcceleration;
+        // motorConfigs.MotionMagic.MotionMagicJerk = ClimbConstants.kJerk;
         motorConfigs.MotorOutput.NeutralMode = neutralMode;
     
         StatusCode response = motorConfigurator.apply(motorConfigs);
