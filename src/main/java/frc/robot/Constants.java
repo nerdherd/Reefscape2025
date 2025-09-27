@@ -562,12 +562,12 @@ public final class Constants {
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
       Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
       // Station1(             ExecutionOrder.PVT_WRTELV, 0.205,  1.275, -0.8), // Adjusted Idaho - better
-      L1(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,    -0.102     ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.265,  0.0,  -0.148      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  1.5, -0.148),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.265,  3.2, -0.197, -0.197     ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.265,  0.0, -0.570, -0.57      ),
+      L1(                  ExecutionOrder.WRTELV_PVT  , 0.04,  0.5,    -0.096     ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.148      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.148),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197     ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.25,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.015, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
