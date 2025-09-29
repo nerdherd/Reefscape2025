@@ -437,16 +437,16 @@ public final class Constants {
     public static final int kPivotCandiID = 7; // TODO change later
     // public static final double kPigeonOffset = 0.231445;
 
-    public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 80.0;//100; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIPivot = 0;
-    public static final double kDPivot = 0;
+    public static final double kDPivot = 0.5;
     public static final double kVPivot = 0; 
     public static final double kSPivot = 0; 
     public static final double kAPivot = 0.0; 
     public static final double kGPivot = 0;
 
-    public static final double kFPivot = 0.21; 
+    public static final double kFPivot = 0.21;//0.21; 
 
     public static final double kPivotStowPosition = 0.01; 
     public static final double kPivotSemiStowPosition = 0.11; 
@@ -563,12 +563,12 @@ public final class Constants {
       Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
       // Station1(             ExecutionOrder.PVT_WRTELV, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.04,  0.5,    -0.096     ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.25,  0.0,  -0.148      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  1.5, -0.148),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.25,  3.2, -0.197, -0.197     ),
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.25,  0.0, -0.570, -0.57      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.25,  1.12, -0.570, -0.570      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.26,  0.0,  -0.148      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.26,  1.5, -0.148),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.26,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.26,  3.2, -0.197, -0.197     ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.26,  0.0, -0.570, -0.57      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.26,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.015, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.14,  0.05, -0.57, -0.57      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );

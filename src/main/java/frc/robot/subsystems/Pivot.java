@@ -315,14 +315,14 @@ public class Pivot extends SubsystemBase implements Reportable{
             case ALL:
                 tab.addString("Pivot Control Mode", pivotMotor.getControlMode()::toString);
                 tab.addNumber("Pivot MM Position", () -> motionMagicRequest.Position);
-                tab.addNumber("Pivot FF", () -> motionMagicRequest.FeedForward);
                 tab.addNumber("Pivot Supply Current", () -> pivotMotor.getSupplyCurrent().getValueAsDouble());
                 tab.addBoolean("Pivot At Position", () -> atPosition());
                 tab.addBoolean("Pivot At Position Wide", () -> atPositionWide());
             case MEDIUM:
                 tab.addBoolean("Pivot Enabled", () -> enabled);
                 tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
-                case MINIMAL:
+            case MINIMAL:
+                tab.addNumber("Pivot FF", () -> motionMagicRequest.FeedForward);
                 tab.addNumber("Pivot Current Position", () -> getPosition());
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Pivot Temperature 1", () -> pivotMotor.getDeviceTemp().getValueAsDouble());
