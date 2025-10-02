@@ -250,10 +250,16 @@ public class RobotContainer {
         .onFalse(superSystem.stopRoller());
 
       // Climb sequence
-      // driverController.buttonDown() // Prepare Position for Climb
-      //   .onTrue(Commands.sequence(
-      //     superSystem.climbCommandUp()));
-          
+      driverController.buttonUp() // Prepare Position for Climb
+        .onTrue(Commands.sequence(
+          superSystem.climbCommandUp()));
+      
+      driverController.buttonRight().onTrue(superSystem.climbstart()).onFalse(superSystem.climbstop());
+      
+      driverController.buttonDown()
+        .onTrue(Commands.sequence(
+          superSystem.climbCommandDown()));
+      
       //     driverController.buttonLeft() // Soft Clamp
       //   .onTrue(Commands.sequence(
       //     superSystem.climbSoftClamp()
@@ -269,7 +275,6 @@ public class RobotContainer {
       //   .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
       //   .onTrue(superSystem.climbHardClamp());
 
-      driverController.buttonDown().onTrue(superSystem.climbstart()).onFalse(superSystem.climbstop());
 
 
       // driverController.buttonDown()

@@ -257,20 +257,20 @@ public class SuperSystem {
     //     return climbMotor.setVoltageCommand(0.0);
     // }
 
-    // public Command climbCommandUp() {
-    //     return Commands.sequence(
-    //         climbPrep(), 
-    //         moveTo(PositionEquivalents.ClimbUp) 
-    //     );
-    // }
+    public Command climbCommandUp() {
+        return Commands.sequence(
+            // climbPrep(), 
+            moveTo(PositionEquivalents.ClimbUp) 
+        );
+    }
 
     
-    // public Command climbCommandDown() {
-    //     return Commands.sequence(
-    //         climbHardRamp(), 
-    //         moveTo(PositionEquivalents.ClimbDown) 
-    //     );
-    // }
+    public Command climbCommandDown() {
+        return Commands.sequence(
+            // climbHardRamp(), 
+            moveTo(PositionEquivalents.ClimbDown) 
+        );
+    }
 
     public Command updatePositions(PositionEquivalents position) {
         return Commands.runOnce(() -> {
