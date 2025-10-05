@@ -1,25 +1,24 @@
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Counter;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DriverStation;
+
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 public class DistanceSensor implements Reportable {
-    private final Counter distanceSensor;
-    public double SensorReading;
-    private final String name;
+    private final AnalogInput distanceSensor;
 
-    public DistanceSensor(String name, int sensorPort) {
-        this.name = name;
-
-        distanceSensor = new Counter(sensorPort);
+    public DistanceSensor(int sensorPort) {
+        distanceSensor = new AnalogInput(sensorPort);
     }
 
     public double getDistanceCM(){
-        double pulseWidthSec = distanceSensor.getPeriod();
-        return (pulseWidthSec * 1000000) /58.0;
+        double rawValue = distanceSensor.getValue();
+        //return (Units.secondsToMilliseconds(pulseWidthSec)) /58.0;
+        double voltageScaleFactor = RobotController.getVoltage5V();
+        double currentDistanceCM = rawValue * voltageScaleFactor* 0.125 *0.2142;
+        return currentDistanceCM;
     }
 
 
@@ -28,9 +27,9 @@ public class DistanceSensor implements Reportable {
 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
-        ShuffleboardTab tab = Shuffleboard.getTab(name);
-        tab.addNumber("Distance Reading in cm", ()-> getDistanceCM());
-
+        ShuffleboardTab tab = Shuffleboard.getTab("Distance Sensor");
+        tab.addNumber("Raw Value", distanceSensor::getValue);
+        tab.addNumber("Distance Reading in cm", this::getDistanceCM);
     }
     
 }
