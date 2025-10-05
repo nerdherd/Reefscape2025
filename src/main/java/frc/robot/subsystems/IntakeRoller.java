@@ -246,7 +246,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
  
     // ****************************** LOGGING METHODS ****************************** //
-  
+ 
+    @Override
+    public void reportToSmartDashboard(LOG_LEVEL priority) {}
+ 
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Intake Roller");
