@@ -201,6 +201,7 @@ public class Climb extends SubsystemBase implements Reportable{
             case MINIMAL:
                 tab.addDouble("Motor Temp", () -> motor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Climb Voltage", () -> motor.getMotorVoltage().getValueAsDouble());
+                tab.addNumber("Climb Current", () -> motor.getTorqueCurrent().getValueAsDouble());
                 break;
         }
     }
