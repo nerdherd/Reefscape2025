@@ -420,15 +420,15 @@ public class RobotContainer {
     // autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
     autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
-    // autoChooser.addOption("PreloadTaxi", new PreloadTaxiAutoMove(swerveDrive, "TaxiPreload", superSystem));
-    autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
-    autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
-    autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
+    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+    // autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
+    // autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
+    // autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
-    autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
-    autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
-    autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
-    autoChooser.addOption("2PieceGround", new TwoPieceGround(swerveDrive, "BottomTwoPieceGround", superSystem));
+    // autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
+    // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
+    // autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
+    // autoChooser.addOption("2PieceGround", new TwoPieceGround(swerveDrive, "BottomTwoPieceGround", superSystem));
     // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
     
     // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
