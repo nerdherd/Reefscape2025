@@ -81,7 +81,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MEDIUM;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
@@ -296,7 +296,7 @@ public class RobotContainer {
       .onTrue(superSystem.intake());
       // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
-        .onTrue(superSystem.intakeCoral())
+        .onTrue(superSystem.intakeCoralSlow())
         .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));

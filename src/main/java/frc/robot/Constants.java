@@ -485,6 +485,7 @@ public final class Constants {
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
     public static final double kCoralIntakePower = -2.8;
+    public static final double kCoralIntakeSlow = -.80;
     public static final double kCoralButAlgaeIntakePower  = -2.8;
     public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2;
@@ -557,7 +558,7 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.04,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.037, 0.81, -0.79), // warren testing
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.03, 0.81, -0.79), // warren testing
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
       Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
@@ -629,7 +630,7 @@ public final class Constants {
       PositionEquivalents(CoralPositions cp, CoralPositions ap) {
         coralPos = cp.position;
         algaePos = ap.position;
-      }
+      }    
       PositionEquivalents(AlgaePositions cp, AlgaePositions ap) {
         coralPos = cp.position;
         algaePos = ap.position;

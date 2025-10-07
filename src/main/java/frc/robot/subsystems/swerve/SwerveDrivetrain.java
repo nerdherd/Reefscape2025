@@ -103,7 +103,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     private Field2d field;
     // private VisionSys vision = new VisionSys();
-    public boolean useVision = true;
+    public boolean useVision = false;
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
