@@ -491,7 +491,8 @@ public final class Constants {
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
     public static final double kAlgaeHoldPower = 1;
-
+    public static final double kCoralSlowIntakePower = -1.0;
+    
   }
 
   public static final class WristConstants {

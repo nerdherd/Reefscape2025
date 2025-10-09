@@ -297,7 +297,7 @@ public class RobotContainer {
       .onTrue(superSystem.intake());
       // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
-        .onTrue(superSystem.intakeCoral())
+        .onTrue(superSystem.intakeCoralSlow())
         .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));

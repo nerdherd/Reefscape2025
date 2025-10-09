@@ -149,6 +149,9 @@ public class SuperSystem {
     public Command intakeCoral() {
         return intakeRoller.intakeCoral();
     }
+    public Command intakeCoralSlow() {
+        return intakeRoller.intakeCoralSlow();
+    }
 
     // public Command repositionCoral() {
     //     return Commands.sequence(

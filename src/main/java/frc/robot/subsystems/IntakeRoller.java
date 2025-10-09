@@ -222,6 +222,13 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         );
     }
 
+    public Command intakeCoralSlow() {
+        return Commands.sequence(
+            setEnabledCommand(true),
+            setVoltageCommandCoral(RollerConstants.kCoralSlowIntakePower)
+        );
+    }
+
     public Command outtakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
