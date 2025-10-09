@@ -229,6 +229,10 @@ public class SuperSystem {
     public Command climbstart() {
         return climbMotor.startClimb();
     }
+    
+    public Command climbgrip() {
+        return climbMotor.startClimbGrip();
+    }
 
     public Command climbstop() {
         return climbMotor.stopClimb();
