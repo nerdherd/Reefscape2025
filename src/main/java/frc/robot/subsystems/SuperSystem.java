@@ -149,6 +149,9 @@ public class SuperSystem {
     public Command intakeCoral() {
         return intakeRoller.intakeCoral();
     }
+    public Command intakeCoralSlow() {
+        return intakeRoller.intakeCoralSlow();
+    }
 
     // public Command repositionCoral() {
     //     return Commands.sequence(
@@ -228,6 +231,10 @@ public class SuperSystem {
 
     public Command climbstart() {
         return climbMotor.startClimb();
+    }
+    
+    public Command climbgrip() {
+        return climbMotor.startClimbGrip();
     }
 
     public Command climbstop() {

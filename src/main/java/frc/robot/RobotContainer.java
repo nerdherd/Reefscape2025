@@ -255,6 +255,7 @@ public class RobotContainer {
           superSystem.climbCommandUp()));
       
       driverController.buttonRight().onTrue(superSystem.climbstart()).onFalse(superSystem.climbstop());
+      driverController.buttonLeft().onTrue(superSystem.climbgrip()).onFalse(superSystem.climbstop());
       
       driverController.buttonDown()
         .onTrue(Commands.sequence(
@@ -296,7 +297,7 @@ public class RobotContainer {
       .onTrue(superSystem.intake());
       // .onFalse(superSystem.holdPiece());
       operatorController.bumperRight()
-        .onTrue(superSystem.intakeCoral())
+        .onTrue(superSystem.intakeCoralSlow())
         .onFalse(superSystem.stopRoller());
       operatorController.triggerLeft()
       .onTrue(superSystem.moveTo(PositionEquivalents.GroundIntake));

@@ -121,8 +121,12 @@ public class ClimbV2 extends SubsystemBase implements Reportable {
         return setVoltageCommand(ClimbConstants.kOpenSpeed); // TODO find climb speed
     }
 
+    public Command startClimbGrip() {
+        return setVoltageCommand(ClimbConstants.kGripSpeed); // TODO find climb speed
+    }
+
     public Command stopClimb() {
-        return setVoltageCommand(ClimbConstants.kCloseSpeed);
+        return setVoltageCommand(0.0);
     }
 
     // ****************************** LOGGING METHODS ****************************** //
