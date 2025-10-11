@@ -31,7 +31,7 @@ public class PreloadTaxi extends SequentialCommandGroup{
                 superSystem.moveToAuto(PositionEquivalents.Stow),
                 AutoBuilder.followPath(pathGroup.get(0)),
                 // swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName), 
-                Commands.waitSeconds(1),
+                Commands.waitSeconds(0.5),
                 superSystem.moveTo(PositionEquivalents.L4),
                 // superSystem.moveToAuto(PositionEquivalents.L1),
                 Commands.waitSeconds(1),
