@@ -25,8 +25,13 @@ public class PreloadTaxi extends SequentialCommandGroup{
             Commands.runOnce(swerve.getImu()::zeroAll),
             // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+            // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+            // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.getImu().zeroAll()),
+            Commands.waitSeconds(0.1),
             Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
+
             Commands.sequence(
                 superSystem.moveToAuto(PositionEquivalents.Stow),
                 AutoBuilder.followPath(pathGroup.get(0)),

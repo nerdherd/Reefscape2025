@@ -331,9 +331,9 @@ public final class Constants {
 
     public static final PIDConstants kPPTranslationPIDConstants = new PIDConstants(kPP_P, kPP_I, kPP_D);
 
-    public static final double kPP_ThetaP = 4.0; //3
+    public static final double kPP_ThetaP = 5.0; //3
     public static final double kPP_ThetaI = 0;
-    public static final double kPP_ThetaD = 0.1;
+    public static final double kPP_ThetaD = 0.0;
 
     public static final PIDConstants kPPRotationPIDConstants = new PIDConstants(kPP_ThetaP, kPP_ThetaI, kPP_ThetaD);
 
