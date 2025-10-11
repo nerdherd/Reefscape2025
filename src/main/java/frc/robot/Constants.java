@@ -460,7 +460,7 @@ public final class Constants {
     public static final double kPivotDeadBand = 0;
     // position 0 is horizontal, use base offset to make it so,
     // then regular offset if the robot doesnt usually start from 0
-    public static final double kPivotOffset = -0.75; // use to zero encoder
+    public static final double kPivotOffset = -0.919921875; // use to zero encoder
 
     public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
