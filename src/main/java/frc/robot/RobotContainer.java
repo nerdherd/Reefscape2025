@@ -183,8 +183,6 @@ public class RobotContainer {
           return -1.0;
         } 
 
-
-
       }
     );
 
@@ -237,11 +235,11 @@ public class RobotContainer {
     // Move to reef side
     driverController.bumperLeft()
       .whileTrue(
-        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
+        swerveDrive.driveToReefVision(VisionConstants.kLimelightBackLeftName, -1)
       );
     driverController.bumperRight()
       .whileTrue(
-        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
+        swerveDrive.driveToReefVision(VisionConstants.kLimelightBackRightName, 1)
       );
 
     if (USE_SUBSYSTEMS){
@@ -261,6 +259,7 @@ public class RobotContainer {
         .onTrue(Commands.sequence(
           superSystem.climbCommandDown()));
       
+      // OLD CLIMB
       //     driverController.buttonLeft() // Soft Clamp
       //   .onTrue(Commands.sequence(
       //     superSystem.climbSoftClamp()
@@ -276,8 +275,7 @@ public class RobotContainer {
       //   .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
       //   .onTrue(superSystem.climbHardClamp());
 
-
-
+      // CORAL VISION TEST
       // driverController.buttonDown()
       //   .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
     
@@ -319,10 +317,7 @@ public class RobotContainer {
       .onTrue(superSystem.setPositionModeAlgae());
     }
     
-    
-    
-    
-    
+    // OLD NAMEDPOSITIONS
     // operatorController.dpadDown()
     // .onTrue(superSystem.moveTo(NamedPositions.L1));
     // operatorController.dpadLeft()

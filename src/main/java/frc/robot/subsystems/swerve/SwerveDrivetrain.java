@@ -985,8 +985,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if (side == -1) sideRotation = new Rotation2d(botRotation.getRadians() + Math.PI/2); // left: 90 deg ccw
         else sideRotation = new Rotation2d(botRotation.getRadians() - Math.PI/2); // right: 90 deg cw
 
-        xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians());
-        yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
+        // xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians()); // might not be used for left/right limelights
+        // yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
 
         return new Pose2d(xPos, yPos, botRotation); // side poses have vert and side offsets
     }
