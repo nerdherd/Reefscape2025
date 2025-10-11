@@ -26,6 +26,7 @@ import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.commands.autos.PreloadTaxi;
+import frc.robot.commands.autos.Taxi;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.autos.TwoPieceGround;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -417,7 +418,7 @@ public class RobotContainer {
     
     autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
-    // autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
+    autoChooser.addOption("Taxi", new Taxi(swerveDrive, "TaxiMid", superSystem));
     // autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
     // autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
