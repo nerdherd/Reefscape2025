@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import org.json.simple.parser.ParseException;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -234,14 +235,14 @@ public class RobotContainer {
     );
 
     // Move to reef side
-    driverController.bumperLeft()
-      .whileTrue(
-        swerveDrive.driveToReefVision(VisionConstants.kLimelightBackLeftName, -1)
-      );
-    driverController.bumperRight()
-      .whileTrue(
-        swerveDrive.driveToReefVision(VisionConstants.kLimelightBackRightName, 1)
-      );
+    // driverController.bumperLeft()
+    //   .whileTrue(
+    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackLeftName, -1)
+    //   );
+    // driverController.bumperRight()
+    //   .whileTrue(
+    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackRightName, 1)
+    //   );
 
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()
@@ -418,7 +419,7 @@ public class RobotContainer {
     
     autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
-    autoChooser.addOption("Taxi", new Taxi(swerveDrive, "TaxiMid", superSystem));
+    autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     // autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
     // autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
@@ -440,7 +441,8 @@ public class RobotContainer {
   public void initShuffleboard() {
     // imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL); 
+    imu.initShuffleboard(loggingLevel); 
     if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);

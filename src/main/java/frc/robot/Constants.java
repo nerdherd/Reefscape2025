@@ -486,7 +486,7 @@ public final class Constants {
 
     public static final double kCoralIntakePower = -2.8;
     public static final double kCoralButAlgaeIntakePower  = -2.8;
-    public static final double kCoralOuttakePower = 1.5;
+    public static final double kCoralOuttakePower = 2.5;
     public static final double kAlgaeIntakePower  = -2;
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
@@ -558,18 +558,18 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.04,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.033, 0.81, -0.79), // warren testing
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.034, 0.81, -0.79), // warren testing
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
       Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
       // Station1(             ExecutionOrder.PVT_WRTELV, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.04,  0.5,    -0.096     ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.254,  0.0,  -0.148      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.254,  1.5, -0.148),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.254,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.254,  3.2, -0.197, -0.197     ),                             
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.254,  0.0, -0.570, -0.57      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.254,  1.12, -0.570, -0.570      ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.257,  0.0,  -0.148      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.257,  1.5, -0.148),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.257,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.257,  3.2, -0.197, -0.197     ),                             
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.257,  0.0, -0.570, -0.57      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.257,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.075, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.26,  0.05, -0.65, -0.65      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
