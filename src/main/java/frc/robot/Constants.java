@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.config.PIDConstants;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.MatBuilder;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -42,7 +44,9 @@ public final class Constants {
     V2,
   }
 
-  public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
+  public static final ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
+
+  public static final AprilTagFieldLayout layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
 
   public static class ControllerConstants {
 
@@ -209,6 +213,10 @@ public final class Constants {
     }
 
     public static final class MapPoses {
+
+      
+
+      // OLD CODE
 
       public static final double CWReefOffset = 0.0; // meters
       
@@ -434,19 +442,19 @@ public final class Constants {
     public static final int kLeftPivotMotorID = 17;  // TODO: Switch back motor IDs. This is TEMPORARY 2/24
     public static final int kRightPivotMotorID = 18;
     
-    public static final int kPivotCandiID = 7; // TODO change later
+    public static final int kPivotPigeonID = 4; // TODO change later
     // public static final double kPigeonOffset = 0.231445;
 
-    public static final double kPElevatorPivot = 80.0;//100; // TODO: NEED TO CALCULATE AND INPUT A kP
+    public static final double kPElevatorPivot = 100; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIPivot = 0;
-    public static final double kDPivot = 0.5;
+    public static final double kDPivot = 0;
     public static final double kVPivot = 0; 
     public static final double kSPivot = 0; 
     public static final double kAPivot = 0.0; 
     public static final double kGPivot = 0;
 
-    public static final double kFPivot = 0.21;//0.21; 
+    public static final double kFPivot = 0.21; 
 
     public static final double kPivotStowPosition = 0.01; 
     public static final double kPivotSemiStowPosition = 0.11; 
@@ -456,11 +464,9 @@ public final class Constants {
     public static final double kPivotMin = 0; // This is Stow with Foam underneath // TODO change later   
     public static final double kPivotMax = 0.285; // Slightly past vertical    // TODO change later   
 
-    public static final double kPivotGearRatio = 1.0; //187.5 / 1.0 original  16:1 for Gearbox, 5:1 for Chain
+    public static final double kPivotGearRatio = 187.5 / 1.0; // 16:1 for Gearbox, 5:1 for Chain
     public static final double kPivotDeadBand = 0;
-    // position 0 is horizontal, use base offset to make it so,
-    // then regular offset if the robot doesnt usually start from 0
-    public static final double kPivotOffset = 0.243164; // use to zero encoder
+    public static final double kPivotOffSet = 0.03051758;
 
     public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
@@ -491,8 +497,7 @@ public final class Constants {
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
     public static final double kAlgaeHoldPower = 1;
-    public static final double kCoralSlowIntakePower = -1.0;
-    
+
   }
 
   public static final class WristConstants {
@@ -529,11 +534,21 @@ public final class Constants {
 
     public static final int kMotorID = 49;
 
+    public static final double kPMotor = 0;
+    public static final double kIMotor = 0;
+    public static final double kDMotor = 0;
+    public static final double kVMotor = 0;
+    public static final double kSMotor = 0;
+
+    public static final double kCruiseVelocity = 0;
+    public static final double kAcceleration = 0;
+    public static final double kJerk = 0;
+
     public static final double kOpenPosition = 0;
     public static final double kClosedPosition = 0;
     
-    public static final double kOpenSpeed = -3;
-    public static final double kGripSpeed = 3;
+    public static final double kOpenSpeed = 0;
+    public static final double kCloseSpeed = 0;
 
     public static final double climbHardClampVoltage = -3;
 
@@ -555,7 +570,7 @@ public final class Constants {
     }
     
     public enum CoralPositions { 
-      Stow(                ExecutionOrder.ELV_WRT_PVT , 0.04,  0.125,    -0.096, -0.096),
+      Stow(                ExecutionOrder.ELV_WRT_PVT , PivotConstants.kPivotOffSet,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
       GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.034, 0.81, -0.79), // warren testing

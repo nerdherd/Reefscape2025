@@ -1177,6 +1177,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             case MINIMAL:
             tab.addString("Drive Mode", () -> this.driveMode.toString());
             tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
+            tab.addNumber("Left Limelight Tag ID", () -> LimelightHelpers.getFiducialID(VisionConstants.kLimelightBackLeftName));
+            tab.addNumber("Left Limelight Tag ID", () -> LimelightHelpers.getFiducialID(VisionConstants.kLimelightBackRightName));
             tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
             tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
             tab.addNumber("Odometry Angle", () -> poseEstimator.getEstimatedPosition().getRotation().getDegrees());
