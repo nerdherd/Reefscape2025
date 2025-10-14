@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
@@ -950,16 +951,24 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
-    /**
-     * Automatically drives to a specified side of the Reef.
-     * @param limelight String for limelight name
-     * @param side -1 for Left, 0 for Middle, 1 for Right
-     * @return Command to drive to the intended Reef side
-     */
-    public Command driveToReefVision(String limelight, int side) {
-        int id = (int) LimelightHelpers.getFiducialID(limelight);
-        if (id == -1) return Commands.none();
-        return AutoBuilder.pathfindToPose(calcReefSidePose(id, side), pathcons);
+    public Command driveToReefLeftVision() {
+        DoubleSupplier idSupplier = () -> LimelightHelpers.getFiducialID(VisionConstants.kLimelightBackLeftName);
+
+        if ((int)idSupplier.getAsDouble() < 1) return Commands.none();
+        return AutoBuilder.pathfindToPose(
+            calcReefSidePose((int)idSupplier.getAsDouble(), -1),
+            pathcons
+        );
+    }
+
+    public Command driveToReefRightVision() {
+        DoubleSupplier idSupplier = () -> LimelightHelpers.getFiducialID(VisionConstants.kLimelightBackRightName);
+
+        if ((int)idSupplier.getAsDouble() < 1) return Commands.none();
+        return AutoBuilder.pathfindToPose(
+            calcReefSidePose((int)idSupplier.getAsDouble(), 1),
+            pathcons
+        );
     }
 
     /**
@@ -1177,6 +1186,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             case MINIMAL:
             tab.addString("Drive Mode", () -> this.driveMode.toString());
             tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
+            tab.addNumber("Tag ID Left Limelight", () -> LimelightHelpers.getFiducialID(VisionConstants.kLimelightBackLeftName));
+            tab.addNumber("Tag ID Right Limelight", () -> LimelightHelpers.getFiducialID(VisionConstants.kLimelightBackRightName));
             tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
             tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
             tab.addNumber("Odometry Angle", () -> poseEstimator.getEstimatedPosition().getRotation().getDegrees());
