@@ -237,11 +237,11 @@ public class RobotContainer {
     // Move to reef side
     // driverController.bumperLeft()
     //   .whileTrue(
-    //     swerveDrive.driveToReefLeftVision()
+    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackLeftName, -1)
     //   );
     // driverController.bumperRight()
     //   .whileTrue(
-    //     swerveDrive.driveToReefRightVision()
+    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackRightName, 1)
     //   );
 
     if (USE_SUBSYSTEMS){
