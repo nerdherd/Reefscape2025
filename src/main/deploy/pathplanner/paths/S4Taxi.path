@@ -8,36 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.271069580871023,
-        "y": 4.0119883185903715
+        "x": 7.889162940285264,
+        "y": 4.0
       },
       "isLocked": false,
       "linkedName": "S4"
     },
     {
       "anchor": {
-        "x": 6.58,
+        "x": 6.210750000000001,
         "y": 4.0
       },
       "prevControl": {
-        "x": 6.829938156466516,
-        "y": 4.00556039046469
-      },
-      "nextControl": {
-        "x": 6.3300618435334846,
-        "y": 3.99443960953531
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 6.58,
-        "y": 3.0
-      },
-      "prevControl": {
-        "x": 6.330028710016345,
-        "y": 2.9962113084175233
+        "x": 5.960750000000001,
+        "y": 4.0
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "reversed": false,
   "folder": "Middle Paths",

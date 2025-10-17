@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.List;
 import org.json.simple.parser.ParseException;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -26,6 +27,7 @@ import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.commands.autos.PreloadTaxi;
+import frc.robot.commands.autos.Taxi;
 import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.autos.TwoPieceGround;
 import frc.robot.commands.SwerveJoystickCommand;
@@ -81,7 +83,7 @@ public class RobotContainer {
   
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MEDIUM;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   public static boolean USE_SUBSYSTEMS = true;
   
   // For logging wrist
@@ -183,8 +185,6 @@ public class RobotContainer {
           return -1.0;
         } 
 
-
-
       }
     );
 
@@ -235,14 +235,14 @@ public class RobotContainer {
     );
 
     // Move to reef side
-    driverController.bumperLeft()
-      .whileTrue(
-        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackLeftName)
-      );
-    driverController.bumperRight()
-      .whileTrue(
-        swerveDrive.driveToTagCommand(VisionConstants.kLimelightBackRightName)
-      );
+    // driverController.bumperLeft()
+    //   .whileTrue(
+    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackLeftName, -1)
+    //   );
+    // driverController.bumperRight()
+    //   .whileTrue(
+    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackRightName, 1)
+    //   );
 
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()
@@ -261,6 +261,7 @@ public class RobotContainer {
         .onTrue(Commands.sequence(
           superSystem.climbCommandDown()));
       
+      // OLD CLIMB
       //     driverController.buttonLeft() // Soft Clamp
       //   .onTrue(Commands.sequence(
       //     superSystem.climbSoftClamp()
@@ -276,8 +277,7 @@ public class RobotContainer {
       //   .onTrue(superSystem.moveTo(PositionEquivalents.ClimbDown))
       //   .onTrue(superSystem.climbHardClamp());
 
-
-
+      // CORAL VISION TEST
       // driverController.buttonDown()
       //   .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
     
@@ -319,10 +319,7 @@ public class RobotContainer {
       .onTrue(superSystem.setPositionModeAlgae());
     }
     
-    
-    
-    
-    
+    // OLD NAMEDPOSITIONS
     // operatorController.dpadDown()
     // .onTrue(superSystem.moveTo(NamedPositions.L1));
     // operatorController.dpadLeft()
@@ -422,7 +419,7 @@ public class RobotContainer {
     
     autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
-    // autoChooser.addOption("TaxiMid", AutoBuilder.buildAuto("TaxiPreload"));
+    autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     // autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
     // autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
     
@@ -444,7 +441,8 @@ public class RobotContainer {
   public void initShuffleboard() {
     // imu.initShuffleboard(loggingLevel);
     swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL);  
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL); 
+    imu.initShuffleboard(loggingLevel); 
     if (USE_SUBSYSTEMS) { 
       intakeRoller.initShuffleboard(loggingLevel); 
       elevator.initShuffleboard(loggingLevel);

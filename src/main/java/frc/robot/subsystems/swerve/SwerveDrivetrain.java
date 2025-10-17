@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.Constants.VisionConstants;
@@ -949,16 +950,27 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
+    /**
+     * Automatically drives to a specified side of the Reef.
+     * @param limelight String for limelight name
+     * @param side -1 for Left, 0 for Middle, 1 for Right
+     * @return Command to drive to the intended Reef side
+     */
+    public Command driveToReefVision(String limelight, int side) {
+        int id = (int) LimelightHelpers.getFiducialID(limelight);
+        if (id == -1) return Commands.none();
+        return AutoBuilder.pathfindToPose(calcReefSidePose(id, side), pathcons);
+    }
 
     /**
-     * Calculate position to move to based on Reef side AprilTags
+     * Calculate position to move to based on Reef side AprilTags.
      * @param tagID ID of tag to move to
      * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Pose2d of position to drive to
      */
-    public Pose2d calcReefSidePose(int tagID, int side) {
+    public Pose2d calcReefSidePose(int id, int side) {
         // get tag info
-        Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
+        Pose2d tagPose = layout.getTagPose(id).get().toPose2d();
         double tagAngle = tagPose.getRotation().getRadians();
 
         // add vert offset and find bot rotation
@@ -973,8 +985,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if (side == -1) sideRotation = new Rotation2d(botRotation.getRadians() + Math.PI/2); // left: 90 deg ccw
         else sideRotation = new Rotation2d(botRotation.getRadians() - Math.PI/2); // right: 90 deg cw
 
-        xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians());
-        yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
+        // xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians()); // might not be used for left/right limelights
+        // yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
 
         return new Pose2d(xPos, yPos, botRotation); // side poses have vert and side offsets
     }
@@ -1132,22 +1144,18 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     
 
     public void initShuffleboard(LOG_LEVEL level) {
-        if (level == LOG_LEVEL.OFF)  {
-            return;
-        }
-        ShuffleboardTab tab;
-        if (level == LOG_LEVEL.MINIMAL) {
-            tab = Shuffleboard.getTab("Main");
-        } else {
-            tab = Shuffleboard.getTab("Swerve");
-        }
+        ShuffleboardTab tab =
+            level == LOG_LEVEL.MINIMAL ?
+            Shuffleboard.getTab("Main") :
+            Shuffleboard.getTab("Swerve");
 
         switch (level) {
             case OFF:
-                break;
+            break;
+            
             case ALL:
             // Display Limelight data on SmartDashboard
-            tab.addNumber("Limelight Left X",   ()-> LimelightHelpers.getTX("limelights-bl"));
+            tab.addNumber("Limelight Left X", ()-> LimelightHelpers.getTX("limelights-bl"));
             tab.addNumber("Limelight Left Y", ()-> LimelightHelpers.getTY("limelights-bl"));
             tab.addNumber("Limelight Left Area", ()-> LimelightHelpers.getTA("limelight-bl"));
 
@@ -1158,31 +1166,20 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             // Optionally display the camera feed URLs (adjust for your Limelight IPs)
             tab.addCamera("LeftLimeLight", "limelights-bl", "http://10.6.87.5:5800");
             tab.addCamera("RightLimeLight", "limelights-br", "http://10.6.87.7:5800");
-            // tab.addString(("Current Command"), () -> {
-                //     Command currCommand = this.getCurrentCommand();
-                //     if (currCommand == null) {
-                    //         return "null";
-                //     } else {
-                    //         return currCommand.getName();
-                //     }
-                // }
-                // );
-                tab.add("Toggle Test", Commands.runOnce(() -> isTest = !isTest));
-                tab.addBoolean("Test Mode", () -> isTest);
-                // Might be negative because our swerveDriveKinematics is flipped across the Y axis
+            tab.add("Toggle Test", Commands.runOnce(() -> isTest = !isTest));
+            tab.addBoolean("Test Mode", () -> isTest);
+            // Might be negative because our swerveDriveKinematics is flipped across the Y axis
+            
             case MEDIUM:
-                tab.add("Field Position", field).withSize(6, 3);
-                tab.add("Zone Id", zoneId);
-                // tab.add("Zone")
-                // tab.add(zone)
+            tab.add("Field Position", field).withSize(6, 3);
+            tab.add("Zone Id", zoneId);
+
             case MINIMAL:
-                tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
-                tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
-                tab.addNumber("Odometry Angle", () -> poseEstimator.getEstimatedPosition().getRotation().getDegrees());
-                // tab.add("Pose Estimator Pose", poseEstimator.getEstimatedPosition());
-                tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
-                tab.addString("Drive Mode", () -> this.driveMode.toString());
-                break;
+            tab.addString("Drive Mode", () -> this.driveMode.toString());
+            tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
+            tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
+            tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
+            tab.addNumber("Odometry Angle", () -> poseEstimator.getEstimatedPosition().getRotation().getDegrees());
         }
     }
 

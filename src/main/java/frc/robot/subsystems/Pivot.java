@@ -176,7 +176,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         CANdiConfiguration candiConfiguration = new CANdiConfiguration();
         candiConfiguration.PWM1.AbsoluteSensorOffset = PivotConstants.kPivotOffset;
         candiConfiguration.PWM1.SensorDirection = false;
-        candiConfiguration.PWM1.AbsoluteSensorDiscontinuityPoint = 1.0;
+        candiConfiguration.PWM1.AbsoluteSensorDiscontinuityPoint = 0.5;
         candi.getConfigurator().apply(candiConfiguration);
     }
 
