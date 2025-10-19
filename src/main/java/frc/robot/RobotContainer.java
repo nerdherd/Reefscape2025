@@ -234,15 +234,15 @@ public class RobotContainer {
       Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle()) // TODO: When camera pose is implemented, this won't be necessary anymore
     );
 
-    // Move to reef side
-    // driverController.bumperLeft()
-    //   .whileTrue(
-    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackLeftName, -1)
-    //   );
-    // driverController.bumperRight()
-    //   .whileTrue(
-    //     swerveDrive.driveToReefVision(VisionConstants.kLimelightBackRightName, 1)
-    //   );
+    // TODO test move to reef side
+    driverController.bumperLeft()
+      .whileTrue(
+        swerveDrive.driveToReefVision(isRedSide, -1)
+      );
+    driverController.bumperRight()
+      .whileTrue(
+        swerveDrive.driveToReefVision(isRedSide, 1)
+      );
 
     if (USE_SUBSYSTEMS){
       driverController.triggerLeft()

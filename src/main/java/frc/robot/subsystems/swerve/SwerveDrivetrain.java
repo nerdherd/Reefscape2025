@@ -87,7 +87,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     // private VisionSys vision = new VisionSys();
     public boolean useVision = true;
 
-    public Map<Integer, Pose2d> reefPoses = new HashMap<>();
+    public Map<Integer, Pose2d> reefPosesRed = new HashMap<>();
+    public Map<Integer, Pose2d> reefPosesBlue = new HashMap<>();
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
@@ -167,10 +168,12 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         //Vision
         layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
-        layout.getTags().stream().filter(tag -> 
-            (tag.ID > 6 && tag.ID <= 11) ||
-            (tag.ID > 17 && tag.ID <= 22)
-        ).forEach(tag -> {reefPoses.put(tag.ID, tag.pose.toPose2d());});
+        layout.getTags().stream().forEach(tag -> {
+            if (tag.ID > 6 && tag.ID <= 11)
+                reefPosesRed.put(tag.ID, tag.pose.toPose2d());
+            else if (tag.ID > 17 && tag.ID <= 22)
+                reefPosesBlue.put(tag.ID, tag.pose.toPose2d());
+        });
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
@@ -827,23 +830,27 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     /**
      * Automatically drives to a specified side of the Reef.
-     * @param limelight String for limelight name
+     * @param isRedAlliance is the alliance red
      * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Command to drive to the intended Reef side
      */
-    public Command driveToReefVision(int side) {
-        return AutoBuilder.pathfindToPose(calcReefSidePose(side), pathcons);
+    public Command driveToReefVision(boolean isRedAlliance, int side) {
+        return AutoBuilder.pathfindToPose(
+            calcReefSidePose(isRedAlliance, side),
+            pathcons);
     }
 
     /**
      * Calculate position to move to based on Reef side AprilTags.
-     * @param tagID ID of tag to move to
+     * @param isRedAlliance is the alliance red
      * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Pose2d of position to drive to
      */
-    public Pose2d calcReefSidePose(int side) {
+    public Pose2d calcReefSidePose(boolean isRedAlliance, int side) {
         // get tag info
-        Pose2d tagPose = poseEstimator.getEstimatedPosition().nearest(reefPoses.values());
+        Pose2d tagPose = isRedAlliance ?
+        poseEstimator.getEstimatedPosition().nearest(reefPosesRed.values()) :
+        poseEstimator.getEstimatedPosition().nearest(reefPosesBlue.values());
         double tagAngle = tagPose.getRotation().getRadians();
 
         // add vert offset and find bot rotation
