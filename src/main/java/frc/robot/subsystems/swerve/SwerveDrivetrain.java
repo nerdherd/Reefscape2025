@@ -344,15 +344,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());
 
-        field.setRobotPose(poseEstimator.getEstimatedPosition());
-            
+        
         if (useVision) {
             visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
             visionupdateOdometry(VisionConstants.kLimelightBackRightName);
             // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
             // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
         }
-    
+        
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
         //todo try MegaTag2
     }
 
@@ -400,14 +400,16 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 mt.pose,
                 mt.timestampSeconds);
         } else {
-            double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+            // double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+            double currentPoseYaw = gyro.getAbsoluteHeading();
+
             LimelightHelpers.SetRobotOrientation(limelightName, currentPoseYaw, 0, 0, 0, 0, 0);
             mt = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
             if(mt == null || Math.abs(gyro.getRate()) > 720 || mt.tagCount == 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             {
                 return;
             }
-            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.3,.3,10));
+            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999)); // .3,.3,10
             poseEstimator.addVisionMeasurement(
                 mt.pose,
                 mt.timestampSeconds);
@@ -513,7 +515,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public void zeroGyroAndPoseAngle() {
         gyro.zeroHeading();
-        gyro.setOffset(0);
+        // gyro.setOffset(0);
         Pose2d pose = getPose();
         Pose2d newPose = new Pose2d(pose.getX(), pose.getY(), RobotContainer.IsRedSide() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
         poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), newPose);
@@ -1171,10 +1173,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             // Might be negative because our swerveDriveKinematics is flipped across the Y axis
             
             case MEDIUM:
-            tab.add("Field Position", field).withSize(6, 3);
             tab.add("Zone Id", zoneId);
-
+            
             case MINIMAL:
+            tab.add("Field Position", field).withSize(6, 3);
             tab.addString("Drive Mode", () -> this.driveMode.toString());
             tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
             tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
