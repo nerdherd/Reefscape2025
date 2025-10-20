@@ -240,7 +240,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     LimelightHelpers.PoseEstimate mt; // thats me :OO
     RawFiducial fiducial;
 	private void visionupdateOdometry(String limelightName) {
-        boolean useMegaTag2 = false; //set to false to use MegaTag1
+        boolean useMegaTag2 = true; //set to false to use MegaTag1
         xyStds = 0.5;
         degStds = 30;
 

@@ -39,10 +39,10 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     public void zeroAbsoluteHeading() {
         RobotContainer.refreshAlliance();
         if (RobotContainer.IsRedSide()) {
-            pigeon.setYaw(0.0);
+            pigeon.setYaw(180.0);
             DriverStation.reportWarning("Pigeon Red", false);
         } else {
-            pigeon.setYaw(180.0);
+            pigeon.setYaw(0.0);
             DriverStation.reportWarning("Pigeon Blue", false);
         }
     }
