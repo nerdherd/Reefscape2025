@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     RobotContainer.refreshAlliance();
     m_robotContainer.imu.zeroAll();
+    m_robotContainer.imu.zeroAbsoluteHeading();
     m_robotContainer.swerveDrive.enableLimeLight();
 
     if (RobotContainer.USE_SUBSYSTEMS) {

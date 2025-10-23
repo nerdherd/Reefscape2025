@@ -1,5 +1,6 @@
 package frc.robot.subsystems.swerve;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.VecBuilder;
@@ -47,6 +48,7 @@ import static frc.robot.Constants.PathPlannerConstants.kPPTranslationPIDConstant
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.BooleanSupplier;
@@ -73,27 +75,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     //Vision
     private AprilTagFieldLayout layout;
     private double lastDistance;
-    
-    ArrayList<Pose2d> list1 = new ArrayList<>();
-    ArrayList<Pose2d> list2 = new ArrayList<>();
-    ArrayList<Pose2d> list3 = new ArrayList<>();
-    ArrayList<Pose2d> list4 = new ArrayList<>();
-    ArrayList<Pose2d> list6 = new ArrayList<>();
-    ArrayList<Pose2d> list7 = new ArrayList<>();
-    ArrayList<Pose2d> list8 = new ArrayList<>();
-    ArrayList<Pose2d> list9 = new ArrayList<>();
-    ArrayList<Pose2d> list10 = new ArrayList<>();
-    ArrayList<Pose2d> list11 = new ArrayList<>();
-    ArrayList<Pose2d> list12 = new ArrayList<>();
-    ArrayList<Pose2d> list13 = new ArrayList<>();
-    ArrayList<Pose2d> list15 = new ArrayList<>();
-    ArrayList<Pose2d> list16 = new ArrayList<>();
-    ArrayList<Pose2d> list17 = new ArrayList<>();
-    ArrayList<Pose2d> list18 = new ArrayList<>();
-    ArrayList<Pose2d> list19 = new ArrayList<>();
-    ArrayList<Pose2d> list20 = new ArrayList<>();
-    ArrayList<Pose2d> list21 = new ArrayList<>();
-    ArrayList<Pose2d> list22 = new ArrayList<>();
 
     PIDController areaController;     // TODO: tune
     PIDController txController;
@@ -105,6 +86,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private Field2d field;
     // private VisionSys vision = new VisionSys();
     public boolean useVision = true;
+
+    public Map<Integer, Pose2d> reefPosesRed = new HashMap<>();
+    public Map<Integer, Pose2d> reefPosesBlue = new HashMap<>();
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
@@ -183,23 +167,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
 
         //Vision
-        layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);      
+        layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
+        layout.getTags().stream().forEach(tag -> {
+            if (tag.ID > 6 && tag.ID <= 11)
+                reefPosesRed.put(tag.ID, tag.pose.toPose2d());
+            else if (tag.ID > 17 && tag.ID <= 22)
+                reefPosesBlue.put(tag.ID, tag.pose.toPose2d());
+        });
 
         field = new Field2d();
         field.setRobotPose(poseEstimator.getEstimatedPosition());
-        initReefSidePoses();
-        initCagePoses();
-        initProcesPoses();
-        initStationsPoses();
-
         
         //DCMotor dcMotor = new DCMotor(kDriveOneMinusAlpha, kDriveAlpha, kBRTurningID, kBRDriveID, kBLTurningID, kBLDriveID);
         //ModuleConfig moduleConfig = new ModuleConfig(kBRTurningID, kBRDriveID, kWheelBase, dcMotor, kBLTurningID, kBLDriveID);
         RobotConfig robotConfig = null;
         try {
-                robotConfig = RobotConfig.fromGUISettings();
-        }
-        catch (Exception e) {
+            robotConfig = RobotConfig.fromGUISettings();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -226,112 +210,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
-    private void initCagePoses() {
-        list4.add(SwerveDriveConstants.MapPoses.tag4LeftBlueOnRed);
-        list4.add(SwerveDriveConstants.MapPoses.tag4RightBlueOnRed); // they are for blue side
-        list4.add(SwerveDriveConstants.MapPoses.tag4MidBlueOnRed);
-        myCageMap.put(4, list4);
-
-        list15.add(SwerveDriveConstants.MapPoses.tag15LeftRedOnBlue); // they are for red side
-        list15.add(SwerveDriveConstants.MapPoses.tag15RightRedOnBlue);
-        list15.add(SwerveDriveConstants.MapPoses.tag15MidRedOnBlue);
-        myCageMap.put(15, list15);
-    }
-
-    private void initProcesPoses(){
-        list3.add(SwerveDriveConstants.MapPoses.tag3Mid);
-        myProsMap.put(3, list3);
-
-        list16.add(SwerveDriveConstants.MapPoses.tag16Mid);
-        myProsMap.put(16, list16);
-    } 
-
-    private void initStationsPoses() {
-        list12.add(SwerveDriveConstants.MapPoses.tag12Left);
-        list12.add(SwerveDriveConstants.MapPoses.tag12Right);
-        list12.add(SwerveDriveConstants.MapPoses.tag12Mid);
-        myStationMap.put(12, list12);
-
-        list13.add(SwerveDriveConstants.MapPoses.tag13Left);
-        list13.add(SwerveDriveConstants.MapPoses.tag13Right);
-        list13.add(SwerveDriveConstants.MapPoses.tag13Mid);
-        myStationMap.put(13, list13);
-
-        list1.add(SwerveDriveConstants.MapPoses.tag1Left);
-        list1.add(SwerveDriveConstants.MapPoses.tag1Right);
-        list1.add(SwerveDriveConstants.MapPoses.tag1Mid);
-        myStationMap.put(1, list1);
-
-        list2.add(SwerveDriveConstants.MapPoses.tag2Left);
-        list2.add(SwerveDriveConstants.MapPoses.tag2Right);
-        list2.add(SwerveDriveConstants.MapPoses.tag2Mid);
-        myStationMap.put(2, list2);
-    } 
-
-    private void initReefSidePoses() {
-        list17.add(SwerveDriveConstants.MapPoses.tag17Left);
-        list17.add(SwerveDriveConstants.MapPoses.tag17Right);
-        list17.add(SwerveDriveConstants.MapPoses.tag17Mid);
-        myReefMap.put(17, list17);
-
-        list18.add(SwerveDriveConstants.MapPoses.tag18Left);
-        list18.add(SwerveDriveConstants.MapPoses.tag18Right);
-        list18.add(SwerveDriveConstants.MapPoses.tag18Mid);
-        myReefMap.put(18, list18);
-
-        list19.add(SwerveDriveConstants.MapPoses.tag19Left);
-        list19.add(SwerveDriveConstants.MapPoses.tag19Right);
-        list19.add(SwerveDriveConstants.MapPoses.tag19Mid);
-        myReefMap.put(19, list19);
-
-        list20.add(SwerveDriveConstants.MapPoses.tag20Left);
-        list20.add(SwerveDriveConstants.MapPoses.tag20Right);
-        list20.add(SwerveDriveConstants.MapPoses.tag20Mid);
-        myReefMap.put(20, list20);
-
-        list21.add(SwerveDriveConstants.MapPoses.tag21Left);
-        list21.add(SwerveDriveConstants.MapPoses.tag21Right);
-        list21.add(SwerveDriveConstants.MapPoses.tag21Mid);
-        myReefMap.put(21, list21);
-
-        list22.add(SwerveDriveConstants.MapPoses.tag22Left);
-        list22.add(SwerveDriveConstants.MapPoses.tag22Right);
-        list22.add(SwerveDriveConstants.MapPoses.tag22Mid);
-        myReefMap.put(22, list22);
-
-        list6.add(SwerveDriveConstants.MapPoses.tag6Left);
-        list6.add(SwerveDriveConstants.MapPoses.tag6Right);
-        list6.add(SwerveDriveConstants.MapPoses.tag6Mid);
-        myReefMap.put(6, list6);
-
-        list7.add(SwerveDriveConstants.MapPoses.tag7Left);
-        list7.add(SwerveDriveConstants.MapPoses.tag7Right);
-        list7.add(SwerveDriveConstants.MapPoses.tag7Mid);
-        myReefMap.put(7, list7);
-
-        list8.add(SwerveDriveConstants.MapPoses.tag8Left);
-        list8.add(SwerveDriveConstants.MapPoses.tag8Right);
-        list8.add(SwerveDriveConstants.MapPoses.tag8Mid);
-        myReefMap.put(8, list8);
-
-        list9.add(SwerveDriveConstants.MapPoses.tag9Left);
-        list9.add(SwerveDriveConstants.MapPoses.tag9Right);
-        list9.add(SwerveDriveConstants.MapPoses.tag9Mid);
-        myReefMap.put(9, list9);
-
-        list10.add(SwerveDriveConstants.MapPoses.tag10Left);
-        list10.add(SwerveDriveConstants.MapPoses.tag10Right);
-        list10.add(SwerveDriveConstants.MapPoses.tag10Mid);
-        myReefMap.put(10, list10);
-
-        list11.add(SwerveDriveConstants.MapPoses.tag11Left);
-        list11.add(SwerveDriveConstants.MapPoses.tag11Right);
-        list11.add(SwerveDriveConstants.MapPoses.tag11Mid);
-        myReefMap.put(11, list11);
-    }
-
-    boolean initPoseByVisionDone = false;
-
     /**
      * Have modules move towards states and update odometry
      */
@@ -344,15 +222,15 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         
         poseEstimator.update(gyro.getRotation2d(), getModulePositions());
 
-        field.setRobotPose(poseEstimator.getEstimatedPosition());
-            
+        
         if (useVision) {
             visionupdateOdometry(VisionConstants.kLimelightBackLeftName); 
             visionupdateOdometry(VisionConstants.kLimelightBackRightName);
             // visionupdateOdometry(VisionConstants.kLimelightFrontLeftName);
             // visionupdateOdometry(VisionConstants.kLimelightFrontRightName);
         }
-    
+        
+        field.setRobotPose(poseEstimator.getEstimatedPosition());
         //todo try MegaTag2
     }
 
@@ -362,7 +240,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     LimelightHelpers.PoseEstimate mt; // thats me :OO
     RawFiducial fiducial;
 	private void visionupdateOdometry(String limelightName) {
-        boolean useMegaTag2 = false; //set to false to use MegaTag1
+        boolean useMegaTag2 = true; //set to false to use MegaTag1
         xyStds = 0.5;
         degStds = 30;
 
@@ -400,14 +278,16 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
                 mt.pose,
                 mt.timestampSeconds);
         } else {
-            double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+            // double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
+            double currentPoseYaw = gyro.getAbsoluteHeading();
+
             LimelightHelpers.SetRobotOrientation(limelightName, currentPoseYaw, 0, 0, 0, 0, 0);
             mt = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(limelightName);
             if(mt == null || Math.abs(gyro.getRate()) > 720 || mt.tagCount == 0) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
             {
                 return;
             }
-            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.3,.3,10));
+            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999)); // .3,.3,10
             poseEstimator.addVisionMeasurement(
                 mt.pose,
                 mt.timestampSeconds);
@@ -513,7 +393,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     public void zeroGyroAndPoseAngle() {
         gyro.zeroHeading();
-        gyro.setOffset(0);
+        // gyro.setOffset(0);
         Pose2d pose = getPose();
         Pose2d newPose = new Pose2d(pose.getX(), pose.getY(), RobotContainer.IsRedSide() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
         poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), newPose);
@@ -952,25 +832,27 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
     /**
      * Automatically drives to a specified side of the Reef.
-     * @param limelight String for limelight name
+     * @param isRedAlliance is the alliance red
      * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Command to drive to the intended Reef side
      */
-    public Command driveToReefVision(String limelight, int side) {
-        int id = (int) LimelightHelpers.getFiducialID(limelight);
-        if (id == -1) return Commands.none();
-        return AutoBuilder.pathfindToPose(calcReefSidePose(id, side), pathcons);
+    public Command driveToReefVision(boolean isRedAlliance, int side) {
+        return AutoBuilder.pathfindToPose(
+            calcReefSidePose(isRedAlliance, side),
+            pathcons);
     }
 
     /**
      * Calculate position to move to based on Reef side AprilTags.
-     * @param tagID ID of tag to move to
+     * @param isRedAlliance is the alliance red
      * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Pose2d of position to drive to
      */
-    public Pose2d calcReefSidePose(int id, int side) {
+    public Pose2d calcReefSidePose(boolean isRedAlliance, int side) {
         // get tag info
-        Pose2d tagPose = layout.getTagPose(id).get().toPose2d();
+        Pose2d tagPose = isRedAlliance ?
+        poseEstimator.getEstimatedPosition().nearest(reefPosesRed.values()) :
+        poseEstimator.getEstimatedPosition().nearest(reefPosesBlue.values());
         double tagAngle = tagPose.getRotation().getRadians();
 
         // add vert offset and find bot rotation
@@ -985,8 +867,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         if (side == -1) sideRotation = new Rotation2d(botRotation.getRadians() + Math.PI/2); // left: 90 deg ccw
         else sideRotation = new Rotation2d(botRotation.getRadians() - Math.PI/2); // right: 90 deg cw
 
-        // xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians()); // might not be used for left/right limelights
-        // yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
+        xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians()); // might not be used for left/right limelights
+        yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
 
         return new Pose2d(xPos, yPos, botRotation); // side poses have vert and side offsets
     }
@@ -1171,10 +1053,10 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             // Might be negative because our swerveDriveKinematics is flipped across the Y axis
             
             case MEDIUM:
-            tab.add("Field Position", field).withSize(6, 3);
             tab.add("Zone Id", zoneId);
-
+            
             case MINIMAL:
+            tab.add("Field Position", field).withSize(6, 3);
             tab.addString("Drive Mode", () -> this.driveMode.toString());
             tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
             tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());

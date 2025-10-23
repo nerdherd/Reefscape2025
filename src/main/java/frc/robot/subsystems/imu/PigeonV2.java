@@ -1,8 +1,11 @@
 package frc.robot.subsystems.imu;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.config.RobotConfig;
 
 import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.RobotContainer;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,8 +32,19 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     }
     
     public void zeroHeading() {
-        pigeon.setYaw(0);
-        offset = 0;
+        // pigeon.setYaw(0);
+        offset = pigeon.getAngle();
+    }
+
+    public void zeroAbsoluteHeading() {
+        RobotContainer.refreshAlliance();
+        if (RobotContainer.IsRedSide()) {
+            pigeon.setYaw(180.0);
+            DriverStation.reportWarning("Pigeon Red", false);
+        } else {
+            pigeon.setYaw(0.0);
+            DriverStation.reportWarning("Pigeon Blue", false);
+        }
     }
 
     /**
@@ -76,6 +90,10 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
 
     public double getHeading() {
         return -(pigeon.getAngle() - offset);
+    }
+
+    public double getAbsoluteHeading() {
+        return pigeon.getYaw().getValueAsDouble();
     }
 
     public void setHeading(double heading) {
