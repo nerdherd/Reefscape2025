@@ -51,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -69,7 +70,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     private final PigeonV2 gyro;
     // private final SwerveDriveOdometry odometer;
     private boolean isTest = false;
-    private final SwerveDrivePoseEstimator poseEstimator;
+    public final SwerveDrivePoseEstimator poseEstimator;
     private DRIVE_MODE driveMode = DRIVE_MODE.FIELD_ORIENTED;
 
     //Vision
@@ -830,16 +831,23 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         );
     }
 
+    private PathConstraints pathconsTeleop = new PathConstraints(
+        2, 4, Units.degreesToRadians(360), Units.degreesToRadians(720)
+    );
     /**
      * Automatically drives to a specified side of the Reef.
-     * @param isRedAlliance is the alliance red
+     * @param isRed is the alliance red
      * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Command to drive to the intended Reef side
      */
-    public Command driveToReefVision(boolean isRedAlliance, int side) {
-        return AutoBuilder.pathfindToPose(
-            calcReefSidePose(isRedAlliance, side),
-            pathcons);
+    public Command driveToReefVision(boolean isRed, int side) {
+        return Commands.defer(() -> AutoBuilder.pathfindToPose(
+            calcReefSidePose(isRed ?
+                poseEstimator.getEstimatedPosition().nearest(reefPosesRed.values()) :
+                poseEstimator.getEstimatedPosition().nearest(reefPosesBlue.values()),
+            side),
+        pathconsTeleop),
+        Set.of(this));
     }
 
     /**
@@ -848,11 +856,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      * @param side -1 for Left, 0 for Middle, 1 for Right
      * @return Pose2d of position to drive to
      */
-    public Pose2d calcReefSidePose(boolean isRedAlliance, int side) {
+    public Pose2d calcReefSidePose(Pose2d tagPose, int side) {
         // get tag info
-        Pose2d tagPose = isRedAlliance ?
-        poseEstimator.getEstimatedPosition().nearest(reefPosesRed.values()) :
-        poseEstimator.getEstimatedPosition().nearest(reefPosesBlue.values());
         double tagAngle = tagPose.getRotation().getRadians();
 
         // add vert offset and find bot rotation
@@ -869,35 +874,6 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
 
         xPos += ReefOffsets.sideOffset*Math.cos(sideRotation.getRadians()); // might not be used for left/right limelights
         yPos += ReefOffsets.sideOffset*Math.sin(sideRotation.getRadians());
-
-        return new Pose2d(xPos, yPos, botRotation); // side poses have vert and side offsets
-    }
-
-    /**
-     * Calculate position to move to based on Station side AprilTags
-     * @param tagID ID of tag to move to
-     * @param side -1 for Left, 0 for Middle, 1 for Right
-     * @return Pose2d of position to drive to
-     */
-    public Pose2d calcStationSidePose(int tagID, int side) {
-        // get tag info
-        Pose2d tagPose = layout.getTagPose(tagID).get().toPose2d();
-        double tagAngle = tagPose.getRotation().getRadians();
-
-        // add vert offset and find bot rotation
-        double xPos = tagPose.getX() + StationOffsets.frontOffset*Math.cos(tagAngle);
-        double yPos = tagPose.getY() + StationOffsets.frontOffset*Math.sin(tagAngle);
-        Rotation2d botRotation = new Rotation2d(-tagAngle);
-
-        if (side == 0) return new Pose2d(xPos, yPos, botRotation); // mid pose has vert offset
-
-        // use side rotation to add side offset
-        Rotation2d sideRotation;
-        if (side == -1) sideRotation = new Rotation2d(botRotation.getRadians() + Math.PI/2); // left: 90 deg ccw
-        else sideRotation = new Rotation2d(botRotation.getRadians() - Math.PI/2); // right: 90 deg cw
-
-        xPos += StationOffsets.sideOffset*Math.cos(sideRotation.getRadians());
-        yPos += StationOffsets.sideOffset*Math.sin(sideRotation.getRadians());
 
         return new Pose2d(xPos, yPos, botRotation); // side poses have vert and side offsets
     }
