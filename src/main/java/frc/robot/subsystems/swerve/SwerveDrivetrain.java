@@ -221,7 +221,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             runModules();
         }
         
-        poseEstimator.update(gyro.getRotation2d(), getModulePositions());
+        poseEstimator.update(Rotation2d.fromDegrees(gyro.getAbsoluteHeading()), getModulePositions());
 
         
         if (useVision) {
@@ -288,6 +288,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             {
                 return;
             }
+            
             poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 9999999)); // .3,.3,10
             poseEstimator.addVisionMeasurement(
                 mt.pose,
