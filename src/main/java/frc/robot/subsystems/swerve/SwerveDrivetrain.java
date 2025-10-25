@@ -88,8 +88,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     // private VisionSys vision = new VisionSys();
     public boolean useVision = true;
 
-    public Map<Integer, Pose2d> reefPosesRed = new HashMap<>();
-    public Map<Integer, Pose2d> reefPosesBlue = new HashMap<>();
+    public Map<Pose2d, Integer> reefPoses = new HashMap<>();
+    // public Map<Pose2d, Integer> reefPosesBlue = new HashMap<>();
 
     private NetworkTableEntry classLabels = NetworkTableInstance.getDefault().getTable("limelight").getEntry("nn_class");
 
@@ -171,9 +171,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         layout.getTags().stream().forEach(tag -> {
             if (tag.ID > 6 && tag.ID <= 11)
-                reefPosesRed.put(tag.ID, tag.pose.toPose2d());
+                reefPoses.put(tag.pose.toPose2d(), tag.ID);
             else if (tag.ID > 17 && tag.ID <= 22)
-                reefPosesBlue.put(tag.ID, tag.pose.toPose2d());
+                reefPoses.put(tag.pose.toPose2d(), tag.ID);
         });
 
         field = new Field2d();
@@ -844,8 +844,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     public Command driveToReefVision(boolean isRed, int side) {
         return Commands.defer(() -> AutoBuilder.pathfindToPose(
             calcReefSidePose(isRed ?
-                poseEstimator.getEstimatedPosition().nearest(reefPosesRed.values()) :
-                poseEstimator.getEstimatedPosition().nearest(reefPosesBlue.values()),
+                poseEstimator.getEstimatedPosition().nearest(reefPoses.keySet()) :
+                poseEstimator.getEstimatedPosition().nearest(reefPoses.keySet()),
             side),
         pathconsTeleop),
         Set.of(this));
@@ -1035,6 +1035,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             case MINIMAL:
             tab.add("Field Position", field).withSize(6, 3);
             tab.addString("Drive Mode", () -> this.driveMode.toString());
+            tab.addNumber("Reef Vision Estimated Tag", () -> reefPoses.get(
+                poseEstimator.getEstimatedPosition().nearest(reefPoses.keySet())
+            ));
             tab.addString("Pose Estimator Pose Str", () -> poseEstimator.getEstimatedPosition().toString());
             tab.addNumber("X Position (m)", () -> poseEstimator.getEstimatedPosition().getX());
             tab.addNumber("Y Position (m)", () -> poseEstimator.getEstimatedPosition().getY());
