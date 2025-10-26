@@ -6,6 +6,8 @@ import com.pathplanner.lib.config.RobotConfig;
 import frc.robot.Constants;
 import frc.robot.Robot;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.swerve.SwerveDrivetrain;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -17,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class PigeonV2 extends SubsystemBase implements Gyro {
     private Pigeon2 pigeon;
     private double offset, pitchOffset, rollOffset = 0;
+    private SwerveDrivetrain swerve;
 
     public PigeonV2(int id, String canbusName) {
         this.pigeon = new Pigeon2(id, canbusName);
@@ -31,6 +34,10 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
         zeroRoll();
     }
     
+    public void setSwerve(SwerveDrivetrain swerve) {
+        this.swerve = swerve;
+    }
+
     public void zeroHeading() {
         // pigeon.setYaw(0);
         offset = pigeon.getAngle();
@@ -45,6 +52,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
             pigeon.setYaw(0.0);
             DriverStation.reportWarning("Pigeon Blue", false);
         }
+        if (swerve != null) swerve.poseEstimator.resetPose(new Pose2d());
     }
 
     /**
