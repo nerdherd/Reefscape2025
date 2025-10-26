@@ -16,7 +16,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
 
 public class PreloadTaxi extends SequentialCommandGroup{
-    public PreloadTaxi(SwerveDrivetrain swerve, String autoname, SuperSystem superSystem) throws IOException, ParseException{
+    public PreloadTaxi(String autoname, SuperSystem superSystem, SwerveDrivetrain swerve) throws IOException, ParseException{
 
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
 

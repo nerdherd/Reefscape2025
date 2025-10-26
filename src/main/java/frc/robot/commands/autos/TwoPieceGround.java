@@ -18,7 +18,7 @@ import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
 public class TwoPieceGround extends SequentialCommandGroup {
-    public TwoPieceGround(SwerveDrivetrain swerve, String autoname, SuperSystem superSystem) throws IOException, ParseException {
+    public TwoPieceGround(String autoname, SuperSystem superSystem, SwerveDrivetrain swerve) throws IOException, ParseException {
         
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
@@ -31,29 +31,31 @@ public class TwoPieceGround extends SequentialCommandGroup {
             Commands.sequence(
                 // Move to L4
                 Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(0)), // swerve.driveToTagCommand(VisionConstants.kLimelightBackLeftName).withTimeout(2),
-                    superSystem.moveToAuto(PositionEquivalents.L1)
+                    AutoBuilder.followPath(pathGroup.get(0)),
+                    superSystem.moveToAuto(PositionEquivalents.L2)
                 ),
-                superSystem.moveToAuto(PositionEquivalents.L4),
+                // superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
                 Commands.waitSeconds(0.25),
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
-                superSystem.moveToAuto(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L2),
 
                 // Move to A3O
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(1)),
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
+                    Commands.sequence(
+                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
+                        superSystem.moveTo(PositionEquivalents.GroundIntake)
+                    )
                 ),
-                superSystem.moveTo(PositionEquivalents.GroundIntake),
 
                 // Move to and intake ground coral
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(2)),
-                    superSystem.intakeUntilSensed(2)
+                    superSystem.intakeUntilSensed(3)
                 ),
 
                 // Move to Reef
@@ -61,23 +63,16 @@ public class TwoPieceGround extends SequentialCommandGroup {
                     AutoBuilder.followPath(pathGroup.get(3)),
                     Commands.sequence(
                         superSystem.moveToAuto(PositionEquivalents.SemiStow),
-                        Commands.waitSeconds(0.5),
-                        superSystem.moveToAuto(PositionEquivalents.L1)
+                        superSystem.moveToAuto(PositionEquivalents.L2)
                     )
                 ),
-                
-                // Move to L4
-                // Commands.parallel(
-                //     // swerve.driveToTagCommand(VisionConstants.kLimelightBackRightName).withTimeout(2),
-                //     superSystem.moveToAuto(PositionEquivalents.L1)
-                // ),
-                superSystem.moveToAuto(PositionEquivalents.L4),
+                // superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
                 Commands.waitSeconds(0.25),
-                // superSystem.outtake(),
-                Commands.waitSeconds(1)
-                // superSystem.stopRoller()
+                superSystem.outtake(),
+                Commands.waitSeconds(1),
+                superSystem.stopRoller()
             )
         );
     }
