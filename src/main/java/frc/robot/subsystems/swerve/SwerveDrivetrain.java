@@ -170,9 +170,9 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         //Vision
         layout = AprilTagFieldLayout.loadField(AprilTagFields.kDefaultField);
         layout.getTags().stream().forEach(tag -> {
-            if (tag.ID > 6 && tag.ID <= 11)
+            if (tag.ID >= 6 && tag.ID <= 11)
                 reefPoses.put(tag.pose.toPose2d(), tag.ID);
-            else if (tag.ID > 17 && tag.ID <= 22)
+            else if (tag.ID >= 17 && tag.ID <= 22)
                 reefPoses.put(tag.pose.toPose2d(), tag.ID);
         });
 
@@ -833,7 +833,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     private PathConstraints pathconsTeleop = new PathConstraints(
-        2, 4, Units.degreesToRadians(360), Units.degreesToRadians(720)
+        2, 2, Units.degreesToRadians(360), Units.degreesToRadians(720)
     );
     /**
      * Automatically drives to a specified side of the Reef.
@@ -864,7 +864,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // add vert offset and find bot rotation
         double xPos = tagPose.getX() + ReefOffsets.frontOffset*Math.cos(tagAngle);
         double yPos = tagPose.getY() + ReefOffsets.frontOffset*Math.sin(tagAngle);
-        Rotation2d botRotation = new Rotation2d(-tagAngle);
+        Rotation2d botRotation = new Rotation2d(tagAngle);
 
         if (side == 0) return new Pose2d(xPos, yPos, botRotation); // mid pose has vert offset
 

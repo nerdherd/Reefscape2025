@@ -220,11 +220,11 @@ public class RobotContainer {
     driverController.controllerRight()
       .onTrue(Commands.runOnce(() -> imu.zeroAbsoluteHeading()));
 
-    // Bumpers
+    // Bumpers (sides are opposite at warren)
     driverController.bumperLeft()
-      .whileTrue(swerveDrive.driveToReefVision(IsRedSide(), -1));
-    driverController.bumperRight()
       .whileTrue(swerveDrive.driveToReefVision(IsRedSide(), 1));
+    driverController.bumperRight()
+      .whileTrue(swerveDrive.driveToReefVision(IsRedSide(), -1));
 
     if (USE_SUBSYSTEMS) {
       // Triggers
