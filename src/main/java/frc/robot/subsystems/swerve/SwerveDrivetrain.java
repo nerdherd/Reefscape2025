@@ -409,6 +409,11 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         }
     }
 
+    public void resetGyroFromPose(Pose2d pose) {
+            gyro.resetHeading(NerdyMath.posMod(pose.getRotation().getDegrees(), 360));
+    }
+
+
     public void refreshModulePID() {
         frontLeft.refreshPID();
         backLeft.refreshPID();

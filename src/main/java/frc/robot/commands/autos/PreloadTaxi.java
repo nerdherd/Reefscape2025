@@ -27,8 +27,11 @@ public class PreloadTaxi extends SequentialCommandGroup{
             Commands.waitSeconds(0.1),
             // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+
+            // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)), //10/25/25
+            // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+            Commands.runOnce(() -> swerve.resetOdometry(startingPose)),
+            Commands.runOnce(() -> swerve.resetGyroFromPose(startingPose)),
             Commands.sequence(
                 superSystem.moveToAuto(PositionEquivalents.Stow),
                 AutoBuilder.followPath(pathGroup.get(0)),
