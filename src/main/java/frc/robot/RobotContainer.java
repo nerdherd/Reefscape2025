@@ -75,31 +75,26 @@ public class RobotContainer {
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
-  private final Controller testController = new Controller(3);
-  
-  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-  // private Bottom2Piece bottom2Piece;
-  public Generic2Piece bottom2Piece;
-  public Generic3Piece bottom3Piece;
-  public Generic4Piece bottom4Piece;
-
-  static boolean isRedSide = false;
-  
   private SwerveJoystickCommand swerveJoystickCommand;
   
-  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
+  private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
+
+  
+  
+  static boolean isRedSide = false;
   public static boolean USE_SUBSYSTEMS = true;
+  private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   
   // For logging wrist
   public final VoltageOut voltageRequest = new VoltageOut(0);
   public double voltage = 0;
-  public double desiredAngle = 0.0; //164, 99.8
+  public double desiredAngle = 0.0; // 164, 99.8
+  public double desiredRotation = 0.0; // ElevatorConstants.kElevatorPivotStowPosition; -1.6
 
-  public double desiredRotation = 0.0;//ElevatorConstants.kElevatorPivotStowPosition; -1.6
 
   /**
-   * The container for the robot. Contain
-   * s subsystems, OI devices, and commands.
+   * The container for the robot. Contains
+   *  subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     try { swerveDrive = new SwerveDrivetrain(imu); }
@@ -115,16 +110,6 @@ public class RobotContainer {
       candi = new CANdi(6);
       climbMotor = new ClimbV2();      
       superSystem = new SuperSystem(swerveDrive,elevator, pivot, wrist, intakeRoller, candi, climbMotor);
-      
-      try { // ide displayed error fix
-        bottom2Piece = new Generic2Piece(swerveDrive, superSystem, "Bottom2Piece", 2, 2);
-        bottom3Piece = new Generic3Piece(swerveDrive, superSystem, "Bottom3Piece", 2, 2, 2);
-        bottom4Piece = new Generic4Piece(swerveDrive, superSystem, "Bottom4Piece", 2, 2, 2, 2);
-      } catch (IOException e) {
-        DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
-      } catch (ParseException e) {
-        DriverStation.reportError("ParseException for Bottom2Piece", e.getStackTrace());
-      }
     }
 
     initShuffleboard();
@@ -354,32 +339,17 @@ public class RobotContainer {
     // } 
 
     try { // fix for vendordeps not importing
-    // PathPlannerPath S4R3 = PathPlannerPath.fromPathFile("S4R3");
-
   	List<String> paths = AutoBuilder.getAllAutoNames();
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
-    // autoChooser.setDefaultOption("Do Nothing", Commands.none());
     
-    autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
-    autoChooser.addOption("PreloadTaxi", new PreloadTaxi(swerveDrive, "TaxiPreload", superSystem));
+    autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
+    autoChooser.setDefaultOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
-    // autoChooser.addOption("TaxiLeft", AutoBuilder.buildAuto("S1Taxi"));
-    // autoChooser.addOption("TaxiRight", AutoBuilder.buildAuto("S7Taxi"));
+    autoChooser.addOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
+    autoChooser.addOption("Bottom2PieceGround", new TwoPieceGround("Bottom2PieceGround", superSystem, swerveDrive));
     
-    // autoChooser.addOption("2PieceLeftOffset", new TwoPieceOffset(swerveDrive, "TopTwoPieceOffset", superSystem));
-    // autoChooser.addOption("2PieceLeft", new TwoPiece(swerveDrive, "TopTwoPiece", superSystem));
-    // autoChooser.addOption("2PieceRightOffset", new TwoPieceOffset(swerveDrive, "BottomTwoPieceOffset", superSystem));
-    // autoChooser.addOption("2PieceGround", new TwoPieceGround(swerveDrive, "BottomTwoPieceGround", superSystem));
-    // autoChooser.addOption("2PieceRight", new TwoPiece(swerveDrive, "BottomTwoPiece", superSystem));
-    
-    // autoChooser.addOption("2PiecePathOnly", new TwoPiecePath(swerveDrive, "TopTwoPiece", superSystem));
-    
-    // autoChooser.addOption("Bottom 3 Piece", bottom3Piece);
-    // autoChooser.addOption("Bottom 4 Piece", bottom4Piece);
-    
-
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }
   
