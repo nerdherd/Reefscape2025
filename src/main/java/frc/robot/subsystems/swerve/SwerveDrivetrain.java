@@ -209,6 +209,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             },
             this
         );
+        gyro.setSwerve(this);
     }
 
     /**
