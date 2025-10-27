@@ -345,10 +345,10 @@ public class RobotContainer {
     autosTab.add("Selected Auto", autoChooser);
     
     autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
-    autoChooser.setDefaultOption("Do Nothing", Commands.none());
+    autoChooser.addOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
-    autoChooser.addOption("Bottom2PieceGround", new TwoPieceGround("Bottom2PieceGround", superSystem, swerveDrive));
+    autoChooser.addOption("Bottom2PGround", new TwoPieceGround("BottomTwoPieceGround", superSystem, swerveDrive));
     
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
   }

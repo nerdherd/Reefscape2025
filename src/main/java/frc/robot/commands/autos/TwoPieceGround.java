@@ -25,32 +25,35 @@ public class TwoPieceGround extends SequentialCommandGroup {
 
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
-            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+            Commands.waitSeconds(0.1),
             
             Commands.sequence(
                 // Move to L4
-                Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(0)),
-                    superSystem.moveToAuto(PositionEquivalents.L2)
-                ),
+            
+                AutoBuilder.followPath(pathGroup.get(0)),
+                superSystem.moveToAuto(PositionEquivalents.L2),
+            
+
+
                 // superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
-                Commands.waitSeconds(0.25),
+                Commands.waitSeconds(1),
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
                 superSystem.moveToAuto(PositionEquivalents.L2),
 
                 // Move to A3O
-                Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(1)),
-                    Commands.sequence(
+                
+                AutoBuilder.followPath(pathGroup.get(1)),
+                Commands.sequence(
                         superSystem.moveToAuto(PositionEquivalents.SemiStow),
                         superSystem.moveTo(PositionEquivalents.GroundIntake)
-                    )
                 ),
+            
+
+                Commands.waitSeconds(2),
 
                 // Move to and intake ground coral
                 Commands.parallel(
@@ -59,17 +62,15 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 ),
 
                 // Move to Reef
-                Commands.parallel(
+                    superSystem.moveToAuto(PositionEquivalents.SemiStow),
                     AutoBuilder.followPath(pathGroup.get(3)),
-                    Commands.sequence(
-                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
-                        superSystem.moveToAuto(PositionEquivalents.L2)
-                    )
-                ),
+                    
+                    superSystem.moveToAuto(PositionEquivalents.L2),
+            
                 // superSystem.moveToAuto(PositionEquivalents.L4),
 
                 // Outtake
-                Commands.waitSeconds(0.25),
+                Commands.waitSeconds(2),
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller()
