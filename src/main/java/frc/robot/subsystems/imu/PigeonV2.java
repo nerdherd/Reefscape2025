@@ -46,13 +46,20 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     public void zeroAbsoluteHeading() {
         RobotContainer.refreshAlliance();
         if (RobotContainer.IsRedSide()) {
+            // offset = getHeading() - 180.0;
             pigeon.setYaw(180.0);
             DriverStation.reportWarning("Pigeon Red", false);
         } else {
+            // offset = getHeading() - 0.0;
             pigeon.setYaw(0.0);
             DriverStation.reportWarning("Pigeon Blue", false);
         }
-        if (swerve != null) swerve.poseEstimator.resetPose(new Pose2d());
+        offset = 0.0;
+        if (swerve != null) {
+            swerve.poseEstimator.resetPose(new Pose2d(0.0,0.0,Rotation2d.fromDegrees(RobotContainer.IsRedSide() ? 180.0 : 0.0)));
+            // swerve.poseEstimator.resetRotation(new Rotation2d());
+            DriverStation.reportWarning("Reset PoseEstimator", false);
+        }
     }
 
     /**
@@ -140,6 +147,9 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     public Rotation2d getRotation2d() {
         return Rotation2d.fromDegrees(getHeading());
     }
+    public Rotation2d getAbsoluteRotation2d() {
+        return Rotation2d.fromDegrees(getAbsoluteHeading());
+    }
     
     /**
      * For orientations, see page 20 of {@link https://store.ctr-electronics.com/content/user-manual/Pigeon2%20User%27s%20Guide.pdf}
@@ -169,6 +179,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
                 SmartDashboard.putNumber("Robot Roll", this.getRoll());
             case MINIMAL:
                 SmartDashboard.putNumber("Robot Heading", getHeading());
+                SmartDashboard.putNumber("Robot Absolute Heading", getAbsoluteHeading());
         }
     }
     
@@ -193,6 +204,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
                 tab.addNumber("Robot Roll", this::getRoll);
             case MINIMAL:
                 tab.addNumber("Robot Heading", this::getHeading);
+                tab.addNumber("Robot Absolute Heading", this::getAbsoluteHeading);
         }
     }
     

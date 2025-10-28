@@ -14,6 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 
 public class PreloadTaxi extends SequentialCommandGroup{
     public PreloadTaxi(SwerveDrivetrain swerve, String autoname, SuperSystem superSystem) throws IOException, ParseException{
@@ -22,13 +23,15 @@ public class PreloadTaxi extends SequentialCommandGroup{
 
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
         addCommands(
-            swerve.setVisionEnabledCommand(true),
             Commands.runOnce(swerve.getImu()::zeroAll),
             Commands.waitSeconds(0.1),
             // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+
+            // Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)), //10/25/25
+            // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
+            // Commands.runOnce(() -> swerve.resetOdometry(new Pose2d(startingPose.getTranslation(), Rotation2d.fromDegrees(gyro.))),
+            // Commands.runOnce(() -> swerve.resetGyroFromPose(startingPose)),
             Commands.sequence(
                 superSystem.moveToAuto(PositionEquivalents.Stow),
                 AutoBuilder.followPath(pathGroup.get(0)),

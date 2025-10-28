@@ -209,6 +209,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             },
             this
         );
+        gyro.setSwerve(this);
     }
 
     /**
@@ -398,7 +399,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
         // gyro.setOffset(0);
         Pose2d pose = getPose();
         Pose2d newPose = new Pose2d(pose.getX(), pose.getY(), RobotContainer.IsRedSide() ? Rotation2d.fromDegrees(180) : Rotation2d.fromDegrees(0));
-        poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), newPose);
+        poseEstimator.resetPosition(gyro.getAbsoluteRotation2d(), getModulePositions(), newPose);
     }
 
     public void resetGyroFromPoseWithAlliance(Pose2d pose) {
@@ -410,6 +411,11 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             gyro.resetHeading(NerdyMath.posMod(pose.getRotation().getDegrees(), 360));
         }
     }
+
+    public void resetGyroFromPose(Pose2d pose) {
+            gyro.resetHeading(NerdyMath.posMod(pose.getRotation().getDegrees(), 360));
+    }
+
 
     public void refreshModulePID() {
         frontLeft.refreshPID();
