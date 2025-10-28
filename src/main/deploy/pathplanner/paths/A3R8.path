@@ -3,32 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 13.94,
-        "y": 5.14
+        "x": 1.10175,
+        "y": 2.211
       },
       "prevControl": null,
       "nextControl": {
-        "x": 16.81704918032786,
-        "y": 5.2718647540983605
+        "x": 2.4344413765100974,
+        "y": 2.3702278192872415
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "A3"
     },
     {
       "anchor": {
-        "x": 17.5140368852459,
-        "y": 8.100819672131149
+        "x": 3.575402396065848,
+        "y": 2.8626817975725443
       },
       "prevControl": {
-        "x": 16.5140368852459,
-        "y": 8.100819672131149
+        "x": 2.9110748291015627,
+        "y": 2.6619144984654017
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "R8"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5058153856981984,
+      "rotationDegrees": -140.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,13 +47,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -122.94921511659042
+    "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "claire square",
+  "folder": "Bottom Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 65.09523119190482
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

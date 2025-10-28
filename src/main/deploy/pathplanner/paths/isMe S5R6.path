@@ -4,23 +4,23 @@
     {
       "anchor": {
         "x": 7.58,
-        "y": 2.4
+        "y": 2.725
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.980931751837925,
-        "y": 2.4
+        "y": 2.725
       },
       "isLocked": false,
       "linkedName": "S5"
     },
     {
       "anchor": {
-        "x": 5.1,
+        "x": 5.079244068287037,
         "y": 2.725
       },
       "prevControl": {
-        "x": 6.649274590163935,
+        "x": 6.628518658450972,
         "y": 1.9906249999999988
       },
       "nextControl": null,
@@ -42,7 +42,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.07578977529488
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "Bottom Half Paths",

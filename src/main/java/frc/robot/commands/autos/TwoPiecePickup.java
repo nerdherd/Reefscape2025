@@ -15,8 +15,8 @@ import frc.robot.subsystems.SuperSystem;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 
 
-public class TwoPieceGround extends SequentialCommandGroup {
-    public TwoPieceGround(String autoname, SuperSystem superSystem, SwerveDrivetrain swerve) throws IOException, ParseException {
+public class TwoPiecePickup extends SequentialCommandGroup {
+    public TwoPiecePickup(String autoname, SuperSystem superSystem, SwerveDrivetrain swerve) throws IOException, ParseException {
         
         List<PathPlannerPath> pathGroup = PathPlannerAuto.getPathGroupFromAutoFile(autoname);
         // Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
@@ -74,6 +74,20 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
                 superSystem.moveToAuto(PositionEquivalents.L2),
+
+                // Move to A2O
+                AutoBuilder.followPath(pathGroup.get(4)),
+                Commands.sequence(
+                    superSystem.moveToAuto(PositionEquivalents.SemiStow),
+                    superSystem.moveToAuto(PositionEquivalents.GroundIntake)
+                ),
+                Commands.waitSeconds(1),
+
+                // Move to and intake ground coral
+                Commands.parallel(
+                    AutoBuilder.followPath(pathGroup.get(5)),
+                    superSystem.intakeUntilSensed(3)
+                ),
 
                 // Prepare for teleop
                 Commands.parallel(

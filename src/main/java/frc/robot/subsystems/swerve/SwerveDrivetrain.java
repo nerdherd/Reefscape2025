@@ -395,6 +395,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     public void zeroGyroAndPoseAngle() {
+        RobotContainer.refreshAlliance();
         gyro.zeroHeading();
         // gyro.setOffset(0);
         Pose2d pose = getPose();

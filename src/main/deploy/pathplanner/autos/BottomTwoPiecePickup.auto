@@ -7,31 +7,43 @@
         {
           "type": "path",
           "data": {
-            "pathName": "S5R6O"
+            "pathName": "S5R6"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R6OA3O"
+            "pathName": "R6A3O"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "R6C4"
+            "pathName": "A3OA3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "C4R7O"
+            "pathName": "A3R9"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "R9A2O"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "A2OA2"
           }
         }
       ]
     }
   },
   "resetOdom": true,
-  "folder": "Bottom Half Autos",
+  "folder": null,
   "choreoAuto": false
 }
