@@ -4,14 +4,6 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.json.simple.parser.ParseException;
-
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.CANdi;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -25,20 +17,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.Subsystem;
 import frc.robot.Constants.ControllerConstants;
 import frc.robot.Constants.ModuleConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.commands.autos.PreloadTaxi;
-import frc.robot.commands.autos.Taxi;
-import frc.robot.commands.autos.TwoPiece;
 import frc.robot.commands.autos.TwoPieceGround;
 import frc.robot.commands.SwerveJoystickCommand;
-import frc.robot.commands.autos.TwoPieceOffset;
-import frc.robot.commands.autos.Generic2Piece;
-import frc.robot.commands.autos.Generic3Piece;
-import frc.robot.commands.autos.Generic4Piece;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem.PositionMode;
 import frc.robot.subsystems.SuperSystem;
@@ -46,7 +30,6 @@ import frc.robot.subsystems.imu.PigeonV2;
 import frc.robot.subsystems.swerve.SwerveDrivetrain;
 import frc.robot.subsystems.swerve.SwerveDrivetrain.DRIVE_MODE;
 import frc.robot.subsystems.BannerSensor;
-import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.ClimbV2;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.IntakeRoller;
@@ -78,8 +61,6 @@ public class RobotContainer {
   private SwerveJoystickCommand swerveJoystickCommand;
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
-
-  
   
   static boolean isRedSide = false;
   public static boolean USE_SUBSYSTEMS = true;
@@ -94,7 +75,7 @@ public class RobotContainer {
 
   /**
    * The container for the robot. Contains
-   *  subsystems, OI devices, and commands.
+   * subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     try { swerveDrive = new SwerveDrivetrain(imu); }
@@ -198,7 +179,8 @@ public class RobotContainer {
   public void configureBindings_teleop() {
     ///////////////////////
     // Driver bindings
-    //////////////////////
+    ///////////////////////
+    
     // Controller buttons
     driverController.controllerLeft()
       .onTrue(Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())); // TODO: When camera pose is implemented, this won't be necessary anymore
@@ -235,14 +217,18 @@ public class RobotContainer {
       // driverController.buttonDown()
       //   .whileTrue(swerveDrive.driveToCoralCommand("limelight-coral", 8));
     
+
+      
       //////////////////////
       // Operator bindings
       //////////////////////
+      
       // Controller buttons
       operatorController.controllerLeft()
         .onTrue(superSystem.setPositionModeCoral());
       operatorController.controllerRight()
         .onTrue(superSystem.setPositionModeAlgae());
+
       // Dpad
       operatorController.dpadDown()
         .onTrue(superSystem.moveTo(PositionEquivalents.L1));
@@ -276,101 +262,23 @@ public class RobotContainer {
     }
   }
 
-
-  public void configureBindings_test() {
-    // CommandScheduler.getInstance().getDefaultButtonLoop().clear();
-    // driverController.buttonDown()
-    // .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
-
-    //////////////////////////
-    /// DO NOT REMOVE IT
-    operatorController.controllerLeft()
-    .onTrue(superSystem.zeroEncoders());
-    ////////////////////////
-    
-    // operatorController.controllerRight()
-    // .onTrue(superSystem.moveTo(NamedPositions.Processor));    
-
-    // operatorController.dpadDown()
-    // .onTrue(superSystem.moveTo(NamedPositions.L1));
-    // operatorController.dpadLeft()
-    // .onTrue(superSystem.moveTo(NamedPositions.L2));
-    // operatorController.dpadUp()
-    // .onTrue(superSystem.moveTo(NamedPositions.L3));
-    // operatorController.dpadRight()
-    // .onTrue(superSystem.moveTo(NamedPositions.L4));
-    
-
-    // operatorController.triggerRight()
-    //   .onTrue(superSystem.intake())
-    //   .onFalse(superSystem.holdPiece());
-    // operatorController.triggerLeft()
-    //   .onTrue(superSystem.outtake())
-    //   .onFalse(superSystem.stopRoller());
-
-    // operatorController.buttonUp()
-    //   .onTrue(superSystem.moveTo(NamedPositions.Station));
-    // operatorController.buttonRight()
-    //   .onTrue(superSystem.moveTo(NamedPositions.GroundIntake));
-    // operatorController.buttonDown()
-    //   .onTrue(superSystem.moveTo(NamedPositions.Stow));
-    // operatorController.buttonLeft()
-    //   .onTrue(superSystem.moveTo(NamedPositions.SemiStow));
-    
-    // driverController.buttonUp()
-    // .onTrue(superSystem.climbCommandUp());
-
-    // driverController.buttonDown()
-    // .onTrue(superSystem.climbCommandDown());
-    
-
-    // operatorController.triggerRight()
-    // .onTrue(superSystem.moveToSemiStow());
-   }
-  
   private void initAutoChoosers() {
-
-    // try { // ide displayed error fix
-      // bottom2Piece = new Bottom2Piece(swerveDrive, intakeRoller, elevator, "Bottom2Piece");
-      // pathOnlyBottom2Piece = new PathOnlyBottom2Piece(swerveDrive, "PathOnlyBottom2Piece");
-    // } catch (Exception e) {
-    //   DriverStation.reportError("IOException for Bottom2Piece", e.getStackTrace());
-    //   return;
-    // } 
-
     try { // fix for vendordeps not importing
-  	List<String> paths = AutoBuilder.getAllAutoNames();
+  	// List<String> paths = AutoBuilder.getAllAutoNames();
     
     ShuffleboardTab autosTab = Shuffleboard.getTab("Autos");
     autosTab.add("Selected Auto", autoChooser);
     
-    autoChooser.setDefaultOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
-    autoChooser.addOption("Do Nothing", Commands.none());
+    autoChooser.setDefaultOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
     autoChooser.addOption("Bottom2PGround", new TwoPieceGround("BottomTwoPieceGround", superSystem, swerveDrive));
     
-    } catch (Exception e) { SmartDashboard.putBoolean("Auto Error", true); }
+    } catch (Exception e) { SmartDashboard.putBoolean("Auto Exception", true); }
   }
-  
-  public void initShuffleboard() {
-    // imu.initShuffleboard(loggingLevel);
-    swerveDrive.initShuffleboard(loggingLevel);
-    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL); 
-    imu.initShuffleboard(loggingLevel); 
-    if (USE_SUBSYSTEMS) { 
-      intakeRoller.initShuffleboard(loggingLevel); 
-      elevator.initShuffleboard(loggingLevel);
-      wrist.initShuffleboard(loggingLevel);
-      pivot.initShuffleboard(loggingLevel);
-      climbMotor.initShuffleboard(loggingLevel);
-      superSystem.initShuffleboard(loggingLevel);
-    }
-  }
-  
+
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
@@ -380,8 +288,15 @@ public class RobotContainer {
     return currentAuto;
   }
 
-  public void DisableAllMotors_Test()
-  {
+  public void configureBindings_test() {
+    //////////////////////////
+    /// DO NOT REMOVE IT
+    operatorController.controllerLeft()
+    .onTrue(superSystem.zeroEncoders());
+    ////////////////////////
+   }
+
+   public void DisableAllMotors_Test() {
     elevator.stopMotion();
     pivot.stopMotion();
     wrist.stopMotion();
@@ -394,6 +309,19 @@ public class RobotContainer {
     swerveDrive.setBreak(true);
   }
   
+  public void initShuffleboard() {
+    swerveDrive.initShuffleboard(loggingLevel);
+    swerveDrive.initModuleShuffleboard(LOG_LEVEL.MINIMAL); 
+    imu.initShuffleboard(loggingLevel); 
 
-  
+    if (USE_SUBSYSTEMS) { 
+      intakeRoller.initShuffleboard(loggingLevel); 
+      elevator.initShuffleboard(loggingLevel);
+      wrist.initShuffleboard(loggingLevel);
+      pivot.initShuffleboard(loggingLevel);
+      climbMotor.initShuffleboard(loggingLevel);
+      superSystem.initShuffleboard(loggingLevel);
+    }
+  }
+
 }

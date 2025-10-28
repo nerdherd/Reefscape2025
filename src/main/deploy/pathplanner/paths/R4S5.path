@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 5.96,
-        "y": 3.9
+        "y": 3.77
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.01748555718287,
-        "y": 4.098342276858997
+        "y": 3.968342276858997
       },
       "isLocked": false,
       "linkedName": "R4"
@@ -45,7 +45,7 @@
     "rotation": -0.2561577651727554
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Middle Paths",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0
