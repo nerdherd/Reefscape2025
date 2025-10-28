@@ -22,6 +22,7 @@ import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SuperSystemConstants.PositionEquivalents;
 import frc.robot.commands.autos.PreloadTaxi;
 import frc.robot.commands.autos.TwoPieceGround;
+import frc.robot.commands.autos.TwoPiecePickup;
 import frc.robot.commands.SwerveJoystickCommand;
 import frc.robot.subsystems.Reportable.LOG_LEVEL;
 import frc.robot.subsystems.SuperSystem.PositionMode;
@@ -273,6 +274,7 @@ public class RobotContainer {
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
     autoChooser.addOption("Bottom2PGround", new TwoPieceGround("BottomTwoPieceGround", superSystem, swerveDrive));
+    autoChooser.addOption("Bottom2PPickup", new TwoPiecePickup("BottomTwoPiecePickup", superSystem, swerveDrive));
     
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Exception", true); }
   }

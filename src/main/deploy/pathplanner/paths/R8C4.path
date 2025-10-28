@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.5295000000000005,
-        "y": 2.728249999999999
+        "x": 3.575402396065848,
+        "y": 2.8626817975725443
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.0074669276424935,
-        "y": 3.154684684601981
+        "x": 4.053369323708341,
+        "y": 3.289116482174526
       },
       "isLocked": false,
       "linkedName": "R8"
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 106.90515809863565
+    "rotation": 106.90515809863567
   },
   "reversed": false,
   "folder": "Bottom Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 56.65929265352303
+    "rotation": -119.99999999999999
   },
   "useDefaultConstraints": true
 }

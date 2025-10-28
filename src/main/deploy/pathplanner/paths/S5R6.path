@@ -3,24 +3,24 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.58,
-        "y": 2.4
+        "x": 7.585,
+        "y": 2.725
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.1499655231014225,
-        "y": 2.3979204875978284
+        "x": 7.154965523101422,
+        "y": 2.7229204875978286
       },
       "isLocked": false,
       "linkedName": "S5"
     },
     {
       "anchor": {
-        "x": 5.1,
+        "x": 5.079244068287037,
         "y": 2.725
       },
       "prevControl": {
-        "x": 5.328624925401415,
+        "x": 5.3078689936884516,
         "y": 2.6238533565302458
       },
       "nextControl": null,
@@ -28,7 +28,12 @@
       "linkedName": "R6"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5658922697368423,
+      "rotationDegrees": -40.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -60.07578977529488
+    "rotation": -59.99999999999999
   },
   "reversed": false,
   "folder": "Bottom Half Paths",

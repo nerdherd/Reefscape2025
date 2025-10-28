@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.4472500000000004,
-        "y": 2.2114999999999996
+        "x": 2.27391456886574,
+        "y": 2.1962803819444434
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.5172775050601919,
-        "y": 2.1901179162135924
+        "x": 1.3439420739259313,
+        "y": 2.1748982981580363
       },
       "isLocked": false,
       "linkedName": "A3O"
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 1.10175,
-        "y": 2.2114999999999996
+        "y": 2.211
       },
       "prevControl": {
         "x": 1.7966467233815535,
-        "y": 2.2234809779893365
+        "y": 2.222980977989337
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "reversed": false,
   "folder": "Bottom Half Paths",
   "idealStartingState": {
-    "velocity": 0,
+    "velocity": 0.5,
     "rotation": 180.0
   },
   "useDefaultConstraints": true

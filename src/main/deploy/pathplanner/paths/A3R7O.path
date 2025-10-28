@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 1.10175,
-        "y": 2.2114999999999996
+        "y": 2.211
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.3612873597602206,
-        "y": 2.2690657473078635
+        "y": 2.2685657473078638
       },
       "isLocked": false,
       "linkedName": "A3"
@@ -28,7 +28,12 @@
       "linkedName": "R7O"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5042454769736842,
+      "rotationDegrees": -140.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
