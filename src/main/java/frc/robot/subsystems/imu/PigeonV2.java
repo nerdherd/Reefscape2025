@@ -203,6 +203,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
                 tab.addNumber("Robot Pitch", this::getPitch);
                 tab.addNumber("Robot Roll", this::getRoll);
             case MINIMAL:
+                tab.addBoolean("Is Red", () -> RobotContainer.IsRedSide());
                 tab.addNumber("Robot Heading", this::getHeading);
                 tab.addNumber("Robot Absolute Heading", this::getAbsoluteHeading);
         }

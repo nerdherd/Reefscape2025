@@ -84,15 +84,17 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     RobotContainer.refreshAlliance();
-    m_robotContainer.imu.zeroAll();
-    m_robotContainer.imu.zeroAbsoluteHeading();
     m_robotContainer.swerveDrive.enableLimeLight();
-
+    
     if (RobotContainer.USE_SUBSYSTEMS) {
       m_robotContainer.superSystem.setNeutralMode(NeutralModeValue.Brake);
       m_robotContainer.superSystem.initialize();
     }
-  // schedule the autonomous command (example)
+    // schedule the autonomous command (example)
+    m_robotContainer.imu.zeroAbsoluteHeading();
+    m_robotContainer.imu.zeroAbsoluteHeading();
+    m_robotContainer.swerveDrive.zeroGyroAndPoseAngle();
+    m_robotContainer.imu.zeroAll();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
