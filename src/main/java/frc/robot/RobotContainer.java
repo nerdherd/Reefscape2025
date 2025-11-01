@@ -187,6 +187,7 @@ public class RobotContainer {
       .onTrue(Commands.runOnce(() -> swerveDrive.zeroGyroAndPoseAngle())); // TODO: When camera pose is implemented, this won't be necessary anymore
     driverController.controllerRight()
       .onTrue(Commands.runOnce(() -> imu.zeroAbsoluteHeading()));
+      // .onTrue(Commands.runOnce(() -> swerveDrive.useMegaTag2 = false));
 
     // Bumpers (sides are opposite at warren)
     driverController.bumperLeft()
