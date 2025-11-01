@@ -43,6 +43,13 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
         offset = pigeon.getAngle();
     }
 
+    public void setAbsoluteHeading(Rotation2d rot) {
+        RobotContainer.refreshAlliance();
+        pigeon.setYaw(rot.getDegrees());
+        swerve.poseEstimator.resetPose(new Pose2d(0.0, 0.0, rot));
+        offset = 0.0;
+    }
+
     public void zeroAbsoluteHeading() {
         RobotContainer.refreshAlliance();
         if (RobotContainer.IsRedSide()) {

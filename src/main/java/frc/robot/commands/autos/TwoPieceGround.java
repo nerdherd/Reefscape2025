@@ -30,11 +30,10 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(0)),
                     Commands.sequence(
-                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
-                        superSystem.moveToAuto(PositionEquivalents.L2)
+                        superSystem.moveToAuto(PositionEquivalents.SemiStow)                        // superSystem.moveToAuto(PositionEquivalents.L2)
                     )
                 ),
-                // superSystem.moveToAuto(PositionEquivalents.L4),
+                superSystem.moveToAuto(PositionEquivalents.L4),
                 Commands.waitSeconds(1),
 
                 // Outtake
@@ -62,11 +61,10 @@ public class TwoPieceGround extends SequentialCommandGroup {
                     AutoBuilder.followPath(pathGroup.get(3)),
                     Commands.sequence(
                         Commands.waitSeconds(0.5),
-                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
-                        superSystem.moveToAuto(PositionEquivalents.L2)
+                        superSystem.moveToAuto(PositionEquivalents.SemiStow)
                     )
                 ),
-                // superSystem.moveToAuto(PositionEquivalents.L4),
+                superSystem.moveToAuto(PositionEquivalents.L4),
                 Commands.waitSeconds(1),
 
                 // Outtake

@@ -305,7 +305,7 @@ public final class Constants {
     public static final class ReefOffsets {
 
       public static final double frontOffset = 0.6; // calculated from two reef sides on spreadsheet
-      public static final double sideOffset = 0.195; // calculated from two reef sides on spreadsheet
+      public static final double sideOffset = 0.175; // calculated from two reef sides on spreadsheet
 
     }
 

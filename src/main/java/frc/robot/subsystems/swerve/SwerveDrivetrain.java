@@ -241,8 +241,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     double degStds = 30;
     LimelightHelpers.PoseEstimate mt; // thats me :OO
     RawFiducial fiducial;
+    public boolean useMegaTag2 = true; //set to false to use MegaTag1
 	private void visionupdateOdometry(String limelightName) {
-        boolean useMegaTag2 = true; //set to false to use MegaTag1
         xyStds = 0.5;
         degStds = 30;
 
@@ -254,31 +254,33 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
             if (mt.tagCount == 0) {
                 return;
             }
-            fiducial = mt.rawFiducials[0];
-            if (mt.tagCount == 1 && mt.rawFiducials.length == 1 && (fiducial.ambiguity > .7 || fiducial.distToCamera > 1.5)) {
-                return;
-            }
-            if(Math.abs(gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per second, ignore vision updates
-                return;
-            }
-            if (mt.avgTagArea > 0.8 && fiducial.distToCamera < 0.5) {
-                xyStds = 1.0;
-                degStds = 12;
-            }
-            // 1 target farther away and estimated pose is close
-            else if (mt.avgTagArea > 0.1 && fiducial.distToCamera < 0.3) {
-                xyStds = 2.0;
-                degStds = 30;
-            } else if (mt.tagCount >= 2) {
-                xyStds = 0.5;
-                degStds = 6;
-            }
+            gyro.setAbsoluteHeading(mt.pose.getRotation());
+            useMegaTag2 = true;
+            // fiducial = mt.rawFiducials[0];
+            // if (mt.tagCount == 1 && mt.rawFiducials.length == 1 && (fiducial.ambiguity > .7 || fiducial.distToCamera > 1.5)) {
+            //     return;
+            // }
+            // if(Math.abs(gyro.getRate()) > 720) { // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+            //     return;
+            // }
+            // if (mt.avgTagArea > 0.8 && fiducial.distToCamera < 0.5) {
+            //     xyStds = 1.0;
+            //     degStds = 12;
+            // }
+            // // 1 target farther away and estimated pose is close
+            // else if (mt.avgTagArea > 0.1 && fiducial.distToCamera < 0.3) {
+            //     xyStds = 2.0;
+            //     degStds = 30;
+            // } else if (mt.tagCount >= 2) {
+            //     xyStds = 0.5;
+            //     degStds = 6;
+            // }
 
-            poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
-            poseEstimator.addVisionMeasurement(
-                // new Pose2d(mt1.pose.getX().getValueAsDouble(), mt1.pose.getY().getValueAsDouble(), 0, gyro.getHeading()),
-                mt.pose,
-                mt.timestampSeconds);
+            // poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(xyStds, xyStds, degStds));
+            // poseEstimator.addVisionMeasurement(
+            //     // new Pose2d(mt1.pose.getX().getValueAsDouble(), mt1.pose.getY().getValueAsDouble(), 0, gyro.getHeading()),
+            //     mt.pose,
+            //     mt.timestampSeconds);
         } else {
             // double currentPoseYaw = RobotContainer.IsRedSide() ? poseEstimator.getEstimatedPosition().getRotation().getDegrees() + 180 : poseEstimator.getEstimatedPosition().getRotation().getDegrees();
             double currentPoseYaw = gyro.getAbsoluteHeading();
