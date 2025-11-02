@@ -180,6 +180,8 @@ public class Pivot extends SubsystemBase implements Reportable{
         candi.getConfigurator().apply(candiConfiguration);
     }
 
+    public double addvoltage = 0.0;
+    public double mult = 0.0;
     @Override
     public void periodic() {
         if (!enabled) {
@@ -187,9 +189,9 @@ public class Pivot extends SubsystemBase implements Reportable{
         }
 
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
-        
+        addvoltage += mult * 1.0 / 50.0;
         ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
-        pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
+        pivotMotor.setControl(motionMagicRequest.withFeedForward(ff + addvoltage)); 
         // pivotMotorRight.setControl(followRequest); 
     }
 

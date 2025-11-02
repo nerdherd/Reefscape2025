@@ -59,6 +59,7 @@ public class RobotContainer {
 
   private final Controller driverController = new Controller(ControllerConstants.kDriverControllerPort, false);
   private final Controller operatorController = new Controller(ControllerConstants.kOperatorControllerPort,false);
+  private final Controller testController = new Controller(2,false);
   private SwerveJoystickCommand swerveJoystickCommand;
   
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
@@ -196,6 +197,13 @@ public class RobotContainer {
       .whileTrue(swerveDrive.driveToReefVision(IsRedSide(), -1));
 
     if (USE_SUBSYSTEMS) {
+      testController.triggerLeft()
+        .onTrue(Commands.runOnce(() -> pivot.mult = 1.0))
+        .onFalse(Commands.runOnce(() ->{pivot.mult = 0.0; pivot.addvoltage = 0.0;}));
+      testController.triggerRight()
+        .onTrue(Commands.runOnce(() -> pivot.mult = -1.0))
+        .onFalse(Commands.runOnce(() ->{pivot.mult = 0.0; pivot.addvoltage = 0.0;}));
+
       // Triggers
       driverController.triggerLeft()
         .onTrue(superSystem.outtake())
