@@ -484,10 +484,10 @@ public final class Constants {
 
     public static final double kNeutralDeadband = 0.01; // In revolutions!
 
-    public static final double kCoralIntakePower = -2.8;
+    public static final double kCoralIntakePower = -3.4;
     public static final double kCoralButAlgaeIntakePower  = -2.8;
     public static final double kCoralOuttakePower = 2.5;
-    public static final double kAlgaeIntakePower  = -2;
+    public static final double kAlgaeIntakePower  = -3.7;
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
     public static final double kAlgaeHoldPower = 1;
@@ -566,9 +566,9 @@ public final class Constants {
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.04,  0.5,    -0.096     ),
       L2(                  ExecutionOrder.WRTELV_PVT  , 0.257,  0.0,  -0.148      ),
       L3(                  ExecutionOrder.WRTPVT_ELV  , 0.257,  1.5, -0.148),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.257,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.257,  3.2, -0.197, -0.197     ),                             
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.257,  0.0, -0.570, -0.57      ),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.258,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.258,  3.2, -0.197, -0.197     ),                             
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.258,  0.0, -0.570, -0.57      ),
       L5(                  ExecutionOrder.WRTELV_PVT  , 0.257,  1.12, -0.570, -0.570      ),
       ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.015, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.26,  0.05, -0.65, -0.65      ),

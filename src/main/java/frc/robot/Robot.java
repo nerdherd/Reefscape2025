@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.imu.zeroAbsoluteHeading();
     m_robotContainer.swerveDrive.zeroGyroAndPoseAngle();
     m_robotContainer.imu.zeroAll();
+    // m_robotContainer.swerveDrive.useMegaTag2 = false;
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();

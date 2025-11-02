@@ -23,7 +23,7 @@ public class TwoPieceGround extends SequentialCommandGroup {
 
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
-            Commands.waitSeconds(0.1),
+            Commands.waitSeconds(0.5),
             
             Commands.sequence(
                 // Move to Reef

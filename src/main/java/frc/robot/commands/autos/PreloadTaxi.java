@@ -21,31 +21,21 @@ public class PreloadTaxi extends SequentialCommandGroup{
         
         addCommands(
             Commands.runOnce(swerve.getImu()::zeroAll),
-            Commands.waitSeconds(0.1),
-
+            
             Commands.sequence(
-                // Move to Reef
-                Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(0)),
-                    Commands.sequence(
-                        Commands.waitSeconds(0.5),
-                        superSystem.moveToAuto(PositionEquivalents.SemiStow)
-                    )
-                ),
+                AutoBuilder.followPath(pathGroup.get(0)),
+                Commands.waitSeconds(0.5),
+                superSystem.moveToAuto(PositionEquivalents.SemiStow),
                 superSystem.moveToAuto(PositionEquivalents.L4),
                 Commands.waitSeconds(1),
-                
-                // Outtake
+
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
-                superSystem.moveToAuto(PositionEquivalents.L2),
+                Commands.waitSeconds(1),
 
-                // Prepare for teleop
-                Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(1)),
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
-                )
+                superSystem.moveToAuto(PositionEquivalents.L2),
+                superSystem.moveToAuto(PositionEquivalents.SemiStow)
             )
         );
     }

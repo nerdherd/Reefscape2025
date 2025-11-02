@@ -842,7 +842,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     private PathConstraints pathconsTeleop = new PathConstraints(
-        2, 2, Units.degreesToRadians(360), Units.degreesToRadians(720)
+        1, 2, Units.degreesToRadians(360), Units.degreesToRadians(720)
     );
     /**
      * Automatically drives to a specified side of the Reef.
