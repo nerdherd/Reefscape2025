@@ -442,11 +442,11 @@ public final class Constants {
     public static final double kIPivot = 0;
     public static final double kDPivot = 0.0;//0.5;
     public static final double kVPivot = 0.0;//54.4102; 
-    public static final double kAPivot = 0.0; 
+    public static final double kAPivot = 0.0;//36.104
     public static final double kSPivot = 0; 
     public static final double kGPivot = 0;
 
-    public static final double kFPivot = 0.21;//0.21; 
+    public static final double kFPivot = 0.21;//0.21; //gravity 
 
     public static final double kPivotStowPosition = 0.01; 
     public static final double kPivotSemiStowPosition = 0.11; 
