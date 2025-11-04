@@ -197,11 +197,18 @@ public class RobotContainer {
       .whileTrue(swerveDrive.driveToReefVision(IsRedSide(), -1));
 
     if (USE_SUBSYSTEMS) {
+      // testController.triggerLeft()
+      //   .onTrue(Commands.runOnce(() -> pivot.mult = 1.0))
+      //   .onFalse(Commands.runOnce(() ->{pivot.mult = 0.0; pivot.addvoltage = 0.0;}));
+      // testController.triggerRight()
+      //   .onTrue(Commands.runOnce(() -> pivot.mult = -1.0))
+      //   .onFalse(Commands.runOnce(() ->{pivot.mult = 0.0; pivot.addvoltage = 0.0;}));
+
       testController.triggerLeft()
-        .onTrue(Commands.runOnce(() -> pivot.mult = 1.0))
+        .onTrue(Commands.runOnce(() -> pivot.addvoltage = 1.0))
         .onFalse(Commands.runOnce(() ->{pivot.mult = 0.0; pivot.addvoltage = 0.0;}));
       testController.triggerRight()
-        .onTrue(Commands.runOnce(() -> pivot.mult = -1.0))
+        .onTrue(Commands.runOnce(() -> pivot.addvoltage = -1.0))
         .onFalse(Commands.runOnce(() ->{pivot.mult = 0.0; pivot.addvoltage = 0.0;}));
 
       // Triggers

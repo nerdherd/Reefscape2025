@@ -190,6 +190,8 @@ public class Pivot extends SubsystemBase implements Reportable{
 
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
         addvoltage += mult * 1.0 / 50.0;
+        if (getPosition() >= 0.249) addvoltage = Math.min(addvoltage, 0.0);
+        if (getPosition() <= 0.01) addvoltage = Math.max(addvoltage, 0.0);
         ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
         pivotMotor.setControl(motionMagicRequest.withFeedForward(ff + addvoltage)); 
         // pivotMotorRight.setControl(followRequest); 
