@@ -189,7 +189,7 @@ public class Pivot extends SubsystemBase implements Reportable{
         //ff = (ElevatorConstants.kElevatorPivotStowedFF + ElevatorConstants.kElevatorPivotDiffFF * (elevatorPosition / ElevatorConstants.kElevatorPivotExtendedFFPosition)) * Math.cos(2 * Math.PI * getPosition());
         
         ff = PivotConstants.kFPivot * Math.cos(2 * Math.PI * getPosition());
-        pivotMotor.setControl(motionMagicRequest.withFeedForward(ff)); 
+        pivotMotor.setControl(motionMagicRequest.withPosition(desiredPosition).withFeedForward(ff)); 
         // pivotMotorRight.setControl(followRequest); 
     }
 
@@ -322,11 +322,13 @@ public class Pivot extends SubsystemBase implements Reportable{
                 tab.addBoolean("Pivot Enabled", () -> enabled);
             case MINIMAL:
                 tab.addNumber("Pivot FF", () -> motionMagicRequest.FeedForward);
-                tab.addNumber("Pivot Current Position", () -> getPosition());
-                tab.addNumber("Pivot Desired Position", ()-> desiredPosition);
+                tab.addNumber("Pivot Position", () -> getPosition());
+                tab.addNumber("Pivot Velocity", ()-> pivotMotor.getVelocity().getValueAsDouble());
+                tab.addNumber("Pivot Desired Position", ()-> motionMagicRequest.Position);
                 tab.addNumber("Pivot Voltage", () -> pivotMotor.getMotorVoltage().getValueAsDouble());    
                 tab.addNumber("Pivot Temperature 1", () -> pivotMotor.getDeviceTemp().getValueAsDouble());
                 tab.addNumber("Pivot Temperature 2", () -> pivotMotorRight.getDeviceTemp().getValueAsDouble());
+                
                 
                 break;
             }
