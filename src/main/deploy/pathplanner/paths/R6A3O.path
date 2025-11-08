@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.099058428304267,
-        "y": 2.287512438308607
+        "x": 4.86525,
+        "y": 2.2114999999999996
       },
       "isLocked": false,
       "linkedName": "R6"
@@ -28,7 +28,12 @@
       "linkedName": "A3O"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6891428571428573,
+      "rotationDegrees": -140.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -41,7 +46,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0.5,
+    "velocity": 0.0,
     "rotation": 180.0
   },
   "reversed": false,

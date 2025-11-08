@@ -265,6 +265,8 @@ public class RobotContainer {
   }
 
   private void initAutoChoosers() {
+    SmartDashboard.putBoolean("Auto Exception", false);
+
     try { // fix for vendordeps not importing
   	// List<String> paths = AutoBuilder.getAllAutoNames();
     
@@ -274,8 +276,14 @@ public class RobotContainer {
     autoChooser.setDefaultOption("Do Nothing", Commands.none());
     autoChooser.addOption("Taxi", AutoBuilder.buildAuto("Taxi"));
     autoChooser.addOption("PreloadTaxi", new PreloadTaxi("TaxiPreload", superSystem, swerveDrive));
+    autoChooser.addOption("BottomTaxi", AutoBuilder.buildAuto("BottomTaxi"));
+    autoChooser.addOption("TopTaxi", AutoBuilder.buildAuto("TopTaxi"));
+    autoChooser.addOption("BottomPreloadTaxi", new PreloadTaxi("BottomTaxiPreload", superSystem, swerveDrive));
+    autoChooser.addOption("TopPreloadTaxi", new PreloadTaxi("TopTaxiPreload", superSystem, swerveDrive));
     autoChooser.addOption("Bottom2PGround", new TwoPieceGround("BottomTwoPieceGround", superSystem, swerveDrive));
+    autoChooser.addOption("Top2PGround", new TwoPieceGround("TopTwoPieceGround", superSystem, swerveDrive));
     autoChooser.addOption("Bottom2PPickup", new TwoPiecePickup("BottomTwoPiecePickup", superSystem, swerveDrive));
+    autoChooser.addOption("Top2PPickup", new TwoPiecePickup("TopTwoPiecePickup", superSystem, swerveDrive));
     
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Exception", true); }
   }

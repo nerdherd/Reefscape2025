@@ -385,7 +385,8 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
      * @param pose  A Pose2D representing the pose of the robot
      */
     public void resetOdometry(Pose2d pose) {
-        poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
+        poseEstimator.resetPose(new Pose2d(pose.getTranslation(), gyro.getAbsoluteRotation2d()));
+        // poseEstimator.resetPosition(gyro.getRotation2d(), getModulePositions(), pose);
     }
 
     public void resetOdometryWithAlliance(Pose2d pose){
@@ -842,7 +843,7 @@ public class SwerveDrivetrain extends SubsystemBase implements Reportable {
     }
 
     private PathConstraints pathconsTeleop = new PathConstraints(
-        2, 2, Units.degreesToRadians(360), Units.degreesToRadians(720)
+        1, 2, Units.degreesToRadians(360), Units.degreesToRadians(720)
     );
     /**
      * Automatically drives to a specified side of the Reef.

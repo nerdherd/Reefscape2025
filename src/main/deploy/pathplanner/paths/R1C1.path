@@ -85,7 +85,7 @@
   "folder": "Top Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 60.37446213482572
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

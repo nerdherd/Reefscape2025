@@ -4,31 +4,36 @@
     {
       "anchor": {
         "x": 7.5881410256410255,
-        "y": 5.088012820512821
+        "y": 5.376
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.507688559412839,
-        "y": 4.850819593942959
+        "x": 6.667979407847654,
+        "y": 5.376
       },
       "isLocked": false,
       "linkedName": "S3"
     },
     {
       "anchor": {
-        "x": 5.008,
-        "y": 5.279
+        "x": 5.079,
+        "y": 5.376
       },
       "prevControl": {
-        "x": 5.465607462319164,
-        "y": 5.441674494487027
+        "x": 5.975671187095584,
+        "y": 5.376
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "R1"
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5485477178423279,
+      "rotationDegrees": 40.0
+    }
+  ],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
@@ -42,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 59.99999999999999
   },
   "reversed": false,
   "folder": "Top Half Paths",
