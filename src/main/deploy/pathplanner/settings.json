@@ -9,8 +9,11 @@
     "claire square"
   ],
   "autoFolders": [
+    "1P",
+    "2P",
     "Bottom Half Autos",
     "Middle Autos",
+    "0P",
     "Top Half Autos"
   ],
   "defaultMaxVel": 3.0,
