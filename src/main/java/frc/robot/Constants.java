@@ -440,8 +440,8 @@ public final class Constants {
     public static final double kPElevatorPivot = 50.0;//80.0;//100; // TODO: NEED TO CALCULATE AND INPUT A kP
     // 0.22V = kP * 0.01         max kP = 100 .01 error is pretty high
     public static final double kIPivot = 0;
-    public static final double kDPivot = 0.6;//0.5;
-    public static final double kVPivot = 25; 
+    public static final double kDPivot = 0.65;//0.5;
+    public static final double kVPivot = 22.5; 
     public static final double kSPivot = 0; 
     public static final double kAPivot = 0.5; 
     public static final double kGPivot = 0;
