@@ -32,26 +32,30 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 // Move to Reef
                 Commands.parallel(
                     AutoBuilder.followPath(pathGroup.get(0)),
-                    Commands.sequence(
-                        superSystem.moveToAuto(PositionEquivalents.SemiStow)                        // superSystem.moveToAuto(PositionEquivalents.L2)
-                    )
+                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
                 ),
-                superSystem.moveToAuto(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L4),
                 Commands.waitSeconds(0.5),
 
                 // Outtake
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
-                superSystem.moveToAuto(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L2),
 
                 // Move to A3O
-                AutoBuilder.followPath(pathGroup.get(1)),
-                Commands.sequence(
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow),
-                    superSystem.moveToAuto(PositionEquivalents.Stow)
+                Commands.parallel(
+                    Commands.sequence(
+                        Commands.waitSeconds(0.5),
+                        AutoBuilder.followPath(pathGroup.get(1))
+                    ),
+                    Commands.sequence(
+                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
+                        superSystem.moveToAuto(PositionEquivalents.GroundIntake)
+                    )
                 ),
-                Commands.waitSeconds(0.1),
+                
+                Commands.waitSeconds(0.1), // TODO see if this can be faster
 
                 // Move to and intake ground coral
                 Commands.parallel(
@@ -67,14 +71,14 @@ public class TwoPieceGround extends SequentialCommandGroup {
                         superSystem.moveToAuto(PositionEquivalents.SemiStow)
                     )
                 ),
-                superSystem.moveToAuto(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L4),
                 Commands.waitSeconds(1),
 
                 // Outtake
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
-                superSystem.moveToAuto(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L2),
 
                 // Prepare for teleop
                 Commands.parallel(

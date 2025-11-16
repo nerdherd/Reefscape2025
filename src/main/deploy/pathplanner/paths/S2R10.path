@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.58,
-        "y": 6.17
+        "x": 7.584037905092592,
+        "y": 6.173180700231481
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.4524590163934423,
-        "y": 6.140829918032787
+        "x": 3.4564969214860346,
+        "y": 6.144010618264268
       },
       "isLocked": false,
       "linkedName": "S2"
@@ -48,7 +48,7 @@
   "folder": "Top Half Paths",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.02922833196660894
+    "rotation": 45.0
   },
   "useDefaultConstraints": true
 }
