@@ -47,7 +47,9 @@ public class SuperSystem {
     boolean elevatorWithinRange, pivotWithinRange;
 
     private BooleanSupplier pivotAtPosition, elevatorAtPosition, wristAtPosition, pivotAtPositionWide, elevatorAtPositionWide, wristAtPositionWide, intakeDetected;
-
+    /**
+     * 
+     */
     public enum ExecutionOrder {
         ALL_TOGETHER,
         ELV_PVT_WRT,
@@ -96,13 +98,14 @@ public class SuperSystem {
     }
 
     // subsystems
+    
     public void reConfigureMotors() {
         pivot.configureMotorV1();
         elevator.setMotorConfigs();
         wrist.configurePID(wrist.motorConfigs);
         intakeRoller.configureMotor(intakeRoller.motorConfigs);
     }
-
+    
     public void setNeutralMode(NeutralModeValue neutralMode) {
         elevator.setNeutralMode(neutralMode);
         pivot.setNeutralMode(neutralMode);
@@ -294,6 +297,12 @@ public class SuperSystem {
     }
 
     // movement
+    /**
+     * 
+     * @param position 
+     * @param previousPosition 
+     * @return
+     */
     private Command goTo(Position position, Position previousPosition) {
         Command gotoCommand;
         if (position.intermediateWristPosition == position.finalWristPosition)
@@ -327,14 +336,25 @@ public class SuperSystem {
             //     () -> (position == PositionEquivalents.GroundIntake.coralPos ||
             //     previousPosition == PositionEquivalents.GroundIntake.coralPos));
     }
-
+    /**
+     * Changes lastPosition to currentPosition 
+     * Changes all subsystem positions to the correct position to score
+     * @param position Get position to tell where which types of positions subsystems should be
+     * @return
+     */
     public Command moveToAuto(PositionEquivalents position) {
         return Commands.sequence(
             updatePositions(position),
             Commands.either(goToAuto(position.coralPos), goToAuto(position.algaePos), () -> (positionMode == PositionMode.Coral))
         );
     }
-
+    /**
+     * Changes are made to for subsystems to go to scoring positions
+     * If current wrist is equal to final then change everything besides that
+     * If not change everything
+     * @param position
+     * @return
+     */
     public Command goToAuto(Position position) {
         if (position.intermediateWristPosition == position.finalWristPosition)
             return Commands.sequence(
@@ -355,28 +375,48 @@ public class SuperSystem {
     // public Command moveToCage() { //TODO
     //     return moveTo(NamedPositions.Cage);
     // }
-
+    /**
+     * Supposed to be for algae
+     * Changes all subsystems position to score on L4
+     * Not implemented
+     * @return 
+     */
     public Command moveToNet() { //TODO
         return moveTo(PositionEquivalents.L4); //Uses net position from position equivalents
     }
-
+    /**
+     * Changes to opposite position mode
+     * If Coral -> Algae, If Algae -> Coral
+     */
     public void togglePositionMode() {
         if (positionMode == PositionMode.Coral) positionMode = PositionMode.Algae;
         else positionMode = PositionMode.Coral;
     }
-
+    /**
+     * Set the Position Mode 
+     * @param mode Changes the different positions that the subsystems can get set to
+     */
     public void setPositionMode(PositionMode mode) {
         positionMode = mode;
     }
-
+    /**
+     * Actually runs the togglePosition command
+     * @return The command
+     */
     public Command togglePositionModeCommand() {
         return Commands.runOnce(() -> togglePositionMode());
     }
-
+    /**
+     * Actually runs the setPosition command
+     * @return The command for coral
+     */
     public Command setPositionModeCoral() {
         return Commands.runOnce(() -> setPositionMode(PositionMode.Coral));
     }
-
+    /**
+     * Actually runs the setPosition command
+     * @return The command for algae
+     */
     public Command setPositionModeAlgae() {
         return Commands.runOnce(() -> setPositionMode(PositionMode.Algae));
     }
@@ -385,7 +425,10 @@ public class SuperSystem {
     //     // note: we may not need this one, because the intake action could cover it.
     //     return moveTo(PositionEquivalents.Processor);
     // }    
-
+    /**
+     * Enables all subsystems
+     * Sets all positions to starting positions
+     */
     public void initialize() {
         pivot.setEnabled(true);
         wrist.setEnabled(true);
@@ -400,14 +443,21 @@ public class SuperSystem {
             // climbMotor.setVoltageCommand(0.0);
         isStarted = false;
     }
-
+    /**
+     *  Sets current subsystem pivot angle equal to the the current angle of the pivot
+     *  This is used to for the gravity equation for each subsystem
+     * 
+     */
     public void updateDependencies() { 
         double curPivotAngle = pivot.getPosition();
         // pivot.setElevatorLength(elevator.getPosition()); // TODO fake
         elevator.setPivotAngle(curPivotAngle);
         wrist.setPivotAngle(curPivotAngle);
     }
-
+    /**
+     * Sets target position to current position
+     * @return Runs the command
+     */
     public Command preExecute()
     {
         return Commands.runOnce(()-> {
@@ -416,7 +466,15 @@ public class SuperSystem {
             wrist.setTargetPosition(wrist.getPosition());
         }, pivot, elevator, wrist);
     }
-
+    /**
+     * Looks at the enums and tells when to run each command to prperly get to desired positions
+     * @param exeOrder Order of running subsystems
+     * @param timeout Stops if stuck in position for to long
+     * @param pivotAngle Angle the pivot is supposed to be at
+     * @param elevatorPosition Angle the elevator is supposed to be at
+     * @param wristAngle Angle the wrist is supposed to be at
+     * @return Commands to run
+     */
     public Command execute(ExecutionOrder exeOrder, double timeout, 
                            double pivotAngle, double elevatorPosition, double wristAngle)
     {
@@ -578,7 +636,11 @@ public class SuperSystem {
             )
         );
     }
-
+    /**
+     * Used for logging
+     * Prints out Supersystem last position, Supersystem current position, Supersystem mode, and Intake Detected
+     * @param priority
+     */
     public void initShuffleboard(LOG_LEVEL priority){
         if (priority == LOG_LEVEL.OFF) {
             return;
