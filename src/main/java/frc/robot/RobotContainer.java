@@ -282,6 +282,7 @@ public class RobotContainer {
     autoChooser.addOption("TopPreloadTaxi", new PreloadTaxi("TopTaxiPreload", superSystem, swerveDrive));
     autoChooser.addOption("Bottom2PGround", new TwoPieceGround("BottomTwoPieceGround", superSystem, swerveDrive));
     autoChooser.addOption("Top2PFast", new TwoPieceGround("Top2PFast", superSystem, swerveDrive));
+    autoChooser.addOption("Bottom2Piece", new TwoPiecePickup("BottomTwoPieceGround", superSystem, swerveDrive));
     
     } catch (Exception e) { SmartDashboard.putBoolean("Auto Exception", true); }
   }

@@ -29,7 +29,7 @@ public class PreloadTaxi extends SequentialCommandGroup{
                 AutoBuilder.followPath(pathGroup.get(0)),
                 Commands.waitSeconds(0.5),
                 superSystem.moveToAuto(PositionEquivalents.SemiStow),
-                superSystem.moveToAuto(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L4),
                 Commands.waitSeconds(1),
 
                 superSystem.outtake(),
@@ -37,7 +37,7 @@ public class PreloadTaxi extends SequentialCommandGroup{
                 superSystem.stopRoller(),
                 Commands.waitSeconds(1),
 
-                superSystem.moveToAuto(PositionEquivalents.L1),
+                superSystem.moveToAuto(PositionEquivalents.L2),
                 superSystem.moveToAuto(PositionEquivalents.SemiStow)
             )
         );

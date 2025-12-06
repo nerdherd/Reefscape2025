@@ -24,15 +24,37 @@ public class TwoPieceGround extends SequentialCommandGroup {
         Pose2d startingPose = pathGroup.get(0).getStartingDifferentialPose();
         
         addCommands(
-            // Commands.runOnce(() -> swerve.resetGyroFromPoseWithAlliance(startingPose)),
             Commands.runOnce(() -> swerve.resetOdometryWithAlliance(startingPose)),
-            // Commands.runOnce(swerve.getImu()::zeroAll),
             
             Commands.sequence(
                 // Move to Reef
+                AutoBuilder.followPath(pathGroup.get(0)),
+                superSystem.moveToAuto(PositionEquivalents.L4),
+                Commands.waitSeconds(0.5),
+
+                // Outtake
+                superSystem.outtake(),
+                Commands.waitSeconds(1),
+                superSystem.stopRoller(),
+                superSystem.moveToAuto(PositionEquivalents.SemiStow),
+
                 Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(0)),
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
+                    AutoBuilder.followPath(pathGroup.get(1)),
+                    superSystem.moveToAuto(PositionEquivalents.GroundIntake)
+                ),
+                Commands.waitSeconds(0.1),
+
+                // Move to and intake ground coral
+                Commands.parallel(
+                    superSystem.intakeUntilSensed(2.5),
+                    AutoBuilder.followPath(pathGroup.get(2))
+                ),
+                superSystem.stopRoller(),
+                
+                // Move to Reef
+                Commands.parallel(
+                    AutoBuilder.followPath(pathGroup.get(3)),
+                    superSystem.moveTo(PositionEquivalents.SemiStow)
                 ),
                 superSystem.moveToAuto(PositionEquivalents.L4),
                 Commands.waitSeconds(0.5),
@@ -41,49 +63,8 @@ public class TwoPieceGround extends SequentialCommandGroup {
                 superSystem.outtake(),
                 Commands.waitSeconds(1),
                 superSystem.stopRoller(),
-                superSystem.moveToAuto(PositionEquivalents.L2),
 
-                // Move to A3O
-                Commands.parallel(
-                    Commands.sequence(
-                        Commands.waitSeconds(0.5),
-                        AutoBuilder.followPath(pathGroup.get(1))
-                    ),
-                    Commands.sequence(
-                        superSystem.moveToAuto(PositionEquivalents.SemiStow),
-                        superSystem.moveToAuto(PositionEquivalents.GroundIntake)
-                    )
-                ),
-                
-                Commands.waitSeconds(0.1), // TODO see if this can be faster
-
-                // Move to and intake ground coral
-                Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(2)),
-                    superSystem.intakeUntilSensed(3)
-                ),
-
-                // Move to Reef
-                Commands.parallel(
-                    AutoBuilder.followPath(pathGroup.get(3)),
-                    Commands.sequence(
-                        Commands.waitSeconds(0.5),
-                        superSystem.moveToAuto(PositionEquivalents.SemiStow)
-                    )
-                ),
-                superSystem.moveToAuto(PositionEquivalents.L4),
-                Commands.waitSeconds(1),
-
-                // Outtake
-                superSystem.outtake(),
-                Commands.waitSeconds(1),
-                superSystem.stopRoller(),
-                superSystem.moveToAuto(PositionEquivalents.L2),
-
-                // Prepare for teleop
-                Commands.parallel(
-                    superSystem.moveToAuto(PositionEquivalents.SemiStow)
-                )
+                superSystem.moveToAuto(PositionEquivalents.SemiStow)
             )
         );
     }

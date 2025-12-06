@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.27391456886574,
-        "y": 2.1962803819444434
+        "x": 2.35,
+        "y": 2.21
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.3439420739259313,
-        "y": 2.1748982981580363
+        "x": 1.4200275050601916,
+        "y": 2.188617916213593
       },
       "isLocked": false,
       "linkedName": "A3O"
     },
     {
       "anchor": {
-        "x": 1.10175,
-        "y": 2.211
+        "x": 1.11,
+        "y": 2.21
       },
       "prevControl": {
-        "x": 1.7966467233815535,
-        "y": 2.222980977989337
+        "x": 1.8048967233815536,
+        "y": 2.221980977989337
       },
       "nextControl": null,
       "isLocked": false,
@@ -29,7 +29,21 @@
     }
   ],
   "rotationTargets": [],
-  "constraintZones": [],
+  "constraintZones": [
+    {
+      "name": "Constraints Zone",
+      "minWaypointRelativePos": 0,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 1.5,
+        "maxAcceleration": 3.0,
+        "maxAngularVelocity": 180.0,
+        "maxAngularAcceleration": 360.0,
+        "nominalVoltage": 12.0,
+        "unlimited": false
+      }
+    }
+  ],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
