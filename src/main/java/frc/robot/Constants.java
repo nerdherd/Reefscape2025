@@ -22,7 +22,9 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.subsystems.TemplateSubsystem;
 import frc.robot.subsystems.SuperSystem.ExecutionOrder;
+import frc.robot.subsystems.TemplateSubsystem.LoggingLevel;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -43,6 +45,7 @@ public final class Constants {
   }
 
   public final static ROBOT_ID ROBOT_NAME = ROBOT_ID.ISME;
+  public final static TemplateSubsystem.LoggingLevel LOGGING_LEVEL = LoggingLevel.MINIMAL;
 
   public static class ControllerConstants {
 
