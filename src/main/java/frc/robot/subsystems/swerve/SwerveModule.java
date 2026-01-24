@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.Constants.ModuleConstants;
 import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.subsystems.Reportable;
+import frc.robot.util.filters.DriverFilter;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -18,6 +20,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 
@@ -100,14 +103,18 @@ public class SwerveModule implements Reportable {
         turningController.enableContinuousInput(-Math.PI, Math.PI); // Originally was -pi to pi
         turningController.setTolerance(.005);
 
-        this.driveMotor.setInverted(invertDriveMotor);
-        this.turnMotor.setInverted(invertTurningMotor);
+        // this.driveMotor.setInverted(invertDriveMotor);
+        // this.turnMotor.setInverted(invertTurningMotor);
         this.invertTurningEncoder = CANCoderReversed;
         
         this.desiredState = new SwerveModuleState(0, Rotation2d.fromDegrees(0));
 
         TalonFXConfiguration driveMotorConfigs = new TalonFXConfiguration();
         driveConfigurator.refresh(driveMotorConfigs);
+        if (invertDriveMotor)
+            driveMotorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        else driveMotorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
         driveMotorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         driveMotorConfigs.Voltage.PeakForwardVoltage = 11.5;
         driveMotorConfigs.Voltage.PeakReverseVoltage = -11.5;
@@ -124,6 +131,10 @@ public class SwerveModule implements Reportable {
 
         TalonFXConfiguration turnMotorConfigs = new TalonFXConfiguration();
         turnConfigurator.refresh(turnMotorConfigs);
+        if (invertDriveMotor)
+            turnMotorConfigs.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        else turnMotorConfigs.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
+
         turnMotorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
         turnMotorConfigs.Feedback.FeedbackRemoteSensorID = CANCoderId;
         turnMotorConfigs.Feedback.RotorToSensorRatio = 150.0/7.0;

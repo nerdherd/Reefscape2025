@@ -40,7 +40,7 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
 
     public void zeroHeading() {
         // pigeon.setYaw(0);
-        offset = pigeon.getAngle();
+        offset = pigeon.getRotation2d().getDegrees();
     }
 
     public void setAbsoluteHeading(Rotation2d rot) {
@@ -111,11 +111,11 @@ public class PigeonV2 extends SubsystemBase implements Gyro {
     }
 
     public double getHeading() {
-        return -(pigeon.getAngle() - offset);
+        return -(pigeon.getRotation2d().getDegrees() - offset);
     }
 
     public double getAbsoluteHeading() {
-        return pigeon.getYaw().getValueAsDouble();
+        return pigeon.getRotation2d().getDegrees();
     }
 
     public void setHeading(double heading) {

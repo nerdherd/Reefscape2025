@@ -9,6 +9,7 @@ import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -51,7 +52,7 @@ public class Elevator extends SubsystemBase implements Reportable {
 
         setMotorConfigs();
 
-        followRequest = new Follower(ElevatorConstants.kElevatorMotorID, true);
+        followRequest = new Follower(ElevatorConstants.kElevatorMotorID, MotorAlignmentValue.Opposed);
         motionMagicRequest.withSlot(0);
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);

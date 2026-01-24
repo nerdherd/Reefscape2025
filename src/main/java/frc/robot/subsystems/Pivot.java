@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -47,7 +48,7 @@ public class Pivot extends SubsystemBase implements Reportable{
     private final NeutralOut brakeRequest = new NeutralOut();
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
-    private final Follower followRequest = new Follower(PivotConstants.kLeftPivotMotorID, true);
+    private final Follower followRequest = new Follower(PivotConstants.kLeftPivotMotorID, MotorAlignmentValue.Opposed);
     // public final VoltageOut voltageRequest = new VoltageOut(0);
 
     private double ff;

@@ -39,7 +39,7 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.util.Controller;
 
 public class RobotContainer {
-  public PigeonV2 imu = new PigeonV2(1, ModuleConstants.kCANivoreName);
+  public PigeonV2 imu = new PigeonV2(0, ModuleConstants.kCANivoreName);
 
   public SwerveDrivetrain swerveDrive;
   public PowerDistribution pdp = new PowerDistribution(0, ModuleType.kCTRE);
@@ -64,7 +64,7 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser = new SendableChooser<Command>();
   
   static boolean isRedSide = false;
-  public static boolean USE_SUBSYSTEMS = true;
+  public static boolean USE_SUBSYSTEMS = false;
   private final LOG_LEVEL loggingLevel = LOG_LEVEL.MINIMAL;
   
   // For logging wrist
