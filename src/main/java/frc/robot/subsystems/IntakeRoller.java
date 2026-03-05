@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
- 
+
+/** importing DriverStation, Shuffleboard, Motor Configs, etc. */
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RollerConstants;
  
+/** Defining Motors for Algae, and creating New Instances */
 public class IntakeRoller extends SubsystemBase implements Reportable {
     private final TalonFX algaeMotor;
     private final TalonFX coralMotor;
@@ -29,12 +31,17 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     private final NeutralOut brakeRequest = new NeutralOut();
 
+/** Enabling and Disabling Booleans, and Resetting Values to 0 */
     private boolean enabled = false;
     private boolean velocityControl = true;
 
     private double desiredVoltageAlgae = 0;
     public double desiredVoltageCoral = 0;
 
+/**Creating new function IntakeRoller()
+ * Enabling and Disabling Booleans, and Resetting Values to 0
+ * Defining Algae and Coral Motor
+ */
     public IntakeRoller() {
         algaeMotor = new TalonFX(RollerConstants.kAlgaeMotorID);
         coralMotor = new TalonFX(RollerConstants.kCoralMotorID);
@@ -64,6 +71,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     //****************************** SETUP METHODS ******************************//
  
+/**
+ * Enabling and Disabling boolean values.
+ * @param motorConfigs Resetting motorConfigs, and setting Voltage and Current values.
+ */
     public void configureMotor(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
         motorConfigs.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
@@ -76,7 +87,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         motorConfigs.CurrentLimits.StatorCurrentLimit = 100;
         motorConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
         motorConfigs.Audio.AllowMusicDurDisable = true;
- 
+
+        /**
+         * Calling if statements for different functions for errors in applying motorConfigs
+         */
         StatusCode response = rollerConfigurator.apply(motorConfigs);
         if (!response.isOK())
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
@@ -88,7 +102,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
         DriverStation.reportError("Could not apply motor configs, error code:" + responseRight.toString(), new Error().getStackTrace());
 
     }
- 
+/**
+ * Configuring PID settings,
+ * @param motorConfigs Calling if statements for different functions for errors in configuring PID
+ */
     private void configurePID(TalonFXConfiguration motorConfigs) {
         rollerConfigurator.refresh(motorConfigs);
 
@@ -112,18 +129,22 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
 
     }
- 
+/** Overide if enabled statements*/
     @Override
     public void periodic() {
         if (!enabled) {
             return;
         }
+/** Setting voltage for algae and coral motors */
         algaeMotor.setVoltage(desiredVoltageAlgae);  
         coralMotor.setVoltage(desiredVoltageCoral);
     }
  
     // ****************************** STATE METHODS ***************************** //
-
+/**
+ * Calling if statement, and setting values if true for algae and coral
+ * @param enabled Defining setEnabled function and setting value
+ */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if (!enabled) {
@@ -133,7 +154,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
             coralMotor.setControl(brakeRequest);
         }
     }
-
+/**
+ * Making privare class and setting Voltage for algae and coral
+ * @param velocity Making private class to set Velocity for algae and coral
+ */
     private void setVelocity(double velocity) {
         velocityRequestAlgae.Velocity = velocity;
         velocityRequestCoral.Velocity = velocity;
@@ -165,10 +189,20 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
 
     // ****************************** COMMAND METHODS ****************************** //
 
+    /**
+     * Setting Command function
+     * @param enabled Setting EnabledCommand boolean
+     * @return Returning value to run once
+     */
     Command setEnabledCommand(boolean enabled) {
         return Commands.runOnce(() -> setEnabled(enabled));
     }
- 
+    /**
+     * Making private class for setVelocityCommand for algae and coral
+     * Making private class setVoltage Command for algae and coral
+     * @param velocity Set VelocityCommand value, and create a new instance of it.  
+     * @return returning value to run once
+     */
     private Command setVelocityCommand(double velocity) {
         return Commands.runOnce(() -> setVelocity(velocity));
     }
@@ -191,7 +225,12 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     public Command setVoltageCommandAlgae(double volt) {
         return Commands.runOnce(() -> setVoltageAlgae(volt));
     }
-
+    
+    /**
+     * Making public class stopCommand
+     * Setting Voltage and Enabled Commands
+     * @return return Commands values (should be off, and reset)
+     */
     public Command stopCommand() {
         return Commands.sequence(
             setVoltageCommand(0),
@@ -200,20 +239,30 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
     }
 
     // ****************************** NAMED COMMANDS ****************************** //
+    /**
+     * Making public class intakeAlgae
+     * @return returning the setEnabledCommand and setVoltageCommandAlgae values
+     */
     public Command intakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             setVoltageCommandAlgae(RollerConstants.kAlgaeIntakePower)
         );
     }
-
+    /**
+     * Making public class holdAlgae
+     * @return returning setEnabledCommand and setVoltageCommandAlgae
+     */
     public Command holdAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             setVoltageCommandAlgae(RollerConstants.kAlgaeHoldPower)
         );
     }
-
+    /**
+     * Making public class intakeCoral
+     * @return returning setEnabledCommand, setVoltageCommandCoral, setVoltageCommandAlgae values
+     */
     public Command intakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
@@ -221,14 +270,20 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
             setVoltageCommandAlgae(RollerConstants.kCoralButAlgaeIntakePower)
         );
     }
-
+    /**
+     * public class intakeCoralSlow
+     * @return setEnabledCommand and setVoltageCommandCoral values
+     */
     public Command intakeCoralSlow() {
         return Commands.sequence(
             setEnabledCommand(true),
             setVoltageCommandCoral(RollerConstants.kCoralSlowIntakePower)
         );
     }
-
+    /**
+     * Making public class outtakeCoral
+     * @return returning setEnabledCommand, setVoltageCommandCoral, and setVoltageCommandAlgae values
+     */
     public Command outtakeCoral() {
         return Commands.sequence(
             setEnabledCommand(true),
@@ -236,14 +291,20 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
             setVoltageCommandAlgae(RollerConstants.kCoralOuttakePower)
         );
     }
-
+    /**
+     * Making public class outtakeAlgae
+     * @return returning setEnabledCommand and setVoltageCommandAlgae values
+     */ 
     public Command outtakeAlgae() {
         return Commands.sequence(
             setEnabledCommand(true),
             setVoltageCommandAlgae(RollerConstants.kAlgaeOuttakePower)
         );
     }
-
+    /**
+     * Making public class outtakeL1
+     * @return setEnabledCommand, setVoltageCommandCoral, setVoltageCommandAlgae values
+     */
     public Command outtakeL1() {
         return Commands.sequence(
             setEnabledCommand(true),
@@ -254,6 +315,10 @@ public class IntakeRoller extends SubsystemBase implements Reportable {
  
     // ****************************** LOGGING METHODS ****************************** //
   
+    /**
+     * Overide funtion, making a pulic class initShuffleboard and adding parameters
+     * switch statement that has cases for ALL, MEDIUM, and MINIMAL priorities
+     */
     @Override
     public void initShuffleboard(LOG_LEVEL priority) {
         ShuffleboardTab tab = Shuffleboard.getTab("Intake Roller");

@@ -101,9 +101,9 @@ public final class Constants {
     public static final double kDThetaAuto = 0.01;
 
     // Distance between right and left wheels
-    public static final double kTrackWidth = Units.inchesToMeters(23.5); // 24.125
+    public static final double kTrackWidth = Units.inchesToMeters(24.125);
     // Distance between front and back wheels
-    public static final double kWheelBase = Units.inchesToMeters(23.5); // 24.125
+    public static final double kWheelBase = Units.inchesToMeters(24.125);
 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
       new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -460,7 +460,7 @@ public final class Constants {
     public static final double kPivotDeadBand = 0;
     // position 0 is horizontal, use base offset to make it so,
     // then regular offset if the robot doesnt usually start from 0
-    public static final double kPivotOffset = 0.243164; // use to zero encoder
+    public static final double kPivotOffset = -0.75; // use to zero encoder
 
     public static final double kPivotCruiseVelocity = 0.8;//0.25 // 0.4S
     public static final double kPivotCruiseAcceleration = kPivotCruiseVelocity * 5; // 0.5
@@ -486,13 +486,12 @@ public final class Constants {
 
     public static final double kCoralIntakePower = -2.8;
     public static final double kCoralButAlgaeIntakePower  = -2.8;
-    public static final double kCoralOuttakePower = 2.5;
+    public static final double kCoralOuttakePower = 1.5;
     public static final double kAlgaeIntakePower  = -2;
     public static final double kAlgaeOuttakePower = 1.5;
     public static final double kL1OuttakePower = 0.7;
     public static final double kAlgaeHoldPower = 1;
-    public static final double kCoralSlowIntakePower = -1.0;
-    
+
   }
 
   public static final class WristConstants {
@@ -533,7 +532,7 @@ public final class Constants {
     public static final double kClosedPosition = 0;
     
     public static final double kOpenSpeed = -3;
-    public static final double kGripSpeed = 3;
+    public static final double kCloseSpeed = 0;
 
     public static final double climbHardClampVoltage = -3;
 
@@ -558,19 +557,19 @@ public final class Constants {
       Stow(                ExecutionOrder.ELV_WRT_PVT , 0.04,  0.125,    -0.096, -0.096),
       SemiStow(            ExecutionOrder.WRT_ELV_PVT  , 0.09,  0.05, -0.21, -0.21      ),
       // GroundIntake(        ExecutionOrder.ELV_WRT_PVT  , PivotConstants.kPivotOffSet, 0.82, -0.75, -0.4     ), // Ground level CAMS Tuned
-      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.038, 0.81, -0.79), // warren testing
+      GroundIntake(        ExecutionOrder.WRTELV_PVT  , 0.03, 0.81, -0.79), // warren testing
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT , 0.034, 0.85, -0.787      ), // Ground with algae rollers lower
       // GroundIntake1(        ExecutionOrder.ELV_WRT_PVT  , 0.042, 0.58, -0.711, -0.711      ), // Ground level s of Idaho
       Station(             ExecutionOrder.ALL_TOGETHER, 0.205,  1.275, -0.8), // Adjusted Idaho
       // Station1(             ExecutionOrder.PVT_WRTELV, 0.205,  1.275, -0.8), // Adjusted Idaho - better
       L1(                  ExecutionOrder.WRTELV_PVT  , 0.04,  0.5,    -0.096     ),
-      L2(                  ExecutionOrder.WRTELV_PVT  , 0.257,  0.0,  -0.148      ),
-      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.257,  1.5, -0.148),
-      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.257,  3.2, -0.197, -0.197      ),
-      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.257,  3.2, -0.197, -0.197     ),                             
-      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.257,  0.0, -0.570, -0.57      ),
-      L5(                  ExecutionOrder.WRTELV_PVT  , 0.257,  1.12, -0.570, -0.570      ),
-      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   -0.075, 1.1, -0.096     ),
+      L2(                  ExecutionOrder.WRTELV_PVT  , 0.26,  0.0,  -0.148      ),
+      L3(                  ExecutionOrder.WRTPVT_ELV  , 0.26,  1.5, -0.148),
+      L4(                  ExecutionOrder.WRTPVT_ELV  , 0.26,  3.2, -0.197, -0.197      ),
+      L4Auto(              ExecutionOrder.WRTPVT_ELV  , 0.26,  3.2, -0.197, -0.197     ),
+      L4AutoPre(           ExecutionOrder.ALL_TOGETHER, 0.26,  0.0, -0.570, -0.57      ),
+      L5(                  ExecutionOrder.WRTELV_PVT  , 0.26,  1.12, -0.570, -0.570      ),
+      ClimbDown(           ExecutionOrder.WRTELV_PVT  ,   0.015, 1.1, -0.096     ),
       ClimbUp(             ExecutionOrder.WRTELV_PVT  , 0.26,  0.05, -0.65, -0.65      ),
       intermediateGround(  ExecutionOrder.PVT_WRTELV , 0.1,   0.4, -0.787, -0.35      );
       public Position position;

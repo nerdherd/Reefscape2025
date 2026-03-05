@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+/** Importing DriverStation, Shuffleboard, 
+ * hardware configs, motor configs, 
+ * NerdyMath, Commands, and controls */
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
@@ -22,6 +25,11 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.util.NerdyMath;
 
+/** Creates private clases for 2 elevatorMotors
+ * created motor configurators
+ * created motion magic request
+ * set desiredPostition & pivotAngle to 0.0
+ */
 public class Elevator extends SubsystemBase implements Reportable {
     private final TalonFX elevatorMotor;
     private final TalonFX elevatorMotor2;
@@ -37,8 +45,16 @@ public class Elevator extends SubsystemBase implements Reportable {
     private double ff = 0.0; 
     private double pivotAngle = 0.0; // TODO: Change this to 0 when supersystem tuned
     
+    /** created new instance of NeutralMode value */
     private NeutralModeValue neutralMode = NeutralModeValue.Brake;
 
+    /** created new Elevator function
+     * creating new instance of elevator motors
+     * created new motion magic request
+     * set elevator position to 0.0
+     * get & set motorcongigs
+     * created new followRequest
+     */
     public Elevator() {
         elevatorMotor = new TalonFX(ElevatorConstants.kElevatorMotorID, "rio");
         elevatorMotor2 = new TalonFX(ElevatorConstants.kElevatorMotorID2, "rio");
@@ -56,7 +72,10 @@ public class Elevator extends SubsystemBase implements Reportable {
         zeroEncoder();
         CommandScheduler.getInstance().registerSubsystem(this);
     }
-    
+/** Set motorConfigs
+ * set kG & kS to 0
+ * Calling if statements for different functions for errors in applying motor configs
+ */  
     public void setMotorConfigs() {
         TalonFXConfiguration motorConfigs = new TalonFXConfiguration();
         motorConfigurator.refresh(motorConfigs);
@@ -82,6 +101,10 @@ public class Elevator extends SubsystemBase implements Reportable {
             DriverStation.reportError("Could not apply motor configs, error code:" + response.toString(), new Error().getStackTrace());
         }
 
+        /** Set motorConfigs2
+         * set kG & kS to 0
+         * Calling if statements for different functions for errors in applying motor configs
+        */
         TalonFXConfiguration motorConfigs2 = new TalonFXConfiguration();
         motorConfigurator2.refresh(motorConfigs2);
         motorConfigs2.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
@@ -107,7 +130,9 @@ public class Elevator extends SubsystemBase implements Reportable {
         }
     }
 
-
+    /**
+     *Overide if enabled statement
+    */
     @Override
     public void periodic() {
         if (!enabled) {
@@ -122,7 +147,11 @@ public class Elevator extends SubsystemBase implements Reportable {
     }
 
     // ****************************** STATE METHODS ****************************** //
-
+/**
+ * 
+ * @param enabled set boolean enabled
+ * stopMotion()called to set the control
+*/
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
         if(enabled) { 
@@ -131,7 +160,9 @@ public class Elevator extends SubsystemBase implements Reportable {
             stopMotion();
         }
     }
-
+/**
+ * @param neutralMode created new instance of neutralMode
+*/
     public void setNeutralMode(NeutralModeValue neutralMode) {
         this.neutralMode = neutralMode;
     }
